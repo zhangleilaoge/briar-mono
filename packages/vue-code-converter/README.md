@@ -48,8 +48,8 @@ vue 代码转换工具，目前支持两种格式转换：
 ### 2.2 脚本转换
 
 ```shell
-# 全局安装 `@youzan/vue-code-converter`
-npm add @youzan/vue-code-converter -g
+# 全局安装 `@briar/vue-code-converter`
+npm add @briar/vue-code-converter -g
 
 # 获取 cli 选项帮助说明
 vue-convert -h
@@ -61,16 +61,16 @@ vue-convert -p ./client/pages/center
 
 ### 2.3 方法调用
 
-安装 `@youzan/vue-code-converter`：
+安装 `@briar/vue-code-converter`：
 
 ```shell
-npm add @youzan/vue-code-converter
+npm add @briar/vue-code-converter
 ```
 
 在代码中直接调用转换方法：
 
 ```javascript
-import { convert } from '@youzan/vue-code-converter';
+import { convert } from "@briar/vue-code-converter"
 
 const { output, warning } = convert(input, {
   // 设置为 true 开启非法语法告警
@@ -78,18 +78,18 @@ const { output, warning } = convert(input, {
   // 设置输出结果的 prettier 格式化参数，类型与 prettier.format 的 option 类型一致（https://www.prettier.cn/docs/options.html）
   // 以下为默认值
   prettier: {
-    parser: 'vue',
+    parser: "vue",
     plugins: [parserHtml],
     singleQuote: true,
     semi: true,
     printWidth: 80,
     tabWidth: 2,
     useTabs: false,
-    trailingComma: 'none',
+    trailingComma: "none",
     bracketSpacing: true,
     vueIndentScriptAndStyle: false,
   },
-});
+})
 ```
 
 ## 四、需要手动处理的场景
