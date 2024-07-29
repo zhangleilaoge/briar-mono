@@ -14,7 +14,7 @@
     "node": ">=16.14.0",
     "pnpm": ">=6.28.0"
   },
-  "author": "zhanglei <1371018512@qq.com>",
+  "author": "zhangleilaoge",
   "license": "ISC",
   "devDependencies": {
     "lerna": "^4.0.0",

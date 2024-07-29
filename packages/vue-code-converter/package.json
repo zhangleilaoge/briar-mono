@@ -1,7 +1,7 @@
 {
-  "name": "@briar/vue-code-converter",
+  "name": "@zhangleilaoge/vue-code-converter",
   "version": "0.0.4",
-  "author": "zhanglei <1371018512@qq.com>",
+  "author": "zhangleilaoge",
   "description": "vue代码转换工具",
   "module": "es/index.js",
   "main": "lib/index.js",
@@ -38,5 +38,8 @@
     "@types/node": "^20.14.11",
     "@types/prettier": "2.6.2"
   },
-  "gitHead": "89ca08eba9750e8eb30853c79473473b97377c7e"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhangleilaoge/briar-mono.git"
+  }
 }
