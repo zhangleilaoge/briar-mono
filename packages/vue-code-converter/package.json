@@ -1,6 +1,6 @@
 {
   "name": "@briar/vue-code-converter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "zhanglei <1371018512@qq.com>",
   "description": "vue代码转换工具",
   "module": "es/index.js",
