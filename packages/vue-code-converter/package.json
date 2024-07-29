@@ -1,6 +1,6 @@
 {
   "name": "@briar/vue-code-converter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "zhanglei <1371018512@qq.com>",
   "description": "vue代码转换工具",
   "module": "es/index.js",
@@ -15,11 +15,11 @@
   "sideEffects": false,
   "scripts": {
     "dev": "tsc --watch -p ./tsconfig.json",
-    "build": "yarn run clean && yarn build:es && yarn build:lib",
+    "build": "pnpm run clean && pnpm build:es && pnpm build:lib",
     "build:lib": "tsc --module CommonJS --outDir lib",
     "build:es": "tsc --module ES6 --outDir es",
     "clean": "rimraf ./lib ./es",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "pnpm build"
   },
   "license": "MIT",
   "dependencies": {
