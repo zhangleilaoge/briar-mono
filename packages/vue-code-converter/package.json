@@ -37,5 +37,6 @@
     "@types/lodash": "4.14.74",
     "@types/node": "^20.14.11",
     "@types/prettier": "2.6.2"
-  }
+  },
+  "gitHead": "89ca08eba9750e8eb30853c79473473b97377c7e"
 }
