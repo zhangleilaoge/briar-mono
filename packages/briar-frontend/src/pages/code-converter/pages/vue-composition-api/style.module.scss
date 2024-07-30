@@ -1,0 +1,39 @@
+.Container {
+    display: flex;
+    width: 100%;
+    gap: 30px;
+}
+
+.Input,
+.Output {
+    flex-grow: 1;
+    flex-basis: 200px;
+    gap: 14px;
+    display: flex;
+    flex-direction: column;
+    width: calc(50% - 23px);
+}
+
+.OutputCode {
+    margin: 0 !important;
+    height: calc(100vh - 136px);
+    border: 1px solid rgb(217, 217, 217);
+}
+
+.Head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 32px;
+}
+
+.ButtonGroup {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.InputCode {
+    border-radius: 0;
+    flex-grow: 1;
+}

@@ -14,7 +14,7 @@
   },
   "sideEffects": false,
   "scripts": {
-    "dev": "tsc --watch -p ./tsconfig.json",
+    "dev": "tsc --module ES6 --outDir es --watch -p ./tsconfig.json",
     "build": "pnpm run clean && pnpm build:es && pnpm build:lib",
     "build:lib": "tsc --module CommonJS --outDir lib",
     "build:es": "tsc --module ES6 --outDir es",
@@ -41,5 +41,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zhangleilaoge/briar-mono.git"
-  }
+  },
+  "keywords": [
+    "vue"
+  ]
 }

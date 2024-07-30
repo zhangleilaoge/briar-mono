@@ -1,2 +1,3 @@
 packages:
   - "packages/vue-code-converter"
+  - "packages/briar-frontend"
