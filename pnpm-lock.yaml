@@ -20,7 +20,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^7.15.0
       '@typescript-eslint/parser': ^7.15.0
       '@vitejs/plugin-react-swc': ^3.5.0
-      '@zhangleilaoge/vue-code-converter': ^0.0.6
+      '@zhangleilaoge/vue-code-converter': ^0.0.7-alpha.0
       antd: ^5.19.3
       eslint: ^8.57.0
       eslint-plugin-react-hooks: ^4.6.2
