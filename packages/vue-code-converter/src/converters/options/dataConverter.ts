@@ -1,33 +1,39 @@
-import ts from 'typescript';
-import { ConvertedExpression } from '../../helper';
-import { useEnum } from '../../type';
-import { getNodeByKind } from '../../utils/ast';
+import {
+  SourceFile,
+  Node,
+  SyntaxKind,
+  isObjectLiteralExpression,
+  isPropertyAssignment,
+} from "typescript"
+import { ConvertedExpression } from "../../helper"
+import { useEnum } from "../../type"
+import { getNodeByKind } from "../../utils/ast"
 
 export const dataConverter = (
-  node: ts.Node,
-  sourceFile: ts.SourceFile
+  node: Node,
+  sourceFile: SourceFile
 ): ConvertedExpression[] => {
-  const objNode = getNodeByKind(node, ts.SyntaxKind.ObjectLiteralExpression);
+  const objNode = getNodeByKind(node, SyntaxKind.ObjectLiteralExpression)
 
-  if (!(objNode && ts.isObjectLiteralExpression(objNode))) return [];
+  if (!(objNode && isObjectLiteralExpression(objNode))) return []
 
   return objNode.properties
     .map((prop) => {
       // 处理常量透传场景
-      if (!ts.isPropertyAssignment(prop)) {
+      if (!isPropertyAssignment(prop)) {
         return {
-          expression: '',
-          returnNames: [prop.name?.getText(sourceFile) || ''],
-        };
+          expression: "",
+          returnNames: [prop.name?.getText(sourceFile) || ""],
+        }
       }
 
-      const name = prop.name.getText(sourceFile);
-      const text = prop.initializer.getText(sourceFile);
+      const name = prop.name.getText(sourceFile)
+      const text = prop.initializer.getText(sourceFile)
       return {
         use: useEnum.Ref,
         expression: `const ${name} = ref(${text})`,
         returnNames: [name],
-      };
+      }
     })
-    .filter((item): item is NonNullable<typeof item> => item != null);
-};
+    .filter((item): item is NonNullable<typeof item> => item != null)
+}

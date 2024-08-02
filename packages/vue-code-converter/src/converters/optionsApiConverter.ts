@@ -1,23 +1,28 @@
-import ts from 'typescript';
-import { getExportStatement, getImportStatement } from '../helper';
-import { convertOptions } from './options/optionsConverter';
-import { handleVuex } from '../utils/vuex';
+import {
+  SourceFile,
+  factory,
+  isExportAssignment,
+  createPrinter,
+} from "typescript"
+import { getExportStatement, getImportStatement } from "../helper"
+import { convertOptions } from "./options/optionsConverter"
+import { handleVuex } from "../utils/vuex"
 
 export const convertOptionsApi = (
-  sourceFile: ts.SourceFile,
+  sourceFile: SourceFile,
   templateContent: string
 ) => {
-  const options = convertOptions(sourceFile, handleVuex(sourceFile));
+  const options = convertOptions(sourceFile, handleVuex(sourceFile))
   if (!options) {
-    throw new Error('invalid options.');
+    throw new Error("invalid options.")
   }
 
-  const { setupProps, propNames, otherProps } = options;
+  const { setupProps, propNames, otherProps } = options
 
-  const newSrc = ts.factory.createSourceFile(
+  const newSrc = factory.createSourceFile(
     [
       ...getImportStatement(setupProps),
-      ...sourceFile.statements.filter((state) => !ts.isExportAssignment(state)),
+      ...sourceFile.statements.filter((state) => !isExportAssignment(state)),
       getExportStatement({
         setupProps,
         propNames,
@@ -27,7 +32,7 @@ export const convertOptionsApi = (
     ],
     sourceFile.endOfFileToken,
     sourceFile.flags
-  );
-  const printer = ts.createPrinter();
-  return printer.printFile(newSrc);
-};
+  )
+  const printer = createPrinter()
+  return printer.printFile(newSrc)
+}

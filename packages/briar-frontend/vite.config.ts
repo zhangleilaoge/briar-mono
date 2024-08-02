@@ -1,12 +1,19 @@
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react-swc"
 import viteCompression from "vite-plugin-compression"
+import { visualizer } from "rollup-plugin-visualizer"
 
 export default defineConfig({
   plugins: [
     react(),
     viteCompression({
-      threshold: 1024000, // 对大于 1mb 的文件进行压缩
+      threshold: 5120,
+    }),
+    visualizer({
+      open: true, // 注意这里要设置为true，否则无效，如果存在本地服务端口，将在打包后自动展示
+      gzipSize: true,
+      brotliSize: true,
+      filename: "./dist/stats.html",
     }),
   ],
   build: {
@@ -20,9 +27,19 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
+        // 静态资源打包做处理
         chunkFileNames: "static/js/[name]-[hash].js",
         entryFileNames: "static/js/[name]-[hash].js",
         assetFileNames: "static/[ext]/[name]-[hash].[ext]",
+        manualChunks(id: string) {
+          if (id.includes("node_modules")) {
+            return id
+              .toString()
+              .split("node_modules/")[1]
+              .split("/")[0]
+              .toString()
+          }
+        },
       },
     },
     reportCompressedSize: false,
@@ -32,5 +49,5 @@ export default defineConfig({
     alias: {
       "@": "/src",
     },
-  }
+  },
 })

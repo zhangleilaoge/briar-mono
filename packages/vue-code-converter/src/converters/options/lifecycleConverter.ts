@@ -1,9 +1,9 @@
-import ts from 'typescript';
-import { ConvertedExpression, getMethodExpression } from '../../helper';
+import { SourceFile, Node } from "typescript"
+import { ConvertedExpression, getMethodExpression } from "../../helper"
 
 export const lifecycleConverter = (
-  node: ts.Node,
-  sourceFile: ts.SourceFile
+  node: Node,
+  sourceFile: SourceFile
 ): ConvertedExpression[] => {
-  return getMethodExpression({ node, sourceFile });
-};
+  return getMethodExpression({ node, sourceFile })
+}
