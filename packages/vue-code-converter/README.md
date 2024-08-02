@@ -43,7 +43,7 @@ vue 代码转换工具，目前支持两种格式转换：
 
 ### 2.1 在线转换
 
-> ungoro 平台在线代码转换：https://ungoro.qa.qima-inc.com/#/code-convert/vue-composition-api
+> 转化平台在线代码转换：http://restrained-hunter.website/code-converter/vue-composition-api
 
 ### 2.2 脚本转换
 

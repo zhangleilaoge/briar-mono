@@ -20,7 +20,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^7.15.0
       '@typescript-eslint/parser': ^7.15.0
       '@vitejs/plugin-react-swc': ^3.5.0
-      '@zhangleilaoge/vue-code-converter': workspace:^0.0.4
+      '@zhangleilaoge/vue-code-converter': ^0.0.4
       antd: ^5.19.3
       eslint: ^8.57.0
       eslint-plugin-react-hooks: ^4.6.2
@@ -1364,7 +1364,7 @@ packages:
     dev: true
 
   /@pkgjs/parseargs/0.11.0:
-    resolution: {integrity: sha1-p36nQvqyV3UUVDTrHSMoz1ATrDM=, tarball: '@pkgjs/parseargs/download/@pkgjs/parseargs-0.11.0.tgz'}
+    resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
     requiresBuild: true
     dev: true
@@ -2889,7 +2889,7 @@ packages:
     dev: true
 
   /encoding/0.1.13:
-    resolution: {integrity: sha1-VldK/deR9UqOmyeFwFgqLSYhD6k=, tarball: encoding/download/encoding-0.1.13.tgz}
+    resolution: {integrity: sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==}
     requiresBuild: true
     dependencies:
       iconv-lite: 0.6.3
@@ -6820,7 +6820,7 @@ packages:
     dev: true
 
   /uglify-js/3.18.0:
-    resolution: {integrity: sha1-c7V2p+j9pj0oMeKTrurXPgonDes=, tarball: uglify-js/download/uglify-js-3.18.0.tgz}
+    resolution: {integrity: sha512-SyVVbcNBCk0dzr9XL/R/ySrmYf0s372K6/hFklzgcp2lBFyXtw4I7BOdDjlLhE1aVqaI/SHWXWmYdlZxuyF38A==}
     engines: {node: '>=0.8.0'}
     hasBin: true
     requiresBuild: true

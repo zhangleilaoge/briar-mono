@@ -180,14 +180,15 @@ const CompositionStyleConvert: FC = () => {
         <FloatButton.Group shape="circle">
           <FloatButton
             icon={<GithubFilled />}
-            href="https://github.com/zhangleilaoge/briar-mono"
-            target="_blank"
-          />
-          <FloatButton
-            icon={<QuestionCircleOutlined />}
             href="https://github.com/zhangleilaoge/briar-mono/tree/main/packages/vue-code-converter"
             target="_blank"
           />
+          {/* todo 增加一个介绍页 */}
+          {/* <FloatButton
+            icon={<QuestionCircleOutlined />}
+            href="https://github.com/zhangleilaoge/briar-mono/tree/main/packages/vue-code-converter"
+            target="_blank"
+          /> */}
         </FloatButton.Group>
       </div>
       {/* 设置区域 */}
