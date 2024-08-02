@@ -11,7 +11,7 @@ import {
   isStringLiteral,
 } from "typescript"
 import { tsTypeToVuePropType } from "../../utils/type"
-import { uniqWith } from "lodash"
+import uniqWith from "lodash/uniqWith"
 
 const getDecoratorInfo = ({
   decorator,

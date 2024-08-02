@@ -20,7 +20,7 @@ importers:
       '@typescript-eslint/eslint-plugin': ^7.15.0
       '@typescript-eslint/parser': ^7.15.0
       '@vitejs/plugin-react-swc': ^3.5.0
-      '@zhangleilaoge/vue-code-converter': ^0.0.4
+      '@zhangleilaoge/vue-code-converter': ^0.0.5
       antd: ^5.19.3
       eslint: ^8.57.0
       eslint-plugin-react-hooks: ^4.6.2
@@ -29,6 +29,8 @@ importers:
       react: ^18.3.1
       react-dom: ^18.3.1
       react-router-dom: ^6.25.1
+      rollup: ^4.1.4
+      rollup-plugin-external-globals: ^0.11.0
       rollup-plugin-visualizer: ^5.12.0
       sass: ^1.77.8
       terser: ^5.31.3
@@ -52,7 +54,9 @@ importers:
       eslint: 8.57.0
       eslint-plugin-react-hooks: 4.6.2_eslint@8.57.0
       eslint-plugin-react-refresh: 0.4.9_eslint@8.57.0
-      rollup-plugin-visualizer: 5.12.0
+      rollup: 4.19.1
+      rollup-plugin-external-globals: 0.11.0_rollup@4.19.1
+      rollup-plugin-visualizer: 5.12.0_rollup@4.19.1
       sass: 1.77.8
       terser: 5.31.3
       typescript: 5.5.4
@@ -68,7 +72,7 @@ importers:
       '@vue/compiler-sfc': ^3.4.31
       chalk: ^4.1.2
       commander: ^11.1.0
-      lodash: ^4.17.21
+      lodash-es: ^4.17.21
       prettier: ^2.6.2
       tslib: ^2.6.2
       typescript: ~4.5.2
@@ -78,7 +82,7 @@ importers:
       '@vue/compiler-sfc': 3.4.31
       chalk: 4.1.2
       commander: 11.1.0
-      lodash: 4.17.21
+      lodash-es: 4.17.21
       prettier: 2.8.8
       tslib: 2.6.3
       typescript: 4.5.5
@@ -1527,6 +1531,21 @@ packages:
     resolution: {integrity: sha512-L3jkqmqoSVBVKHfpGZmLrex0lxR5SucGA0sUfFzGctehw+S/ggL9L/0NnC5mw6P8HUWpFZ3nQw3cRApjjWx9Sw==}
     engines: {node: '>=14.0.0'}
     dev: false
+
+  /@rollup/pluginutils/5.1.0_rollup@4.19.1:
+    resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@types/estree': 1.0.5
+      estree-walker: 2.0.2
+      picomatch: 2.3.1
+      rollup: 4.19.1
+    dev: true
 
   /@rollup/rollup-android-arm-eabi/4.19.1:
     resolution: {integrity: sha512-XzqSg714++M+FXhHfXpS1tDnNZNpgxxuGZWlRG/jSj+VEPmZ0yg6jV4E0AL3uyBKxO8mO3xtOsP5mQ+XLfrlww==}
@@ -3223,8 +3242,13 @@ packages:
     dev: true
 
   /estree-walker/2.0.2:
-    resolution: {integrity: sha1-UvAQF4wqTBF6d1fP6UKtt9LaTKw=, tarball: estree-walker/download/estree-walker-2.0.2.tgz}
-    dev: false
+    resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
+
+  /estree-walker/3.0.3:
+    resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
+    dependencies:
+      '@types/estree': 1.0.5
+    dev: true
 
   /esutils/2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
@@ -4054,6 +4078,12 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /is-reference/3.0.2:
+    resolution: {integrity: sha512-v3rht/LgVcsdZa3O2Nqs+NMowLOxeOm7Ay9+/ARQ2F+qEoANRcqrjAZKGN0v8ymUetZGgkp26LTnGT7H0Qo9Pg==}
+    dependencies:
+      '@types/estree': 1.0.5
+    dev: true
+
   /is-regex/1.1.4:
     resolution: {integrity: sha1-7vVmPNWfpMCuM5UFMj32hUuxWVg=, tarball: is-regex/download/is-regex-1.1.4.tgz}
     engines: {node: '>= 0.4'}
@@ -4348,6 +4378,10 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lodash-es/4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
+
   /lodash._reinterpolate/3.0.0:
     resolution: {integrity: sha1-DM8tiRZq8Ds2Y8eWU4t1rG4RTZ0=, tarball: lodash._reinterpolate/download/lodash._reinterpolate-3.0.0.tgz}
     dev: true
@@ -4375,6 +4409,7 @@ packages:
 
   /lodash/4.17.21:
     resolution: {integrity: sha1-Z5WRxWTDv/quhFTPCz3zcMPWkRw=, tarball: lodash/download/lodash-4.17.21.tgz}
+    dev: true
 
   /loose-envify/1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -4396,10 +4431,9 @@ packages:
     dev: true
 
   /magic-string/0.30.10:
-    resolution: {integrity: sha1-Ej2cQaDLVkDIkrBB1M+zvQqks54=, tarball: magic-string/download/magic-string-0.30.10.tgz}
+    resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.4.15
-    dev: false
 
   /make-dir/2.1.0:
     resolution: {integrity: sha1-XwMQ4YuL6JjMBwCSlaMK5B6R5vU=, tarball: make-dir/download/make-dir-2.1.0.tgz}
@@ -6191,7 +6225,19 @@ packages:
       package-json-from-dist: 1.0.0
     dev: true
 
-  /rollup-plugin-visualizer/5.12.0:
+  /rollup-plugin-external-globals/0.11.0_rollup@4.19.1:
+    resolution: {integrity: sha512-LR+sH2WkgWMPxsA5o5rT7uW7BeWXSeygLe60QQi9qoN/ufaCuHDaVOIbndIkqDPnZt/wZugJh5DCzkZFdSWlLQ==}
+    peerDependencies:
+      rollup: ^2.25.0 || ^3.3.0 || ^4.1.4
+    dependencies:
+      '@rollup/pluginutils': 5.1.0_rollup@4.19.1
+      estree-walker: 3.0.3
+      is-reference: 3.0.2
+      magic-string: 0.30.10
+      rollup: 4.19.1
+    dev: true
+
+  /rollup-plugin-visualizer/5.12.0_rollup@4.19.1:
     resolution: {integrity: sha512-8/NU9jXcHRs7Nnj07PF2o4gjxmm9lXIrZ8r175bT9dK8qoLlvKTwRMArRCMgpMGlq8CTLugRvEmyMeMXIU2pNQ==}
     engines: {node: '>=14'}
     hasBin: true
@@ -6203,6 +6249,7 @@ packages:
     dependencies:
       open: 8.4.2
       picomatch: 2.3.1
+      rollup: 4.19.1
       source-map: 0.7.4
       yargs: 17.7.2
     dev: true

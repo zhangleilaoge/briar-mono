@@ -14,7 +14,7 @@ import {
 } from "./class/handlePropertyDeclaration"
 import { handleVuex } from "../utils/vuex"
 import { normalizeWatchName } from "./options/watchConverter"
-import { kebabCase } from "lodash"
+import kebabCase from "lodash/kebabCase"
 import { getNodeByKind, mergeBlockBody } from "../utils/ast"
 import {
   SourceFile,
