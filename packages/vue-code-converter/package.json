@@ -1,6 +1,6 @@
 {
   "name": "@zhangleilaoge/vue-code-converter",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "zhangleilaoge",
   "description": "vue代码转换工具",
   "module": "es/index.js",
