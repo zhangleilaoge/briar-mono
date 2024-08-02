@@ -21,6 +21,7 @@ import { DEMO } from "./constants/demo"
 import { COMPOSITION_API_CONFIG } from "./constants/formConfig"
 import s from "./style.module.scss"
 import { IConfigForm } from "./type"
+import { copyToClipboard } from "@/utils/document"
 
 const CompositionStyleConvert: FC = () => {
   const [inputType, setInputType] = useState<InputType>()
@@ -60,7 +61,7 @@ const CompositionStyleConvert: FC = () => {
   }
 
   const copyOutput = () => {
-    navigator.clipboard.writeText(output)
+    copyToClipboard(output)
 
     message.success("复制成功")
   }
