@@ -1,6 +1,6 @@
 import "prismjs/themes/prism.css"
 
-import { GithubFilled, QuestionCircleOutlined } from "@ant-design/icons"
+import { GithubFilled } from "@ant-design/icons"
 import { convert, InputType } from "@zhangleilaoge/vue-code-converter"
 import {
   Alert,
