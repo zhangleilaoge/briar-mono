@@ -41,7 +41,6 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-# 想办法在自动化脚本里面去获取相关配置，而不是硬编码在仓库里
 # 4. upload to cdn
 Write-Output "Uploading to cdn..."
 node ./depoly-front-upload-cdn.js

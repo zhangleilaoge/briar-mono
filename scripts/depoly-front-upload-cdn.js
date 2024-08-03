@@ -16,11 +16,8 @@ const bucket = process.env.COS_BUCKET
  */
 function listFilesInDirectory(targetDirectory) {
   const file_paths = []
-  const currentWorkingDirectory = process.cwd()
-  const absoluteTargetDirectory = path.join(
-    currentWorkingDirectory,
-    targetDirectory
-  )
+  const projectRoot = process.cwd().split("briar-mono")[0]
+  const absoluteTargetDirectory = path.join(projectRoot, targetDirectory)
 
   if (!fs.existsSync(absoluteTargetDirectory)) {
     console.log(`目录 ${absoluteTargetDirectory} 不存在`)
@@ -125,7 +122,7 @@ const uploadFile = (pathItem, retries = 3) => {
 }
 
 async function main() {
-  const targetDirectory = "./packages/briar-frontend/dist"
+  const targetDirectory = "./briar-mono/packages/briar-frontend/dist"
   const staticArr = listFilesInDirectory(targetDirectory)
 
   await deleteOldFile()
