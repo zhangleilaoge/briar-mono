@@ -50,12 +50,3 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-# 5. Reload nginx
-Write-Output "Reloading nginx..."
-nginx -s reload
-if ($LASTEXITCODE -ne 0) {
-    Write-Output "nginx reload failed. Exiting..."
-    exit 1
-}
-
-Write-Output "All steps completed successfully."
