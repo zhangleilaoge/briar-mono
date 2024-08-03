@@ -1,9 +1,3 @@
-# PowerShell script to perform the following tasks:
-# 1. Git pull
-# 2. Install dependencies using pnpm
-# 3. Build the project
-# 4. Reload nginx
-
 # 1. Git pull
 Write-Output "Pulling latest changes from git..."
 git pull
@@ -28,7 +22,15 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-# 4. Reload nginx
+# 4. upload to cdn
+Write-Output "Uploading to cdn..."
+node ./depoly-front-upload-cdn.js
+if ($LASTEXITCODE -ne 0) {
+    Write-Output "upload to cdn failed. Exiting..."
+    exit 1
+}
+
+# 5. Reload nginx
 Write-Output "Reloading nginx..."
 nginx -s reload
 if ($LASTEXITCODE -ne 0) {
