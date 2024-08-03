@@ -50,3 +50,4 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+Write-Output "All steps completed successfully."
