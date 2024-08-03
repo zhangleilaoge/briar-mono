@@ -2,12 +2,12 @@ const fs = require("fs")
 const path = require("path")
 const COS = require("cos-nodejs-sdk-v5")
 
+const region = process.env.REGION
 const cos = new COS({
-  SecretId: "AKIDCoT6a2a3KOFvRn8IH5qUwFNK7lO5fFeq",
-  SecretKey: "81f8NPEq7C8s66qMhoiOuBE2dIp8E566",
+  SecretId: process.env.COS_SECRET_ID,
+  SecretKey: process.env.COS_SECRET_KEY,
 })
-const bucket = "briar-assets-1309736035"
-const region = "ap-nanjing"
+const bucket = process.env.COS_BUCKET
 
 /**
  * 获取目标目录下所有文件的文件路径
