@@ -2,7 +2,7 @@ import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react-swc"
 import viteCompression from "vite-plugin-compression"
 // import { visualizer } from "rollup-plugin-visualizer"
-import externalGlobals from "rollup-plugin-external-globals"
+// import externalGlobals from "rollup-plugin-external-globals"
 
 const cdnUrl = "https://briar-assets-1309736035.cos.ap-nanjing.myqcloud.com"
 
@@ -31,33 +31,33 @@ const config = ({ mode }: { mode: string }) => {
         },
       },
       rollupOptions: {
-        external: [
-          "typescript",
-          "prettier",
-          "prettier/parser-babel",
-          "prettier/parser-postcss",
-          "prettier/parser-typescript",
-          "prettier/parser-html",
-        ],
-        plugins: [
-          externalGlobals({
-            typescript: "ts",
-            prettier: "prettier",
-            "prettier/parser-babel": "prettierPlugins.babel",
-            "prettier/parser-postcss": "prettierPlugins.postcss",
-            "prettier/parser-typescript": "prettierPlugins.typescript",
-            "prettier/parser-html": "prettierPlugins.html",
-          }),
-        ],
+        // external: [
+        //   "typescript",
+        //   "prettier",
+        //   "prettier/parser-babel",
+        //   "prettier/parser-postcss",
+        //   "prettier/parser-typescript",
+        //   "prettier/parser-html",
+        // ],
+        // plugins: [
+        //   externalGlobals({
+        //     typescript: "ts",
+        //     prettier: "prettier",
+        //     "prettier/parser-babel": "prettierPlugins.babel",
+        //     "prettier/parser-postcss": "prettierPlugins.postcss",
+        //     "prettier/parser-typescript": "prettierPlugins.typescript",
+        //     "prettier/parser-html": "prettierPlugins.html",
+        //   }),
+        // ],
         output: {
-          globals: {
-            typescript: "ts",
-            prettier: "prettier",
-            "prettier/parser-babel": "prettierPlugins.babel",
-            "prettier/parser-postcss": "prettierPlugins.postcss",
-            "prettier/parser-typescript": "prettierPlugins.typescript",
-            "prettier/parser-html": "prettierPlugins.html",
-          },
+          // globals: {
+          //   typescript: "ts",
+          //   prettier: "prettier",
+          //   "prettier/parser-babel": "prettierPlugins.babel",
+          //   "prettier/parser-postcss": "prettierPlugins.postcss",
+          //   "prettier/parser-typescript": "prettierPlugins.typescript",
+          //   "prettier/parser-html": "prettierPlugins.html",
+          // },
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",
           assetFileNames: "static/[ext]/[name]-[hash].[ext]",
