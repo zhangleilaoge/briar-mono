@@ -165,6 +165,7 @@ export default class ConvertClassService {
           propNames,
           otherProps,
           templateContent: this.templateContent,
+          sourceCode: this.sourceFile.getText(this.sourceFile),
         }),
       ],
       this.sourceFile.endOfFileToken,
@@ -227,7 +228,7 @@ export default class ConvertClassService {
       const { callback, options } = val
       return {
         use: useEnum.Watch,
-        expression: `watch(${[normalizeWatchName(key), callback, options]
+        expression: `watch(() => ${[normalizeWatchName(key), callback, options]
           .filter((item) => item != null)
           .join(",")})`,
       }

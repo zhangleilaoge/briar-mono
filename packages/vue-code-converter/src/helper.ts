@@ -147,12 +147,18 @@ export const replaceThisContext = (
     })
 }
 
-export const getSetupStatements = (
-  setupProps: ConvertedExpression[],
+export const getSetupStatements = ({
+  setupProps,
+  templateContent,
+  sourceCode,
+}: {
+  setupProps: ConvertedExpression[]
   templateContent: string
-) => {
+  sourceCode: string
+}) => {
   // this.prop => prop.value
   const refNameMap: Map<string, true> = new Map()
+
   setupProps.forEach(({ use, returnNames }) => {
     if (
       returnNames != null &&
@@ -165,13 +171,31 @@ export const getSetupStatements = (
     }
   })
 
+  setupProps = setupProps.filter(({ use, returnNames }) => {
+    if (returnNames?.length === 1 && use && /^(ref|computed)$/.test(use)) {
+      // 如果响应式变量没有被任何地方所消费，则直接删掉
+      if (
+        sourceCode.match(new RegExp(`\\b${returnNames[0]}\\b`))?.length === 1
+      ) {
+        return false
+      }
+      return true
+    }
+    return true
+  })
+
   const returnPropsStatement = `return {${setupProps
     .filter((prop) => prop.use !== useEnum.ToRefs) // ignore spread props
     .map(({ returnNames }) => returnNames)
     .filter(Boolean)
     .flat()
     .filter((returnValue) => {
-      return templateContent.match(new RegExp(`\\b${returnValue}\\b`))
+      // 如果存在 template，则只返回 template 有消费的变量，否则返回所有变量
+      if (templateContent) {
+        return templateContent.match(new RegExp(`\\b${returnValue}\\b`))
+      }
+
+      return true
     })
     .join(",")}}`
 
@@ -309,14 +333,16 @@ export const getExportStatement = ({
   propNames,
   otherProps,
   templateContent,
+  sourceCode,
 }: {
   setupProps: ConvertedExpression[]
   propNames: string[]
   otherProps: ObjectLiteralElementLike[]
   templateContent: string
+  sourceCode: string
 }) => {
   const { statements: setupStatements, statementsExpressions } =
-    getSetupStatements(setupProps, templateContent)
+    getSetupStatements({ setupProps, templateContent, sourceCode })
   const propsArg = [
     propNames.length === 0 ? "_props" : `props`,
     statementsExpressions.some((express) => express.expression.includes("ctx."))
