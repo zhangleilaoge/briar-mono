@@ -4,7 +4,7 @@ import viteCompression from "vite-plugin-compression"
 // import { visualizer } from "rollup-plugin-visualizer"
 // import externalGlobals from "rollup-plugin-external-globals"
 
-const cdnUrl = "https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com"
+const cdnUrl = process.env.CDN_URL
 
 const config = ({ mode }: { mode: string }) => {
   const isProd = mode === "production"
@@ -75,7 +75,7 @@ const config = ({ mode }: { mode: string }) => {
       reportCompressedSize: false,
       sourcemap: false,
     },
-    base: isProd ? cdnUrl : "./",
+    base: isProd && cdnUrl ? cdnUrl : "./",
     resolve: {
       alias: {
         "@": "/src",
