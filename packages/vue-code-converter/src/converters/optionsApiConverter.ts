@@ -28,6 +28,7 @@ export const convertOptionsApi = (
         propNames,
         otherProps,
         templateContent,
+        sourceCode: sourceFile.getText(sourceFile),
       }),
     ],
     sourceFile.endOfFileToken,
