@@ -173,10 +173,11 @@ export const getSetupStatements = ({
 
   setupProps = setupProps.filter(({ use, returnNames }) => {
     if (returnNames?.length === 1 && use && /^(ref|computed)$/.test(use)) {
-      // 如果响应式变量没有被任何地方所消费，则直接删掉
+      // 如果存在 template，且响应式变量没有被其他任何地方所消费，则直接删掉；否则保留此变量
       if (
         sourceCode.match(new RegExp(`\\b${returnNames[0]}\\b`, "g"))?.length ===
-        1
+          1 &&
+        templateContent
       ) {
         return false
       }
@@ -191,7 +192,7 @@ export const getSetupStatements = ({
     .filter(Boolean)
     .flat()
     .filter((returnValue) => {
-      // 如果存在 template，则只返回 template 有消费的变量，否则返回所有变量
+      // 如果存在 template，则只返回 template 有消费的变量；否则返回所有变量
       if (templateContent) {
         return templateContent.match(new RegExp(`\\b${returnValue}\\b`))
       }
