@@ -4,7 +4,7 @@ import viteCompression from "vite-plugin-compression"
 // import { visualizer } from "rollup-plugin-visualizer"
 // import externalGlobals from "rollup-plugin-external-globals"
 
-const cdnUrl = "https://briar-assets-1309736035.cos.ap-nanjing.myqcloud.com"
+const cdnUrl = "https://briar-shanghai-1309736035.cos.ap-nanjing.myqcloud.com"
 
 const config = ({ mode }: { mode: string }) => {
   const isProd = mode === "production"
