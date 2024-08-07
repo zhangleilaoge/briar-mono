@@ -75,7 +75,7 @@ const config = ({ mode }: { mode: string }) => {
       reportCompressedSize: false,
       sourcemap: false,
     },
-    base: isProd && cdnUrl ? cdnUrl : "./",
+    base: isProd && cdnUrl ? cdnUrl : "/",
     resolve: {
       alias: {
         "@": "/src",
