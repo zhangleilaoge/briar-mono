@@ -2,7 +2,7 @@ param (
     [string]$cosSecretId,
     [string]$cosSecretKey,
     [string]$cosBucket,
-    [string]$region
+    [string]$region,
     [string]$cdnUrl
 )
 
