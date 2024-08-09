@@ -35,7 +35,7 @@ export const watchConverter = (
 
         return {
           use: useEnum.Watch,
-          expression: `watch(${normalizeWatchName(
+          expression: `watch(() => ${normalizeWatchName(
             name
           )}, (${parameters}) => ${block})`,
         }
@@ -76,7 +76,7 @@ export const watchConverter = (
 
         return {
           use: useEnum.Watch,
-          expression: `watch(${normalizeWatchName(
+          expression: `watch(() => ${normalizeWatchName(
             name
           )}, (${parameters}) => ${block}, ${JSON.stringify(options)} )`,
         }
