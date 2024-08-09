@@ -16,6 +16,7 @@ import {
   SyntaxKind,
   createSourceFile,
 } from "typescript"
+import { removeScriptComments, removeVueTemplateComments } from "./utils/string"
 
 const checkNeedConvert = (input: string) => {
   if (input.includes("composition-api") && input.includes("setup")) {
@@ -35,7 +36,8 @@ export const convertSrc = (input: string): IConvertResult => {
 
   const parsed = parseComponent(input)
   const { script, styles, template } = parsed
-  const scriptContent = script?.content || ""
+  const scriptContent = removeScriptComments(script?.content || "")
+  const templateContent = removeVueTemplateComments(template?.content || "")
 
   const sourceFile = createSourceFile("", scriptContent, ScriptTarget.Latest)
 
@@ -50,7 +52,7 @@ export const convertSrc = (input: string): IConvertResult => {
         template,
         {
           ...script,
-          content: convertOptionsApi(sourceFile, template?.content || ""),
+          content: convertOptionsApi(sourceFile, templateContent),
         } as SFCBlock,
         styles?.[0]
       ),
@@ -72,7 +74,7 @@ export const convertSrc = (input: string): IConvertResult => {
           content: new ConvertClassService(
             classNode,
             sourceFile,
-            template?.content || ""
+            templateContent
           ).convertClass(),
         } as SFCBlock,
         styles?.[0]

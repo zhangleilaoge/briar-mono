@@ -6,6 +6,7 @@
 - [fix] 仅在存在 template 模版场景才去做 setup 返回判断(老版本在无 template 场景，setup 函数不会返回任何值)
 - [fix] watch 的首位参数现使用监听函数写法，避免出现在 composition-api 中直接监听非影响式数据
 - [fix] 修复 @Model 解析 propName 错误的问题
+- [feat] 将永不修改的 ref 变量降级，降级为普通变量，或者删除变量将代码中的使用指向修改为 ref 变量的初始赋值
 
 ### 0.0.10 beta (2024/07/22)
 

@@ -1,6 +1,6 @@
 import { IVuexParams, Vue2LifecycleEnum, useEnum } from "./type"
 import { DEFAULT_VUEX_PARAMS } from "./constants"
-import { getInsertString } from "./utils/string"
+import { getInsertString, replaceVariableInCode } from "./utils/string"
 import {
   ScriptTarget,
   SourceFile,
@@ -71,6 +71,92 @@ const contextProps = [
   "refs",
   "emit",
 ]
+
+/** @description 将永不修改的 ref 变量降级，调整为普通变量或直接使用原始值 */
+const downgradeRefToNormal = (
+  setupProps: ConvertedExpression[],
+  sourceCode: string,
+  templateContent: string
+) => {
+  const downgradeRefs: string[] = []
+  const removeRefs: {
+    refName: string
+    initialValueName: string
+  }[] = []
+
+  // 1. 收集所有永不被修改的 ref 变量定义，并替换为普通变量声明，或直接删除当前变量声明
+  setupProps = setupProps
+    .map((item) => {
+      const { use, returnNames, expression } = item
+      const isNeverChange =
+        returnNames?.length === 1 &&
+        /^(ref)$/.test(use || "") &&
+        !sourceCode.match(new RegExp(`this\\.${returnNames[0]}\\s*=`, "g"))
+          ?.length &&
+        !templateContent.match(
+          new RegExp(`v-model(:[-\\w]+)?(\\.\\w+)?="${returnNames[0]}"`, "g")
+        )?.length
+
+      if (isNeverChange) {
+        const initialValueName = expression.match(
+          /ref\(\s*([a-zA-Z_$][\w$]*)\s*\)/
+        )?.[1]
+
+        if (initialValueName) {
+          removeRefs.push({
+            refName: returnNames[0],
+            initialValueName,
+          })
+          return null
+        } else {
+          downgradeRefs.push(returnNames[0])
+          return {
+            ...item,
+            use: undefined,
+            expression: expression.replace(/ref\((.+)\)/, "$1"),
+          }
+        }
+      }
+
+      return item
+    })
+    .filter(Boolean) as ConvertedExpression[]
+
+  // 2. 将 script 部分中对永不修改的原 ref 的引用调整为普通变量引用，或调整为原始值引用
+  setupProps = setupProps.map((item) => {
+    const { expression } = item
+
+    for (let i = 0; i < downgradeRefs?.length; i++) {
+      const refName = downgradeRefs[i]
+      if (expression.includes(`this.${refName}`)) {
+        return {
+          ...item,
+          expression: expression.replace(
+            new RegExp(`this\\.(${refName})`, "g"),
+            `$1`
+          ),
+        }
+      }
+    }
+
+    for (let i = 0; i < removeRefs?.length; i++) {
+      const { refName, initialValueName } = removeRefs[i]
+      if (expression.includes(`this.${refName}`)) {
+        return {
+          ...item,
+          expression: replaceVariableInCode(
+            expression,
+            `this.${refName}`,
+            initialValueName
+          ),
+        }
+      }
+    }
+    return item
+  })
+
+  return setupProps
+}
 
 /**
  * @description 将从 this 解构对象中的属性拆分出来
@@ -171,28 +257,30 @@ export const getSetupStatements = ({
     }
   })
 
+  // 1. 避免存在无用的响应式变量：如果存在 template，且响应式变量仅定义没有被其他任何地方所消费，则直接删掉
   setupProps = setupProps.filter(({ use, returnNames }) => {
-    if (returnNames?.length === 1 && use && /^(ref|computed)$/.test(use)) {
-      // 如果存在 template，且响应式变量没有被其他任何地方所消费，则直接删掉；否则保留此变量
-      if (
-        sourceCode.match(new RegExp(`\\b${returnNames[0]}\\b`, "g"))?.length ===
-          1 &&
-        templateContent
-      ) {
-        return false
-      }
-      return true
-    }
-    return true
+    const isUnused =
+      returnNames?.length === 1 &&
+      /^(ref|computed)$/.test(use || "") &&
+      templateContent &&
+      !templateContent.match(new RegExp(`\\b${returnNames[0]}\\b`, "g")) &&
+      sourceCode
+        .replace(/(['"]).*?\1/g, "")
+        .match(new RegExp(`\\b${returnNames[0]}\\b`, "g"))?.length === 1
+
+    return !isUnused
   })
 
+  // 2. 将永不修改的 ref 变量降级：调整为普通变量或直接使用原始值
+  setupProps = downgradeRefToNormal(setupProps, sourceCode, templateContent)
+
+  // 3. 避免无效的 return：如果存在 template，则只返回 template 有消费的变量
   const returnPropsStatement = `return {${setupProps
     .filter((prop) => prop.use !== useEnum.ToRefs) // ignore spread props
     .map(({ returnNames }) => returnNames)
     .filter(Boolean)
     .flat()
     .filter((returnValue) => {
-      // 如果存在 template，则只返回 template 有消费的变量；否则返回所有变量
       if (templateContent) {
         return templateContent.match(new RegExp(`\\b${returnValue}\\b`))
       }
@@ -208,6 +296,7 @@ export const getSetupStatements = ({
     .filter(({ expression }) => expression)
     .map(({ expression }) => {
       return {
+        // 4. 将 this.xx 写法进行转换
         expression: replaceThisContext(expression, refNameMap),
       }
     })
