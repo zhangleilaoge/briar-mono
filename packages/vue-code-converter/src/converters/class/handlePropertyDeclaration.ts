@@ -230,7 +230,7 @@ export const parseModelDecorator = (
     }),
     modelNode: {
       event: args[eventIndex].getText(sourceFile),
-      prop: args[propNameIndex].getText(sourceFile),
+      prop: args?.[propNameIndex]?.getText(sourceFile),
     },
   }
 
