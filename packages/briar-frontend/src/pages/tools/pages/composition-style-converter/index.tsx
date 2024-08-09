@@ -1,4 +1,4 @@
-import "prismjs/themes/prism.css"
+import "prismjs/themes/prism-tomorrow.css"
 
 import { GithubFilled } from "@ant-design/icons"
 import { convert, InputType } from "@zhangleilaoge/vue-code-converter"
@@ -15,15 +15,16 @@ import {
 } from "antd"
 import TextArea from "antd/es/input/TextArea"
 import Prism from "prismjs"
-import { FC, useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 
 import { DEMO } from "./constants/demo"
 import { COMPOSITION_API_CONFIG } from "./constants/formConfig"
 import s from "./style.module.scss"
+import mainStyle from "@/styles/main.module.scss"
 import { IConfigForm } from "./type"
 import { copyToClipboard } from "@/utils/document"
 
-const CompositionStyleConvert: FC = () => {
+const CompositionStyleConvert = () => {
   const [inputType, setInputType] = useState<InputType>()
   const [demoType, setDemoType] = useState<InputType>()
 
@@ -183,8 +184,8 @@ const CompositionStyleConvert: FC = () => {
             icon={<GithubFilled />}
             href="https://github.com/zhangleilaoge/briar-mono/tree/main/packages/vue-code-converter"
             target="_blank"
+            className={mainStyle.ColoredText}
           />
-          {/* todo 增加一个介绍页 */}
           {/* <FloatButton
             icon={<QuestionCircleOutlined />}
             href="https://github.com/zhangleilaoge/briar-mono/tree/main/packages/vue-code-converter"
