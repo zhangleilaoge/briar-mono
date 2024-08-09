@@ -1,0 +1,25 @@
+@import "@/styles/var.module.scss";
+
+.ContentLayout {
+  max-height: calc(100vh - $headerHeight - $headerMarginBottom);
+  overflow: scroll;
+  padding: 0 24px;
+  margin-top: $headerMarginBottom;
+  margin-left: $siderWidth;
+}
+
+.Sider {
+  height: calc(100vh - $headerHeight - $headerMarginBottom);
+  margin-top: $headerMarginBottom;
+  border-radius: 8px;
+  overflow: hidden;
+  background: transparent !important;
+  position: fixed !important;
+  top: $headerHeight;
+  width: $siderWidth;
+}
+
+.SiderMenu {
+  height: 100%;
+  border-right: 0;
+}

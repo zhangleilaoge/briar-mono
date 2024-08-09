@@ -8,7 +8,8 @@
     "publish": "lerna publish",
     "dev": "lerna run dev --parallel",
     "build": "lerna run build",
-    "build:watch": "lerna run build:watch"
+    "build:watch": "lerna run build:watch",
+    "dev:front": "cd packages/briar-frontend && pnpm run dev"
   },
   "engines": {
     "node": ">=16.14.0",
