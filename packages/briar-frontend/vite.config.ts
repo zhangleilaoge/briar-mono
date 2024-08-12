@@ -4,10 +4,10 @@ import viteCompression from "vite-plugin-compression"
 // import { visualizer } from "rollup-plugin-visualizer"
 // import externalGlobals from "rollup-plugin-external-globals"
 
-const cdnUrl = process.env.CDN_URL
+// const cdnUrl = process.env.CDN_URL
 
-const config = ({ mode }: { mode: string }) => {
-  const isProd = mode === "production"
+const config = () => {
+  // const isProd = mode === "production"
 
   return defineConfig({
     plugins: [
@@ -75,7 +75,7 @@ const config = ({ mode }: { mode: string }) => {
       reportCompressedSize: false,
       sourcemap: false,
     },
-    base: isProd && cdnUrl ? cdnUrl : "/",
+    // base: isProd && cdnUrl ? cdnUrl : "/",
     resolve: {
       alias: {
         "@": "/src",

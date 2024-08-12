@@ -44,11 +44,11 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # 4. upload to cdn
-Write-Output "Uploading to cdn..."
-node ./depoly-front-upload-cdn.js
-if ($LASTEXITCODE -ne 0) {
-    Write-Output "upload to cdn failed. Exiting..."
-    exit 1
-}
+# Write-Output "Uploading to cdn..."
+# node ./depoly-front-upload-cdn.js
+# if ($LASTEXITCODE -ne 0) {
+#     Write-Output "upload to cdn failed. Exiting..."
+#     exit 1
+# }
 
 Write-Output "All steps completed successfully."
