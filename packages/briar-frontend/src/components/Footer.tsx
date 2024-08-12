@@ -4,7 +4,10 @@ import s from "@/styles/main.module.scss"
 const Footer = () => {
   return (
     <AntdFooter className={s.Footer}>
-      Briar ©{new Date().getFullYear()} Created by zhangleilaoge
+      <div> Briar ©{new Date().getFullYear()} Created by zhangleilaoge</div>
+      <a href="https://beian.miit.gov.cn" target="_blank">
+        浙ICP备2024116093号
+      </a>
     </AntdFooter>
   )
 }
