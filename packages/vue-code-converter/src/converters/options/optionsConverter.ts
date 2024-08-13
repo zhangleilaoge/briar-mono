@@ -1,4 +1,8 @@
-import { ConvertedExpression, lifecycleNameMap } from "../../helper"
+import {
+  ConvertedExpression,
+  getToRefsExpression,
+  lifecycleNameMap,
+} from "../../helper"
 import { computedConverter } from "./computedConverter"
 import { dataConverter } from "./dataConverter"
 import { lifecycleConverter } from "./lifecycleConverter"
@@ -84,7 +88,7 @@ const _convertOptions = ({
       : [
           {
             use: useEnum.ToRefs,
-            expression: `const { ${propNames.join(",")} } = toRefs(props)`,
+            expression: getToRefsExpression(propNames),
             returnNames: propNames,
           },
         ]

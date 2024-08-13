@@ -14,7 +14,7 @@ export const convertOptionsApi = (sourceFile: SourceFile) => {
     throw new Error("invalid options.")
   }
 
-  const { setupProps, propNames, otherProps } = options
+  const { setupProps, otherProps } = options
 
   const newSrc = factory.createSourceFile(
     [
@@ -22,7 +22,6 @@ export const convertOptionsApi = (sourceFile: SourceFile) => {
       ...sourceFile.statements.filter((state) => !isExportAssignment(state)),
       getExportStatement({
         setupProps,
-        propNames,
         otherProps,
         sourceCode: sourceFile.getText(sourceFile),
       }),

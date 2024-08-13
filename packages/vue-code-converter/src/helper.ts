@@ -37,7 +37,7 @@ import {
   visitEachChild,
   visitNode,
 } from "typescript"
-import { getGlobalTemplate, setGlobalTemplate } from "./store"
+import { getGlobalScript, getGlobalTemplate, setGlobalTemplate } from "./store"
 
 export interface ConvertedExpression {
   expression: string
@@ -72,6 +72,10 @@ const contextProps = [
   "refs",
   "emit",
 ]
+
+export const getToRefsExpression = (returnNames: string[]) => {
+  return `const { ${returnNames.join(",")} } = toRefs(props)`
+}
 
 /** @description 将永不修改的 ref 变量降级，调整为普通变量或直接使用原始值 */
 const downgradeRefToNormal = (
@@ -160,8 +164,8 @@ const downgradeRefToNormal = (
     const { refName, initialValueName } = removeRefs[i]
     const template = getGlobalTemplate()
       ?.content?.replace(
-        new RegExp(`="${refName}"`, "g"),
-        `="${initialValueName}"`
+        new RegExp(`="\\s*([^}]*)\\b${refName}\\b([^}]*)\\s*"`, "g"),
+        `="$1${initialValueName}$2"`
       )
       .replace(
         new RegExp(`{{\\s*([^}]*)\\b${refName}\\b([^}]*)\\s*}}`, "g"),
@@ -261,6 +265,7 @@ export const getSetupStatements = ({
 }) => {
   // this.prop => prop.value
   const refNameMap: Map<string, true> = new Map()
+  const toRefsNames: string[] = []
 
   const templateContent = getGlobalTemplate()?.content || ""
 
@@ -290,10 +295,39 @@ export const getSetupStatements = ({
     return !isUnused
   })
 
-  // 2. 将永不修改的 ref 变量降级：调整为普通变量或直接使用原始值
+  // 2. 将无用的 toRefs 变量在 setup 中删去
+  setupProps = setupProps
+    .map((item) => {
+      const { use, returnNames = [] } = item
+      if (use === useEnum.ToRefs) {
+        const usedToRefsVars = returnNames?.filter((returnName) => {
+          return !!getGlobalScript()?.content.match(
+            new RegExp(`\\bthis\\.${returnName}\\b`, "g")
+          )?.length
+        })
+        return {
+          ...item,
+          returnNames: usedToRefsVars,
+          expression: getToRefsExpression(usedToRefsVars),
+        }
+      }
+      return item
+    })
+    .filter(({ use, returnNames }) => {
+      if (use === useEnum.ToRefs && returnNames) {
+        if (returnNames?.length === 0) {
+          return false
+        }
+        toRefsNames.push(...returnNames)
+      }
+
+      return true
+    })
+
+  // 3. 将永不修改的 ref 变量降级：调整为普通变量或直接使用原始值
   setupProps = downgradeRefToNormal(setupProps, sourceCode)
 
-  // 3. 避免无效的 return：如果存在 template，则只返回 template 有消费的变量
+  // 4. 避免无效的 return：如果存在 template，则只返回 template 有消费的变量
   const returnPropsStatement = `return {${setupProps
     .filter((prop) => prop.use !== useEnum.ToRefs) // ignore spread props
     .map(({ returnNames }) => returnNames)
@@ -332,6 +366,7 @@ export const getSetupStatements = ({
   return {
     statements,
     statementsExpressions,
+    toRefsNames,
   }
 }
 
@@ -442,19 +477,20 @@ export const getImportStatement = (setupProps: ConvertedExpression[]) => {
 
 export const getExportStatement = ({
   setupProps,
-  propNames,
   otherProps,
   sourceCode,
 }: {
   setupProps: ConvertedExpression[]
-  propNames: string[]
   otherProps: ObjectLiteralElementLike[]
   sourceCode: string
 }) => {
-  const { statements: setupStatements, statementsExpressions } =
-    getSetupStatements({ setupProps, sourceCode })
+  const {
+    statements: setupStatements,
+    statementsExpressions,
+    toRefsNames,
+  } = getSetupStatements({ setupProps, sourceCode })
   const propsArg = [
-    propNames.length === 0 ? "_props" : `props`,
+    toRefsNames.length === 0 ? "_props" : `props`,
     statementsExpressions.some((express) => express.expression.includes("ctx."))
       ? "ctx"
       : "_ctx",

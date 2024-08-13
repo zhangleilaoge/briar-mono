@@ -2,6 +2,7 @@ import {
   ConvertedExpression,
   getExportStatement,
   getImportStatement,
+  getToRefsExpression,
   lifecycleNameMap,
 } from "../helper"
 import { convertOptions } from "./options/optionsConverter"
@@ -155,7 +156,6 @@ export default class ConvertClassService {
         ),
         getExportStatement({
           setupProps,
-          propNames,
           otherProps,
           sourceCode: this.sourceFile.getText(this.sourceFile),
         }),
@@ -249,7 +249,7 @@ export default class ConvertClassService {
         : [
             {
               use: useEnum.ToRefs,
-              expression: `const { ${propNames.join(",")} } = toRefs(props)`,
+              expression: getToRefsExpression(propNames),
               returnNames: propNames,
             },
           ]
