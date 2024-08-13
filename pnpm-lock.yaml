@@ -17,12 +17,14 @@ importers:
   packages/briar-frontend:
     specifiers:
       '@ant-design/icons': ^5.4.0
+      '@antv/x6': ^2.18.1
+      '@antv/x6-react-shape': ^2.2.3
       '@types/react': ^18.3.3
       '@types/react-dom': ^18.3.0
       '@typescript-eslint/eslint-plugin': ^7.15.0
       '@typescript-eslint/parser': ^7.15.0
       '@vitejs/plugin-react-swc': ^3.5.0
-      '@zhangleilaoge/vue-code-converter': ^0.0.8
+      '@zhangleilaoge/vue-code-converter': ^0.0.9
       antd: ^5.19.3
       eslint: ^8.57.0
       eslint-plugin-react-hooks: ^4.6.2
@@ -41,6 +43,8 @@ importers:
       vite-plugin-compression: ^0.5.1
     dependencies:
       '@ant-design/icons': 5.4.0_react-dom@18.3.1+react@18.3.1
+      '@antv/x6': 2.18.1
+      '@antv/x6-react-shape': 2.2.3_790548795068977c8b304a92d0064321
       '@zhangleilaoge/vue-code-converter': link:../vue-code-converter
       antd: 5.19.3_react-dom@18.3.1+react@18.3.1
       prismjs: 1.29.0
@@ -152,6 +156,37 @@ packages:
       react: 18.3.1
       resize-observer-polyfill: 1.5.1
       throttle-debounce: 5.0.2
+    dev: false
+
+  /@antv/x6-common/2.0.17:
+    resolution: {integrity: sha512-37g7vmRkNdYzZPdwjaMSZEGv/MMH0S4r70/Jwoab1mioycmuIBN73iyziX8m56BvJSDucZ3J/6DU07otWqzS6A==}
+    dependencies:
+      lodash-es: 4.17.21
+      utility-types: 3.11.0
+    dev: false
+
+  /@antv/x6-geometry/2.0.5:
+    resolution: {integrity: sha512-MId6riEQkxphBpVeTcL4ZNXL4lScyvDEPLyIafvWMcWNTGK0jgkK7N20XSzqt8ltJb0mGUso5s56mrk8ysHu2A==}
+    dev: false
+
+  /@antv/x6-react-shape/2.2.3_790548795068977c8b304a92d0064321:
+    resolution: {integrity: sha512-42PGxk3XLnx9bsHQiRPauai5UQCrsh0MbWI3MyHRpjQaC30FK1rqyjH/EJ8qH0p6/cAndszZzCaiPqBbs3FqLQ==}
+    peerDependencies:
+      '@antv/x6': ^2.x
+      react: '>=18.0.0'
+      react-dom: '>= 18.0.0'
+    dependencies:
+      '@antv/x6': 2.18.1
+      react: 18.3.1
+      react-dom: 18.3.1_react@18.3.1
+    dev: false
+
+  /@antv/x6/2.18.1:
+    resolution: {integrity: sha512-FkWdbLOpN9J7dfJ+kiBxzowSx2N6syBily13NMVdMs+wqC6Eo5sLXWCZjQHateTFWgFw7ZGi2y9o3Pmdov1sXw==}
+    dependencies:
+      '@antv/x6-common': 2.0.17
+      '@antv/x6-geometry': 2.0.5
+      utility-types: 3.11.0
     dev: false
 
   /@babel/code-frame/7.24.7:
@@ -7208,6 +7243,11 @@ packages:
     dependencies:
       object.getownpropertydescriptors: 2.1.7
     dev: true
+
+  /utility-types/3.11.0:
+    resolution: {integrity: sha512-6Z7Ma2aVEWisaL6TvBCy7P8rm2LQoPv6dJ7ecIaIixHcwfbJ0x7mWdbcwlIM5IGQxPZSFYeqRCqlOOeKoJYMkw==}
+    engines: {node: '>= 4'}
+    dev: false
 
   /uuid/3.4.0:
     resolution: {integrity: sha1-sj5DWK+oogL+ehAK8fX4g/AgB+4=, tarball: uuid/download/uuid-3.4.0.tgz}

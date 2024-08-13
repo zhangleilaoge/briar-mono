@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
+    "@antv/x6": "^2.18.1",
+    "@antv/x6-react-shape": "^2.2.3",
     "@zhangleilaoge/vue-code-converter": "^0.0.9",
     "antd": "^5.19.3",
     "prismjs": "^1.29.0",
