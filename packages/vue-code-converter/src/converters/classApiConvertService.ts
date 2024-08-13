@@ -77,19 +77,12 @@ export default class ConvertClassService {
 
   lifecycleMap: Map<string, IMethodObj> = new Map()
 
-  templateContent = ""
-
   // 其他配置项
   otherProps: ObjectLiteralElementLike[] = []
 
-  constructor(
-    classNode: ClassDeclaration,
-    sourceFile: SourceFile,
-    templateContent: string
-  ) {
+  constructor(classNode: ClassDeclaration, sourceFile: SourceFile) {
     this.sourceFile = sourceFile
     this.classNode = classNode
-    this.templateContent = templateContent
   }
 
   convertClass() {
@@ -164,7 +157,6 @@ export default class ConvertClassService {
           setupProps,
           propNames,
           otherProps,
-          templateContent: this.templateContent,
           sourceCode: this.sourceFile.getText(this.sourceFile),
         }),
       ],

@@ -8,10 +8,7 @@ import { getExportStatement, getImportStatement } from "../helper"
 import { convertOptions } from "./options/optionsConverter"
 import { handleVuex } from "../utils/vuex"
 
-export const convertOptionsApi = (
-  sourceFile: SourceFile,
-  templateContent: string
-) => {
+export const convertOptionsApi = (sourceFile: SourceFile) => {
   const options = convertOptions(sourceFile, handleVuex(sourceFile))
   if (!options) {
     throw new Error("invalid options.")
@@ -27,7 +24,6 @@ export const convertOptionsApi = (
         setupProps,
         propNames,
         otherProps,
-        templateContent,
         sourceCode: sourceFile.getText(sourceFile),
       }),
     ],
