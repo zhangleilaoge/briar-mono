@@ -9,6 +9,7 @@ body {
 
 .ColoredText {
   color: $textColor;
+
   svg {
     color: $textColor;
   }
@@ -33,6 +34,10 @@ body {
 .Footer {
   text-align: center;
   color: $textColor;
+
+  a {
+    color: #c8c9cc;
+  }
 }
 
 .Briar {
