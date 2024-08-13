@@ -37,6 +37,7 @@ import {
   visitEachChild,
   visitNode,
 } from "typescript"
+import { getGlobalTemplate, setGlobalTemplate } from "./store"
 
 export interface ConvertedExpression {
   expression: string
@@ -75,8 +76,7 @@ const contextProps = [
 /** @description 将永不修改的 ref 变量降级，调整为普通变量或直接使用原始值 */
 const downgradeRefToNormal = (
   setupProps: ConvertedExpression[],
-  sourceCode: string,
-  templateContent: string
+  sourceCode: string
 ) => {
   const downgradeRefs: string[] = []
   const removeRefs: {
@@ -85,42 +85,44 @@ const downgradeRefToNormal = (
   }[] = []
 
   // 1. 收集所有永不被修改的 ref 变量定义，并替换为普通变量声明，或直接删除当前变量声明
-  setupProps = setupProps
-    .map((item) => {
-      const { use, returnNames, expression } = item
-      const isNeverChange =
-        returnNames?.length === 1 &&
-        /^(ref)$/.test(use || "") &&
-        !sourceCode.match(new RegExp(`this\\.${returnNames[0]}\\s*=`, "g"))
-          ?.length &&
-        !templateContent.match(
-          new RegExp(`v-model(:[-\\w]+)?(\\.\\w+)?="${returnNames[0]}"`, "g")
-        )?.length
+  setupProps = setupProps.map((item) => {
+    const { use, returnNames, expression } = item
+    const isNeverChange =
+      returnNames?.length === 1 &&
+      /^(ref)$/.test(use || "") &&
+      !sourceCode.match(new RegExp(`this\\.${returnNames[0]}\\s*=`, "g"))
+        ?.length &&
+      !getGlobalTemplate()?.content.match(
+        new RegExp(`v-model(:[-\\w]+)?(\\.\\w+)?="${returnNames[0]}"`, "g")
+      )?.length
 
-      if (isNeverChange) {
-        const initialValueName = expression.match(
-          /ref\(\s*([a-zA-Z_$][\w$]*)\s*\)/
-        )?.[1]
+    if (isNeverChange) {
+      const initialValueName = expression.match(
+        /ref\(\s*([a-zA-Z_$][\w$]*)\s*\)/
+      )?.[1]
 
-        if (initialValueName) {
-          removeRefs.push({
-            refName: returnNames[0],
-            initialValueName,
-          })
-          return null
-        } else {
-          downgradeRefs.push(returnNames[0])
-          return {
-            ...item,
-            use: undefined,
-            expression: expression.replace(/ref\((.+)\)/, "$1"),
-          }
+      if (initialValueName) {
+        removeRefs.push({
+          refName: returnNames[0],
+          initialValueName,
+        })
+        return {
+          use: undefined,
+          returnNames: [initialValueName],
+          expression: "",
+        }
+      } else {
+        downgradeRefs.push(returnNames[0])
+        return {
+          ...item,
+          use: undefined,
+          expression: expression.replace(/ref\((.+)\)/, "$1"),
         }
       }
+    }
 
-      return item
-    })
-    .filter(Boolean) as ConvertedExpression[]
+    return item
+  })
 
   // 2. 将 script 部分中对永不修改的原 ref 的引用调整为普通变量引用，或调整为原始值引用
   setupProps = setupProps.map((item) => {
@@ -154,6 +156,23 @@ const downgradeRefToNormal = (
     }
     return item
   })
+  for (let i = 0; i < removeRefs?.length; i++) {
+    const { refName, initialValueName } = removeRefs[i]
+    const template = getGlobalTemplate()
+      ?.content?.replace(
+        new RegExp(`="${refName}"`, "g"),
+        `="${initialValueName}"`
+      )
+      .replace(
+        new RegExp(`{{\\s*([^}]*)\\b${refName}\\b([^}]*)\\s*}}`, "g"),
+        `{{ $1${initialValueName}$2 }}`
+      )
+
+    setGlobalTemplate({
+      ...getGlobalTemplate(),
+      content: template,
+    })
+  }
 
   return setupProps
 }
@@ -235,15 +254,15 @@ export const replaceThisContext = (
 
 export const getSetupStatements = ({
   setupProps,
-  templateContent,
   sourceCode,
 }: {
   setupProps: ConvertedExpression[]
-  templateContent: string
   sourceCode: string
 }) => {
   // this.prop => prop.value
   const refNameMap: Map<string, true> = new Map()
+
+  const templateContent = getGlobalTemplate()?.content || ""
 
   setupProps.forEach(({ use, returnNames }) => {
     if (
@@ -272,7 +291,7 @@ export const getSetupStatements = ({
   })
 
   // 2. 将永不修改的 ref 变量降级：调整为普通变量或直接使用原始值
-  setupProps = downgradeRefToNormal(setupProps, sourceCode, templateContent)
+  setupProps = downgradeRefToNormal(setupProps, sourceCode)
 
   // 3. 避免无效的 return：如果存在 template，则只返回 template 有消费的变量
   const returnPropsStatement = `return {${setupProps
@@ -281,6 +300,8 @@ export const getSetupStatements = ({
     .filter(Boolean)
     .flat()
     .filter((returnValue) => {
+      // 此时 template 可能已经被改动，这里冲获取一次
+      const templateContent = getGlobalTemplate()?.content || ""
       if (templateContent) {
         return templateContent.match(new RegExp(`\\b${returnValue}\\b`))
       }
@@ -423,17 +444,15 @@ export const getExportStatement = ({
   setupProps,
   propNames,
   otherProps,
-  templateContent,
   sourceCode,
 }: {
   setupProps: ConvertedExpression[]
   propNames: string[]
   otherProps: ObjectLiteralElementLike[]
-  templateContent: string
   sourceCode: string
 }) => {
   const { statements: setupStatements, statementsExpressions } =
-    getSetupStatements({ setupProps, templateContent, sourceCode })
+    getSetupStatements({ setupProps, sourceCode })
   const propsArg = [
     propNames.length === 0 ? "_props" : `props`,
     statementsExpressions.some((express) => express.expression.includes("ctx."))

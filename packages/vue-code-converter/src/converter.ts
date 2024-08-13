@@ -1,4 +1,4 @@
-import { SFCBlock, parseComponent } from "vue-template-compiler"
+import { SFCBlock } from "vue-template-compiler"
 import ConvertClassService from "./converters/classApiConvertService"
 import { convertOptionsApi } from "./converters/optionsApiConverter"
 import { getNodeByKind } from "./utils/ast"
@@ -9,14 +9,18 @@ import {
 } from "./converters/safeConverter"
 import prettier, { Options } from "prettier"
 import { DEFAULT_PRETTIER_OPTIONS } from "./constants"
-import { getCompleteContent } from "./utils/jsx"
 import {
   ClassDeclaration,
   ScriptTarget,
   SyntaxKind,
   createSourceFile,
 } from "typescript"
-import { removeScriptComments, removeVueTemplateComments } from "./utils/string"
+import {
+  getFileCode,
+  getGlobalScript,
+  initFileCode,
+  setGlobalScript,
+} from "./store"
 
 const checkNeedConvert = (input: string) => {
   if (input.includes("composition-api") && input.includes("setup")) {
@@ -29,17 +33,17 @@ const checkNeedConvert = (input: string) => {
 export const convertSrc = (input: string): IConvertResult => {
   if (!checkNeedConvert(input)) {
     return {
-      output: input,
       inputType: InputType.CompositionApi,
     }
   }
 
-  const parsed = parseComponent(input)
-  const { script, styles, template } = parsed
-  const scriptContent = removeScriptComments(script?.content || "")
-  const templateContent = removeVueTemplateComments(template?.content || "")
+  initFileCode(input)
 
-  const sourceFile = createSourceFile("", scriptContent, ScriptTarget.Latest)
+  const sourceFile = createSourceFile(
+    "",
+    getGlobalScript()?.content || "",
+    ScriptTarget.Latest
+  )
 
   // optionsAPI
   const exportAssignNode = getNodeByKind(
@@ -47,15 +51,11 @@ export const convertSrc = (input: string): IConvertResult => {
     SyntaxKind.ExportAssignment
   )
   if (exportAssignNode) {
+    setGlobalScript({
+      content: convertOptionsApi(sourceFile),
+    } as SFCBlock)
+
     return {
-      output: getCompleteContent(
-        template,
-        {
-          ...script,
-          content: convertOptionsApi(sourceFile, templateContent),
-        } as SFCBlock,
-        styles?.[0]
-      ),
       inputType: InputType.OptionStyle,
     }
   }
@@ -66,19 +66,11 @@ export const convertSrc = (input: string): IConvertResult => {
     SyntaxKind.ClassDeclaration
   )
   if (classNode) {
+    setGlobalScript({
+      content: new ConvertClassService(classNode, sourceFile).convertClass(),
+    } as SFCBlock)
+
     return {
-      output: getCompleteContent(
-        template,
-        {
-          ...script,
-          content: new ConvertClassService(
-            classNode,
-            sourceFile,
-            templateContent
-          ).convertClass(),
-        } as SFCBlock,
-        styles?.[0]
-      ),
       inputType: InputType.DecorateStyle,
     }
   }
@@ -87,10 +79,8 @@ export const convertSrc = (input: string): IConvertResult => {
 }
 
 export const safeConvert = (result: IConvertResult): IConvertResult => {
-  const { output, inputType } = result
-  const parsed = parseComponent(output)
-  const { script, styles, template } = parsed
-  const scriptContent = script?.content || ""
+  const { inputType } = result
+  const scriptContent = getGlobalScript()?.content || ""
 
   // 处理不兼容的语法
   const { warning, output: handledIncompatibleSyntaxScript } =
@@ -100,12 +90,11 @@ export const safeConvert = (result: IConvertResult): IConvertResult => {
   const { output: handledSameNameScript, warning: handledSameNameWarning } =
     handleSameNameVar(handledIncompatibleSyntaxScript, warning)
 
+  setGlobalScript({
+    content: handledSameNameScript,
+  } as SFCBlock)
+
   return {
-    output: getCompleteContent(
-      template,
-      { ...script, content: handledSameNameScript } as SFCBlock,
-      styles?.[0]
-    ),
     inputType,
     warning: handledSameNameWarning,
   }
@@ -115,22 +104,24 @@ export const prettierConvert = (
   result: IConvertResult,
   prettierOptions: Partial<Options> = DEFAULT_PRETTIER_OPTIONS
 ): IConvertResult => {
-  const { output } = result
+  const output = getFileCode()
+
   const formattedOutput = prettier.format(output, {
     ...DEFAULT_PRETTIER_OPTIONS,
     ...prettierOptions,
   })
 
+  initFileCode(formattedOutput)
+
   return {
     ...result,
-    output: formattedOutput,
   }
 }
 
 export const convert = (
   input: string,
   option?: IConvertOptions
-): IConvertResult => {
+): IConvertResult & { output: string } => {
   let result = convertSrc(input)
 
   if (option?.strict && result.inputType !== InputType.CompositionApi) {
@@ -141,5 +132,5 @@ export const convert = (
     result = prettierConvert(result, option?.prettier)
   }
 
-  return result
+  return { ...result, output: getFileCode() || input }
 }
