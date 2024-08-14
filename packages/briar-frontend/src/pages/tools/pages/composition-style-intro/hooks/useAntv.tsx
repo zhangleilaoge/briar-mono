@@ -5,6 +5,30 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Pop } from "zent"
 import { Export } from "@antv/x6-plugin-export"
 
+enum CompareTypeEnum {
+  YearOnYear = "yearOnYear",
+  MonthOnMonth = "monthOnMonth",
+}
+
+interface IGraphNode {
+  key: string
+  parent?: string
+  proportion?: number
+  content: {
+    title: string
+    subTitle: string
+    value: string
+    compareType?: CompareTypeEnum
+    compareRadio?: number
+    borderColor?: string
+    backgroundColor?: string
+  }
+  popContent?: {
+    desc?: string
+    value?: string
+  }
+}
+
 const nodeWidth = 260
 const nodeHeight = 88
 const male =
