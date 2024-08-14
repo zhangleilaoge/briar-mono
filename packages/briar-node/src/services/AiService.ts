@@ -2,18 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 import { IChatRequestParams, RoleEnum } from 'briar-shared';
 import OpenAI from 'openai';
-import {
-  DEFAULT_FREE_API_KEY,
-  FOREIGN_OPEN_AI_BASE_URL,
-  OPEN_AI_BASE_URL,
-} from 'src/constants/ai';
-import { isDev } from 'src/constants/env';
+import { DEFAULT_FREE_API_KEY, OPEN_AI_BASE_URL } from 'src/constants/ai';
 
 @Injectable()
 export class AiService {
   openai = new OpenAI({
     apiKey: process.env.API_KEY || DEFAULT_FREE_API_KEY,
-    baseURL: isDev ? OPEN_AI_BASE_URL : FOREIGN_OPEN_AI_BASE_URL,
+    baseURL: OPEN_AI_BASE_URL,
   });
 
   @Throttle({
