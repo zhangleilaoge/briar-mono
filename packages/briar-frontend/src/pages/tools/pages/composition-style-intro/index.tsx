@@ -1,8 +1,15 @@
+import useAntv from "./hooks/useAntv"
+
 const CompositionApiIntro = () => {
+  const { exportPng } = useAntv()
   return (
-    <div>
-      <h1>Composition API</h1>
-    </div>
+    <>
+      <button onClick={exportPng}></button>
+      <div
+        id="antv-playground"
+        style={{ width: "100%", height: "448px" }}
+      ></div>
+    </>
   )
 }
 
