@@ -1,4 +1,4 @@
-import { Controller, Post, Query } from '@nestjs/common';
+import { Body, Controller, Post, Query } from '@nestjs/common';
 import { AiService } from '../services/AiService';
 import { IMessage, ModelEnum } from 'briar-shared';
 
@@ -8,8 +8,8 @@ export class AppController {
 
   @Post('chatRequest')
   async chatRequest(
-    @Query('messages') messages: IMessage[],
-    @Query('model') model: ModelEnum,
+    @Body('messages') messages: IMessage[],
+    @Body('model') model: ModelEnum,
   ) {
     const data = await this.AiService.chatRequest({
       messages,

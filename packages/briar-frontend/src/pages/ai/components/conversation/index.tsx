@@ -2,11 +2,17 @@ import { Button, Input, Popover, Radio, Select, Space } from "antd"
 import s from "./style.module.scss"
 import { ArrowUpOutlined, FormOutlined } from "@ant-design/icons"
 import { FC, useContext, useEffect, useState } from "react"
-import { IConversation, ModelEnum, RoleEnum } from "briar-shared"
+import {
+  IChatRequestParams,
+  IConversation,
+  ModelEnum,
+  RoleEnum,
+} from "briar-shared"
 import ConversationContext from "../../context/conversation"
 import Messages from "../messages"
 import { chatRequest } from "@/api/ai"
 import { onError } from "@/utils/notify"
+import { useRequest } from "alova/client"
 
 interface IProps {}
 
@@ -26,6 +32,10 @@ const Conversation: FC<IProps> = (props) => {
     setCurrentConversationKey(undefined)
   }
 
+  const { loading, onError, send } = useRequest(chatRequest, {
+    immediate: false,
+  })
+
   const submit = async () => {
     if (!inputValue) {
       return
@@ -33,66 +43,55 @@ const Conversation: FC<IProps> = (props) => {
 
     const submitTime = Date.now()
 
-    // const data = await Promise.resolve({
-    //   choices: [
-    //     {
-    //       finish_reason: "stop",
-    //       index: 0,
-    //       message: {
-    //         content:
-    //           "The 2020 World Series was played in Texas at Globe Life Field in Arlington.",
-    //         role: "assistant",
-    //       },
-    //       logprobs: null,
-    //     },
-    //   ],
-    //   created: Math.random() * 99999,
-    //   id: "chatcmpl-7QyqpwdfhqwajicIEznoc6Q47XAyW",
-    //   model: "gpt-4o-mini",
-    //   object: "chat.completion",
-    //   usage: {
-    //     completion_tokens: 17,
-    //     prompt_tokens: 57,
-    //     total_tokens: 74,
-    //   },
-    // })
+    const submitMessage = {
+      role: RoleEnum.User,
+      content: inputValue,
+      created: submitTime,
+    }
 
-    chatRequest({
-      messages: conversation?.messages || [],
+    await send({
+      messages: (conversation?.messages || []).concat(submitMessage),
       model,
     })
-      .then((data) => {
-        const userMessage = {
-          role: RoleEnum.User,
-          content: inputValue,
-          created: submitTime,
-        }
 
-        const assistantMessage = {
-          role: RoleEnum.Assistant,
-          content: data?.choices?.[0]?.message?.content,
-          created: data?.created,
-        }
+    setInputValue("")
 
-        if (conversation) {
-          updateConversation({
-            ...conversation,
-            messages: [...conversation.messages, userMessage, assistantMessage],
-          })
-        } else {
-          addConversation({
-            model,
-            created: submitTime,
-            messages: [userMessage, assistantMessage],
-          })
-        }
-      })
-      .catch((e) => {
-        onError(e)
-      })
-      .finally(() => {
-        setInputValue("")
-      })
+    // chatRequest({
+    //   messages: conversation?.messages || [],
+    //   model,
+    // })
+    //   .then((data) => {
+    //     const userMessage = {
+    //       role: RoleEnum.User,
+    //       content: inputValue,
+    //       created: submitTime,
+    //     }
+
+    //     const assistantMessage = {
+    //       role: RoleEnum.Assistant,
+    //       content: data?.choices?.[0]?.message?.content,
+    //       created: data?.created,
+    //     }
+
+    //     if (conversation) {
+    //       updateConversation({
+    //         ...conversation,
+    //         messages: [...conversation.messages, userMessage, assistantMessage],
+    //       })
+    //     } else {
+    //       addConversation({
+    //         model,
+    //         created: submitTime,
+    //         messages: [userMessage, assistantMessage],
+    //       })
+    //     }
+    //   })
+    //   .catch((e) => {
+    //     onError(e)
+    //   })
+    //   .finally(() => {
+    //     setInputValue("")
+    //   })
   }
 
   useEffect(() => {

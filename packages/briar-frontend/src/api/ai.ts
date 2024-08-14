@@ -2,4 +2,4 @@ import { IChatRequestParams } from "briar-shared"
 import alovaInstance from "./common"
 
 export const chatRequest = (params: IChatRequestParams) =>
-  alovaInstance.Post<any>("./chatRequest", params)
+  alovaInstance.Post("./ai/chatRequest", params)
