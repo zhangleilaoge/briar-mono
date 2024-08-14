@@ -24,6 +24,7 @@ Set-Location -Path $scriptDir
 
 # 1. Git pull
 Write-Output "Pulling latest changes from git..."
+git restore .
 git pull
 if ($LASTEXITCODE -ne 0) {
     Write-Output "Git pull failed. Exiting..."
