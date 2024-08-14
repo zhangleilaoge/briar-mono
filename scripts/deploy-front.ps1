@@ -3,7 +3,7 @@ param (
     [string]$cosSecretKey,
     [string]$cosBucket,
     [string]$region,
-    [string]$cdnUrl
+    [string]$cdnUrl,
     [string]$apiKey
 )
 
