@@ -1,6 +1,7 @@
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react-swc"
 import viteCompression from "vite-plugin-compression"
+import { chunkSplitPlugin } from "vite-plugin-chunk-split"
 // import { visualizer } from "rollup-plugin-visualizer"
 // import externalGlobals from "rollup-plugin-external-globals"
 
@@ -23,6 +24,12 @@ const config = () => {
       react(),
       viteCompression({
         threshold: 5120,
+      }),
+      chunkSplitPlugin({
+        strategy: "default",
+        customSplitting: {
+          typescript: ["typescript"],
+        },
       }),
       // visualizer({
       //   open: true, // 注意这里要设置为true，否则无效，如果存在本地服务端口，将在打包后自动展示

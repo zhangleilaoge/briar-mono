@@ -15,7 +15,7 @@ async function bootstrap() {
   app.enableCors({
     origin: isDev
       ? 'http://127.0.0.1:5173'
-      : 'http://restrained-hunter.website',
+      : /http:\/\/(www\.)?restrained-hunter\.website/,
     methods: 'GET,PUT,POST',
     allowedHeaders: 'Content-Type,Authorization',
     exposedHeaders: 'Content-Range,X-Content-Range',

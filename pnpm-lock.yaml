@@ -42,6 +42,7 @@ importers:
       terser: ^5.31.3
       typescript: ^5.2.2
       vite: ^5.3.4
+      vite-plugin-chunk-split: ^0.5.0
       vite-plugin-compression: ^0.5.1
     dependencies:
       '@ant-design/icons': 5.4.0_react-dom@18.3.1+react@18.3.1
@@ -71,6 +72,7 @@ importers:
       terser: 5.31.3
       typescript: 5.5.4
       vite: 5.3.5_sass@1.77.8+terser@5.31.3
+      vite-plugin-chunk-split: 0.5.0_vite@5.3.5
       vite-plugin-compression: 0.5.1_vite@5.3.5
 
   packages/briar-node:
@@ -5010,6 +5012,10 @@ packages:
       resolve-cwd: 3.0.0
     dev: true
 
+  /import-meta-resolve/4.1.0:
+    resolution: {integrity: sha512-I6fiaX09Xivtk+THaMfAwnA3MVA5Big1WHF1Dfx9hFuvNIWpXnorlkzhcQf6ehrqQiiZECRt1poOAkPmer3ruw==}
+    dev: true
+
   /imurmurhash/0.1.4:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
@@ -8843,6 +8849,17 @@ packages:
       assert-plus: 1.0.0
       core-util-is: 1.0.2
       extsprintf: 1.3.0
+    dev: true
+
+  /vite-plugin-chunk-split/0.5.0_vite@5.3.5:
+    resolution: {integrity: sha512-pasNKLhH+ICjoCF6HoKKvgmZ1LEPSCIKAa8Lz0ZpMyQC9bLmCLT7UxgKMULewsc9SUw89OX0udsGiIQCtr8wLA==}
+    peerDependencies:
+      vite: ^4 || ^5
+    dependencies:
+      es-module-lexer: 1.5.4
+      import-meta-resolve: 4.1.0
+      magic-string: 0.30.10
+      vite: 5.3.5_sass@1.77.8+terser@5.31.3
     dev: true
 
   /vite-plugin-compression/0.5.1_vite@5.3.5:
