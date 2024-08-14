@@ -2,16 +2,12 @@ import { Button, Input, Popover, Radio, Select, Space } from "antd"
 import s from "./style.module.scss"
 import { ArrowUpOutlined, FormOutlined } from "@ant-design/icons"
 import { FC, useContext, useEffect, useState } from "react"
-import {
-  IChatRequestParams,
-  IConversation,
-  ModelEnum,
-  RoleEnum,
-} from "briar-shared"
+import { IConversation, ModelEnum, RoleEnum } from "briar-shared"
 import ConversationContext from "../../context/conversation"
 import Messages from "../messages"
 import { chatRequest } from "@/api/ai"
-import { onError } from "@/utils/notify"
+import { errorNotify } from "@/utils/notify"
+
 import { useRequest } from "alova/client"
 
 interface IProps {}
@@ -32,12 +28,19 @@ const Conversation: FC<IProps> = (props) => {
     setCurrentConversationKey(undefined)
   }
 
-  const { loading, onError, send } = useRequest(chatRequest, {
+  const { loading, send } = useRequest(chatRequest, {
     immediate: false,
   })
 
+  const scrollToBottom = () => {
+    const messages = document.querySelector(`.${s.Messages}`)
+    if (messages) {
+      messages.scrollTop = messages.scrollHeight
+    }
+  }
+
   const submit = async () => {
-    if (!inputValue) {
+    if (!inputValue || loading) {
       return
     }
 
@@ -49,49 +52,44 @@ const Conversation: FC<IProps> = (props) => {
       created: submitTime,
     }
 
-    await send({
+    send({
       messages: (conversation?.messages || []).concat(submitMessage),
       model,
     })
+      .then((data) => {
+        const userMessage = {
+          role: RoleEnum.User,
+          content: inputValue,
+          created: submitTime,
+        }
 
-    setInputValue("")
+        const assistantMessage = {
+          role: RoleEnum.Assistant,
+          content: data?.choices?.[0]?.message?.content || "",
+          created: data?.created,
+        }
 
-    // chatRequest({
-    //   messages: conversation?.messages || [],
-    //   model,
-    // })
-    //   .then((data) => {
-    //     const userMessage = {
-    //       role: RoleEnum.User,
-    //       content: inputValue,
-    //       created: submitTime,
-    //     }
+        if (conversation) {
+          updateConversation({
+            ...conversation,
+            messages: [...conversation.messages, userMessage, assistantMessage],
+          })
+        } else {
+          addConversation({
+            model,
+            created: submitTime,
+            messages: [userMessage, assistantMessage],
+          })
+        }
 
-    //     const assistantMessage = {
-    //       role: RoleEnum.Assistant,
-    //       content: data?.choices?.[0]?.message?.content,
-    //       created: data?.created,
-    //     }
-
-    //     if (conversation) {
-    //       updateConversation({
-    //         ...conversation,
-    //         messages: [...conversation.messages, userMessage, assistantMessage],
-    //       })
-    //     } else {
-    //       addConversation({
-    //         model,
-    //         created: submitTime,
-    //         messages: [userMessage, assistantMessage],
-    //       })
-    //     }
-    //   })
-    //   .catch((e) => {
-    //     onError(e)
-    //   })
-    //   .finally(() => {
-    //     setInputValue("")
-    //   })
+        scrollToBottom()
+      })
+      .catch((e) => {
+        errorNotify(e)
+      })
+      .finally(() => {
+        setInputValue("")
+      })
   }
 
   useEffect(() => {
@@ -133,6 +131,7 @@ const Conversation: FC<IProps> = (props) => {
             icon={<ArrowUpOutlined />}
             size="large"
             onClick={submit}
+            loading={loading}
           ></Button>
         </Space.Compact>
       </div>

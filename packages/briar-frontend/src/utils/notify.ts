@@ -1,6 +1,6 @@
 import { notification } from "antd"
 
-export const onError = (error: any) => {
+export const errorNotify = (error: any) => {
   const [api] = notification.useNotification()
 
   api.error({
