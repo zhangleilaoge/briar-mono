@@ -1,0 +1,32 @@
+@import "@/styles/var.module.scss";
+
+$messageAreaWidth: 768px;
+
+.Head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: $textColor;
+  width: 100%;
+}
+
+.Input,
+.Messages {
+  max-width: $messageAreaWidth;
+  width: calc(100% - 124px);
+}
+
+.Messages {
+  height: calc(100vh - 276px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}

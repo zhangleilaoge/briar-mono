@@ -6,6 +6,7 @@ import { lazy } from "react"
 
 export enum MenuKeyEnum {
   Tools = "tools",
+  Ai = "ai",
 }
 
 export enum ToolsPathKeyEnum {
@@ -15,6 +16,11 @@ export enum ToolsPathKeyEnum {
 }
 
 export const MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
+  {
+    key: MenuKeyEnum.Ai,
+    label: "AI",
+    component: lazy(() => import("../pages/ai")),
+  },
   {
     key: MenuKeyEnum.Tools,
     label: "工具",

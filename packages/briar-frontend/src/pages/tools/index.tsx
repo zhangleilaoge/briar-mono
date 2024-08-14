@@ -1,14 +1,17 @@
 import { Routes } from "react-router-dom"
-import { Menu, theme } from "antd"
-import s from "./style.module.scss"
+import { Layout, Menu, theme } from "antd"
+import mainStyle from "@/styles/main.module.scss"
 import { Content } from "antd/es/layout/layout"
 import Footer from "@/components/Footer"
 import { SIDER_MENU_ROUTER_CONFIG, ToolsPathKeyEnum } from "@/constants/router"
 import useLevelPath from "@/hooks/useLevelPath"
 import { findSuperiorRouterConfig, getRoutes } from "@/utils/router"
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
+import Sider from "antd/es/layout/Sider"
 
 function CodeConverter() {
+  const [collapsed, setCollapsed] = useState(false)
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken()
@@ -20,18 +23,24 @@ function CodeConverter() {
   }, [menuKey])
 
   return (
-    <>
-      <div className={s.Sider}>
+    <Layout>
+      <Sider
+        className={mainStyle.Sider}
+        width={240}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
         <Menu
           mode="inline"
           selectedKeys={[menuKey]}
           defaultOpenKeys={defaultOpenKeys}
-          className={s.SiderMenu}
+          className={mainStyle.SiderMenu}
           items={SIDER_MENU_ROUTER_CONFIG}
           onClick={({ key }) => onLevelPathChange(key)}
         />
-      </div>
-      <div className={s.ContentLayout}>
+      </Sider>
+      <div className={mainStyle.ContentLayout}>
         <Content
           style={{
             padding: 24,
@@ -50,7 +59,7 @@ function CodeConverter() {
         </Content>
         <Footer />
       </div>
-    </>
+    </Layout>
   )
 }
 
