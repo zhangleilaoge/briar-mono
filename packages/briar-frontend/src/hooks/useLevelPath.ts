@@ -9,6 +9,7 @@ const useLevelPath = (level = 1) => {
   const { pathname } = useLocation()
 
   const onLevelPathChange = (key: string) => {
+    if (key === menuKey) return
     setMenuKey(key)
     navigate(key)
   }

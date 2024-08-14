@@ -12,6 +12,7 @@ import CompositionApiIntro from "./pages/tools/pages/composition-style-intro"
 
 function App() {
   const { menuKey, onLevelPathChange } = useLevelPath()
+
   return (
     <ConfigProvider
       theme={{
@@ -41,6 +42,18 @@ function App() {
             defaultActiveBg: ThemeColor.selectedBgColor,
             defaultHoverColor: ThemeColor.selectedColor,
             defaultHoverBorderColor: ThemeColor.selectedColor,
+          },
+          Select: {
+            colorText: ThemeColor.textColor,
+            optionSelectedBg: ThemeColor.selectedBgColor,
+            colorPrimaryHover: ThemeColor.selectedColor,
+            colorPrimary: ThemeColor.selectedColor,
+          },
+          Input: {
+            colorText: ThemeColor.textColor,
+            colorPrimary: ThemeColor.selectedColor,
+            colorPrimaryHover: ThemeColor.selectedColor,
+            activeShadow: `0 0 0 2px ${ThemeColor.selectedColor}1a`,
           },
         },
       }}

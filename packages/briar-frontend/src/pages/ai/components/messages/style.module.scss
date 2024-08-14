@@ -1,0 +1,40 @@
+@import "@/styles/var.module.scss";
+
+.Message {
+  display: flex;
+  // justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.User {
+  flex-direction: row-reverse;
+}
+
+.Assistant {
+}
+
+.Content {
+  font-size: 16px;
+  border-radius: 24px;
+  padding: 10px 20px;
+  background-color: #f5f5f5;
+  white-space: pre-wrap;
+}
+
+.Assistant .Content {
+  background-color: $selectedColor;
+  color: white;
+  margin-right: 120px;
+}
+
+.User .Content {
+  margin-left: 120px;
+}
+
+.Profile {
+  font-size: 24px;
+  height: 41px;
+  display: flex;
+  align-items: center;
+}
