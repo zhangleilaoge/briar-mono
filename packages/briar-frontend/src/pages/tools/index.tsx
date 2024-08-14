@@ -6,11 +6,12 @@ import Footer from "@/components/Footer"
 import { SIDER_MENU_ROUTER_CONFIG, ToolsPathKeyEnum } from "@/constants/router"
 import useLevelPath from "@/hooks/useLevelPath"
 import { findSuperiorRouterConfig, getRoutes } from "@/utils/router"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import Sider from "antd/es/layout/Sider"
+import useSider from "@/hooks/useSider"
 
 function CodeConverter() {
-  const [collapsed, setCollapsed] = useState(false)
+  const { isCollapsed, setIsCollapsed } = useSider()
 
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -28,8 +29,8 @@ function CodeConverter() {
         className={mainStyle.Sider}
         width={240}
         collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
+        collapsed={isCollapsed}
+        onCollapse={(value) => setIsCollapsed(value)}
       >
         <Menu
           mode="inline"

@@ -1,8 +1,8 @@
 import { Button, Popover, Radio, Select } from "antd"
 import s from "./style.module.scss"
 import { ArrowUpOutlined, FormOutlined } from "@ant-design/icons"
-import { FC, useContext, useEffect, useState } from "react"
-import { IConversation, ModelEnum, RoleEnum } from "briar-shared"
+import { FC, useContext, useEffect, useMemo, useState } from "react"
+import { ModelEnum, RoleEnum } from "briar-shared"
 import ConversationContext from "../../context/conversation"
 import Messages from "../messages"
 import { chatRequest } from "@/api/ai"
@@ -16,7 +16,6 @@ interface IProps {}
 
 const Conversation: FC<IProps> = () => {
   const [model, setModel] = useState<ModelEnum>(ModelEnum.Gpt4oMini)
-  const [conversation, setConversation] = useState<IConversation>()
   const [inputValue, setInputValue] = useState("")
   const {
     updateConversation,
@@ -26,11 +25,10 @@ const Conversation: FC<IProps> = () => {
   } = useContext(ConversationContext)
 
   const createNewChat = () => {
-    setConversation(undefined)
     setCurrentConversationKey(undefined)
   }
 
-  const { loading, send } = useRequest(chatRequest, {
+  const { loading, send, abort } = useRequest(chatRequest, {
     immediate: false,
   })
 
@@ -50,7 +48,7 @@ const Conversation: FC<IProps> = () => {
     }
 
     send({
-      messages: (conversation?.messages || []).concat(submitMessage),
+      messages: (currentConversation?.messages || []).concat(submitMessage),
       model,
     })
       .then((data) => {
@@ -66,10 +64,14 @@ const Conversation: FC<IProps> = () => {
           created: data?.created,
         }
 
-        if (conversation) {
+        if (currentConversation) {
           updateConversation({
-            ...conversation,
-            messages: [...conversation.messages, userMessage, assistantMessage],
+            ...currentConversation,
+            messages: [
+              ...currentConversation.messages,
+              userMessage,
+              assistantMessage,
+            ],
           })
         } else {
           addConversation({
@@ -89,17 +91,33 @@ const Conversation: FC<IProps> = () => {
       })
   }
 
-  useEffect(() => {
-    if (currentConversation) {
-      setConversation(currentConversation)
+  const textareaPlaceholder = useMemo(() => {
+    if (!currentConversation) {
+      return "输入聊天内容，开启新的对话。"
     }
+
+    return "继续输入内容以获取回答。"
   }, [currentConversation])
+
+  const onTextAreaKeydown: React.KeyboardEventHandler<HTMLTextAreaElement> = (
+    e
+  ) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      submit()
+    }
+  }
+
+  // 切会话了，手动取消当前请求
+  useEffect(() => {
+    abort()
+  }, [currentConversation?.created])
 
   return (
     <div className={s.Container}>
       <div className={s.Head}>
         <Popover content="创建新对话">
-          <Radio.Group value={!conversation}>
+          <Radio.Group value={!currentConversation}>
             <Radio.Button onClick={createNewChat} value={true}>
               <FormOutlined />
             </Radio.Button>
@@ -113,16 +131,16 @@ const Conversation: FC<IProps> = () => {
         />
       </div>
       <div className={s.Messages}>
-        <Messages conversation={conversation} />
+        <Messages conversation={currentConversation} />
       </div>
       <div className={s.Input}>
         <TextArea
-          placeholder="输入内容以获取回答。"
+          placeholder={textareaPlaceholder}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           size="large"
           autoSize
-          onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && submit()}
+          onKeyDown={onTextAreaKeydown}
         />
         <Button
           icon={<ArrowUpOutlined />}

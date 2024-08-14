@@ -1,13 +1,10 @@
 import { IConversation } from "briar-shared"
-import {
-  CONVERSATION_DESC,
-  ConversationEnum,
-  LOCAL_STORAGE_KEY,
-} from "../constants"
+import { CONVERSATION_DESC, ConversationEnum } from "../constants"
 import { useEffect, useMemo, useState } from "react"
 import { isAfter, isBefore, subDays } from "date-fns"
 import { IMenuRouterConfig } from "@/types/router"
 import { safeJSONParse } from "@/utils"
+import { LocalStorageKey } from "@/constants/env"
 
 const useConversationList = () => {
   const [conversationList, setConversationList] = useState<IConversation[]>([])
@@ -21,7 +18,8 @@ const useConversationList = () => {
 
   const init = () => {
     const list =
-      safeJSONParse(localStorage.getItem(LOCAL_STORAGE_KEY) || "") || []
+      safeJSONParse(localStorage.getItem(LocalStorageKey.Conversation) || "") ||
+      []
     setConversationList(list)
   }
 
@@ -114,7 +112,10 @@ const useConversationList = () => {
 
   useEffect(() => {
     if (needUpdate) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(conversationList))
+      localStorage.setItem(
+        LocalStorageKey.Conversation,
+        JSON.stringify(conversationList)
+      )
 
       setNeedUpdate(false)
     }

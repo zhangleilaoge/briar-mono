@@ -4,7 +4,6 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { isDev } from './constants/env';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -13,14 +12,13 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: isDev
-      ? 'http://127.0.0.1:5173'
-      : /http:\/\/(www\.)?restrained-hunter\.website/,
+    origin:
+      /(http:\/\/(www\.)?restrained-hunter\.website|http:\/\/localhost:5173|http:\/\/127\.0\.0\.1:5173)/,
     methods: 'GET,PUT,POST',
     allowedHeaders: 'Content-Type,Authorization',
     exposedHeaders: 'Content-Range,X-Content-Range',
     credentials: true,
-    maxAge: 10000,
+    maxAge: 20000,
   });
 
   await app.listen(8922);

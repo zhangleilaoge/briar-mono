@@ -11,5 +11,3 @@ export const CONVERSATION_DESC = {
   [ConversationEnum.DuringPastWeek]: "一周内",
   [ConversationEnum.DuringPastMonth]: "一个月内",
 }
-
-export const LOCAL_STORAGE_KEY = "briar-conversation-list"
