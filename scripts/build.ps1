@@ -56,11 +56,11 @@ if ($LASTEXITCODE -ne 0) {
 # }
 
 # 5. start node server
-Write-Output "Starting node server..."
-pnpm run start
-if ($LASTEXITCODE -ne 0) {
-    Write-Output "start node server failed. Exiting..."
-    exit 1
-}
+# Write-Output "Starting node server..."
+# pnpm run start
+# if ($LASTEXITCODE -ne 0) {
+#     Write-Output "start node server failed. Exiting..."
+#     exit 1
+# }
 
 Write-Output "All steps completed successfully."
