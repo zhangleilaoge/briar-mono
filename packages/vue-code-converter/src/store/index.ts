@@ -64,5 +64,5 @@ export const setGlobalTemplate = (data: Partial<SFCBlock>) => {
 }
 
 export const setGlobalStyle = (data: SFCBlock[]) => {
-  globalData.style = [...globalData.style, ...data]
+  globalData.style = [...data]
 }
