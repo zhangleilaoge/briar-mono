@@ -1,17 +1,27 @@
 import { Injectable } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 import { IChatRequestParams, RoleEnum } from 'briar-shared';
 import OpenAI from 'openai';
-import { FOREIGN_OPEN_AI_BASE_URL, OPEN_AI_BASE_URL } from 'src/constants/ai';
+import {
+  DEFAULT_FREE_API_KEY,
+  FOREIGN_OPEN_AI_BASE_URL,
+  OPEN_AI_BASE_URL,
+} from 'src/constants/ai';
 import { isDev } from 'src/constants/env';
 
 @Injectable()
 export class AiService {
   openai = new OpenAI({
-    // 这个 key 下次 push 时必须处理掉
-    apiKey: 'sk-WVEHYHXsi4bPoPRFXfyd5nqL8YFdkJQt9FlNWDWV1aet9tKx',
+    apiKey: process.env.API_KEY || DEFAULT_FREE_API_KEY,
     baseURL: isDev ? OPEN_AI_BASE_URL : FOREIGN_OPEN_AI_BASE_URL,
   });
 
+  @Throttle({
+    default: {
+      ttl: 60,
+      limit: 6,
+    },
+  })
   async chatRequest(params: IChatRequestParams) {
     const completion = await this.openai.chat.completions.create({
       messages: [

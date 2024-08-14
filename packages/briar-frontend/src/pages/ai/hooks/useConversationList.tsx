@@ -1,13 +1,18 @@
-import { IConversation, ModelEnum, RoleEnum } from "briar-shared"
-import { CONVERSATION_DESC, ConversationEnum } from "../constants"
+import { IConversation } from "briar-shared"
+import {
+  CONVERSATION_DESC,
+  ConversationEnum,
+  LOCAL_STORAGE_KEY,
+} from "../constants"
 import { useEffect, useMemo, useState } from "react"
 import { isAfter, isBefore, subDays } from "date-fns"
 import { IMenuRouterConfig } from "@/types/router"
-import { FormOutlined } from "@ant-design/icons"
+import { safeJSONParse } from "@/utils"
 
 const useConversationList = () => {
   const [conversationList, setConversationList] = useState<IConversation[]>([])
   const [currentConversationKey, setCurrentConversationKey] = useState<string>()
+  const [needUpdate, setNeedUpdate] = useState(false)
   const now = Date.now()
 
   const clickMenuItem = (key: string) => {
@@ -15,25 +20,9 @@ const useConversationList = () => {
   }
 
   const init = () => {
-    setConversationList([
-      {
-        model: ModelEnum.Gpt4oMini,
-        created: Date.now(),
-        messages: [
-          {
-            role: RoleEnum.User,
-            content: "Who won the world series in 2020?",
-            created: Date.now() - 1,
-          },
-          {
-            role: RoleEnum.Assistant,
-            content:
-              "The Los Angeles Dodgers won the World Series in 2020.The 2020 World Series was played in Texas at Globe Life Field in Arlington.\nThe 2020 World Series was played in Texas at Globe Life Field in Arlington.",
-            created: Date.now(),
-          },
-        ],
-      },
-    ])
+    const list =
+      safeJSONParse(localStorage.getItem(LOCAL_STORAGE_KEY) || "") || []
+    setConversationList(list)
   }
 
   const updateConversation = (conversation: IConversation) => {
@@ -44,14 +33,18 @@ const useConversationList = () => {
       }),
     ])
     setCurrentConversationKey(conversation.created.toString())
+
+    setNeedUpdate(true)
   }
 
   const addConversation = (conversation: IConversation) => {
     setConversationList([conversation, ...conversationList])
     setCurrentConversationKey(conversation.created.toString())
+
+    setNeedUpdate(true)
   }
 
-  const deleteConversation = (conversation: IConversation) => {}
+  // const deleteConversation = (conversation: IConversation) => {}
 
   const currentConversation: IConversation | undefined = useMemo(() => {
     if (!currentConversationKey) {
@@ -119,6 +112,14 @@ const useConversationList = () => {
     init()
   }, [])
 
+  useEffect(() => {
+    if (needUpdate) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(conversationList))
+
+      setNeedUpdate(false)
+    }
+  }, [conversationList, needUpdate])
+
   return {
     menuConfig,
     currentConversationKey,
@@ -127,8 +128,6 @@ const useConversationList = () => {
     updateConversation,
     addConversation,
     setCurrentConversationKey,
-    // model,
-    // setModel
   }
 }
 

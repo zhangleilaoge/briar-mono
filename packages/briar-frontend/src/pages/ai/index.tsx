@@ -9,7 +9,7 @@ import Conversation from "./components/conversation"
 import ConversationContext from "./context/conversation"
 function CodeConverter() {
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { borderRadiusLG },
   } = theme.useToken()
   const [collapsed, setCollapsed] = useState(false)
   const {
@@ -54,7 +54,7 @@ function CodeConverter() {
               padding: 24,
               margin: 0,
               minHeight: 280,
-              background: colorBgContainer,
+              background: "#efeaed",
               borderRadius: borderRadiusLG,
             }}
           >

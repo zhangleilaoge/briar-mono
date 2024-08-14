@@ -4,6 +4,7 @@ param (
     [string]$cosBucket,
     [string]$region,
     [string]$cdnUrl
+    [string]$apiKey
 )
 
 # 设置环境变量
@@ -12,6 +13,8 @@ param (
 [System.Environment]::SetEnvironmentVariable('COS_BUCKET', $cosBucket, [System.EnvironmentVariableTarget]::Process)
 [System.Environment]::SetEnvironmentVariable('REGION', $region, [System.EnvironmentVariableTarget]::Process)
 [System.Environment]::SetEnvironmentVariable('CDN_URL', $cdnUrl, [System.EnvironmentVariableTarget]::Process)
+[System.Environment]::SetEnvironmentVariable('API_KEY', $apiKey, [System.EnvironmentVariableTarget]::Process)
+
 
 # 获取当前脚本所在目录
 $scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent

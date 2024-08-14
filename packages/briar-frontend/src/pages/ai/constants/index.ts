@@ -6,8 +6,10 @@ export enum ConversationEnum {
 }
 
 export const CONVERSATION_DESC = {
-  [ConversationEnum.Latest]: "Latest",
-  [ConversationEnum.DuringPast3Days]: "During past 3 days",
-  [ConversationEnum.DuringPastWeek]: "During past week",
-  [ConversationEnum.DuringPastMonth]: "During past month",
+  [ConversationEnum.Latest]: "刚刚",
+  [ConversationEnum.DuringPast3Days]: "三天内",
+  [ConversationEnum.DuringPastWeek]: "一周内",
+  [ConversationEnum.DuringPastMonth]: "一个月内",
 }
+
+export const LOCAL_STORAGE_KEY = "briar-conversation-list"

@@ -1,4 +1,4 @@
-import { Button, Input, Popover, Radio, Select, Space } from "antd"
+import { Button, Popover, Radio, Select } from "antd"
 import s from "./style.module.scss"
 import { ArrowUpOutlined, FormOutlined } from "@ant-design/icons"
 import { FC, useContext, useEffect, useState } from "react"
@@ -9,10 +9,12 @@ import { chatRequest } from "@/api/ai"
 import { errorNotify } from "@/utils/notify"
 
 import { useRequest } from "alova/client"
+import useScroll from "../../hooks/useScroll"
+import TextArea from "antd/es/input/TextArea"
 
 interface IProps {}
 
-const Conversation: FC<IProps> = (props) => {
+const Conversation: FC<IProps> = () => {
   const [model, setModel] = useState<ModelEnum>(ModelEnum.Gpt4oMini)
   const [conversation, setConversation] = useState<IConversation>()
   const [inputValue, setInputValue] = useState("")
@@ -32,12 +34,7 @@ const Conversation: FC<IProps> = (props) => {
     immediate: false,
   })
 
-  const scrollToBottom = () => {
-    const messages = document.querySelector(`.${s.Messages}`)
-    if (messages) {
-      messages.scrollTop = messages.scrollHeight
-    }
-  }
+  const { scrollToBottom } = useScroll(`.${s.Messages}`)
 
   const submit = async () => {
     if (!inputValue || loading) {
@@ -119,21 +116,21 @@ const Conversation: FC<IProps> = (props) => {
         <Messages conversation={conversation} />
       </div>
       <div className={s.Input}>
-        <Space.Compact style={{ width: "100%" }}>
-          <Input
-            placeholder="输入内容以获取回答。"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            size="large"
-            onPressEnter={submit}
-          />
-          <Button
-            icon={<ArrowUpOutlined />}
-            size="large"
-            onClick={submit}
-            loading={loading}
-          ></Button>
-        </Space.Compact>
+        <TextArea
+          placeholder="输入内容以获取回答。"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          size="large"
+          autoSize
+          onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && submit()}
+        />
+        <Button
+          icon={<ArrowUpOutlined />}
+          onClick={submit}
+          loading={loading}
+          className={s.SubmitBtn}
+          shape="circle"
+        ></Button>
       </div>
     </div>
   )

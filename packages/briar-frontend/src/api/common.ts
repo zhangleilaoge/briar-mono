@@ -10,6 +10,7 @@ const alovaInstance = createAlova({
     : "http://restrained-hunter.website/api",
   statesHook: reactHook,
   responded: (response) => response.json(),
+  timeout: 10000,
 })
 
 export default alovaInstance
