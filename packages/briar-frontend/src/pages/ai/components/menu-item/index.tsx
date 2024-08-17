@@ -24,6 +24,7 @@ export const MenuItem = ({
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(title || messages?.[0].content)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+
   const conversationTitle = useMemo(() => {
     return title || messages?.[0].content
   }, [messages, title])
@@ -115,8 +116,8 @@ export const MenuItem = ({
       >
         <Button
           icon={<EllipsisOutlined className={s.EditConversation} />}
-          size="small"
-          shape="circle"
+          // size="small"
+          type="text"
           onClick={(e) => e.stopPropagation()}
         ></Button>
       </Dropdown>

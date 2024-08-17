@@ -2,6 +2,7 @@ import { IConversation, RoleEnum } from "briar-shared"
 import { FC } from "react"
 import s from "./style.module.scss"
 import { RobotOutlined } from "@ant-design/icons"
+import useLoadingDesc from "./hooks/useLoadingDesc"
 
 const Message: FC<{
   content: string
@@ -19,11 +20,18 @@ const Message: FC<{
 
 const Messages: FC<{
   conversation?: IConversation
-}> = ({ conversation }) => {
+  loading?: boolean
+}> = ({ conversation, loading }) => {
+  const { desc } = useLoadingDesc()
   const messages = conversation?.messages || []
   return (
     <>
-      {messages.map((message) => {
+      {messages.map((message, index) => {
+        if (index === messages.length - 1 && loading) {
+          return (
+            <Message key={message.created} content={desc} role={message.role} />
+          )
+        }
         return (
           <Message
             key={message.created}

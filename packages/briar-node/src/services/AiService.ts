@@ -69,9 +69,13 @@ export class AiService {
           }
           subject.complete();
         } catch (err) {
-          console.error('Error processing stream', err);
+          console.error(err);
           subject.error(err);
         }
+      })
+      .catch((err) => {
+        console.error(err);
+        subject.error(err);
       });
     return subject.pipe(map((data: string) => data));
   }

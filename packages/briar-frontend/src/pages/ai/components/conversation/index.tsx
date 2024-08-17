@@ -11,11 +11,11 @@ import { useSSE } from "alova/client"
 import useScroll from "../../hooks/useScroll"
 import TextArea from "antd/es/input/TextArea"
 import { SSEHookReadyState } from "../../constants"
+import useGptModel from "./hooks/useGptModel"
 
 interface IProps {}
 
 const Conversation: FC<IProps> = () => {
-  const [model, setModel] = useState<ModelEnum>(ModelEnum.Gpt4oMini)
   const [inputValue, setInputValue] = useState("")
   const {
     updateConversation,
@@ -27,7 +27,7 @@ const Conversation: FC<IProps> = () => {
   const createNewChat = () => {
     setCurrentConversationKey(undefined)
   }
-
+  const { selectOption, options, onChange } = useGptModel()
   const { onMessage, send, close, readyState } = useSSE(chatRequestStream)
   const loading = useMemo(() => {
     return (readyState as number) !== SSEHookReadyState.CLOSED
@@ -74,7 +74,7 @@ const Conversation: FC<IProps> = () => {
       messages: JSON.stringify(
         (currentConversation?.messages || []).concat(submitMessage)
       ),
-      model,
+      model: selectOption.value,
     })
 
     const userMessage = {
@@ -100,7 +100,7 @@ const Conversation: FC<IProps> = () => {
       })
     } else {
       addConversation({
-        model,
+        model: selectOption.value,
         created: submitTime,
         messages: [userMessage, assistantMessage],
       })
@@ -133,9 +133,28 @@ const Conversation: FC<IProps> = () => {
     scrollToBottom()
   }
 
-  // sse 结束，手动关闭 stream
   useEffect(() => {
     if (!loading) {
+      if (
+        currentConversation?.messages?.length &&
+        !currentConversation?.messages?.[
+          currentConversation.messages.length - 1
+        ]?.content
+      ) {
+        updateConversation({
+          ...currentConversation,
+          messages: currentConversation?.messages.map((message, index) => {
+            if (index === currentConversation?.messages.length - 1) {
+              return {
+                ...message,
+                content: "服务端错误，请稍后重试。",
+              }
+            }
+            return message
+          }),
+        })
+      }
+
       shutDown()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -152,20 +171,14 @@ const Conversation: FC<IProps> = () => {
           </Radio.Group>
         </Popover>
         <Select
-          value={ModelEnum.Gpt4oMini}
+          value={selectOption.value}
           style={{ width: 120 }}
-          onChange={setModel}
-          options={[
-            { value: ModelEnum.Gpt4oMini, label: ModelEnum.Gpt4oMini },
-            {
-              value: ModelEnum.Gpt4o,
-              label: ModelEnum.Gpt4o,
-            },
-          ]}
+          onChange={onChange}
+          options={options}
         />
       </div>
       <div className={s.Messages}>
-        <Messages conversation={currentConversation} />
+        <Messages conversation={currentConversation} loading={loading} />
       </div>
       <div className={s.Input}>
         <TextArea
