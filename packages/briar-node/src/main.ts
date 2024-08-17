@@ -16,7 +16,12 @@ async function bootstrap() {
       /(http:\/\/(www\.)?restrained-hunter\.website|http:\/\/localhost:5173|http:\/\/127\.0\.0\.1:5173)/,
     methods: 'GET,PUT,POST',
     allowedHeaders: 'Content-Type,Authorization',
-    exposedHeaders: 'Content-Range,X-Content-Range',
+    exposedHeaders: [
+      'Content-Length',
+      'Content-Type',
+      'X-Content-Range',
+      'Content-Range',
+    ], // 可以公开的响应头
     credentials: true,
     maxAge: 20000,
   });

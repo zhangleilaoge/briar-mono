@@ -1,5 +1,5 @@
 import { LocalStorageKey } from "@/constants/env"
-import { safeJSONParse } from "@/utils"
+import { safeJsonParse } from "briar-shared"
 import { useEffect, useState } from "react"
 
 const useSider = () => {
@@ -8,7 +8,7 @@ const useSider = () => {
 
   useEffect(() => {
     const siderStatus =
-      safeJSONParse(localStorage.getItem(LocalStorageKey.Sider) || "false") ||
+      safeJsonParse(localStorage.getItem(LocalStorageKey.Sider) || "false") ||
       false
 
     _setIsCollapsed(siderStatus)

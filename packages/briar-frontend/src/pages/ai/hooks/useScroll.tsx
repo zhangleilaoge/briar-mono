@@ -15,7 +15,6 @@ const useScroll = (querySelectorStr: string) => {
   useEffect(() => {
     if (dom) {
       dom.onscroll = () => {
-        console.log(dom.scrollHeight, dom.scrollTop, dom.clientHeight)
         // 离底部一个父组件的高度，认为远离底部
         if (dom.scrollHeight - dom.scrollTop > 2 * dom.clientHeight) {
           setIsNearBottom(true)

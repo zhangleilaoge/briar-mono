@@ -9,8 +9,15 @@ const alovaInstance = createAlova({
     ? "http://127.0.0.1:8922/api"
     : "http://restrained-hunter.website/api",
   statesHook: reactHook,
-  responded: (response) => response.json(),
+  responded: (response) => response?.json?.() || response,
   timeout: 20000,
 })
+
+export const getQueryFromObj = (obj: any) => {
+  if (!obj) return ""
+  return Object.keys(obj)
+    .map((key) => `${key}=${obj[key]}`)
+    .join("&")
+}
 
 export default alovaInstance

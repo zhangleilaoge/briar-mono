@@ -1,10 +1,14 @@
-import { IConversation } from "briar-shared"
-import { CONVERSATION_DESC, ConversationEnum } from "../constants"
-import { useEffect, useMemo, useState } from "react"
+import { IConversation, safeJsonParse } from "briar-shared"
+import {
+  CONVERSATION_DESC,
+  ConversationEnum,
+  MAX_CONVERSATION_NUM,
+} from "../constants"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { isAfter, isBefore, subDays } from "date-fns"
 import { IMenuRouterConfig } from "@/types/router"
-import { safeJSONParse } from "@/utils"
 import { LocalStorageKey } from "@/constants/env"
+import { MenuItem } from "../components/menu-item"
 
 const useConversationList = () => {
   const [conversationList, setConversationList] = useState<IConversation[]>([])
@@ -18,22 +22,31 @@ const useConversationList = () => {
 
   const init = () => {
     const list =
-      safeJSONParse(localStorage.getItem(LocalStorageKey.Conversation) || "") ||
+      safeJsonParse(localStorage.getItem(LocalStorageKey.Conversation) || "") ||
       []
     setConversationList(list)
   }
 
-  const updateConversation = (conversation: IConversation) => {
-    setConversationList([
-      conversation,
-      ...conversationList.filter(({ created }) => {
-        return created !== conversation.created
-      }),
-    ])
-    setCurrentConversationKey(conversation.created.toString())
+  const updateConversation = useCallback(
+    (conversation: IConversation, updateToTop = true) => {
+      setConversationList(
+        updateToTop
+          ? [
+              conversation,
+              ...conversationList.filter(({ created }) => {
+                return created !== conversation.created
+              }),
+            ]
+          : conversationList.map((item) => {
+              return item.created === conversation.created ? conversation : item
+            })
+      )
+      updateToTop && setCurrentConversationKey(conversation.created.toString())
 
-    setNeedUpdate(true)
-  }
+      setNeedUpdate(true)
+    },
+    [conversationList]
+  )
 
   const addConversation = (conversation: IConversation) => {
     setConversationList([conversation, ...conversationList])
@@ -42,7 +55,17 @@ const useConversationList = () => {
     setNeedUpdate(true)
   }
 
-  // const deleteConversation = (conversation: IConversation) => {}
+  const deleteConversation = useCallback(
+    (conversation: IConversation) => {
+      setConversationList(
+        conversationList.filter(({ created }) => {
+          return created !== conversation.created
+        })
+      )
+      setNeedUpdate(true)
+    },
+    [conversationList]
+  )
 
   const currentConversation: IConversation | undefined = useMemo(() => {
     if (!currentConversationKey) {
@@ -64,11 +87,17 @@ const useConversationList = () => {
             : true
         })
         .map((conversation) => {
-          const { created, messages } = conversation
+          const { created } = conversation
           return {
             ...conversation,
             key: created.toString(),
-            label: messages?.[0].content,
+            label: (
+              <MenuItem
+                conversation={conversation}
+                deleteConversation={deleteConversation}
+                updateConversation={updateConversation}
+              />
+            ),
           }
         })
     }
@@ -104,7 +133,7 @@ const useConversationList = () => {
         children: duringPastMonthConversations,
       },
     ].filter((item) => item.children.length > 0)
-  }, [conversationList, now])
+  }, [conversationList, deleteConversation, now, updateConversation])
 
   useEffect(() => {
     init()
@@ -114,7 +143,7 @@ const useConversationList = () => {
     if (needUpdate) {
       localStorage.setItem(
         LocalStorageKey.Conversation,
-        JSON.stringify(conversationList)
+        JSON.stringify(conversationList.slice(0, MAX_CONVERSATION_NUM))
       )
 
       setNeedUpdate(false)

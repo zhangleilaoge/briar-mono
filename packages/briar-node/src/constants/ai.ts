@@ -14,3 +14,5 @@ export const port = 3000;
 // 免费的 API Key，看到这的读者如果想用就用吧
 export const DEFAULT_FREE_API_KEY =
   'sk-WVEHYHXsi4bPoPRFXfyd5nqL8YFdkJQt9FlNWDWV1aet9tKx';
+
+export const MAX_STREAM_TOKEN = 1000;

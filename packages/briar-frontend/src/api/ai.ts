@@ -1,5 +1,5 @@
 import { IChatRequestParams } from "briar-shared"
-import alovaInstance from "./common"
+import alovaInstance, { getQueryFromObj } from "./common"
 import OpenAI from "openai"
 
 export const chatRequest = (params: IChatRequestParams) =>
@@ -7,3 +7,6 @@ export const chatRequest = (params: IChatRequestParams) =>
     "./ai/chatRequest",
     params
   )
+
+export const chatRequestStream = (params: IChatRequestParams) =>
+  alovaInstance.Get(`./ai/chatRequestStream?${getQueryFromObj(params)}`)

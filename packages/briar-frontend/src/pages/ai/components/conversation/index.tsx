@@ -1,16 +1,16 @@
 import { Button, Popover, Radio, Select } from "antd"
 import s from "./style.module.scss"
-import { ArrowUpOutlined, FormOutlined } from "@ant-design/icons"
-import { FC, useContext, useEffect, useMemo, useState } from "react"
+import { ArrowUpOutlined, FormOutlined, XFilled } from "@ant-design/icons"
+import { FC, useContext, useEffect, useMemo, useRef, useState } from "react"
 import { ModelEnum, RoleEnum } from "briar-shared"
 import ConversationContext from "../../context/conversation"
 import Messages from "../messages"
-import { chatRequest } from "@/api/ai"
-import { errorNotify } from "@/utils/notify"
+import { chatRequestStream } from "@/api/ai"
 
-import { useRequest } from "alova/client"
+import { useSSE } from "alova/client"
 import useScroll from "../../hooks/useScroll"
 import TextArea from "antd/es/input/TextArea"
+import { SSEHookReadyState } from "../../constants"
 
 interface IProps {}
 
@@ -23,19 +23,42 @@ const Conversation: FC<IProps> = () => {
     setCurrentConversationKey,
     currentConversation,
   } = useContext(ConversationContext)
-
+  const assistantAnswerRef = useRef("")
   const createNewChat = () => {
     setCurrentConversationKey(undefined)
   }
 
-  const { loading, send, abort } = useRequest(chatRequest, {
-    immediate: false,
-  })
-
+  const { onMessage, send, close, readyState } = useSSE(chatRequestStream)
+  const loading = useMemo(() => {
+    return (readyState as number) !== SSEHookReadyState.CLOSED
+  }, [readyState])
   const { scrollToBottom } = useScroll(`.${s.Messages}`)
+
+  onMessage(({ data }) => {
+    if (!currentConversation) return
+
+    assistantAnswerRef.current = `${assistantAnswerRef.current}${data}`
+
+    updateConversation({
+      ...currentConversation,
+      messages: currentConversation?.messages.map((message, index) => {
+        if (index === currentConversation?.messages.length - 1) {
+          return {
+            ...message,
+            content: assistantAnswerRef.current,
+            created: Date.now(),
+          }
+        }
+        return message
+      }),
+    })
+
+    scrollToBottom()
+  })
 
   const submit = async () => {
     if (!inputValue || loading) {
+      shutDown()
       return
     }
 
@@ -48,47 +71,42 @@ const Conversation: FC<IProps> = () => {
     }
 
     send({
-      messages: (currentConversation?.messages || []).concat(submitMessage),
+      messages: JSON.stringify(
+        (currentConversation?.messages || []).concat(submitMessage)
+      ),
       model,
     })
-      .then((data) => {
-        const userMessage = {
-          role: RoleEnum.User,
-          content: inputValue,
-          created: submitTime,
-        }
 
-        const assistantMessage = {
-          role: RoleEnum.Assistant,
-          content: data?.choices?.[0]?.message?.content || "",
-          created: data?.created,
-        }
+    const userMessage = {
+      role: RoleEnum.User,
+      content: inputValue,
+      created: submitTime,
+    }
 
-        if (currentConversation) {
-          updateConversation({
-            ...currentConversation,
-            messages: [
-              ...currentConversation.messages,
-              userMessage,
-              assistantMessage,
-            ],
-          })
-        } else {
-          addConversation({
-            model,
-            created: submitTime,
-            messages: [userMessage, assistantMessage],
-          })
-        }
+    const assistantMessage = {
+      role: RoleEnum.Assistant,
+      content: "",
+      created: submitTime + 1,
+    }
 
-        scrollToBottom()
+    if (currentConversation) {
+      updateConversation({
+        ...currentConversation,
+        messages: [
+          ...currentConversation.messages,
+          userMessage,
+          assistantMessage,
+        ],
       })
-      .catch((e) => {
-        errorNotify(e)
+    } else {
+      addConversation({
+        model,
+        created: submitTime,
+        messages: [userMessage, assistantMessage],
       })
-      .finally(() => {
-        setInputValue("")
-      })
+    }
+
+    setInputValue("")
   }
 
   const textareaPlaceholder = useMemo(() => {
@@ -108,10 +126,20 @@ const Conversation: FC<IProps> = () => {
     }
   }
 
-  // 切会话了，手动取消当前请求
+  const shutDown = () => {
+    close()
+    assistantAnswerRef.current = ""
+    setInputValue("")
+    scrollToBottom()
+  }
+
+  // sse 结束，手动关闭 stream
   useEffect(() => {
-    abort()
-  }, [currentConversation?.created])
+    if (!loading) {
+      shutDown()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentConversation?.created, loading])
 
   return (
     <div className={s.Container}>
@@ -127,7 +155,13 @@ const Conversation: FC<IProps> = () => {
           value={ModelEnum.Gpt4oMini}
           style={{ width: 120 }}
           onChange={setModel}
-          options={[{ value: ModelEnum.Gpt4oMini, label: "gpt-4o-mini" }]}
+          options={[
+            { value: ModelEnum.Gpt4oMini, label: ModelEnum.Gpt4oMini },
+            {
+              value: ModelEnum.Gpt4o,
+              label: ModelEnum.Gpt4o,
+            },
+          ]}
         />
       </div>
       <div className={s.Messages}>
@@ -139,15 +173,15 @@ const Conversation: FC<IProps> = () => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           size="large"
-          autoSize
+          autoSize={{ minRows: 1, maxRows: 6 }}
           onKeyDown={onTextAreaKeydown}
         />
         <Button
-          icon={<ArrowUpOutlined />}
+          icon={loading ? <XFilled /> : <ArrowUpOutlined />}
           onClick={submit}
-          loading={loading}
           className={s.SubmitBtn}
           shape="circle"
+          danger={loading}
         ></Button>
       </div>
     </div>

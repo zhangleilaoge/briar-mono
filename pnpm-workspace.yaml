@@ -1,5 +1,2 @@
 packages:
-  - "packages/vue-code-converter"
-  - "packages/briar-frontend"
-  - "packages/briar-node"
-  - "packages/briar-shared"
+  - "packages/*"

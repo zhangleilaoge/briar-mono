@@ -17,6 +17,8 @@ $messageAreaWidth: 768px;
 }
 
 .Input {
+  position: relative;
+
   :global {
     textArea {
       box-sizing: border-box;
@@ -32,12 +34,12 @@ $messageAreaWidth: 768px;
 }
 
 .Messages {
-  height: calc(100vh - 276px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 24px;
   scroll-behavior: smooth;
+  flex: auto 1 1;
 }
 
 .Container {
@@ -46,11 +48,11 @@ $messageAreaWidth: 768px;
   align-items: center;
   gap: 24px;
   position: relative;
+  height: calc(100vh - 206px);
 }
-
 
 .SubmitBtn {
   position: absolute;
   bottom: 8px;
-  right: 72px;
+  right: 9px;
 }

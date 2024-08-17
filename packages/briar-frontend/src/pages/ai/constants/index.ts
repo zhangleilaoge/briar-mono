@@ -11,3 +11,11 @@ export const CONVERSATION_DESC = {
   [ConversationEnum.DuringPastWeek]: "一周内",
   [ConversationEnum.DuringPastMonth]: "一个月内",
 }
+
+export const enum SSEHookReadyState {
+  CONNECTING = 0,
+  OPEN = 1,
+  CLOSED = 2,
+}
+
+export const MAX_CONVERSATION_NUM = 100

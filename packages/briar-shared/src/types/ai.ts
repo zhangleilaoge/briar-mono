@@ -6,6 +6,7 @@ export enum RoleEnum {
 
 export enum ModelEnum {
   Gpt4oMini = "gpt-4o-mini",
+  Gpt4o = "gpt-4o",
 }
 
 export interface IMessage {
@@ -18,6 +19,7 @@ export interface IConversation {
   messages: IMessage[]
   model: ModelEnum
   created: number
+  title?: string
 }
 
 export interface IChatRequestParams {

@@ -1,7 +1,6 @@
-import { Body, Controller, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Sse } from '@nestjs/common';
 import { AiService } from '../services/AiService';
-import { IMessage, ModelEnum } from 'briar-shared';
-
+import { IMessage, ModelEnum, safeJsonParse } from 'briar-shared';
 @Controller('api/ai')
 export class AppController {
   constructor(private readonly AiService: AiService) {}
@@ -16,5 +15,18 @@ export class AppController {
       model: model || ModelEnum.Gpt4oMini,
     });
     return data;
+  }
+
+  @Get('chatRequestStream')
+  @Sse('sse')
+  async chatRequestStream(
+    @Query('messages') messages: string,
+    @Query('model') model: ModelEnum,
+  ) {
+    // console.log('messages', reply);
+    return this.AiService.chatRequestStream({
+      messages: safeJsonParse(messages),
+      model: model || ModelEnum.Gpt4oMini,
+    });
   }
 }
