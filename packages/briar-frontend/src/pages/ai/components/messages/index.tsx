@@ -27,7 +27,7 @@ const Messages: FC<{
   return (
     <>
       {messages.map((message, index) => {
-        if (index === messages.length - 1 && loading) {
+        if (index === messages.length - 1 && loading && !message.content) {
           return (
             <Message key={message.created} content={desc} role={message.role} />
           )

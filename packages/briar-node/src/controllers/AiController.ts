@@ -23,9 +23,8 @@ export class AppController {
     @Query('messages') messages: string,
     @Query('model') model: ModelEnum,
   ) {
-    // console.log('messages', reply);
     return this.AiService.chatRequestStream({
-      messages: safeJsonParse(messages),
+      messages: safeJsonParse(decodeURIComponent(messages)),
       model: model || ModelEnum.Gpt4oMini,
     });
   }

@@ -16,7 +16,7 @@ const alovaInstance = createAlova({
 export const getQueryFromObj = (obj: any) => {
   if (!obj) return ""
   return Object.keys(obj)
-    .map((key) => `${key}=${obj[key]}`)
+    .map((key) => `${key}=${encodeURIComponent(obj[key])}`)
     .join("&")
 }
 
