@@ -13,8 +13,8 @@ const descriptions = [
 const useLoadingDesc = () => {
   const [_, setDesc] = useState("")
   const [dots, setDots] = useState(".")
-  const descTimer = useRef(0)
-  const dotsTimer = useRef(0)
+  const descTimer = useRef<ReturnType<typeof setTimeout>>()
+  const dotsTimer = useRef<ReturnType<typeof setTimeout>>()
 
   const updateDots = useCallback(() => {
     setDots((prevDots) => {
