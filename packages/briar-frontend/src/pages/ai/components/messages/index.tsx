@@ -9,11 +9,13 @@ import "highlight.js/styles/atom-one-dark.css"
 import { copyToClipboard } from "@/utils/document"
 import { Button, message } from "antd"
 import ReactDOM from "react-dom"
+import { format } from "date-fns/format"
 
 const Message: FC<{
   content: string
   role: RoleEnum
-}> = ({ content, role }) => {
+  date: number
+}> = ({ content, role, date }) => {
   const isUser = role === RoleEnum.User
 
   // 复制代码功能
@@ -59,8 +61,13 @@ const Message: FC<{
   return (
     <div className={`${s.Message} ${isUser ? s.User : s.Assistant}`}>
       {!isUser && <RobotOutlined className={s.Profile} />}
-      <div className={`${s.Content}`}>
-        <Markdown rehypePlugins={[rehypeHighlight]}>{content || " "}</Markdown>
+      <div>
+        <div className={s.Date}>{format(date, "yyyy-MM-dd HH:mm:ss")}</div>
+        <div className={`${s.Content}`}>
+          <Markdown rehypePlugins={[rehypeHighlight]}>
+            {content || " "}
+          </Markdown>
+        </div>
       </div>
     </div>
   )
@@ -78,7 +85,12 @@ const Messages: FC<{
       {messages.map((message, index) => {
         if (index === messages.length - 1 && loading && !message.content) {
           return (
-            <Message key={message.created} content={desc} role={message.role} />
+            <Message
+              key={message.created}
+              content={desc}
+              role={message.role}
+              date={message.created}
+            />
           )
         }
         return (
@@ -86,6 +98,7 @@ const Messages: FC<{
             key={message.created}
             content={message.content}
             role={message.role}
+            date={message.created}
           />
         )
       })}

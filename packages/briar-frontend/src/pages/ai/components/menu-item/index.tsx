@@ -105,7 +105,7 @@ export const MenuItem = ({
           />
         </ClickOutside>
       ) : (
-        conversationTitle
+        <div className={s.ConversationTitle}>{conversationTitle}</div>
       )}
       <Dropdown
         menu={{ items }}

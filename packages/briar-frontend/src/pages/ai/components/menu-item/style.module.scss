@@ -6,15 +6,25 @@
   gap: 16px;
 }
 
-:global(.ant-layout-sider-collapsed) {
-  .EditConversation {
-    display: none;
-  }
-}
-
 .DropdownItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 92px;
+}
+
+.ConversationTitle {
+  width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:global(.ant-layout-sider-collapsed) {
+  .EditConversation {
+    display: none;
+  }
+  .ConversationTitle {
+    overflow: visible;
+  }
 }
