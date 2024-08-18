@@ -13,6 +13,7 @@ import TextArea from "antd/es/input/TextArea"
 import { SSEHookReadyState } from "../../constants"
 import useGptModel from "./hooks/useGptModel"
 import { trimMessageList } from "../../utils"
+import mainStyle from "@/styles/main.module.scss"
 
 interface IProps {}
 
@@ -180,7 +181,9 @@ const Conversation: FC<IProps> = () => {
           options={options}
         />
       </div>
-      <div className={s.Messages}>
+      <div
+        className={`${s.Messages} ${loading ? mainStyle.loadingCursor : ""}`}
+      >
         <Messages conversation={currentConversation} loading={loading} />
       </div>
       <div className={s.Input}>

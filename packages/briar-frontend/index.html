@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,17 +9,77 @@
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Briar</title>
-    <!-- 引入 Prettier 主库 -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.8/standalone.js"></script> -->
-    <!-- 引入 Prettier 解析器插件 -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.8/parser-babel.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.8/parser-postcss.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.8/parser-typescript.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prettier/2.8.8/parser-html.js"></script> -->
-    <!-- 引入 TypeScript -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/typescript/4.5.4/typescript.min.js"></script> -->
+    <style>
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #db6d8d; /* 设置背景颜色 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999; /* 确保加载页面在最前面 */
+      }
+
+      @keyframes ball-scale-multiple {
+        0% {
+          -webkit-transform: scale(0);
+          transform: scale(0);
+          opacity: 0;
+        }
+        5% {
+          opacity: 1;
+        }
+        100% {
+          -webkit-transform: scale(3);
+          transform: scale(3);
+          opacity: 0;
+        }
+      }
+
+      .ball-scale-multiple {
+        position: relative;
+        -webkit-transform: translateY(-30px);
+        transform: translateY(-30px);
+      }
+      .ball-scale-multiple > div:nth-child(2) {
+        -webkit-animation-delay: -0.4s;
+        animation-delay: -0.4s;
+      }
+      .ball-scale-multiple > div:nth-child(3) {
+        -webkit-animation-delay: -0.2s;
+        animation-delay: -0.2s;
+      }
+      .ball-scale-multiple > div {
+        background-color: #fff;
+        width: 15px;
+        height: 15px;
+        border-radius: 100%;
+        margin: 2px;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+        position: absolute;
+        left: -30px;
+        top: 0px;
+        opacity: 0;
+        margin: 0;
+        width: 60px;
+        height: 60px;
+        -webkit-animation: ball-scale-multiple 1s 0s linear infinite;
+        animation: ball-scale-multiple 1s 0s linear infinite;
+      }
+    </style>
   </head>
   <body>
+    <div id="loading-screen">
+      <div class="loader-inner ball-scale-multiple">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="./src/main.tsx"></script>
   </body>

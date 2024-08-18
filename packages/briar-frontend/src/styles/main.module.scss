@@ -1,12 +1,5 @@
 @import "./var.module.scss";
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background-color: #f5f5f5;
-  width: 100%;
-}
-
 .ColoredText {
   color: $textColor;
 
@@ -110,4 +103,36 @@ body {
   .ant-select-focused .ant-select-selector {
     box-shadow: 0 0 0 2px rgba($color: $selectedColor, $alpha: 0.1) !important;
   }
+}
+
+* {
+  cursor: inherit;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  width: 100%;
+  cursor: url(https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20normal_page_01.png),
+    default;
+}
+
+button,
+button.ant-btn,
+[role="menuitem"] {
+  cursor: url(https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20link_page_01.png),
+    pointer !important;
+}
+
+textarea,
+input,
+code {
+  cursor: url(https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20text_page_01.png),
+    text !important;
+}
+
+.loadingCursor {
+  cursor: url(https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20work_page_04.png),
+    progress !important;
 }
