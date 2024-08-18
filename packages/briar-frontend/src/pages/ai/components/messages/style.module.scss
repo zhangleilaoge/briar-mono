@@ -1,10 +1,47 @@
 @import "@/styles/var.module.scss";
 
+.CopyButton {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+
 .Message {
   display: flex;
   // justify-content: space-between;
+  line-height: 22px;
   gap: 24px;
   align-items: flex-start;
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  ol,
+  pre {
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    max-width: 556px;
+  }
+
+  pre {
+    background: #1a1621;
+    border-radius: 12px;
+    position: relative;
+  }
+
+  ol,
+  li {
+    white-space: normal;
+  }
+
+  li {
+    margin-block-start: 0.6em;
+  }
 }
 
 .User {
@@ -17,7 +54,7 @@
 .Content {
   font-size: 16px;
   border-radius: 24px;
-  padding: 10px 20px;
+  padding: 16px 20px;
   background-color: #f5f5f5;
   white-space: pre-wrap;
 }

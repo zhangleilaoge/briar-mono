@@ -61,8 +61,8 @@ const CompositionStyleConvert = () => {
     setDemoType(undefined)
   }
 
-  const copyOutput = () => {
-    copyToClipboard(output)
+  const copyOutput = async () => {
+    await copyToClipboard(output)
 
     message.success("复制成功")
   }

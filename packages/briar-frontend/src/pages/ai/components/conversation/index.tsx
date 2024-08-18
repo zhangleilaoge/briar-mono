@@ -12,6 +12,7 @@ import useScroll from "../../hooks/useScroll"
 import TextArea from "antd/es/input/TextArea"
 import { SSEHookReadyState } from "../../constants"
 import useGptModel from "./hooks/useGptModel"
+import { trimMessageList } from "../../utils"
 
 interface IProps {}
 
@@ -72,7 +73,9 @@ const Conversation: FC<IProps> = () => {
 
     send({
       messages: JSON.stringify(
-        (currentConversation?.messages || []).concat(submitMessage)
+        trimMessageList(
+          (currentConversation?.messages || []).concat(submitMessage)
+        )
       ),
       model: selectOption.value,
     })
