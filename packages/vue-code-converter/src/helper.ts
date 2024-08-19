@@ -288,9 +288,7 @@ export const getSetupStatements = ({
       /^(ref|computed)$/.test(use || "") &&
       templateContent &&
       !templateContent.match(new RegExp(`\\b${returnNames[0]}\\b`, "g")) &&
-      sourceCode
-        .replace(/(['"]).*?\1/g, "")
-        .match(new RegExp(`\\b${returnNames[0]}\\b`, "g"))?.length === 1
+      sourceCode.match(new RegExp(`\\b${returnNames[0]}\\b`, "g"))?.length === 1
 
     return !isUnused
   })
