@@ -1,7 +1,11 @@
 import { IConversation, RoleEnum } from "briar-shared"
-import { FC, useEffect } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import s from "./style.module.scss"
-import { CopyOutlined, RobotOutlined } from "@ant-design/icons"
+import {
+  CheckCircleFilled,
+  CopyOutlined,
+  RobotOutlined,
+} from "@ant-design/icons"
 import useLoadingDesc from "./hooks/useLoadingDesc"
 import Markdown from "react-markdown"
 import rehypeHighlight from "rehype-highlight"
@@ -10,6 +14,28 @@ import { copyToClipboard } from "@/utils/document"
 import { Button, message } from "antd"
 import ReactDOM from "react-dom"
 import { format } from "date-fns/format"
+
+const CopyBtn = ({ content }: { content: string }) => {
+  const [copied, setCopied] = useState(false)
+
+  return (
+    <Button
+      type="text"
+      className={s.CopyBtn}
+      icon={copied ? <CheckCircleFilled /> : <CopyOutlined />}
+      onClick={async () => {
+        await copyToClipboard(content)
+        message.success("复制成功")
+        setCopied(true)
+      }}
+      onMouseLeave={() => {
+        setTimeout(() => {
+          setCopied(false)
+        }, 5000)
+      }}
+    ></Button>
+  )
+}
 
 const Message: FC<{
   content: string
@@ -30,20 +56,7 @@ const Message: FC<{
       button = document.createElement("div")
       button.className = s.CopyButton
 
-      ReactDOM.render(
-        <Button
-          type="text"
-          style={{
-            color: "#c8c9cc",
-          }}
-          icon={<CopyOutlined />}
-          onClick={async () => {
-            await copyToClipboard(block.innerText)
-            message.success("复制成功")
-          }}
-        ></Button>,
-        button
-      )
+      ReactDOM.render(<CopyBtn content={block.textContent || ""} />, button)
 
       block.appendChild(button)
     })
@@ -64,9 +77,13 @@ const Message: FC<{
       <div>
         <div className={s.Date}>{format(date, "yyyy-MM-dd HH:mm:ss")}</div>
         <div className={`${s.Content}`}>
-          <Markdown rehypePlugins={[rehypeHighlight]}>
-            {content || " "}
-          </Markdown>
+          {isUser ? (
+            content || ""
+          ) : (
+            <Markdown rehypePlugins={[rehypeHighlight]}>
+              {content || " "}
+            </Markdown>
+          )}
         </div>
       </div>
     </div>

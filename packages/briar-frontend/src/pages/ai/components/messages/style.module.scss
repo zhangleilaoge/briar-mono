@@ -88,3 +88,10 @@
 .Assistant .Date {
   justify-content: flex-start;
 }
+
+.CopyBtn {
+  color: #c8c9cc;
+  &:hover {
+    color: #7c8282 !important;
+  }
+}
