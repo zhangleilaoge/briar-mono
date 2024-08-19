@@ -14,6 +14,7 @@ import { SSEHookReadyState } from "../../constants"
 import useGptModel from "./hooks/useGptModel"
 import { trimMessageList } from "../../utils"
 import mainStyle from "@/styles/main.module.scss"
+import useCompositionInput from "./hooks/useCompositionInput"
 
 interface IProps {}
 
@@ -35,6 +36,12 @@ const Conversation: FC<IProps> = () => {
     return (readyState as number) !== SSEHookReadyState.CLOSED
   }, [readyState])
   const { scrollToBottom } = useScroll(`.${s.Messages}`)
+  const { handleComposition, isCompositionRef } = useCompositionInput()
+
+  // 现在 sse 的 error 太弱了，没有任何提示作用，先注释了
+  // onError((e) => {
+  //   console.log(e)
+  // })
 
   onMessage(({ data }) => {
     if (!currentConversation) return
@@ -124,7 +131,7 @@ const Conversation: FC<IProps> = () => {
   const onTextAreaKeydown: React.KeyboardEventHandler<HTMLTextAreaElement> = (
     e
   ) => {
-    if (e.key === "Enter" && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey && !isCompositionRef.current) {
       e.preventDefault()
       submit()
     }
@@ -194,7 +201,10 @@ const Conversation: FC<IProps> = () => {
           size="large"
           autoSize={{ minRows: 1, maxRows: 6 }}
           onKeyDown={onTextAreaKeydown}
+          onCompositionStart={handleComposition}
+          onCompositionEnd={handleComposition}
         />
+
         <Button
           icon={loading ? <XFilled /> : <ArrowUpOutlined />}
           onClick={submit}
