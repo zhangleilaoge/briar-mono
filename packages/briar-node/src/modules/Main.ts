@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AiModule } from './ai';
+import { AiModule } from './Ai';
 
 @Module({
   imports: [AiModule],
