@@ -1,5 +1,5 @@
 import { IConversation, RoleEnum } from "briar-shared"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import s from "./style.module.scss"
 import {
   CheckCircleFilled,
