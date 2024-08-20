@@ -4,6 +4,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { isDev } from './constants/env';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -30,7 +31,8 @@ async function bootstrap() {
     maxAge: 20000,
   });
 
-  await app.listen(8922);
+  // 生产环境请在 docker 环境运行，所以 ip 地址为 0.0.0.0
+  await app.listen(8922, isDev ? '127.0.0.1' : '0.0.0.0');
 
   console.log(`\nApplication is running on: ${await app.getUrl()}`);
 }
