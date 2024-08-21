@@ -11,3 +11,7 @@
 -cdnUrl "yourCdnUrl"`
 -apiKey “yourApiKey”
 ```
+
+## 代理
+
+使用 charles 的 mapRemote 功能，即可用原始域名进行代理。
