@@ -201,7 +201,9 @@ const Conversation: FC<IProps> = () => {
           size="large"
           autoSize={{ minRows: 1, maxRows: 6 }}
           onKeyDown={onTextAreaKeydown}
+          // @ts-ignore
           onCompositionStart={handleComposition}
+          // @ts-ignore
           onCompositionEnd={handleComposition}
         />
 
