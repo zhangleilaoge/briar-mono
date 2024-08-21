@@ -8,6 +8,7 @@ import ClickOutside from "@/components/ClickOutSide"
 enum OperationEnum {
   Edit = "edit",
   Delete = "delete",
+  DeleteOther = "deleteOther",
 }
 
 export const MenuItem = ({
@@ -16,7 +17,7 @@ export const MenuItem = ({
   updateConversation,
 }: {
   conversation: IConversation
-  deleteConversation: (_: IConversation) => void
+  deleteConversation: (_?: IConversation) => void
   updateConversation: (_: IConversation, updateToTop?: boolean) => void
 }) => {
   const { messages, title } = conversation
@@ -77,6 +78,23 @@ export const MenuItem = ({
         >
           <DeleteFilled />
           delete
+        </div>
+      ),
+    },
+    {
+      key: OperationEnum.DeleteOther,
+      label: (
+        <div
+          className={s.DropdownItem}
+          style={{ color: colorError }}
+          onClick={(e) => {
+            deleteConversation()
+            setDropdownOpen(false)
+            e.stopPropagation()
+          }}
+        >
+          <DeleteFilled />
+          clear
         </div>
       ),
     },
