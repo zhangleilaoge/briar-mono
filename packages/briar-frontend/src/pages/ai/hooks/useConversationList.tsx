@@ -56,12 +56,16 @@ const useConversationList = () => {
   }
 
   const deleteConversation = useCallback(
-    (conversation: IConversation) => {
-      setConversationList(
-        conversationList.filter(({ created }) => {
-          return created !== conversation.created
-        })
-      )
+    (conversation?: IConversation) => {
+      if (!conversation) {
+        setConversationList([])
+      } else {
+        setConversationList(
+          conversationList.filter(({ created }) => {
+            return created !== conversation.created
+          })
+        )
+      }
       setNeedUpdate(true)
     },
     [conversationList]

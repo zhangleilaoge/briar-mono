@@ -24,3 +24,7 @@ docker-compose up --build
 # 本地 docker 镜像推送到远端
 docker compose push
 ```
+
+## 代理
+
+使用 charles 的 mapRemote 功能，即可用原始域名进行代理。
