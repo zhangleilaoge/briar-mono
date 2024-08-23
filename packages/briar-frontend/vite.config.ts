@@ -5,8 +5,6 @@ import { chunkSplitPlugin } from "vite-plugin-chunk-split"
 // import { visualizer } from "rollup-plugin-visualizer"
 // import externalGlobals from "rollup-plugin-external-globals"
 
-// const cdnUrl = process.env.CDN_URL
-
 const config = () => {
   // const isProd = mode === "production"
 

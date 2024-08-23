@@ -11,3 +11,16 @@
 -cdnUrl "yourCdnUrl"`
 -apiKey “yourApiKey”
 ```
+
+## docker
+
+```cmd
+# 清除本地 docker 容器缓存
+docker container prune
+
+# 本地 docker 构建并运行
+docker-compose up --build
+
+# 本地 docker 镜像推送到远端
+docker compose push
+```
