@@ -6,6 +6,7 @@ const alovaInstance = createAlova({
   requestAdapter: fetchAdapter(),
   statesHook: reactHook,
   responded: (response) => response?.json?.() || response,
+  baseURL: "http://restrained-hunter.website/api",
   timeout: 20000,
 })
 
