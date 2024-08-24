@@ -13,9 +13,9 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-# 2. Docker run,也要记得关
+# 2. Docker run
 Write-Output "try to run docker..."
-docker-compose up -d
+docker compose up -d
 if ($LASTEXITCODE -ne 0) {
     Write-Output "Docker run failed. Exiting..."
     exit 1

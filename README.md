@@ -19,7 +19,7 @@
 docker container prune
 
 # 本地 docker 构建并运行
-docker-compose up --build
+docker compose up --build
 
 # 本地 docker 镜像推送到远端
 docker compose push
