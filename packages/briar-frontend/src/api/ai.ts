@@ -4,9 +4,9 @@ import OpenAI from "openai"
 
 export const chatRequest = (params: IChatRequestParams) =>
   alovaInstance.Post<OpenAI.Chat.Completions.ChatCompletion>(
-    "/api/ai/chatRequest",
+    "/ai/chatRequest",
     params
   )
 
 export const chatRequestStream = (params: IChatRequestParams) =>
-  alovaInstance.Get(`/api/ai/chatRequestStream?${getQueryFromObj(params)}`)
+  alovaInstance.Get(`/ai/chatRequestStream?${getQueryFromObj(params)}`)

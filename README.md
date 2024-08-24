@@ -16,7 +16,7 @@
 
 ```cmd
 # 清除本地 docker 容器缓存
-docker container prune
+docker system prune -a
 
 # 本地 docker 构建并运行
 docker compose up --build
