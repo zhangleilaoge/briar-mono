@@ -15,6 +15,8 @@ if ($LASTEXITCODE -ne 0) {
 
 # 2. Docker run
 Write-Output "try to run docker..."
+docker system prune -a
+rm  ~/.docker/config.json 
 docker compose pull
 docker compose up -d
 if ($LASTEXITCODE -ne 0) {
