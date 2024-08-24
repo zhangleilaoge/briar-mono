@@ -15,6 +15,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # 2. Docker run
 Write-Output "try to run docker..."
+docker compose pull
 docker compose up -d
 if ($LASTEXITCODE -ne 0) {
     Write-Output "Docker run failed. Exiting..."
