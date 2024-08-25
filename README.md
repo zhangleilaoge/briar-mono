@@ -23,6 +23,10 @@ docker compose up --build
 
 # 本地 docker 镜像推送到远端(拉取则是 pull)
 docker compose push
+
+# 查看镜像内部
+docker run -it --entrypoint sh <镜像名称>
+docker-compose exec <服务名称>
 ```
 
 ## 代理
