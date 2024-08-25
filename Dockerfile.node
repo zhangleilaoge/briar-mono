@@ -1,6 +1,7 @@
 FROM node:16.14.0 AS nodeimg
 WORKDIR /briar-mono
-COPY . /briar-mono
+COPY . .
+
 RUN npm install -g pnpm@8.15.9
 RUN pnpm install
 RUN pnpm run build

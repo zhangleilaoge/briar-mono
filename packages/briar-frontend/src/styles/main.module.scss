@@ -44,7 +44,7 @@
   height: calc(100vh - $headerMarginBottom - $headerHeight);
   margin-top: $headerMarginBottom;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: auto;
   background: transparent !important;
   padding-bottom: 0;
 
