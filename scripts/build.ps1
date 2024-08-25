@@ -18,6 +18,7 @@ Write-Output "try to run docker..."
 sudo docker stop $(sudo docker ps -aq)
 sudo docker rm $(sudo docker ps -a -q)
 sudo docker system prune -a -f
+sudo docker volume rm briar-mono_briar-static
 # rm  ~/.docker/config.json 
 sudo docker compose pull
 sudo docker compose up -d
