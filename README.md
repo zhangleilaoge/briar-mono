@@ -26,7 +26,7 @@ docker compose push
 
 # 查看镜像内部
 docker run -it --entrypoint sh <镜像名称>
-docker-compose exec <服务名称>
+docker-compose exec <服务名称> sh
 ```
 
 ## 代理

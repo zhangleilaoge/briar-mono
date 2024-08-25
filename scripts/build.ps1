@@ -15,10 +15,12 @@ if ($LASTEXITCODE -ne 0) {
 
 # 2. Docker run
 Write-Output "try to run docker..."
-docker system prune -a -f
+sudo docker stop $(sudo docker ps -aq)
+sudo docker rm $(sudo docker ps -a -q)
+sudo docker system prune -a -f
 # rm  ~/.docker/config.json 
-docker compose pull
-docker compose up -d
+sudo docker compose pull
+sudo docker compose up -d
 if ($LASTEXITCODE -ne 0) {
     Write-Output "Docker run failed. Exiting..."
     exit 1
