@@ -9,9 +9,11 @@ import { getRoutes } from "./utils/router"
 import { ThemeColor } from "./constants/styles"
 import useLevelPath from "./hooks/useLevelPath"
 import CompositionApiIntro from "./pages/tools/pages/composition-style-intro"
-
+import useRouteHistory from "./hooks/useRouteHistory"
+import CommonContext from "./context/common"
 function App() {
   const { menuKey, onLevelPathChange } = useLevelPath()
+  const { pathHistory } = useRouteHistory()
 
   return (
     <ConfigProvider
@@ -58,31 +60,33 @@ function App() {
         },
       }}
     >
-      <Header className={s.Header}>
-        <img src={BRIAR_ICON} className={s.Briar} />
-        <Menu
-          mode="horizontal"
-          selectedKeys={[menuKey]}
-          items={MENU_ROUTER_CONFIG}
-          onClick={({ key }) => onLevelPathChange(key as MenuKeyEnum)}
-          className={s.Menu}
-          theme={"light"}
-        />
-      </Header>
-      <Suspense
-        fallback={
-          <div className={s.SuspenseSpin}>
-            <Spin size="large" />
-          </div>
-        }
-      >
-        <Routes>
-          {getRoutes(MENU_ROUTER_CONFIG, MenuKeyEnum.Tools)}
-          <Route path="*" element={<div>404 - Page Not Found</div>} />
-          {/* Fix me */}
-          <Route path="/404" Component={CompositionApiIntro} />
-        </Routes>
-      </Suspense>
+      <CommonContext.Provider value={{ pathHistory }}>
+        <Header className={s.Header}>
+          <img src={BRIAR_ICON} className={s.Briar} />
+          <Menu
+            mode="horizontal"
+            selectedKeys={[menuKey]}
+            items={MENU_ROUTER_CONFIG}
+            onClick={({ key }) => onLevelPathChange(key as MenuKeyEnum)}
+            className={s.Menu}
+            theme={"light"}
+          />
+        </Header>
+        <Suspense
+          fallback={
+            <div className={s.SuspenseSpin}>
+              <Spin size="large" />
+            </div>
+          }
+        >
+          <Routes>
+            {getRoutes(MENU_ROUTER_CONFIG, MenuKeyEnum.Tools)}
+            <Route path="*" element={<div>404 - Page Not Found</div>} />
+            {/* Fix me */}
+            <Route path="/404" Component={CompositionApiIntro} />
+          </Routes>
+        </Suspense>
+      </CommonContext.Provider>
     </ConfigProvider>
   )
 }

@@ -1,3 +1,5 @@
+import { createSourceFile, ScriptTarget } from "typescript"
+
 /**
  * @description 获取插入模版字符串的插入值
  * @example
@@ -14,29 +16,9 @@ export const getInsertString = (input: string) => {
 
 /** @description 去掉 js 注释 */
 export const removeScriptComments = (input: string) => {
-  const LINE_BREAK = "\n\n"
+  const sourceFile = createSourceFile("", input, ScriptTarget.Latest)
 
-  // 去除注释的正则表达式
-  const commentRegex = /(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/gm
-
-  // 删除注释代码和空格代码，但保留行末空格
-  const strippedCode = input.replace(commentRegex, (match) => {
-    // 如果是单行注释，则返回一个空行间隙（即在行末加上两个换行符）
-    if (match.startsWith("//")) {
-      return LINE_BREAK
-    }
-    // 如果是多行注释，则保留与其同样长度的空白字符，并返回一个空行间隙
-    else {
-      return (
-        match
-          .split("")
-          .map((char) => {
-            return /\s/.test(char) ? char : " "
-          })
-          .join("") + LINE_BREAK
-      )
-    }
-  })
+  const strippedCode = sourceFile.getText(sourceFile)
 
   return strippedCode
 }

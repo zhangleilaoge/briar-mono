@@ -64,7 +64,7 @@
 
 .ContentLayout {
   max-height: calc(100vh - $headerHeight - $headerMarginBottom);
-  overflow: scroll;
+  overflow: auto;
   padding: 0 24px;
   margin-top: $headerMarginBottom;
   flex-grow: 1;

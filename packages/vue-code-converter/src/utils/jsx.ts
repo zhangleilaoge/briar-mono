@@ -53,7 +53,7 @@ export function wrapWithTag(
 export function getCompleteContent(
   template?: SFCBlock,
   script?: SFCBlock,
-  style?: SFCBlock
+  styles?: SFCBlock[]
 ): string {
   const templateStr = template?.content
     ? wrapWithTag(template?.content, "template", {
@@ -66,8 +66,11 @@ export function getCompleteContent(
         lang: "ts",
       })
     : ""
-  const styleStr = style?.content
-    ? wrapWithTag(style?.content, "style", { ...style?.attrs, lang: "scss" })
-    : ""
+  let styleStr = ""
+  styles?.forEach((item) => {
+    styleStr += item?.content
+      ? wrapWithTag(item?.content, "style", { ...item?.attrs })
+      : ""
+  })
   return `${templateStr}${scriptStr}${styleStr}`
 }

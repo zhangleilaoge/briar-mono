@@ -35,14 +35,32 @@ export const getFileCode = () => {
   return getCompleteContent(
     getGlobalTemplate(),
     getGlobalScript(),
-    getGlobalStyle()[0]
+    getGlobalStyle()
   )
 }
 
 // set
 export const initFileCode = (code: string) => {
-  const parsed = parseComponent(code)
-  const { script, styles, template } = parsed
+  let script: SFCBlock | undefined
+  let template: SFCBlock | undefined
+  let styles: SFCBlock[] = []
+
+  let codes = code.split("</script>")
+  codes = codes.map((item, index) => {
+    if (index !== codes.length - 1) {
+      return item + "</script>"
+    }
+
+    return item
+  })
+
+  codes.forEach((item) => {
+    const parsed = parseComponent(item)
+    const { script: _script, styles: _styles, template: _template } = parsed
+    _script && (script = _script)
+    _styles && (styles = [...styles, ..._styles])
+    _template && (template = _template)
+  })
 
   setGlobalScript({
     ...script,
