@@ -23,12 +23,10 @@ import s from "./style.module.scss"
 import mainStyle from "@/styles/main.module.scss"
 import { IConfigForm } from "./type"
 import { copyToClipboard } from "@/utils/document"
-import useRouteHistory from "@/hooks/useRouteHistory"
 
 const CompositionStyleConvert = () => {
   const [inputType, setInputType] = useState<InputType>()
   const [demoType, setDemoType] = useState<InputType>()
-  const { pathHistory } = useRouteHistory()
 
   // 输入与输入
   const [input, setInput] = useState<string>(DEMO[InputType.OptionStyle])
@@ -76,10 +74,6 @@ const CompositionStyleConvert = () => {
   const hideConfig = () => {
     setConfigShow(false)
   }
-
-  useEffect(() => {
-    console.log("pathHistory", pathHistory)
-  }, [pathHistory])
 
   useEffect(() => {
     const codeElement = outputRef?.current

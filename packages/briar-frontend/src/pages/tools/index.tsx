@@ -6,13 +6,14 @@ import Footer from "@/components/Footer"
 import { SIDER_MENU_ROUTER_CONFIG, ToolsPathKeyEnum } from "@/constants/router"
 import useLevelPath from "@/hooks/useLevelPath"
 import { findSuperiorRouterConfig, getRoutes } from "@/utils/router"
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 import Sider from "antd/es/layout/Sider"
 import useSider from "@/hooks/useSider"
+import CommonContext from "@/context/common"
 
 function CodeConverter() {
   const { isCollapsed, setIsCollapsed } = useSider()
-
+  const { SiderClass, LayoutClass } = useContext(CommonContext)
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken()
@@ -26,7 +27,7 @@ function CodeConverter() {
   return (
     <Layout>
       <Sider
-        className={mainStyle.Sider}
+        className={SiderClass}
         width={240}
         collapsible
         collapsed={isCollapsed}
@@ -41,7 +42,7 @@ function CodeConverter() {
           onClick={({ key }) => onLevelPathChange(key)}
         />
       </Sider>
-      <div className={mainStyle.ContentLayout}>
+      <div className={LayoutClass}>
         <Content
           style={{
             padding: 24,

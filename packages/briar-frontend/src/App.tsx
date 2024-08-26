@@ -6,62 +6,24 @@ import { BRIAR_ICON } from "./constants/img"
 import { Suspense } from "react"
 import { MENU_ROUTER_CONFIG, MenuKeyEnum } from "./constants/router"
 import { getRoutes } from "./utils/router"
-import { ThemeColor } from "./constants/styles"
 import useLevelPath from "./hooks/useLevelPath"
 import CompositionApiIntro from "./pages/tools/pages/composition-style-intro"
 import useRouteHistory from "./hooks/useRouteHistory"
 import CommonContext from "./context/common"
+import { THEME } from "./constants/styles"
+import useFullScreen from "./hooks/useFullScreen"
+
 function App() {
   const { menuKey, onLevelPathChange } = useLevelPath()
-  const { pathHistory } = useRouteHistory()
+  const { hrefHistory } = useRouteHistory()
+  const { fullScreen, HeaderClass, SiderClass, LayoutClass } = useFullScreen()
 
   return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Layout: {
-            headerBg: "#fff",
-          },
-          Menu: {
-            itemSelectedColor: ThemeColor.selectedColor,
-            colorText: ThemeColor.textColor,
-            itemSelectedBg: ThemeColor.selectedBgColor,
-            itemActiveBg: ThemeColor.selectedBgColor,
-            horizontalItemSelectedColor: ThemeColor.selectedColor,
-          },
-          Spin: {
-            colorPrimary: ThemeColor.selectedColor,
-          },
-          Radio: {
-            colorPrimary: ThemeColor.selectedColor,
-            colorPrimaryHover: ThemeColor.selectedColor,
-            buttonColor: ThemeColor.textColor,
-          },
-          Button: {
-            defaultColor: ThemeColor.textColor,
-            defaultActiveColor: ThemeColor.selectedColor,
-            defaultActiveBorderColor: ThemeColor.selectedColor,
-            defaultActiveBg: ThemeColor.selectedBgColor,
-            defaultHoverColor: ThemeColor.selectedColor,
-            defaultHoverBorderColor: ThemeColor.selectedColor,
-          },
-          Select: {
-            colorText: ThemeColor.textColor,
-            optionSelectedBg: ThemeColor.selectedBgColor,
-            colorPrimaryHover: ThemeColor.selectedColor,
-            colorPrimary: ThemeColor.selectedColor,
-          },
-          Input: {
-            colorText: ThemeColor.textColor,
-            colorPrimary: ThemeColor.selectedColor,
-            colorPrimaryHover: ThemeColor.selectedColor,
-            activeShadow: `0 0 0 2px ${ThemeColor.selectedColor}1a`,
-          },
-        },
-      }}
-    >
-      <CommonContext.Provider value={{ pathHistory }}>
-        <Header className={s.Header}>
+    <ConfigProvider theme={THEME}>
+      <CommonContext.Provider
+        value={{ hrefHistory, fullScreen, SiderClass, LayoutClass }}
+      >
+        <Header className={HeaderClass}>
           <img src={BRIAR_ICON} className={s.Briar} />
           <Menu
             mode="horizontal"

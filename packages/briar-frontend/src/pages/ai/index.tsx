@@ -7,10 +7,13 @@ import Footer from "@/components/Footer"
 import Conversation from "./components/conversation"
 import ConversationContext from "./context/conversation"
 import useSider from "@/hooks/useSider"
+import CommonContext from "@/context/common"
+import { useContext } from "react"
 function CodeConverter() {
   const {
     token: { borderRadiusLG },
   } = theme.useToken()
+  const { LayoutClass, SiderClass } = useContext(CommonContext)
   const { isCollapsed, setIsCollapsed } = useSider()
   const {
     menuConfig,
@@ -35,7 +38,7 @@ function CodeConverter() {
         <Sider
           width={240}
           collapsible
-          className={mainStyle.Sider}
+          className={SiderClass}
           collapsed={isCollapsed}
           onCollapse={(value) => setIsCollapsed(value)}
         >
@@ -48,7 +51,7 @@ function CodeConverter() {
             onClick={({ key }) => clickMenuItem(key)}
           />
         </Sider>
-        <div className={mainStyle.ContentLayout}>
+        <div className={LayoutClass}>
           <Content
             style={{
               padding: 24,

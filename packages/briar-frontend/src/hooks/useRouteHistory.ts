@@ -1,24 +1,40 @@
+import { getUrlParams, QueryKeyEnum } from "@/utils/url"
 import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const useRouteHistory = () => {
   const location = useLocation()
-  const [pathHistory, setPathHistory] = useState<string[]>([])
+  const navigate = useNavigate()
+  const [hrefHistory, setHrefHistory] = useState<string[]>([])
 
   useEffect(() => {
-    const previousPathname = pathHistory?.[pathHistory.length - 1]
-    console.log("previousPathname", previousPathname)
-
-    setPathHistory((history) => {
-      const previousPathname = history?.[history.length - 1]
-      if (previousPathname === location.pathname) return history
-      return [...history, location.pathname]
+    setHrefHistory((history) => {
+      const previousHref = history?.[history.length - 1]
+      if (previousHref === window.location.href) return history
+      return [...history, window.location.href]
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname])
+  }, [location])
+
+  // 自动带参 displayMode
+  useEffect(() => {
+    const currentHref = hrefHistory?.[hrefHistory.length - 1]
+    const oldHref = hrefHistory?.[hrefHistory.length - 2]
+
+    if (currentHref !== window.location.href || !oldHref) return
+
+    const oldDisplayMode = getUrlParams(oldHref)?.[QueryKeyEnum.displayMode]
+    const newDisplayMode = getUrlParams(currentHref)?.[QueryKeyEnum.displayMode]
+
+    if (oldDisplayMode && !newDisplayMode) {
+      const url = new URL(currentHref)
+
+      url.searchParams.set(QueryKeyEnum.displayMode, oldDisplayMode)
+      navigate(`${url.pathname}${url.search}`)
+    }
+  }, [hrefHistory, navigate])
 
   return {
-    pathHistory,
+    hrefHistory,
   }
 }
 
