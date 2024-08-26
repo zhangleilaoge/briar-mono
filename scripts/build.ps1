@@ -1,20 +1,3 @@
-param (
-    [string]$cosSecretId,
-    [string]$cosSecretKey,
-    [string]$cosBucket,
-    [string]$region,
-    [string]$cdnUrl,
-    [string]$apiKey
-)
-
-# 设置环境变量
-[System.Environment]::SetEnvironmentVariable('COS_SECRET_ID', $cosSecretId, [System.EnvironmentVariableTarget]::Process)
-[System.Environment]::SetEnvironmentVariable('COS_SECRET_KEY', $cosSecretKey, [System.EnvironmentVariableTarget]::Process)
-[System.Environment]::SetEnvironmentVariable('COS_BUCKET', $cosBucket, [System.EnvironmentVariableTarget]::Process)
-[System.Environment]::SetEnvironmentVariable('REGION', $region, [System.EnvironmentVariableTarget]::Process)
-[System.Environment]::SetEnvironmentVariable('CDN_URL', $cdnUrl, [System.EnvironmentVariableTarget]::Process)
-
-
 # 获取当前脚本所在目录
 $scriptDir = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
 
@@ -30,36 +13,18 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-# 2. Install dependencies using pnpm
-Write-Output "Installing dependencies with pnpm..."
-pnpm install
+# 2. Docker run
+Write-Output "try to run docker..."
+sudo docker stop $(sudo docker ps -aq)
+sudo docker rm $(sudo docker ps -a -q)
+sudo docker system prune -a -f
+sudo docker volume rm briar-mono_briar-static
+# rm  ~/.docker/config.json 
+sudo docker compose pull
+sudo docker compose up -d
 if ($LASTEXITCODE -ne 0) {
-    Write-Output "pnpm install failed. Exiting..."
+    Write-Output "Docker run failed. Exiting..."
     exit 1
 }
-
-# 3. Build the project
-Write-Output "Building the project..."
-pnpm run build
-if ($LASTEXITCODE -ne 0) {
-    Write-Output "pnpm run build failed. Exiting..."
-    exit 1
-}
-
-# 4. upload to cdn
-# Write-Output "Uploading to cdn..."
-# node ./depoly-front-upload-cdn.js
-# if ($LASTEXITCODE -ne 0) {
-#     Write-Output "upload to cdn failed. Exiting..."
-#     exit 1
-# }
-
-# 5. start node server
-# Write-Output "Starting node server..."
-# pnpm run start
-# if ($LASTEXITCODE -ne 0) {
-#     Write-Output "start node server failed. Exiting..."
-#     exit 1
-# }
 
 Write-Output "All steps completed successfully."

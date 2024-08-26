@@ -1,0 +1,26 @@
+services:
+  briar-node:
+    image: zhangleilaoge/briar-node
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    container_name: nodeimg
+    volumes:
+      - briar-static:/briar-mono/packages/briar-frontend/dist
+    ports:
+      - "8922:8922"
+
+  briar-nginx:
+    image: zhangleilaoge/briar-nginx
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    container_name: nginximg
+    volumes:
+      - briar-static:/usr/share/nginx/static
+    ports:
+      - "80:80"
+    depends_on:
+      - briar-node
+volumes:
+  briar-static:
