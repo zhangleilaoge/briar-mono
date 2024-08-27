@@ -1,4 +1,4 @@
-import { Button, Layout, Menu, theme } from "antd"
+import { Layout, Menu, theme } from "antd"
 import Sider from "antd/es/layout/Sider"
 import useConversationList from "./hooks/useConversationList"
 import mainStyle from "@/styles/main.module.scss"
