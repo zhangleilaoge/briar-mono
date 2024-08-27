@@ -1,4 +1,4 @@
-import { Layout, Menu, theme } from "antd"
+import { Button, Layout, Menu, theme } from "antd"
 import Sider from "antd/es/layout/Sider"
 import useConversationList from "./hooks/useConversationList"
 import mainStyle from "@/styles/main.module.scss"
@@ -9,6 +9,7 @@ import ConversationContext from "./context/conversation"
 import useSider from "@/hooks/useSider"
 import CommonContext from "@/context/common"
 import { useContext } from "react"
+import SiderOperations from "./components/sider-operations"
 function CodeConverter() {
   const {
     token: { borderRadiusLG },
@@ -23,6 +24,12 @@ function CodeConverter() {
     addConversation,
     currentConversation,
     setCurrentConversationKey,
+    inMultiSelectMode,
+    outMultiSelectMode,
+    multiSelectMode,
+    setSelectedConversationKeys,
+    selectedConversationKeys,
+    deleteSelectedConversation,
   } = useConversationList()
 
   return (
@@ -32,16 +39,20 @@ function CodeConverter() {
         addConversation,
         currentConversation,
         setCurrentConversationKey,
+        inMultiSelectMode,
+        outMultiSelectMode,
+        multiSelectMode,
+        setSelectedConversationKeys,
+        deleteSelectedConversation,
+        selectedConversationKeys,
       }}
     >
       <Layout>
-        <Sider
-          width={240}
-          collapsible
-          className={SiderClass}
-          collapsed={isCollapsed}
-          onCollapse={(value) => setIsCollapsed(value)}
-        >
+        <Sider width={240} className={SiderClass} collapsed={isCollapsed}>
+          <SiderOperations
+            setIsCollapsed={setIsCollapsed}
+            isCollapsed={isCollapsed}
+          />
           <Menu
             mode="inline"
             selectedKeys={[currentConversationKey].filter(Boolean) as string[]}

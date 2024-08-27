@@ -14,10 +14,17 @@
 }
 
 .ConversationTitle {
-  width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.ConversationContent {
+  width: 160px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
 }
 
 :global(.ant-layout-sider-collapsed) {

@@ -13,8 +13,22 @@ import { MenuItem } from "../components/menu-item"
 const useConversationList = () => {
   const [conversationList, setConversationList] = useState<IConversation[]>([])
   const [currentConversationKey, setCurrentConversationKey] = useState<string>()
+  const [selectedConversationKeys, setSelectedConversationKeys] = useState<
+    string[]
+  >([])
   const [needUpdate, setNeedUpdate] = useState(false)
+  const [multiSelectMode, setMultiSelectMode] = useState(false)
+
   const now = Date.now()
+
+  const inMultiSelectMode = useCallback(() => {
+    setMultiSelectMode(true)
+  }, [])
+
+  const outMultiSelectMode = useCallback(() => {
+    setMultiSelectMode(false)
+    setSelectedConversationKeys([])
+  }, [])
 
   const clickMenuItem = (key: string) => {
     setCurrentConversationKey(key)
@@ -71,6 +85,18 @@ const useConversationList = () => {
     [conversationList]
   )
 
+  const deleteSelectedConversation = useCallback(() => {
+    setConversationList(
+      conversationList.filter(({ created }) => {
+        return !selectedConversationKeys.includes(created.toString())
+      })
+    )
+    setSelectedConversationKeys([])
+    setMultiSelectMode(false)
+
+    setNeedUpdate(true)
+  }, [conversationList, selectedConversationKeys])
+
   const currentConversation: IConversation | undefined = useMemo(() => {
     if (!currentConversationKey) {
       return
@@ -83,12 +109,12 @@ const useConversationList = () => {
   const menuConfig = useMemo((): IMenuRouterConfig[] => {
     const normalizeConversationList = (during: [number, number]) => {
       const [minAgo, maxAgo] = during
+      const start = subDays(now, maxAgo).getTime()
+      const end = subDays(now, minAgo).getTime()
 
       return conversationList
         .filter(({ created }) => {
-          return isAfter(created, subDays(now, maxAgo).getTime()) && minAgo
-            ? isBefore(created, subDays(now, minAgo))
-            : true
+          return isAfter(created, start) && isBefore(created, end)
         })
         .map((conversation) => {
           const { created } = conversation
@@ -162,6 +188,12 @@ const useConversationList = () => {
     updateConversation,
     addConversation,
     setCurrentConversationKey,
+    deleteSelectedConversation,
+    multiSelectMode,
+    inMultiSelectMode,
+    outMultiSelectMode,
+    setSelectedConversationKeys,
+    selectedConversationKeys,
   }
 }
 

@@ -7,6 +7,12 @@ const ConversationContext = React.createContext({
   addConversation: (_conversation: IConversation) => {},
   currentConversation: undefined as IConversation | undefined,
   setCurrentConversationKey: (_key?: string) => {},
+  multiSelectMode: false,
+  inMultiSelectMode: () => {},
+  outMultiSelectMode: () => {},
+  setSelectedConversationKeys: (_keys: string[]) => {},
+  selectedConversationKeys: [] as string[],
+  deleteSelectedConversation: () => {},
 })
 
 export default ConversationContext
