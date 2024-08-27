@@ -1,13 +1,41 @@
-import { getUrlParams } from "@/utils/url"
+import { getUrlParams, QueryKeyEnum, updateURLParameter } from "@/utils/url"
 import s from "@/styles/main.module.scss"
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { useLocation } from "react-router-dom"
+import useNeedUpdate from "./useNeedUpdate"
+import { LocalStorageKey } from "@/constants/env"
 const useFullScreen = () => {
   const [fullScreen, setFullScreen] = useState(false)
+  const location = useLocation()
+  const { needUpdate, triggerUpdate, finishUpdate } = useNeedUpdate()
 
   useEffect(() => {
-    const { displayMode } = getUrlParams()
+    if (!needUpdate) {
+      return
+    }
+    const {
+      displayMode = localStorage.getItem(LocalStorageKey.FullScreen) || "",
+    } = getUrlParams()
     setFullScreen(displayMode === "full")
-  }, [location.search])
+    localStorage.setItem(LocalStorageKey.FullScreen, displayMode)
+    finishUpdate()
+  }, [finishUpdate, needUpdate])
+
+  useEffect(() => {
+    triggerUpdate()
+  }, [location, triggerUpdate])
+
+  const inFullScreen = useCallback(() => {
+    updateURLParameter(QueryKeyEnum.displayMode)
+    localStorage.setItem(LocalStorageKey.FullScreen, "full")
+    triggerUpdate()
+  }, [triggerUpdate])
+
+  const outFullScreen = useCallback(() => {
+    updateURLParameter(QueryKeyEnum.displayMode)
+    localStorage.setItem(LocalStorageKey.FullScreen, "normal")
+    triggerUpdate()
+  }, [triggerUpdate])
 
   const HeaderClass = useMemo(() => {
     return `${s.Header} ${fullScreen ? s.Hide : ""}`
@@ -21,7 +49,14 @@ const useFullScreen = () => {
     return `${s.ContentLayout} ${fullScreen ? s.FullScreenContentLayout : ""}`
   }, [fullScreen])
 
-  return { fullScreen, HeaderClass, SiderClass, LayoutClass }
+  return {
+    fullScreen,
+    inFullScreen,
+    outFullScreen,
+    HeaderClass,
+    SiderClass,
+    LayoutClass,
+  }
 }
 
 export default useFullScreen

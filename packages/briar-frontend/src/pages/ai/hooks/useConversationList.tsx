@@ -9,12 +9,27 @@ import { isAfter, isBefore, subDays } from "date-fns"
 import { IMenuRouterConfig } from "@/types/router"
 import { LocalStorageKey } from "@/constants/env"
 import { MenuItem } from "../components/menu-item"
+import useNeedUpdate from "@/hooks/useNeedUpdate"
 
 const useConversationList = () => {
   const [conversationList, setConversationList] = useState<IConversation[]>([])
   const [currentConversationKey, setCurrentConversationKey] = useState<string>()
-  const [needUpdate, setNeedUpdate] = useState(false)
+  const [selectedConversationKeys, setSelectedConversationKeys] = useState<
+    string[]
+  >([])
+  const { needUpdate, triggerUpdate, finishUpdate } = useNeedUpdate()
+  const [multiSelectMode, setMultiSelectMode] = useState(false)
+
   const now = Date.now()
+
+  const inMultiSelectMode = useCallback(() => {
+    setMultiSelectMode(true)
+  }, [])
+
+  const outMultiSelectMode = useCallback(() => {
+    setMultiSelectMode(false)
+    setSelectedConversationKeys([])
+  }, [])
 
   const clickMenuItem = (key: string) => {
     setCurrentConversationKey(key)
@@ -43,16 +58,16 @@ const useConversationList = () => {
       )
       updateToTop && setCurrentConversationKey(conversation.created.toString())
 
-      setNeedUpdate(true)
+      triggerUpdate()
     },
-    [conversationList]
+    [conversationList, triggerUpdate]
   )
 
   const addConversation = (conversation: IConversation) => {
     setConversationList([conversation, ...conversationList])
     setCurrentConversationKey(conversation.created.toString())
 
-    setNeedUpdate(true)
+    triggerUpdate()
   }
 
   const deleteConversation = useCallback(
@@ -66,10 +81,22 @@ const useConversationList = () => {
           })
         )
       }
-      setNeedUpdate(true)
+      triggerUpdate()
     },
-    [conversationList]
+    [conversationList, triggerUpdate]
   )
+
+  const deleteSelectedConversation = useCallback(() => {
+    setConversationList(
+      conversationList.filter(({ created }) => {
+        return !selectedConversationKeys.includes(created.toString())
+      })
+    )
+    setSelectedConversationKeys([])
+    setMultiSelectMode(false)
+
+    triggerUpdate()
+  }, [conversationList, selectedConversationKeys, triggerUpdate])
 
   const currentConversation: IConversation | undefined = useMemo(() => {
     if (!currentConversationKey) {
@@ -83,12 +110,12 @@ const useConversationList = () => {
   const menuConfig = useMemo((): IMenuRouterConfig[] => {
     const normalizeConversationList = (during: [number, number]) => {
       const [minAgo, maxAgo] = during
+      const start = subDays(now, maxAgo).getTime()
+      const end = subDays(now, minAgo).getTime()
 
       return conversationList
         .filter(({ created }) => {
-          return isAfter(created, subDays(now, maxAgo).getTime()) && minAgo
-            ? isBefore(created, subDays(now, minAgo))
-            : true
+          return isAfter(created, start) && isBefore(created, end)
         })
         .map((conversation) => {
           const { created } = conversation
@@ -150,9 +177,9 @@ const useConversationList = () => {
         JSON.stringify(conversationList.slice(0, MAX_CONVERSATION_NUM))
       )
 
-      setNeedUpdate(false)
+      finishUpdate()
     }
-  }, [conversationList, needUpdate])
+  }, [conversationList, finishUpdate, needUpdate])
 
   return {
     menuConfig,
@@ -162,6 +189,12 @@ const useConversationList = () => {
     updateConversation,
     addConversation,
     setCurrentConversationKey,
+    deleteSelectedConversation,
+    multiSelectMode,
+    inMultiSelectMode,
+    outMultiSelectMode,
+    setSelectedConversationKeys,
+    selectedConversationKeys,
   }
 }
 

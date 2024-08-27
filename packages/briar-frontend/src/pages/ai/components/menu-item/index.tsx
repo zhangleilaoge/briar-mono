@@ -1,14 +1,30 @@
-import { Button, Dropdown, Input, InputRef, MenuProps, theme } from "antd"
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  Input,
+  InputRef,
+  MenuProps,
+  theme,
+} from "antd"
 import s from "./style.module.scss"
 import { DeleteFilled, EditFilled, EllipsisOutlined } from "@ant-design/icons"
 import { IConversation } from "briar-shared"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import ClickOutside from "@/components/ClickOutSide"
+import ConversationContext from "../../context/conversation"
+import { CheckboxChangeEvent } from "antd/es/checkbox"
 
 enum OperationEnum {
   Edit = "edit",
   Delete = "delete",
-  DeleteOther = "deleteOther",
 }
 
 export const MenuItem = ({
@@ -25,6 +41,15 @@ export const MenuItem = ({
   const [isEditing, setIsEditing] = useState(false)
   const [editValue, setEditValue] = useState(title || messages?.[0].content)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const {
+    multiSelectMode,
+    selectedConversationKeys,
+    setSelectedConversationKeys,
+  } = useContext(ConversationContext)
+
+  const checked = useMemo(() => {
+    return selectedConversationKeys.includes(conversation.created.toString())
+  }, [conversation.created, selectedConversationKeys])
 
   const conversationTitle = useMemo(() => {
     return title || messages?.[0].content
@@ -32,6 +57,25 @@ export const MenuItem = ({
   const {
     token: { colorError },
   } = theme.useToken()
+
+  const changeChecked = useCallback(
+    (e: CheckboxChangeEvent) => {
+      let keys = selectedConversationKeys
+      if (e.target.checked) {
+        keys = [...keys, conversation.created.toString()]
+      } else {
+        keys = keys.filter(
+          (key: string) => key !== conversation.created.toString()
+        )
+      }
+      setSelectedConversationKeys(keys)
+    },
+    [
+      conversation.created,
+      selectedConversationKeys,
+      setSelectedConversationKeys,
+    ]
+  )
 
   const finishEdit = useCallback(() => {
     setIsEditing(false)
@@ -81,23 +125,6 @@ export const MenuItem = ({
         </div>
       ),
     },
-    {
-      key: OperationEnum.DeleteOther,
-      label: (
-        <div
-          className={s.DropdownItem}
-          style={{ color: colorError }}
-          onClick={(e) => {
-            deleteConversation()
-            setDropdownOpen(false)
-            e.stopPropagation()
-          }}
-        >
-          <DeleteFilled />
-          clear
-        </div>
-      ),
-    },
   ]
 
   useEffect(() => {
@@ -106,25 +133,34 @@ export const MenuItem = ({
 
   return (
     <div className={s.Conversation}>
-      {isEditing ? (
-        <ClickOutside onClickOutside={finishEdit}>
-          <Input
-            onBlur={finishEdit}
-            ref={inputRef}
-            onChange={(e) => {
-              setEditValue(e.target.value)
-            }}
-            value={editValue}
+      <div className={s.ConversationContent}>
+        {multiSelectMode && (
+          <Checkbox
+            onChange={changeChecked}
+            checked={checked}
             onClick={(e) => e.stopPropagation()}
-            onPressEnter={(e) => {
-              e.stopPropagation()
-              finishEdit()
-            }}
-          />
-        </ClickOutside>
-      ) : (
-        <div className={s.ConversationTitle}>{conversationTitle}</div>
-      )}
+          ></Checkbox>
+        )}
+        {isEditing ? (
+          <ClickOutside onClickOutside={finishEdit}>
+            <Input
+              onBlur={finishEdit}
+              ref={inputRef}
+              onChange={(e) => {
+                setEditValue(e.target.value)
+              }}
+              value={editValue}
+              onClick={(e) => e.stopPropagation()}
+              onPressEnter={(e) => {
+                e.stopPropagation()
+                finishEdit()
+              }}
+            />
+          </ClickOutside>
+        ) : (
+          <div className={s.ConversationTitle}>{conversationTitle}</div>
+        )}
+      </div>
       <Dropdown
         menu={{ items }}
         placement="bottomLeft"
@@ -134,7 +170,6 @@ export const MenuItem = ({
       >
         <Button
           icon={<EllipsisOutlined className={s.EditConversation} />}
-          // size="small"
           type="text"
           onClick={(e) => e.stopPropagation()}
         ></Button>

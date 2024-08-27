@@ -1,12 +1,10 @@
 import "prismjs/themes/prism-tomorrow.css"
 
-import { GithubFilled } from "@ant-design/icons"
 import { convert, InputType } from "@zhangleilaoge/vue-code-converter"
 import {
   Alert,
   Button,
   Drawer,
-  FloatButton,
   Form,
   message,
   Radio,
@@ -20,7 +18,6 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import { DEMO } from "./constants/demo"
 import { COMPOSITION_API_CONFIG } from "./constants/formConfig"
 import s from "./style.module.scss"
-import mainStyle from "@/styles/main.module.scss"
 import { IConfigForm } from "./type"
 import { copyToClipboard } from "@/utils/document"
 
@@ -178,20 +175,6 @@ const CompositionStyleConvert = () => {
             <code className="code-output-content">{output}</code>
           </pre>
         </div>
-        {/* 操作区 */}
-        <FloatButton.Group shape="circle">
-          <FloatButton
-            icon={<GithubFilled />}
-            href="https://github.com/zhangleilaoge/briar-mono/tree/main/packages/vue-code-converter"
-            target="_blank"
-            className={mainStyle.ColoredText}
-          />
-          {/* <FloatButton
-            icon={<QuestionCircleOutlined />}
-            href="https://github.com/zhangleilaoge/briar-mono/tree/main/packages/vue-code-converter"
-            target="_blank"
-          /> */}
-        </FloatButton.Group>
       </div>
       {/* 设置区域 */}
       <Drawer onClose={hideConfig} open={configShow}>

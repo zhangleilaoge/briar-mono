@@ -8,21 +8,34 @@ import { MENU_ROUTER_CONFIG, MenuKeyEnum } from "./constants/router"
 import { getRoutes } from "./utils/router"
 import useLevelPath from "./hooks/useLevelPath"
 import CompositionApiIntro from "./pages/tools/pages/composition-style-intro"
-import useRouteHistory from "./hooks/useRouteHistory"
 import CommonContext from "./context/common"
 import { THEME } from "./constants/styles"
 import useFullScreen from "./hooks/useFullScreen"
+import FloatBtn from "./components/FloatBtn"
 
 function App() {
   const { menuKey, onLevelPathChange } = useLevelPath()
-  const { hrefHistory } = useRouteHistory()
-  const { fullScreen, HeaderClass, SiderClass, LayoutClass } = useFullScreen()
+  const {
+    fullScreen,
+    HeaderClass,
+    SiderClass,
+    LayoutClass,
+    inFullScreen,
+    outFullScreen,
+  } = useFullScreen()
 
   return (
     <ConfigProvider theme={THEME}>
       <CommonContext.Provider
-        value={{ hrefHistory, fullScreen, SiderClass, LayoutClass }}
+        value={{
+          fullScreen,
+          SiderClass,
+          LayoutClass,
+          inFullScreen,
+          outFullScreen,
+        }}
       >
+        <FloatBtn />
         <Header className={HeaderClass}>
           <img src={BRIAR_ICON} className={s.Briar} />
           <Menu

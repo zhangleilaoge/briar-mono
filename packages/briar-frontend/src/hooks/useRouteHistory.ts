@@ -2,6 +2,7 @@ import { getUrlParams, QueryKeyEnum } from "@/utils/url"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
+// 暂时用不到
 const useRouteHistory = () => {
   const location = useLocation()
   const navigate = useNavigate()

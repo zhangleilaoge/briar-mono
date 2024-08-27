@@ -1,0 +1,21 @@
+.SiderOperations {
+  display: flex;
+  justify-content: flex-end;
+  // position: absolute;
+  height: 24px;
+  align-items: center;
+  right: 16px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.btn {
+  color: rgba(0, 0, 0, 0.45);
+  transition: all 0.5s;
+}
+
+.hideBtn {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
