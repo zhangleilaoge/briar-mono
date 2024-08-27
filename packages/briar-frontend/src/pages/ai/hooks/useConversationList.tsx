@@ -9,6 +9,7 @@ import { isAfter, isBefore, subDays } from "date-fns"
 import { IMenuRouterConfig } from "@/types/router"
 import { LocalStorageKey } from "@/constants/env"
 import { MenuItem } from "../components/menu-item"
+import useNeedUpdate from "@/hooks/useNeedUpdate"
 
 const useConversationList = () => {
   const [conversationList, setConversationList] = useState<IConversation[]>([])
@@ -16,7 +17,7 @@ const useConversationList = () => {
   const [selectedConversationKeys, setSelectedConversationKeys] = useState<
     string[]
   >([])
-  const [needUpdate, setNeedUpdate] = useState(false)
+  const { needUpdate, triggerUpdate, finishUpdate } = useNeedUpdate()
   const [multiSelectMode, setMultiSelectMode] = useState(false)
 
   const now = Date.now()
@@ -57,16 +58,16 @@ const useConversationList = () => {
       )
       updateToTop && setCurrentConversationKey(conversation.created.toString())
 
-      setNeedUpdate(true)
+      triggerUpdate()
     },
-    [conversationList]
+    [conversationList, triggerUpdate]
   )
 
   const addConversation = (conversation: IConversation) => {
     setConversationList([conversation, ...conversationList])
     setCurrentConversationKey(conversation.created.toString())
 
-    setNeedUpdate(true)
+    triggerUpdate()
   }
 
   const deleteConversation = useCallback(
@@ -80,9 +81,9 @@ const useConversationList = () => {
           })
         )
       }
-      setNeedUpdate(true)
+      triggerUpdate()
     },
-    [conversationList]
+    [conversationList, triggerUpdate]
   )
 
   const deleteSelectedConversation = useCallback(() => {
@@ -94,8 +95,8 @@ const useConversationList = () => {
     setSelectedConversationKeys([])
     setMultiSelectMode(false)
 
-    setNeedUpdate(true)
-  }, [conversationList, selectedConversationKeys])
+    triggerUpdate()
+  }, [conversationList, selectedConversationKeys, triggerUpdate])
 
   const currentConversation: IConversation | undefined = useMemo(() => {
     if (!currentConversationKey) {
@@ -176,9 +177,9 @@ const useConversationList = () => {
         JSON.stringify(conversationList.slice(0, MAX_CONVERSATION_NUM))
       )
 
-      setNeedUpdate(false)
+      finishUpdate()
     }
-  }, [conversationList, needUpdate])
+  }, [conversationList, finishUpdate, needUpdate])
 
   return {
     menuConfig,
