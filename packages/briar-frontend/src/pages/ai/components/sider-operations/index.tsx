@@ -26,7 +26,7 @@ const SiderOperations = ({
   return (
     <div className={s.SiderOperations}>
       <div className={multiSelectMode ? "" : s.hideBtn}>
-        <Tooltip title={"全部删除"}>
+        <Tooltip title={"全部选中"}>
           <Button
             icon={<CloseCircleOutlined />}
             size="small"
