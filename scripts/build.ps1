@@ -18,7 +18,8 @@ Write-Output "try to run docker..."
 sudo docker stop $(sudo docker ps -aq)
 sudo docker rm $(sudo docker ps -a -q)
 sudo docker system prune -a -f
-sudo docker volume rm briar-mono_briar-static
+# 有时候这句会静默失败，后续再看看原因
+sudo docker volume rm briar-mono_briar-static -f
 sudo docker compose pull
 sudo docker compose up -d
 if ($LASTEXITCODE -ne 0) {

@@ -15,10 +15,13 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       /http:\/\/(www\.)?restrained-hunter\.website/,
+      /https:\/\/(www\.)?restrained-hunter\.website/,
       /http:\/\/localhost:5173/,
+      /https:\/\/localhost:5173/,
       /http:\/\/127\.0\.0\.1:5173/,
-      /http:\/\/127\.0\.0\.1:80/,
+      /https:\/\/127\.0\.0\.1:5173/,
       /http:\/\/122\.51\.158\.41/,
+      /https:\/\/122\.51\.158\.41/,
     ],
     methods: 'GET,PUT,POST',
     allowedHeaders: 'Content-Type,Authorization',

@@ -19,6 +19,7 @@ services:
     volumes:
       - briar-static:/usr/share/nginx/static
     ports:
+      - "443:443"
       - "80:80"
     depends_on:
       - briar-node
