@@ -43,7 +43,7 @@ vue 代码转换工具，目前支持两种格式转换：
 
 ### 2.1 在线转换
 
-> 转化平台在线代码转换：http://122.51.158.41/tools/composition-style-convert
+> 转化平台在线代码转换：https://restrained-hunter.website/tools/composition-style-converter?displayMode=full
 
 ### 2.2 脚本转换
 
