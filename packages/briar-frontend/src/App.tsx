@@ -55,7 +55,7 @@ function App() {
           }
         >
           <Routes>
-            {getRoutes(MENU_ROUTER_CONFIG, MenuKeyEnum.Tools)}
+            {getRoutes(MENU_ROUTER_CONFIG, MenuKeyEnum.Ai)}
             <Route path="*" element={<div>404 - Page Not Found</div>} />
             {/* Fix me */}
             <Route path="/404" Component={CompositionApiIntro} />
