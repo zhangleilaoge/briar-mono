@@ -17,10 +17,12 @@
     "antd": "^5.19.3",
     "briar-shared": "^0.0.8",
     "date-fns": "^3.6.0",
+    "gapi-script": "^1.2.0",
     "highlight.js": "^11.10.0",
     "prismjs": "^1.29.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-google-login": "^5.2.2",
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.25.1",
     "rehype-highlight": "^7.0.0"

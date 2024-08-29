@@ -37,7 +37,7 @@ const SiderOperations = ({
         </Tooltip>
         <Tooltip title={"退出多选"}>
           <Button
-            icon={<LogoutOutlined />}
+            icon={<BarsOutlined />}
             size="small"
             type="text"
             className={s.btn}
