@@ -5,8 +5,6 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { isDev } from './constants/env';
-import * as fs from 'fs';
-import * as path from 'path';
 
 const origins = [
   /http:\/\/(www\.)?restrained-hunter\.website/,
@@ -19,21 +17,10 @@ const origins = [
   /https:\/\/122\.51\.158\.41/,
 ];
 
-// const httpsOptions = {
-//   key: fs.readFileSync(
-//     path.join(__dirname, '../../../config/restrained-hunter.website.key'),
-//   ),
-//   cert: fs.readFileSync(
-//     path.join(__dirname, '../../../config/restrained-hunter.website.crt'),
-//   ),
-//   ca: fs.readFileSync(path.join(__dirname, '../../../config/root_bundle.crt')),
-// };
-
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     MainModule,
     new FastifyAdapter(),
-    // { httpsOptions },
   );
 
   app.enableCors({
