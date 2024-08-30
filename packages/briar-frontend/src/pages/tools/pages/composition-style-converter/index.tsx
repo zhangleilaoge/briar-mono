@@ -1,6 +1,6 @@
 import "prismjs/themes/prism-tomorrow.css"
 
-import { convert, InputType } from "@zhangleilaoge/vue-code-converter"
+import { InputType } from "@zhangleilaoge/vue-code-converter"
 import {
   Alert,
   Button,
@@ -87,29 +87,32 @@ const CompositionStyleConvert = () => {
 
       console.log("convertSrc start", Date.now())
 
-      const {
-        output: convertOutput,
-        inputType: convertInputType,
-        warning,
-      } = convert(input, {
-        strict: true,
-        prettier: {
-          printWidth: configFormValue.outputPrintWidth,
-        },
+      // 懒加载，体积小
+      import("@zhangleilaoge/vue-code-converter").then(async (mod) => {
+        const {
+          output: convertOutput,
+          inputType: convertInputType,
+          warning,
+        } = await mod.convert(input, {
+          strict: true,
+          prettier: {
+            printWidth: configFormValue.outputPrintWidth,
+          },
+        })
+
+        console.log("convertSrc end", Date.now())
+
+        setInputType(convertInputType)
+        setOutput(convertOutput)
+
+        if (warning) {
+          setInputTipType("warning")
+          setInputTip(warning)
+        } else if (convertInputType === InputType.CompositionApi) {
+          setInputTipType("info")
+          setInputTip("Composition API 无需转换")
+        }
       })
-
-      console.log("convertSrc end", Date.now())
-
-      setInputType(convertInputType)
-      setOutput(convertOutput)
-
-      if (warning) {
-        setInputTipType("warning")
-        setInputTip(warning)
-      } else if (convertInputType === InputType.CompositionApi) {
-        setInputTipType("info")
-        setInputTip("Composition API 无需转换")
-      }
     } catch (err: any) {
       setInputTipType("error")
       setInputTip(err?.message || JSON.stringify(err))
