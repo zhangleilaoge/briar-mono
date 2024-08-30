@@ -37,7 +37,7 @@ import {
   visitEachChild,
   visitNode,
 } from "typescript"
-import { getGlobalScript, getGlobalTemplate, setGlobalTemplate } from "./store"
+import { getGlobalTemplate, setGlobalTemplate } from "./store"
 
 export interface ConvertedExpression {
   expression: string
@@ -293,34 +293,34 @@ export const getSetupStatements = ({
     return !isUnused
   })
 
-  // 2. 将无用的 toRefs 变量在 setup 中删去
-  setupProps = setupProps
-    .map((item) => {
-      const { use, returnNames = [] } = item
-      if (use === useEnum.ToRefs) {
-        const usedToRefsVars = returnNames?.filter((returnName) => {
-          return !!getGlobalScript()?.content.match(
-            new RegExp(`\\bthis\\.${returnName}\\b`, "g")
-          )?.length
-        })
-        return {
-          ...item,
-          returnNames: usedToRefsVars,
-          expression: getToRefsExpression(usedToRefsVars),
-        }
-      }
-      return item
-    })
-    .filter(({ use, returnNames }) => {
-      if (use === useEnum.ToRefs && returnNames) {
-        if (returnNames?.length === 0) {
-          return false
-        }
-        toRefsNames.push(...returnNames)
-      }
+  // 2. 将无用的 toRefs 变量在 setup 中删去。20240829：去掉这段代码，因为没法判断是否无用。就像@ModelSync，看似没有this.xx被消费，实际转换后就有了
+  // setupProps = setupProps
+  //   .map((item) => {
+  //     const { use, returnNames = [] } = item
+  //     if (use === useEnum.ToRefs) {
+  //       const usedToRefsVars = returnNames?.filter((returnName) => {
+  //         return !!getGlobalScript()?.content.match(
+  //           new RegExp(`\\b${returnName}\\b`, "g")
+  //         )?.length
+  //       })
+  //       return {
+  //         ...item,
+  //         returnNames: usedToRefsVars,
+  //         expression: getToRefsExpression(usedToRefsVars),
+  //       }
+  //     }
+  //     return item
+  //   })
+  //   .filter(({ use, returnNames }) => {
+  //     if (use === useEnum.ToRefs && returnNames) {
+  //       if (returnNames?.length === 0) {
+  //         return false
+  //       }
+  //       toRefsNames.push(...returnNames)
+  //     }
 
-      return true
-    })
+  //     return true
+  //   })
 
   // 3. 将永不修改的 ref 变量降级：调整为普通变量或直接使用原始值
   setupProps = downgradeRefToNormal(setupProps, sourceCode)

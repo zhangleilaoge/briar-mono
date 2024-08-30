@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 import s from "./styles/main.module.scss"
 import { ConfigProvider, Menu, Spin } from "antd"
 import { Header } from "antd/es/layout/layout"
@@ -7,11 +7,11 @@ import { Suspense } from "react"
 import { MENU_ROUTER_CONFIG, MenuKeyEnum } from "./constants/router"
 import { getRoutes } from "./utils/router"
 import useLevelPath from "./hooks/useLevelPath"
-import CompositionApiIntro from "./pages/tools/pages/composition-style-intro"
 import CommonContext from "./context/common"
 import { THEME } from "./constants/styles"
 import useFullScreen from "./hooks/useFullScreen"
 import FloatBtn from "./components/FloatBtn"
+import Page404 from "./pages/404"
 
 function App() {
   const { menuKey, onLevelPathChange } = useLevelPath()
@@ -56,9 +56,8 @@ function App() {
         >
           <Routes>
             {getRoutes(MENU_ROUTER_CONFIG, MenuKeyEnum.Tools)}
-            <Route path="*" element={<div>404 - Page Not Found</div>} />
-            {/* Fix me */}
-            <Route path="/404" Component={CompositionApiIntro} />
+            <Route path="/404" Component={Page404} />
+            <Route path="*" element={<Navigate to="/404" replace />} />
           </Routes>
         </Suspense>
       </CommonContext.Provider>
