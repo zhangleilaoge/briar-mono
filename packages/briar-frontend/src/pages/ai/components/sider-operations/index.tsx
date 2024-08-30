@@ -1,7 +1,6 @@
 import {
   BarsOutlined,
   CloseCircleOutlined,
-  LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons"
