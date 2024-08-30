@@ -13,6 +13,9 @@ import useFullScreen from "./hooks/useFullScreen"
 import FloatBtn from "./components/FloatBtn"
 import Page404 from "./pages/404"
 
+import useLogin from "./hooks/useLogin"
+import Profile from "./components/profile"
+
 function App() {
   const { menuKey, onLevelPathChange } = useLevelPath()
   const {
@@ -23,6 +26,7 @@ function App() {
     inFullScreen,
     outFullScreen,
   } = useFullScreen()
+  const { profileImg, fullName } = useLogin()
 
   return (
     <ConfigProvider theme={THEME}>
@@ -33,19 +37,24 @@ function App() {
           LayoutClass,
           inFullScreen,
           outFullScreen,
+          profileImg,
+          fullName,
         }}
       >
         <FloatBtn />
         <Header className={HeaderClass}>
           <img src={BRIAR_ICON} className={s.Briar} />
-          <Menu
-            mode="horizontal"
-            selectedKeys={[menuKey]}
-            items={MENU_ROUTER_CONFIG}
-            onClick={({ key }) => onLevelPathChange(key as MenuKeyEnum)}
-            className={s.Menu}
-            theme={"light"}
-          />
+          <div className={s.HeaderRight}>
+            <Menu
+              mode="horizontal"
+              selectedKeys={[menuKey]}
+              items={MENU_ROUTER_CONFIG}
+              onClick={({ key }) => onLevelPathChange(key as MenuKeyEnum)}
+              className={s.Menu}
+              theme={"light"}
+            />
+            <Profile />
+          </div>
         </Header>
         <Suspense
           fallback={
