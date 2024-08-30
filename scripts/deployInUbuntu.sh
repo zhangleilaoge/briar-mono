@@ -14,7 +14,7 @@ echo "Trying to run docker..."
 sudo docker stop $(sudo docker ps -aq)
 sudo docker rm $(sudo docker ps -a -q)
 sudo docker system prune -a -f
-# rm ~/.docker/config.json
+sudo docker volume rm briar-mono_briar-static -f
 sudo docker compose pull
 sudo docker compose up -d
 if [ $? -ne 0 ]; then
