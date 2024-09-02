@@ -7,16 +7,19 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
+    "build:watch": "nest build --watch",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
     "start": "cross-env NODE_ENV=production node dist/main  "
   },
   "dependencies": {
+    "@fastify/static": "^7.0.4",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-fastify": "^10.3.10",
+    "@nestjs/serve-static": "^4.0.2",
     "@nestjs/throttler": "^6.1.1",
-    "briar-shared": "workspace:*",
+    "briar-shared": "^0.0.8",
     "cross-env": "^7.0.3",
     "openai": "^4.55.4",
     "reflect-metadata": "^0.2.0",
