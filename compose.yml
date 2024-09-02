@@ -9,7 +9,6 @@ services:
       - briar-static:/briar-mono/packages/briar-frontend/dist
     ports:
       - "8922:8922"
-
   briar-nginx:
     image: zhangleilaoge/briar-nginx
     build:
@@ -23,5 +22,18 @@ services:
       - "80:80"
     depends_on:
       - briar-node
+  briar-mysql:
+    image: mysql:9.0.1
+    container_name: mysqlimg
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - briar-mysql-data:/var/lib/mysql
 volumes:
   briar-static:
+  briar-mysql-data:

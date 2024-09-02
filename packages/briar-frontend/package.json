@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:unlimited": "tsc -b && node --max_old_space_size=4096 node_modules/vite/bin/vite.js build",
+    "build:watch": "tsc -b && vite build --watch",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -19,6 +19,7 @@
     "date-fns": "^3.6.0",
     "gapi-script": "^1.2.0",
     "highlight.js": "^11.10.0",
+    "js-cookie": "^3.0.5",
     "prismjs": "^1.29.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

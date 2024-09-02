@@ -1,9 +1,9 @@
 import CommonContext from '@/context/common';
-import { LoginOutlined, LogoutOutlined } from '@ant-design/icons';
+import { LoginOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, message, Modal } from 'antd';
 import { useContext, useMemo, useState } from 'react';
-import GoogleLogin from 'react-google-login';
-import { clientId } from '@/constants/login';
+import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import { clientId } from '@/constants/user';
 import s from './style.module.scss';
 import { errorNotify } from '@/utils/notify';
 
@@ -13,10 +13,10 @@ enum OperationEnum {
 }
 
 const Profile = () => {
-	const { profileImg } = useContext(CommonContext);
+	const { userInfo } = useContext(CommonContext);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const onSuccess = (res: any) => {
+	const onSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
 		console.log('success:', res);
 	};
 	const onFailure = (err: Error) => {
@@ -57,7 +57,7 @@ const Profile = () => {
 	return (
 		<>
 			<Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
-				<Avatar size={40} src={profileImg} />
+				<Avatar size={40} src={userInfo.profileImg || ''} icon={<UserOutlined />} />
 			</Dropdown>
 			<Modal
 				open={isModalOpen}

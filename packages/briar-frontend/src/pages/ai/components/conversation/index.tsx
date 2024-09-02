@@ -18,7 +18,7 @@ import useCompositionInput from './hooks/useCompositionInput';
 
 const Conversation: FC = () => {
 	const [inputValue, setInputValue] = useState('');
-	const { updateConversation, addConversation, setCurrentConversationKey, currentConversation } =
+	const { updateConversation, createConversation, setCurrentConversationKey, currentConversation } =
 		useContext(ConversationContext);
 	const assistantAnswerRef = useRef('');
 	const createNewChat = () => {
@@ -98,7 +98,7 @@ const Conversation: FC = () => {
 				messages: [...currentConversation.messages, userMessage, assistantMessage]
 			});
 		} else {
-			addConversation({
+			createConversation({
 				model: selectOption.value,
 				created: submitTime,
 				messages: [userMessage, assistantMessage]

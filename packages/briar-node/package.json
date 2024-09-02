@@ -12,15 +12,19 @@
     "start": "cross-env NODE_ENV=production node dist/main  "
   },
   "dependencies": {
+    "@fastify/cookie": "^9.4.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-fastify": "^10.3.10",
+    "@nestjs/sequelize": "^10.0.1",
     "@nestjs/throttler": "^6.1.1",
     "briar-shared": "^0.0.8",
     "cross-env": "^7.0.3",
+    "mysql2": "^3.11.0",
     "openai": "^4.55.4",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

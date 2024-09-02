@@ -14,14 +14,14 @@ function CodeConverter() {
   const {
     token: { borderRadiusLG },
   } = theme.useToken()
-  const { LayoutClass, SiderClass } = useContext(CommonContext)
+  const { fullScreenInfo } = useContext(CommonContext)
   const { isCollapsed, setIsCollapsed } = useSider()
   const {
     menuConfig,
     currentConversationKey,
     clickMenuItem,
     updateConversation,
-    addConversation,
+    createConversation,
     currentConversation,
     setCurrentConversationKey,
     inMultiSelectMode,
@@ -30,13 +30,14 @@ function CodeConverter() {
     setSelectedConversationKeys,
     selectedConversationKeys,
     deleteSelectedConversation,
+    messages,
   } = useConversationList()
 
   return (
     <ConversationContext.Provider
       value={{
         updateConversation,
-        addConversation,
+        createConversation,
         currentConversation,
         setCurrentConversationKey,
         inMultiSelectMode,
@@ -45,10 +46,11 @@ function CodeConverter() {
         setSelectedConversationKeys,
         deleteSelectedConversation,
         selectedConversationKeys,
+        messages,
       }}
     >
       <Layout>
-        <Sider width={240} className={SiderClass} collapsed={isCollapsed}>
+        <Sider width={240} className={fullScreenInfo.SiderClass} collapsed={isCollapsed}>
           <SiderOperations
             setIsCollapsed={setIsCollapsed}
             isCollapsed={isCollapsed}
@@ -62,7 +64,7 @@ function CodeConverter() {
             onClick={({ key }) => clickMenuItem(key)}
           />
         </Sider>
-        <div className={LayoutClass}>
+        <div className={fullScreenInfo.LayoutClass}>
           <Content
             style={{
               padding: 24,

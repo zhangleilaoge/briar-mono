@@ -4,10 +4,10 @@ import s from "@/styles/main.module.scss"
 import CommonContext from "@/context/common"
 import { useContext } from "react"
 const FloatBtn = () => {
-  const { inFullScreen, outFullScreen, fullScreen } = useContext(CommonContext)
+  const { inFullScreen, outFullScreen, fullScreenInfo } = useContext(CommonContext)
   return (
     <FloatButton.Group shape="circle">
-      {fullScreen ? (
+      {fullScreenInfo.fullScreen ? (
         <FloatButton
           icon={<FullscreenExitOutlined />}
           className={s.ColoredText}

@@ -8,25 +8,24 @@
 }
 
 .Message {
-	display: flex;
-	// justify-content: space-between;
-	line-height: 22px;
-	gap: 24px;
-	align-items: flex-start;
-	p,
-	h1,
-	h2,
-	h3,
-	h4,
-	h5,
-	h6,
-	ol,
-	ul,
-	pre {
-		margin-block-start: 0em;
-		margin-block-end: 0em;
-		max-width: 556px;
-	}
+  display: flex;
+  line-height: 22px;
+  gap: 24px;
+  align-items: flex-start;
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  ol,
+  ul,
+  pre {
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    max-width: 756px;
+  }
 
 	pre {
 		background: #1a1621;
@@ -43,6 +42,14 @@
 	li {
 		margin-block-start: 0.6em;
 	}
+
+  > div{
+    max-width: calc(100% - 78px);
+  }
+
+  ::global(.ant-avatar){
+    flex-shrink: 0 !important;
+  }
 }
 
 .User {

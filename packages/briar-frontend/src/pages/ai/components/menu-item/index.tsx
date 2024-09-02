@@ -8,7 +8,7 @@ import {
   theme,
 } from "antd"
 import s from "./style.module.scss"
-import { DeleteFilled, EditFilled, EllipsisOutlined } from "@ant-design/icons"
+import {  DeleteFilled, EditFilled, EllipsisOutlined } from "@ant-design/icons"
 import { IConversation } from "briar-shared"
 import {
   useCallback,

@@ -1,20 +1,17 @@
 import { NestFactory } from '@nestjs/core';
-import { MainModule } from './modules/Main';
+import fastifyCookie from '@fastify/cookie';
+import { MainModule } from './modules/MainModule';
 import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import { isDev } from './constants/env';
+import {  localHost } from './constants/env';
 
 const origins = [
-  /http:\/\/(www\.)?restrained-hunter\.website/,
-  /https:\/\/(www\.)?restrained-hunter\.website/,
-  /http:\/\/localhost:5173/,
-  /https:\/\/localhost:5173/,
-  /http:\/\/127\.0\.0\.1:5173/,
-  /https:\/\/127\.0\.0\.1:5173/,
-  /http:\/\/122\.51\.158\.41/,
-  /https:\/\/122\.51\.158\.41/,
+  /http(s)?:\/\/(www\.)?restrained-hunter\.website/,
+  /http(s)?:\/\/localhost:5173/,
+  /http(s)?:\/\/127\.0\.0\.1:5173/,
+  /http(s)?:\/\/122\.51\.158\.41:5173/,
 ];
 
 async function bootstrap() {
@@ -22,6 +19,10 @@ async function bootstrap() {
     MainModule,
     new FastifyAdapter(),
   );
+
+  app.register(fastifyCookie, {
+    secret: 'my-secret', // for cookies signature
+  });
 
   app.enableCors({
     origin: origins,
@@ -37,8 +38,8 @@ async function bootstrap() {
     maxAge: 20000,
   });
 
-  // 生产环境请在 docker 环境运行，所以 ip 地址为 0.0.0.0
-  await app.listen(8922, isDev ? '127.0.0.1' : '0.0.0.0');
+  // 生产环境在 docker 环境运行，所以 ip 地址为 0.0.0.0
+  await app.listen(8922, localHost);
 
   console.log(`\nApplication is running on: ${await app.getUrl()}`);
 }

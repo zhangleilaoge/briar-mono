@@ -8,6 +8,14 @@ import {
   MAX_STREAM_TOKEN,
   OPEN_AI_BASE_URL,
 } from 'src/constants/ai';
+import { ConversationDalService } from './dal/ConversationDalService';
+
+const THROTTLE_CONFIG = {
+  default: {
+    ttl: 60,
+    limit: 6,
+  },
+};
 
 @Injectable()
 export class AiService {
@@ -16,12 +24,11 @@ export class AiService {
     baseURL: OPEN_AI_BASE_URL,
   });
 
-  @Throttle({
-    default: {
-      ttl: 60,
-      limit: 6,
-    },
-  })
+  constructor(
+    private readonly conversationDalService: ConversationDalService,
+  ) {}
+
+  @Throttle(THROTTLE_CONFIG)
   async chatRequest(params: IChatRequestParams) {
     const completion = await this.openai.chat.completions.create({
       messages: [
@@ -34,12 +41,7 @@ export class AiService {
     return completion;
   }
 
-  @Throttle({
-    default: {
-      ttl: 60,
-      limit: 6,
-    },
-  })
+  @Throttle(THROTTLE_CONFIG)
   async chatRequestStream(params: IChatRequestParams) {
     const subject = new Subject();
 
@@ -78,5 +80,12 @@ export class AiService {
         subject.error(err);
       });
     return subject.pipe(map((data: string) => data));
+  }
+
+  async getConversationList(userId: number) {
+    const conversationList = (
+      await this.conversationDalService.getConversationList(userId)
+    ).map((conversation) => conversation.toJSON());
+    return conversationList;
   }
 }
