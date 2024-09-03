@@ -5,6 +5,8 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { isDev } from './constants/env';
+import { join } from 'path';
+import * as ejs from 'ejs';
 
 const origins = [
   /http:\/\/(www\.)?restrained-hunter\.website/,
@@ -37,9 +39,17 @@ async function bootstrap() {
     maxAge: 20000,
   });
 
+  app.setViewEngine({
+    engine: {
+      ejs,
+    },
+    templates: join(__dirname, '.', 'views'),
+  });
+
   // 生产环境请在 docker 环境运行，所以 ip 地址为 0.0.0.0
   await app.listen(8922, isDev ? '127.0.0.1' : '0.0.0.0');
 
   console.log(`\nApplication is running on: ${await app.getUrl()}`);
 }
+
 bootstrap();
