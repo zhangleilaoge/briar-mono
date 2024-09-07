@@ -12,8 +12,7 @@ import { MessageModel } from '@/model/MessageModel';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      // 这个后面记得改成脚本传参
-      password: 'zlws892221',
+      password: '123456',
       database: 'briar',
       autoLoadModels: true, // 如果希望自动加载
       synchronize: true, // 在开发环境中可能使用，生产环境建议关闭

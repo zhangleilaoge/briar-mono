@@ -26,4 +26,12 @@ export class UserDalService {
   async delete(id: number) {
     return await this.userModel.destroy({ where: { id } });
   }
+
+  async findOne(userId: number) {
+    return await this.userModel.findOne({ where: { id: userId } });
+  }
+
+  async update(data: Partial<UserModel>) {
+    return await this.userModel.update(data, { where: { id: data.id } });
+  }
 }

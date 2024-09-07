@@ -1,27 +1,27 @@
 {
-  "name": "briar-shared",
-  "version": "0.0.8",
-  "author": "zhangleilaoge",
-  "description": "briar 公共方法或定义",
-  "main": "lib/index.js",
-  "module": "es/index.js",
-  "private": true,
-  "files": [
-    "es/",
-    "lib/"
-  ],
-  "dependencies": {
-    "tslib": "^2.6.3"
-  },
-  "scripts": {
-    "dev": "tsc --module ES6 --outDir es --watch -p ./tsconfig.json",
-    "build": "pnpm run clean && pnpm build:es && pnpm build:lib",
-    "build:lib": "tsc --module CommonJS --outDir lib",
-    "build:es": "tsc --module ES6 --outDir es",
-    "clean": "rimraf ./lib ./es",
-    "prepublishOnly": "pnpm build"
-  },
-  "sideEffects": false,
-  "keywords": [],
-  "license": "ISC"
+	"name": "briar-shared",
+	"version": "0.0.8",
+	"author": "zhangleilaoge",
+	"description": "briar 公共方法或定义",
+	"main": "lib/index.js",
+	"module": "src/index.ts",
+	"private": true,
+	"files": [
+		"es/",
+		"lib/"
+	],
+	"dependencies": {
+		"tslib": "^2.6.3"
+	},
+	"scripts": {
+		"dev": "tsc --module CommonJS --outDir lib --watch -p ./tsconfig.json",
+		"build": "pnpm run clean && pnpm build:es && pnpm build:lib",
+		"build:lib": "tsc --module CommonJS --outDir lib",
+		"build:es": "tsc --module ES6 --outDir es",
+		"clean": "rimraf ./lib ./es",
+		"prepublishOnly": "pnpm build"
+	},
+	"sideEffects": false,
+	"keywords": [],
+	"license": "ISC"
 }

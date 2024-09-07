@@ -1,4 +1,4 @@
-import { IUserInfo } from 'briar-shared';
+import { IUserInfoDTO } from 'briar-shared';
 import React from 'react';
 
 // 创建一个新的 Context
@@ -12,7 +12,7 @@ const CommonContext = React.createContext({
 	inFullScreen: () => {},
 	outFullScreen: () => {},
 	/** 用户 */
-	userInfo: {} as IUserInfo
+	userInfo: {} as IUserInfoDTO
 });
 
 export default CommonContext;

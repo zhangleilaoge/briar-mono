@@ -11,11 +11,12 @@ export enum ModelEnum {
 	Gpt4o = 'gpt-4o'
 }
 
-export interface IMessage {
+export type IMessageDTO = IModel<{
 	role: RoleEnum;
 	content: string;
-	created: number;
-}
+	conversationId: number;
+	model: ModelEnum;
+}>;
 
 export type IConversationDTO = IModel<{
 	model: ModelEnum;
@@ -23,15 +24,16 @@ export type IConversationDTO = IModel<{
 	userId: number;
 }>;
 
-export type IConversation = IConversationDTO;
-
 // ====================== request params below ========================
 export interface IChatRequestParams {
-	messages: IMessage[];
+	query: string;
+	conversationId?: number;
 	model: ModelEnum;
 }
 
-export interface ICreateConversationParams {
+export interface ICreateMessageParams {
+	content: string;
+	conversationId: number;
 	model: ModelEnum;
-	messages: IMessage[];
+	role: RoleEnum;
 }

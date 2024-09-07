@@ -5,7 +5,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
-import {  localHost } from './constants/env';
+import { localHost } from './constants/env';
 
 const origins = [
   /http(s)?:\/\/(www\.)?restrained-hunter\.website/,

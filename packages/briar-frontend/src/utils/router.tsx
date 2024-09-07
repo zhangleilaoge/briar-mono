@@ -23,7 +23,7 @@ export function getRoutes(routerConfig: IMenuRouterConfig[], defaultKey: string)
 	const flatConfig = flat(routerConfig);
 
 	// @ts-ignore
-	return [<Route path="" element={<Navigate to={defaultKey} />} />].concat(
+	return [<Route path="" element={<Navigate to={defaultKey} />} key={''} />].concat(
 		flatConfig.map((item) => (
 			<Route path={`${item.key}/*`} Component={item.component} key={item.key} />
 		))

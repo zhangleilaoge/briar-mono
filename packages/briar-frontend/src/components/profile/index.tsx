@@ -6,6 +6,8 @@ import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 're
 import { clientId } from '@/constants/user';
 import s from './style.module.scss';
 import { errorNotify } from '@/utils/notify';
+import { ItemType } from 'antd/es/menu/interface';
+import { authenticateUserByGoogle } from '@/api/user';
 
 enum OperationEnum {
 	Login = 'login',
@@ -16,8 +18,16 @@ const Profile = () => {
 	const { userInfo } = useContext(CommonContext);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const onSuccess = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-		console.log('success:', res);
+	const onSuccess = async (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+		const { tokenId } = res as GoogleLoginResponse;
+		const result = await authenticateUserByGoogle(tokenId);
+		if (result) {
+			message.success('登录成功，页面即将刷新。');
+			setTimeout(() => {
+				window.location.reload();
+			}, 3000);
+		}
+		errorNotify('登录失败。');
 	};
 	const onFailure = (err: Error) => {
 		errorNotify(err);
@@ -25,12 +35,12 @@ const Profile = () => {
 
 	const dropdownItems = useMemo(() => {
 		return [
-			{
+			!userInfo?.isAuthenticated && {
 				key: OperationEnum.Login,
 				icon: <LoginOutlined />,
 				label: (
 					<a
-						onClick={() => {
+						onClick={async () => {
 							setIsModalOpen(true);
 						}}
 					>
@@ -38,7 +48,7 @@ const Profile = () => {
 					</a>
 				)
 			},
-			{
+			userInfo?.isAuthenticated && {
 				key: OperationEnum.Logout,
 				icon: <LogoutOutlined />,
 				label: (
@@ -51,8 +61,8 @@ const Profile = () => {
 					</a>
 				)
 			}
-		];
-	}, []);
+		].filter(Boolean) as ItemType[];
+	}, [userInfo?.isAuthenticated]);
 
 	return (
 		<>

@@ -3,6 +3,6 @@ import { AiModule } from './AiModule';
 import { UserModule } from './UserModule';
 
 @Module({
-  imports: [AiModule, UserModule,],
+  imports: [AiModule, UserModule],
 })
 export class MainModule {}

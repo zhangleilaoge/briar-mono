@@ -1,41 +1,36 @@
-import { isDev, LocalStorageKey } from '@/constants/env';
-import { clientId } from '@/constants/user';
-import { safeJsonParse, IUserInfo } from 'briar-shared';
+import { CLIENT_ID, IUserInfoDTO } from 'briar-shared';
 import { gapi } from 'gapi-script';
 import { useEffect, useState } from 'react';
-import { createAnonymousUser as createAnonymousUserApi } from '@/api/user';
-import Cookies from 'js-cookie';
+import { createAnonymousUser as createAnonymousUserApi, getUserInfo } from '@/api/user';
 
 const useLogin = () => {
-	const [userInfo, setUserInfo] = useState<IUserInfo>({
+	const [userInfo, setUserInfo] = useState<IUserInfoDTO>({
 		id: 0,
 		createdAt: '',
 		updatedAt: ''
 	});
 
-	const createAnonymousUser = async () => {
-		const data = await createAnonymousUserApi();
-		setUserInfo(data);
-		localStorage.setItem(LocalStorageKey.userInfo, JSON.stringify(data));
-    if(isDev){
-      Cookies.set('userId', data.id);
-    }
+	const init = async () => {
+		const userData = await getUserInfo();
+		if (userData) {
+			setUserInfo(userData);
+			return;
+		}
+
+		const newUserData = await createAnonymousUserApi();
+		setUserInfo(newUserData);
 	};
 
 	useEffect(() => {
 		const initClient = () => {
 			gapi.client.init({
-				clientId,
+				clientId: CLIENT_ID,
 				scope: ''
 			});
 		};
 		gapi.load('client:auth2', initClient);
 
-		const initUserInfo = safeJsonParse(localStorage.getItem(LocalStorageKey.userInfo) || '{}');
-
-		if (!initUserInfo.id) {
-			createAnonymousUser();
-		} else setUserInfo(initUserInfo);
+		init();
 	}, []);
 
 	return {

@@ -1,22 +1,25 @@
-import { IConversation, ICreateConversationParams } from 'briar-shared';
-import { CONVERSATION_DESC, ConversationEnum, MAX_CONVERSATION_NUM } from '../constants';
+import { IConversationDTO, IMessageDTO } from 'briar-shared';
+import { CONVERSATION_DESC, ConversationEnum } from '../constants';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isAfter, isBefore, subDays } from 'date-fns';
 import { IMenuRouterConfig } from '@/types/router';
-import { LocalStorageKey } from '@/constants/env';
 import { MenuItem } from '../components/menu-item';
-import useNeedUpdate from '@/hooks/useNeedUpdate';
-import { getConversationList, createConversation as createConversationApi } from '@/api/ai';
+import {
+	getConversationList,
+	createConversation as createConversationApi,
+	deleteConversation as deleteConversationApi,
+	updateConversation as updateConversationApi,
+	findMessagesByConversationId
+} from '@/api/ai';
+
+const initTime = Date.now();
 
 const useConversationList = () => {
-	const [conversationList, setConversationList] = useState<IConversation[]>([]);
-	const [messages, setMessages] = useState<IMessage[]>([]);
-	const [currentConversationKey, setCurrentConversationKey] = useState<string>();
-	const [selectedConversationKeys, setSelectedConversationKeys] = useState<string[]>([]);
-	const { needUpdate, triggerUpdate, finishUpdate } = useNeedUpdate();
+	const [conversationList, setConversationList] = useState<IConversationDTO[]>([]);
+	const [messageArr, setMessageArr] = useState<IMessageDTO[]>([]);
+	const [currentConversationKey, setCurrentConversationKey] = useState<number>();
+	const [selectedConversationKeys, setSelectedConversationKeys] = useState<number[]>([]);
 	const [multiSelectMode, setMultiSelectMode] = useState(false);
-
-	const now = Date.now();
 
 	const inMultiSelectMode = useCallback(() => {
 		setMultiSelectMode(true);
@@ -27,76 +30,49 @@ const useConversationList = () => {
 		setSelectedConversationKeys([]);
 	}, []);
 
-	const clickMenuItem = (key: string) => {
+	const clickMenuItem = (key: number) => {
 		setCurrentConversationKey(key);
+		findMessagesByConversationId(key).then((data) => {
+			setMessageArr(data);
+		});
 	};
 
-	const init = async () => {
+	const refreshConversationList = async () => {
 		const list = await getConversationList();
 		setConversationList(list);
 	};
 
-  // 你应该是updateMessage
-	const updateConversation = useCallback(
-		(conversation: IConversation, updateToTop = true) => {
-			setConversationList(
-				updateToTop
-					? [
-							conversation,
-							...conversationList.filter(({ created }) => {
-								return created !== conversation.created;
-							})
-						]
-					: conversationList.map((item) => {
-							return item.created === conversation.created ? conversation : item;
-						})
-			);
-			updateToTop && setCurrentConversationKey(conversation.created.toString());
-
-			triggerUpdate();
-		},
-		[conversationList, triggerUpdate]
-	);
-
-	const createConversation = async (params: ICreateConversationParams) => {
-		const { conversation, messages } = await createConversationApi(params);
+	const createConversation = async (title: string) => {
+		const conversation = await createConversationApi({
+			title
+		});
 
 		setConversationList([conversation, ...conversationList]);
-		setMessages(messages);
-		setCurrentConversationKey(conversation.id.toString());
+		setCurrentConversationKey(conversation.id);
 
-		triggerUpdate();
+		return conversation;
 	};
 
-	const deleteConversation = useCallback(
-		(conversation?: IConversation) => {
-			if (!conversation) {
-				setConversationList([]);
-			} else {
-				setConversationList(
-					conversationList.filter(({ created }) => {
-						return created !== conversation.created;
-					})
-				);
-			}
-			triggerUpdate();
-		},
-		[conversationList, triggerUpdate]
-	);
+	const updateConversation = useCallback((conversation: IConversationDTO) => {
+		updateConversationApi(conversation).then(() => {
+			refreshConversationList();
+		});
+	}, []);
 
-	const deleteSelectedConversation = useCallback(() => {
-		setConversationList(
-			conversationList.filter(({ created }) => {
-				return !selectedConversationKeys.includes(created.toString());
-			})
-		);
+	const deleteConversation = useCallback(async (id: number) => {
+		await deleteConversationApi({ ids: [id] });
+		refreshConversationList();
+		setMessageArr([]);
+	}, []);
+
+	const deleteSelectedConversation = useCallback(async () => {
+		await deleteConversationApi({ ids: selectedConversationKeys });
 		setSelectedConversationKeys([]);
 		setMultiSelectMode(false);
+		refreshConversationList();
+	}, [selectedConversationKeys]);
 
-		triggerUpdate();
-	}, [conversationList, selectedConversationKeys, triggerUpdate]);
-
-	const currentConversation: IConversation | undefined = useMemo(() => {
+	const currentConversation: IConversationDTO | undefined = useMemo(() => {
 		if (!currentConversationKey) {
 			return;
 		}
@@ -108,18 +84,17 @@ const useConversationList = () => {
 	const menuConfig = useMemo((): IMenuRouterConfig[] => {
 		const normalizeConversationList = (during: [number, number]) => {
 			const [minAgo, maxAgo] = during;
-			const start = subDays(now, maxAgo).getTime();
-			const end = subDays(now, minAgo).getTime();
+			const start = subDays(initTime, maxAgo).getTime();
+			const end = minAgo ? subDays(initTime, minAgo).getTime() : Date.now();
 
 			return conversationList
-				.filter(({ created }) => {
-					return isAfter(created, start) && isBefore(created, end);
+				.filter(({ createdAt }) => {
+					return isAfter(createdAt, start) && isBefore(createdAt, end);
 				})
 				.map((conversation) => {
-					const { created } = conversation;
+					const { id } = conversation;
 					return {
-						...conversation,
-						key: created.toString(),
+						key: `${id}`,
 						label: (
 							<MenuItem
 								conversation={conversation}
@@ -162,38 +137,28 @@ const useConversationList = () => {
 				children: duringPastMonthConversations
 			}
 		].filter((item) => item.children.length > 0);
-	}, [conversationList, deleteConversation, now, updateConversation]);
+	}, [conversationList, deleteConversation, updateConversation]);
 
 	useEffect(() => {
-		init();
+		refreshConversationList();
 	}, []);
-
-	useEffect(() => {
-		if (needUpdate) {
-			localStorage.setItem(
-				LocalStorageKey.Conversation,
-				JSON.stringify(conversationList.slice(0, MAX_CONVERSATION_NUM))
-			);
-
-			finishUpdate();
-		}
-	}, [conversationList, finishUpdate, needUpdate]);
 
 	return {
 		menuConfig,
 		currentConversationKey,
-		clickMenuItem,
 		currentConversation,
-		updateConversation,
+		multiSelectMode,
+		selectedConversationKeys,
+		messageArr,
 		createConversation,
 		setCurrentConversationKey,
 		deleteSelectedConversation,
-		multiSelectMode,
 		inMultiSelectMode,
 		outMultiSelectMode,
 		setSelectedConversationKeys,
-		selectedConversationKeys,
-		messages
+		setMessageArr,
+		clickMenuItem,
+		updateConversation
 	};
 };
 

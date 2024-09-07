@@ -1,37 +1,37 @@
-// @import "~antd/es/style/themes/default.less";
 .Conversation {
-  justify-content: space-between;
-  display: flex;
-  align-items: center;
-  gap: 16px;
+	justify-content: space-between;
+	display: flex;
+	align-items: center;
+	gap: 16px;
 }
 
 .DropdownItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 92px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 92px;
 }
 
 .ConversationTitle {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .ConversationContent {
-  width: 160px;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  gap: 8px;
+	max-width: 146px;
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+	gap: 8px;
 }
 
 :global(.ant-layout-sider-collapsed) {
-  .EditConversation {
-    display: none;
-  }
-  .ConversationTitle {
-    overflow: visible;
-  }
+	.EditConversation {
+		display: none;
+	}
+
+	.ConversationTitle {
+		overflow: visible;
+	}
 }
