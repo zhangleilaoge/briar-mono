@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import { IChatRequestParams, RoleEnum } from 'briar-shared';
+import { IMessageDTO, RoleEnum } from 'briar-shared';
 import OpenAI from 'openai';
 import { map, Subject } from 'rxjs';
 import {
@@ -8,6 +8,15 @@ import {
   MAX_STREAM_TOKEN,
   OPEN_AI_BASE_URL,
 } from 'src/constants/ai';
+import { ConversationDalService } from './dal/ConversationDalService';
+import { MessageDalService } from './dal/MessageDalService';
+
+const THROTTLE_CONFIG = {
+  default: {
+    ttl: 60,
+    limit: 6,
+  },
+};
 
 @Injectable()
 export class AiService {
@@ -16,31 +25,28 @@ export class AiService {
     baseURL: OPEN_AI_BASE_URL,
   });
 
-  @Throttle({
-    default: {
-      ttl: 60,
-      limit: 6,
-    },
-  })
-  async chatRequest(params: IChatRequestParams) {
-    const completion = await this.openai.chat.completions.create({
-      messages: [
-        { role: RoleEnum.Assistant, content: 'You are a helpful assistant.' },
-        ...params.messages,
-      ],
-      model: params.model,
-    });
+  constructor(
+    private readonly conversationDalService: ConversationDalService,
+    private readonly messageDalService: MessageDalService,
+  ) {}
 
-    return completion;
-  }
+  // @Throttle(THROTTLE_CONFIG)
+  // async chatRequest(params: IChatRequestParams) {
+  //   const completion = await this.openai.chat.completions.create({
+  //     messages: [
+  //       { role: RoleEnum.Assistant, content: 'You are a helpful assistant.' },
+  //       ...params.messages,
+  //     ],
+  //     model: params.model,
+  //   });
 
-  @Throttle({
-    default: {
-      ttl: 60,
-      limit: 6,
-    },
-  })
-  async chatRequestStream(params: IChatRequestParams) {
+  //   return completion;
+  // }
+
+  @Throttle(THROTTLE_CONFIG)
+  async chatRequestStream(params: {
+    messages: Omit<IMessageDTO, 'createdAt' | 'updatedAt' | 'id'>[];
+  }) {
     const subject = new Subject();
 
     this.openai.chat.completions
@@ -54,7 +60,7 @@ export class AiService {
             ...params.messages,
           ],
           max_tokens: MAX_STREAM_TOKEN,
-          model: params.model,
+          model: params.messages.pop().model,
           stream: true,
         },
         { stream: true },
@@ -78,5 +84,18 @@ export class AiService {
         subject.error(err);
       });
     return subject.pipe(map((data: string) => data));
+  }
+
+  async getConversationList(userId: number) {
+    const conversationList = (
+      await this.conversationDalService.getConversationList(userId)
+    ).map((conversation) => conversation.toJSON());
+    return conversationList;
+  }
+
+  async getContextMessages(conversationId: number) {
+    const messages =
+      await this.messageDalService.findMessagesByConversationId(conversationId);
+    return messages;
   }
 }

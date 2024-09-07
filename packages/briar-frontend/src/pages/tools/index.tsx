@@ -1,19 +1,19 @@
 import { Routes } from 'react-router-dom';
-import { Layout, Menu, Spin, theme } from 'antd';
+import { Layout, Menu, theme } from 'antd';
 import mainStyle from '@/styles/main.module.scss';
 import { Content } from 'antd/es/layout/layout';
 import Footer from '@/components/Footer';
 import { SIDER_MENU_ROUTER_CONFIG, ToolsPathKeyEnum } from '@/constants/router';
 import useLevelPath from '@/hooks/useLevelPath';
 import { findSuperiorRouterConfig, getRoutes } from '@/utils/router';
-import { Suspense, useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import Sider from 'antd/es/layout/Sider';
 import useSider from '@/hooks/useSider';
 import CommonContext from '@/context/common';
 
 function CodeConverter() {
 	const { isCollapsed, setIsCollapsed } = useSider();
-	const { SiderClass, LayoutClass } = useContext(CommonContext);
+	const { fullScreenInfo } = useContext(CommonContext);
 	const {
 		token: { colorBgContainer, borderRadiusLG }
 	} = theme.useToken();
@@ -27,7 +27,7 @@ function CodeConverter() {
 	return (
 		<Layout>
 			<Sider
-				className={SiderClass}
+				className={fullScreenInfo.SiderClass}
 				width={240}
 				collapsible
 				collapsed={isCollapsed}
@@ -42,7 +42,7 @@ function CodeConverter() {
 					onClick={({ key }) => onLevelPathChange(key)}
 				/>
 			</Sider>
-			<div className={LayoutClass}>
+			<div className={fullScreenInfo.LayoutClass}>
 				<Content
 					style={{
 						padding: 24,
@@ -52,17 +52,9 @@ function CodeConverter() {
 						borderRadius: borderRadiusLG
 					}}
 				>
-					<Suspense
-						fallback={
-							<div className={mainStyle.SuspenseSpin}>
-								<Spin size="large" />
-							</div>
-						}
-					>
-						<Routes>
-							{getRoutes(SIDER_MENU_ROUTER_CONFIG, ToolsPathKeyEnum.CompositionStyleConverter)}
-						</Routes>
-					</Suspense>
+					<Routes>
+						{getRoutes(SIDER_MENU_ROUTER_CONFIG, ToolsPathKeyEnum.CompositionStyleConverter)}
+					</Routes>
 				</Content>
 				<Footer />
 			</div>

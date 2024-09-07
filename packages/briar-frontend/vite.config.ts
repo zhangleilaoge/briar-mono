@@ -2,22 +2,12 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import viteCompression from 'vite-plugin-compression';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
-// import { visualizer } from 'rollup-plugin-visualizer';
 import externalGlobals from 'rollup-plugin-external-globals';
 
 const config = () => {
 	// const isProd = mode === "production"
 
 	return defineConfig({
-		server: {
-			proxy: {
-				'/api': {
-					target: 'http://127.0.0.1:3000',
-					changeOrigin: true,
-					rewrite: (path) => path.replace(/^\/api/, '')
-				}
-			}
-		},
 		plugins: [
 			react(),
 			viteCompression({
@@ -25,14 +15,16 @@ const config = () => {
 			}),
 			chunkSplitPlugin({
 				strategy: 'default',
-				customSplitting: {}
+				customSplitting: {
+					typescript: ['typescript']
+				}
 			})
 			// visualizer({
-			// 	open: true, // 注意这里要设置为true，否则无效，如果存在本地服务端口，将在打包后自动展示
-			// 	gzipSize: true,
-			// 	brotliSize: true,
-			// 	filename: './dist/stats.html'
-			// })
+			//   open: true, // 注意这里要设置为true，否则无效，如果存在本地服务端口，将在打包后自动展示
+			//   gzipSize: true,
+			//   brotliSize: true,
+			//   filename: "./dist/stats.html",
+			// }),
 		],
 		build: {
 			minify: 'terser',

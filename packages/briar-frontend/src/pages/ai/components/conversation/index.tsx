@@ -5,24 +5,29 @@ import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { RoleEnum } from 'briar-shared';
 import ConversationContext from '../../context/conversation';
 import Messages from '../messages';
-import { chatRequestStream } from '@/api/ai';
+import { chatRequestStream, createMessage, updateMessage } from '@/api/ai';
 
 import { useSSE } from 'alova/client';
 import useScroll from '../../hooks/useScroll';
 import TextArea from 'antd/es/input/TextArea';
 import { SSEHookReadyState } from '../../constants';
 import useGptModel from './hooks/useGptModel';
-import { trimMessageList } from '../../utils';
 import mainStyle from '@/styles/main.module.scss';
 import useCompositionInput from './hooks/useCompositionInput';
 
 const Conversation: FC = () => {
 	const [inputValue, setInputValue] = useState('');
-	const { updateConversation, addConversation, setCurrentConversationKey, currentConversation } =
-		useContext(ConversationContext);
+	const {
+		createConversation,
+		setCurrentConversationKey,
+		currentConversation,
+		setMessageArr,
+		messageArr
+	} = useContext(ConversationContext);
 	const assistantAnswerRef = useRef('');
-	const createNewChat = () => {
+	const readyForNewChat = () => {
 		setCurrentConversationKey(undefined);
+		setMessageArr([]);
 	};
 	const { selectOption, options, onChange } = useGptModel();
 	const { onMessage, send, close, readyState } = useSSE(chatRequestStream);
@@ -37,75 +42,61 @@ const Conversation: FC = () => {
 	//   console.log(e)
 	// })
 
-	onMessage(({ data }) => {
+	// sse 更新消息
+	onMessage(async ({ data }) => {
 		if (!currentConversation) return;
 
 		assistantAnswerRef.current = `${assistantAnswerRef.current}${data}`;
-
-		updateConversation({
-			...currentConversation,
-			messages: currentConversation?.messages.map((message, index) => {
-				if (index === currentConversation?.messages.length - 1) {
-					return {
-						...message,
-						content: assistantAnswerRef.current,
-						created: Date.now()
-					};
-				}
-				return message;
-			})
-		});
+		const isAssistantEnd = messageArr[messageArr.length - 1].role === RoleEnum.Assistant;
+		if (isAssistantEnd) {
+			setMessageArr(
+				messageArr.map((message, index) => {
+					if (index === messageArr.length - 1) {
+						return {
+							...message,
+							content: assistantAnswerRef.current
+						};
+					}
+					return message;
+				})
+			);
+		}
 
 		scrollToBottom();
 	});
 
+	// 询问发出时，创建对话以及创建用户消息和助手消息
 	const submit = async () => {
 		if (!inputValue || loading) {
 			shutDown();
 			return;
 		}
 
-		const submitTime = Date.now();
-
-		const submitMessage = {
-			role: RoleEnum.User,
+		const conversation = currentConversation || (await createConversation(inputValue))!;
+		setCurrentConversationKey(conversation.id);
+		const userMsg = await createMessage({
 			content: inputValue,
-			created: submitTime
-		};
-
-		send({
-			messages: JSON.stringify(
-				trimMessageList((currentConversation?.messages || []).concat(submitMessage))
-			),
-			model: selectOption.value
+			role: RoleEnum.User,
+			model: selectOption.value,
+			conversationId: conversation.id
+		});
+		const assistantMsg = await createMessage({
+			content: assistantAnswerRef.current,
+			role: RoleEnum.Assistant,
+			model: selectOption.value,
+			conversationId: conversation.id
 		});
 
-		const userMessage = {
-			role: RoleEnum.User,
-			content: inputValue,
-			created: submitTime
-		};
+		setMessageArr([...messageArr, userMsg, assistantMsg]);
 
-		const assistantMessage = {
-			role: RoleEnum.Assistant,
-			content: '',
-			created: submitTime + 1
-		};
-
-		if (currentConversation) {
-			updateConversation({
-				...currentConversation,
-				messages: [...currentConversation.messages, userMessage, assistantMessage]
-			});
-		} else {
-			addConversation({
-				model: selectOption.value,
-				created: submitTime,
-				messages: [userMessage, assistantMessage]
-			});
-		}
+		send({
+			query: inputValue,
+			model: selectOption.value,
+			conversationId: conversation?.id
+		});
 
 		setInputValue('');
+		scrollToBottom();
 	};
 
 	const textareaPlaceholder = useMemo(() => {
@@ -123,43 +114,56 @@ const Conversation: FC = () => {
 		}
 	};
 
-	const shutDown = () => {
+	const shutDown = async () => {
 		close();
 		assistantAnswerRef.current = '';
 		setInputValue('');
 		scrollToBottom();
 	};
 
+	// 请求完成后，更新助手消息
 	useEffect(() => {
 		if (!loading) {
-			if (
-				currentConversation?.messages?.length &&
-				!currentConversation?.messages?.[currentConversation.messages.length - 1]?.content
-			) {
-				updateConversation({
-					...currentConversation,
-					messages: currentConversation?.messages.map((message, index) => {
-						if (index === currentConversation?.messages.length - 1) {
-							return {
-								...message,
-								content: '服务端错误，请稍后重试。'
-							};
+			const content = assistantAnswerRef.current || '请求超时,请稍后重试。';
+
+			if (messageArr.length && messageArr[messageArr.length - 1].role === RoleEnum.Assistant) {
+				updateMessage({
+					content,
+					id: messageArr[messageArr.length - 1].id
+				}).then(() => {
+					setMessageArr([
+						...messageArr.slice(0, -1),
+						{
+							...messageArr[messageArr.length - 1],
+							content
 						}
-						return message;
-					})
+					]);
 				});
 			}
 
 			shutDown();
 		}
-	}, [currentConversation?.created, loading]);
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [loading]);
+
+	// 切换对话，停止先前的消息流
+	useEffect(() => {
+		if (
+			!currentConversation?.id ||
+			(messageArr.length && messageArr[0].conversationId !== currentConversation?.id)
+		) {
+			shutDown();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentConversation?.id]);
 
 	return (
 		<div className={s.Container}>
 			<div className={s.Head}>
 				<Popover content="创建新对话">
 					<Radio.Group value={!currentConversation}>
-						<Radio.Button onClick={createNewChat} value={true}>
+						<Radio.Button onClick={readyForNewChat} value={true}>
 							<FormOutlined />
 						</Radio.Button>
 					</Radio.Group>
@@ -187,7 +191,6 @@ const Conversation: FC = () => {
 					// @ts-ignore
 					onCompositionEnd={handleComposition}
 				/>
-
 				<Button
 					icon={loading ? <XFilled /> : <ArrowUpOutlined />}
 					onClick={submit}

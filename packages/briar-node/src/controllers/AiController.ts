@@ -1,31 +1,112 @@
 import { Body, Controller, Get, Post, Query, Sse } from '@nestjs/common';
 import { AiService } from '../services/AiService';
-import { IMessage, ModelEnum, safeJsonParse } from 'briar-shared';
+import { IConversationDTO, ModelEnum, RoleEnum } from 'briar-shared';
+import { Cookies } from '@/decorators/Cookies';
+import { ConversationDalService } from '@/services/dal/ConversationDalService';
+import { MessageDalService } from '@/services/dal/MessageDalService';
 @Controller('api/ai')
 export class AppController {
-  constructor(private readonly AiService: AiService) {}
+  constructor(
+    private readonly AiService: AiService,
+    private readonly ConversationDalService: ConversationDalService,
+    private readonly MessageDalService: MessageDalService,
+  ) {}
 
-  @Post('chatRequest')
-  async chatRequest(
-    @Body('messages') messages: IMessage[],
-    @Body('model') model: ModelEnum,
-  ) {
-    const data = await this.AiService.chatRequest({
-      messages,
-      model: model || ModelEnum.Gpt4oMini,
-    });
-    return data;
-  }
+  // @Post('chatRequest')
+  // async chatRequest(
+  //   @Body('messages') messages: IMessage[],
+  //   @Body('model') model: ModelEnum,
+  // ) {
+  //   const data = await this.AiService.chatRequest({
+  //     messages,
+  //     model: model || ModelEnum.Gpt4oMini,
+  //   });
+  //   return data;
+  // }
 
   @Get('chatRequestStream')
   @Sse('sse')
   async chatRequestStream(
-    @Query('messages') messages: string,
+    @Query('query') query: string,
     @Query('model') model: ModelEnum,
+    @Query('conversationId') conversationId: number,
   ) {
+    const messageArr = await this.AiService.getContextMessages(conversationId);
+
     return this.AiService.chatRequestStream({
-      messages: safeJsonParse(decodeURIComponent(messages)),
-      model: model || ModelEnum.Gpt4oMini,
+      messages: [
+        ...messageArr,
+        {
+          content: query,
+          role: RoleEnum.User,
+          conversationId,
+          model,
+        },
+      ],
+    });
+  }
+
+  @Get('getConversationList')
+  async getConversationList(@Cookies('userId') userId = 0) {
+    return this.AiService.getConversationList(userId);
+  }
+
+  @Get('findMessagesByConversationId')
+  async findMessagesByConversationId(
+    @Query('conversationId') conversationId: number,
+  ) {
+    return this.MessageDalService.findMessagesByConversationId(conversationId);
+  }
+
+  @Post('createConversation')
+  async createConversation(
+    @Body('title') title: string,
+    @Cookies('userId') userId: number,
+  ) {
+    const data = await this.ConversationDalService.create({
+      userId,
+      title,
+    });
+
+    return data.toJSON();
+  }
+
+  @Post('deleteConversation')
+  async deleteConversation(@Body('ids') ids: number[]) {
+    return this.ConversationDalService.delete(ids);
+  }
+
+  @Post('updateConversation')
+  async updateConversation(
+    @Body('id') id: number,
+    @Body() conversation: Partial<IConversationDTO>,
+  ) {
+    return this.ConversationDalService.update(id, conversation);
+  }
+
+  @Post('createMessage')
+  async createMessage(
+    @Body('content') content: string,
+    @Body('model') model: ModelEnum,
+    @Body('conversationId') conversationId: number,
+    @Body('role') role = RoleEnum.User,
+  ) {
+    return this.MessageDalService.create({
+      content,
+      role,
+      conversationId,
+      model,
+    });
+  }
+
+  @Post('updateMessage')
+  async updateMessage(
+    @Body('content') content: string,
+    @Body('id') id: number,
+  ) {
+    return this.MessageDalService.update({
+      content,
+      id,
     });
   }
 }

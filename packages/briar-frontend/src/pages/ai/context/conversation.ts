@@ -1,18 +1,20 @@
-import { IConversation } from "briar-shared"
-import React from "react"
+import { IConversationDTO, IMessageDTO } from 'briar-shared';
+import React from 'react';
 
 // 创建一个新的 Context
 const ConversationContext = React.createContext({
-  updateConversation: (_conversation: IConversation) => {},
-  addConversation: (_conversation: IConversation) => {},
-  currentConversation: undefined as IConversation | undefined,
-  setCurrentConversationKey: (_key?: string) => {},
-  multiSelectMode: false,
-  inMultiSelectMode: () => {},
-  outMultiSelectMode: () => {},
-  setSelectedConversationKeys: (_keys: string[]) => {},
-  selectedConversationKeys: [] as string[],
-  deleteSelectedConversation: () => {},
-})
+	selectedConversationKeys: [] as number[],
+	currentConversation: undefined as IConversationDTO | undefined,
+	messageArr: [] as IMessageDTO[],
+	multiSelectMode: false,
+	updateConversation: (_conversation: IConversationDTO) => {},
+	createConversation: (_title: string) => {},
+	setCurrentConversationKey: (_key?: number) => {},
+	inMultiSelectMode: () => {},
+	outMultiSelectMode: () => {},
+	setSelectedConversationKeys: (_keys: number[]) => {},
+	deleteSelectedConversation: () => {},
+	setMessageArr: (_messages: IMessageDTO[]) => {}
+});
 
-export default ConversationContext
+export default ConversationContext;

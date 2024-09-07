@@ -9,7 +9,6 @@
 
 .Message {
 	display: flex;
-	// justify-content: space-between;
 	line-height: 22px;
 	gap: 24px;
 	align-items: flex-start;
@@ -25,7 +24,7 @@
 	pre {
 		margin-block-start: 0em;
 		margin-block-end: 0em;
-		max-width: 556px;
+		max-width: 756px;
 	}
 
 	pre {
@@ -42,6 +41,14 @@
 
 	li {
 		margin-block-start: 0.6em;
+	}
+
+	> div {
+		max-width: calc(100% - 78px);
+	}
+
+	:global(.ant-avatar) {
+		flex-shrink: 0 !important;
 	}
 }
 

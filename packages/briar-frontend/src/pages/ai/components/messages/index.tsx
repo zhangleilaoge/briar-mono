@@ -1,5 +1,5 @@
-import { IConversation, RoleEnum } from 'briar-shared';
-import { FC, useEffect, useState } from 'react';
+import { IConversationDTO, RoleEnum } from 'briar-shared';
+import { FC, useContext, useEffect, useState } from 'react';
 import s from './style.module.scss';
 import { CheckCircleFilled, CopyOutlined } from '@ant-design/icons';
 import useLoadingDesc from './hooks/useLoadingDesc';
@@ -9,7 +9,8 @@ import 'highlight.js/styles/atom-one-dark.css';
 import { copyToClipboard } from '@/utils/document';
 import { Avatar, Button, message } from 'antd';
 import ReactDOM from 'react-dom';
-import { format } from 'date-fns/format';
+import ConversationContext from '../../context/conversation';
+import { format } from 'date-fns';
 
 const BRIAR_PROFILE =
 	'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/121280494_p0_master1200.jpg';
@@ -55,6 +56,7 @@ const Message: FC<{
 			button = document.createElement('div');
 			button.className = s.CopyButton;
 
+			// eslint-disable-next-line react/no-deprecated
 			ReactDOM.render(<CopyBtn content={block.textContent || ''} />, button);
 
 			block.appendChild(button);
@@ -88,31 +90,31 @@ const Message: FC<{
 };
 
 const Messages: FC<{
-	conversation?: IConversation;
+	conversation?: IConversationDTO;
 	loading?: boolean;
-}> = ({ conversation, loading }) => {
+}> = ({ loading }) => {
 	const { desc } = useLoadingDesc();
-	const messages = conversation?.messages || [];
+	const { messageArr } = useContext(ConversationContext);
 
 	return (
 		<>
-			{messages.map((message, index) => {
-				if (index === messages.length - 1 && loading && !message.content) {
+			{messageArr.map((message, index) => {
+				if (index === messageArr.length - 1 && loading && !message.content) {
 					return (
 						<Message
-							key={message.created}
+							key={message.id}
 							content={desc}
 							role={message.role}
-							date={message.created}
+							date={new Date(message.createdAt).getTime()}
 						/>
 					);
 				}
 				return (
 					<Message
-						key={message.created}
+						key={message.id}
 						content={message.content}
 						role={message.role}
-						date={message.created}
+						date={new Date(message.createdAt).getTime()}
 					/>
 				);
 			})}

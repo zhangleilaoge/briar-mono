@@ -1,6 +1,4 @@
-import CompositionStyleConvert from '@/pages/tools/pages/composition-style-converter';
 import CompositionApiIntro from '@/pages/tools/pages/composition-style-intro';
-import Shader from '@/pages/tools/pages/shader';
 import { IMenuRouterConfig } from '@/types/router';
 import { ExperimentOutlined, InteractionOutlined } from '@ant-design/icons';
 import { lazy } from 'react';
@@ -14,7 +12,6 @@ export enum ToolsPathKeyEnum {
 	CodeConverter = 'code-converter',
 	CompositionStyleConverter = 'composition-style-converter',
 	CompositionStyleIntro = 'composition-style-intro',
-
 	Playground = 'playground',
 	Shader = 'shader'
 }

@@ -1,11 +1,13 @@
 import CommonContext from '@/context/common';
-import { LoginOutlined, LogoutOutlined } from '@ant-design/icons';
+import { LoginOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, message, Modal } from 'antd';
 import { useContext, useMemo, useState } from 'react';
-import GoogleLogin from 'react-google-login';
-import { clientId } from '@/constants/login';
+import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import { clientId } from '@/constants/user';
 import s from './style.module.scss';
 import { errorNotify } from '@/utils/notify';
+import { ItemType } from 'antd/es/menu/interface';
+import { authenticateUserByGoogle } from '@/api/user';
 
 enum OperationEnum {
 	Login = 'login',
@@ -13,11 +15,19 @@ enum OperationEnum {
 }
 
 const Profile = () => {
-	const { profileImg } = useContext(CommonContext);
+	const { userInfo } = useContext(CommonContext);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const onSuccess = (res: any) => {
-		console.log('success:', res);
+	const onSuccess = async (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+		const { tokenId } = res as GoogleLoginResponse;
+		const result = await authenticateUserByGoogle(tokenId);
+		if (result) {
+			message.success('登录成功，页面即将刷新。');
+			setTimeout(() => {
+				window.location.reload();
+			}, 3000);
+		}
+		errorNotify('登录失败。');
 	};
 	const onFailure = (err: Error) => {
 		errorNotify(err);
@@ -25,12 +35,12 @@ const Profile = () => {
 
 	const dropdownItems = useMemo(() => {
 		return [
-			{
+			!userInfo?.isAuthenticated && {
 				key: OperationEnum.Login,
 				icon: <LoginOutlined />,
 				label: (
 					<a
-						onClick={() => {
+						onClick={async () => {
 							setIsModalOpen(true);
 						}}
 					>
@@ -38,7 +48,7 @@ const Profile = () => {
 					</a>
 				)
 			},
-			{
+			userInfo?.isAuthenticated && {
 				key: OperationEnum.Logout,
 				icon: <LogoutOutlined />,
 				label: (
@@ -51,13 +61,13 @@ const Profile = () => {
 					</a>
 				)
 			}
-		];
-	}, []);
+		].filter(Boolean) as ItemType[];
+	}, [userInfo?.isAuthenticated]);
 
 	return (
 		<>
 			<Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
-				<Avatar size={40} src={profileImg} />
+				<Avatar size={40} src={userInfo.profileImg || ''} icon={<UserOutlined />} />
 			</Dropdown>
 			<Modal
 				open={isModalOpen}

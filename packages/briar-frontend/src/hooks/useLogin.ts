@@ -1,26 +1,42 @@
-import { clientId } from '@/constants/login';
+import { CLIENT_ID, IUserInfoDTO } from 'briar-shared';
 import { gapi } from 'gapi-script';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { createAnonymousUser as createAnonymousUserApi, getUserInfo } from '@/api/user';
 
 const useLogin = () => {
-  // 后面改成在localStorage中存储
-  const profileImg = 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/%E8%B4%9D%E8%95%BE%E4%BA%9A%E4%B8%8A%E8%BA%AB64.png'
-  const fullName = '123'
+	const [userInfo, setUserInfo] = useState<IUserInfoDTO>({
+		id: 0,
+		createdAt: '',
+		updatedAt: ''
+	});
 
-  useEffect(() => {
-    const initClient = () => {
-      gapi.client.init({
-        clientId,
-        scope: "",
-      })
-    }
-    gapi.load("client:auth2", initClient)
-  })
+	const init = async () => {
+		const userData = await getUserInfo();
+		if (userData) {
+			setUserInfo(userData);
+			return;
+		}
 
-  return {
-    profileImg,
-    fullName
-  }
-}
+		const newUserData = await createAnonymousUserApi();
+		setUserInfo(newUserData);
+	};
 
-export default useLogin
+	useEffect(() => {
+		const initClient = () => {
+			gapi.client.init({
+				clientId: CLIENT_ID,
+				scope: ''
+			});
+		};
+		gapi.load('client:auth2', initClient);
+
+		init();
+	}, []);
+
+	return {
+		userInfo,
+		setUserInfo
+	};
+};
+
+export default useLogin;
