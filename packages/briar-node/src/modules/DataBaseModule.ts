@@ -10,7 +10,7 @@ import { MessageModel } from '@/model/MessageModel';
     SequelizeModule.forRoot({
       dialect: 'mysql', // 根据你的数据库类型设置
       host: 'localhost',
-      port: 3306,
+      port: 33060,
       username: 'root',
       password: '123456',
       database: 'briar',
