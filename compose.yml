@@ -1,6 +1,6 @@
 services:
   briar-mysql:
-    image: mysql:9.0.1
+    image: zhangleilaoge/briar-mysql
     container_name: mysqlimg
     build:
       context: .
