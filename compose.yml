@@ -1,17 +1,4 @@
 services:
-  briar-mysql:
-    image: zhangleilaoge/briar-mysql
-    container_name: mysqlimg
-    build:
-      context: .
-      dockerfile: Dockerfile.mysql
-    ports:
-      - '33060:33060'
-    environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_ROOT_PASSWORD=123456
-    volumes:
-      - briar-mysql-data:/var/lib/mysql
   briar-node:
     image: zhangleilaoge/briar-node
     build:
@@ -22,8 +9,6 @@ services:
       - briar-static:/briar-mono/packages/briar-frontend/dist
     ports:
       - '8922:8922'
-    depends_on:
-      - briar-mysql
   briar-nginx:
     image: zhangleilaoge/briar-nginx
     build:
@@ -39,9 +24,3 @@ services:
       - briar-node
 volumes:
   briar-static:
-  briar-mysql-data:
-    # driver: local
-    # driver_opts:
-    #   type: none
-    #   device: 'C:/Program Files/MySQL/MySQL Server 9.0/data'
-    #   o: bind

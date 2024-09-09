@@ -9,10 +9,11 @@ import { MessageModel } from '@/model/MessageModel';
   imports: [
     SequelizeModule.forRoot({
       dialect: 'mysql', // 根据你的数据库类型设置
-      host: 'localhost',
-      port: 33060,
+      host: 'sh-cdb-ecumhe7a.sql.tencentcdb.com',
+      port: 27200,
       username: 'root',
-      password: '123456',
+      // 后续把这个密码配置化
+      password: '@zlws892221',
       database: 'briar',
       autoLoadModels: true, // 如果希望自动加载
       synchronize: true, // 在开发环境中可能使用，生产环境建议关闭
