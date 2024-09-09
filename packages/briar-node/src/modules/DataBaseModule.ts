@@ -5,6 +5,9 @@ import { ConversationModel } from '@/model/ConversationModel';
 import { UserModel } from '@/model/UserModel';
 import { MessageModel } from '@/model/MessageModel';
 
+console.log(process.env.DATABASE_USER);
+console.log(process.env.DATABASE_PASSWORD);
+
 @Module({
   imports: [
     SequelizeModule.forRoot({
