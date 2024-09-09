@@ -11,6 +11,8 @@ import {
 import { ConversationDalService } from './dal/ConversationDalService';
 import { MessageDalService } from './dal/MessageDalService';
 
+import { getLimitedMessages } from '@/utils/ai';
+
 const THROTTLE_CONFIG = {
   default: {
     ttl: 60,
@@ -30,14 +32,13 @@ export class AiService {
     private readonly messageDalService: MessageDalService,
   ) {}
 
-  // @Throttle(THROTTLE_CONFIG)
-  // async chatRequest(params: IChatRequestParams) {
+  // async chatRequest(prompt: string) {
   //   const completion = await this.openai.chat.completions.create({
   //     messages: [
-  //       { role: RoleEnum.Assistant, content: 'You are a helpful assistant.' },
+  //       { role: RoleEnum.System, content: prompt },
   //       ...params.messages,
   //     ],
-  //     model: params.model,
+  //     model: ModelEnum.Gpt4oMini,
   //   });
 
   //   return completion;
@@ -54,10 +55,10 @@ export class AiService {
         {
           messages: [
             {
-              role: RoleEnum.Assistant,
+              role: RoleEnum.System,
               content: 'You are a helpful assistant.',
             },
-            ...params.messages,
+            ...getLimitedMessages(params.messages),
           ],
           max_tokens: MAX_STREAM_TOKEN,
           model: params.messages.pop().model,
