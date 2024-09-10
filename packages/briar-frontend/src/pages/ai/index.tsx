@@ -31,7 +31,8 @@ function CodeConverter() {
 		outMultiSelectMode,
 		setSelectedConversationKeys,
 		setMessageArr,
-		clickMenuItem
+		clickMenuItem,
+		refreshConversationList
 	} = useConversationList();
 
 	return (
@@ -48,7 +49,8 @@ function CodeConverter() {
 				inMultiSelectMode,
 				outMultiSelectMode,
 				setSelectedConversationKeys,
-				setMessageArr
+				setMessageArr,
+				refreshConversationList
 			}}
 		>
 			<Layout>

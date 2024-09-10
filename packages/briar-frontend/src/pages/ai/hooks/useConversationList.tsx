@@ -160,7 +160,8 @@ const useConversationList = () => {
 		setSelectedConversationKeys,
 		setMessageArr,
 		clickMenuItem,
-		updateConversation
+		updateConversation,
+		refreshConversationList
 	};
 };
 

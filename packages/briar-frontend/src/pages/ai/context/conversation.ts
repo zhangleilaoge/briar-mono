@@ -14,7 +14,8 @@ const ConversationContext = React.createContext({
 	outMultiSelectMode: () => {},
 	setSelectedConversationKeys: (_keys: number[]) => {},
 	deleteSelectedConversation: () => {},
-	setMessageArr: (_messages: IMessageDTO[]) => {}
+	setMessageArr: (_messages: IMessageDTO[]) => {},
+	refreshConversationList: () => {}
 });
 
 export default ConversationContext;

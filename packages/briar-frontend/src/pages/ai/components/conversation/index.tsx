@@ -22,6 +22,7 @@ const Conversation: FC = () => {
 		setCurrentConversationKey,
 		currentConversation,
 		setMessageArr,
+		refreshConversationList,
 		messageArr
 	} = useContext(ConversationContext);
 	const assistantAnswerRef = useRef('');
@@ -72,8 +73,12 @@ const Conversation: FC = () => {
 			return;
 		}
 
+		const isNewConversation = !currentConversation;
 		const conversation = currentConversation || (await createConversation(inputValue))!;
 		setCurrentConversationKey(conversation.id);
+
+		isNewConversation && refreshConversationList();
+
 		const userMsg = await createMessage({
 			content: inputValue,
 			role: RoleEnum.User,
