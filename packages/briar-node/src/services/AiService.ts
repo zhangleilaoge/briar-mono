@@ -10,7 +10,7 @@ import {
 } from 'src/constants/ai';
 import { ConversationDalService } from './dal/ConversationDalService';
 import { MessageDalService } from './dal/MessageDalService';
-
+import 'dotenv/config';
 import { getLimitedMessages } from '@/utils/ai';
 
 const THROTTLE_CONFIG = {
@@ -23,7 +23,7 @@ const THROTTLE_CONFIG = {
 @Injectable()
 export class AiService {
   openai = new OpenAI({
-    apiKey: process.env.API_KEY || DEFAULT_FREE_API_KEY,
+    apiKey: process.env.BRIAR_API_KEY || DEFAULT_FREE_API_KEY,
     baseURL: OPEN_AI_BASE_URL,
   });
 
