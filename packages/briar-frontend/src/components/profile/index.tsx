@@ -15,7 +15,7 @@ enum OperationEnum {
 }
 
 const Profile = () => {
-	const { userInfo } = useContext(CommonContext);
+	const { userInfo, logout } = useContext(CommonContext);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const onSuccess = async (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
@@ -26,8 +26,7 @@ const Profile = () => {
 			setTimeout(() => {
 				window.location.reload();
 			}, 3000);
-		}
-		errorNotify('登录失败。');
+		} else errorNotify('登录失败。');
 	};
 	const onFailure = (err: Error) => {
 		errorNotify(err);
@@ -54,7 +53,8 @@ const Profile = () => {
 				label: (
 					<a
 						onClick={() => {
-							message.success('成功登出');
+							message.success('登出成功，页面即将刷新。');
+							logout();
 						}}
 					>
 						logout
@@ -62,7 +62,7 @@ const Profile = () => {
 				)
 			}
 		].filter(Boolean) as ItemType[];
-	}, [userInfo?.isAuthenticated]);
+	}, [logout, userInfo?.isAuthenticated]);
 
 	return (
 		<>

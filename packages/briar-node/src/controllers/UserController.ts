@@ -20,6 +20,18 @@ export class AppController {
     return data;
   }
 
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) response) {
+    response.cookie('userId', '', {
+      maxAge: 0,
+      httpOnly: true,
+      secure: true,
+      path: '/',
+    });
+
+    return true;
+  }
+
   @Get('getUserInfo')
   async getUserInfo(@Cookies('userId') userId: number) {
     const data = await this.UserService.getUserInfo(userId);
@@ -29,12 +41,14 @@ export class AppController {
 
   @Post('authenticateUserByGoogle')
   async authenticateUserByGoogle(
+    @Res({ passthrough: true }) response,
     @Body('tokenId') tokenId: string,
     @Cookies('userId') userId: number,
   ) {
     const data = await this.UserService.authenticateUserByGoogle(
       tokenId,
       userId,
+      response,
     );
     return data;
   }

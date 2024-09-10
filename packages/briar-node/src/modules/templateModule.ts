@@ -1,6 +1,5 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from '../controllers/TemplateController';
-import { LogMiddleware } from '../middleware/log';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
@@ -15,8 +14,4 @@ import { join } from 'path';
   controllers: [AppController],
   providers: [],
 })
-export class TemplateModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LogMiddleware).forRoutes('*');
-  }
-}
+export class TemplateModule {}

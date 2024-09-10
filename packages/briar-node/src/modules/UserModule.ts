@@ -1,7 +1,6 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from '../controllers/UserController';
 import { UserService } from '../services/UserService';
-import { LogMiddleware } from '../middleware/log';
 import { DatabaseModule } from './DataBaseModule';
 import { UserDalService } from '@/services/dal/UserDalService';
 
@@ -10,8 +9,4 @@ import { UserDalService } from '@/services/dal/UserDalService';
   controllers: [AppController],
   providers: [UserService, UserDalService],
 })
-export class UserModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LogMiddleware).forRoutes('*');
-  }
-}
+export class UserModule {}

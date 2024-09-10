@@ -61,6 +61,7 @@
 
   :global(.ant-layout-sider-trigger) {
     background-color: $collapseBgColor;
+    position: relative;
   }
 
   :global(.ant-menu-root) {
@@ -86,6 +87,7 @@
   margin-top: 0;
   padding: 0;
   max-height: none;
+
   :global(.ant-layout-content) {
     border-radius: 0 !important;
   }
@@ -140,6 +142,5 @@ body {
 
 
 .Hide {
-  display: none !important
-  ;
+  display: none !important;
 }

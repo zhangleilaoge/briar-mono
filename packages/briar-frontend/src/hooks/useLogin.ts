@@ -1,7 +1,11 @@
 import { CLIENT_ID, IUserInfoDTO } from 'briar-shared';
 import { gapi } from 'gapi-script';
-import { useEffect, useState } from 'react';
-import { createAnonymousUser as createAnonymousUserApi, getUserInfo } from '@/api/user';
+import { useCallback, useEffect, useState } from 'react';
+import {
+	createAnonymousUser as createAnonymousUserApi,
+	getUserInfo,
+	logout as logoutApi
+} from '@/api/user';
 
 const useLogin = () => {
 	const [userInfo, setUserInfo] = useState<IUserInfoDTO>({
@@ -33,9 +37,24 @@ const useLogin = () => {
 		init();
 	}, []);
 
+	const logout = useCallback(async () => {
+		await logoutApi();
+
+		setUserInfo({
+			id: 0,
+			createdAt: '',
+			updatedAt: ''
+		});
+
+		setTimeout(() => {
+			window.location.reload();
+		}, 3000);
+	}, []);
+
 	return {
 		userInfo,
-		setUserInfo
+		setUserInfo,
+		logout
 	};
 };
 

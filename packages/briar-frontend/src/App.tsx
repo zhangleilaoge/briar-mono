@@ -20,7 +20,7 @@ function App() {
 	const { menuKey, onLevelPathChange } = useLevelPath();
 	const { fullScreen, HeaderClass, SiderClass, LayoutClass, inFullScreen, outFullScreen } =
 		useFullScreen();
-	const { userInfo } = useLogin();
+	const { userInfo, logout } = useLogin();
 
 	return (
 		<ConfigProvider theme={THEME}>
@@ -31,9 +31,10 @@ function App() {
 						SiderClass,
 						LayoutClass
 					},
+					userInfo,
 					inFullScreen,
 					outFullScreen,
-					userInfo
+					logout
 				}}
 			>
 				<FloatBtn />

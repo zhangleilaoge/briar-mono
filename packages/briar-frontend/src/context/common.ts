@@ -12,7 +12,8 @@ const CommonContext = React.createContext({
 	inFullScreen: () => {},
 	outFullScreen: () => {},
 	/** 用户 */
-	userInfo: {} as IUserInfoDTO
+	userInfo: {} as IUserInfoDTO,
+	logout: () => {}
 });
 
 export default CommonContext;
