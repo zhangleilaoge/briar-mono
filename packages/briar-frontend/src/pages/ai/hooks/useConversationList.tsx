@@ -87,7 +87,8 @@ const useConversationList = () => {
 		const normalizeConversationList = (during: [number, number]) => {
 			const [minAgo, maxAgo] = during;
 			const start = subDays(initTime, maxAgo).getTime();
-			const end = minAgo ? subDays(initTime, minAgo).getTime() : Date.now();
+			// 避免时区问题，当 minAgo 为 0 时，将 end 适当延后
+			const end = minAgo ? subDays(initTime, minAgo).getTime() : Date.now() + 1000 * 60 * 60 * 24;
 
 			return conversationList
 				.filter(({ createdAt }) => {
