@@ -8,6 +8,7 @@ import s from './style.module.scss';
 import { errorNotify } from '@/utils/notify';
 import { ItemType } from 'antd/es/menu/interface';
 import { authenticateUserByGoogle } from '@/api/user';
+import { LocalStorageKey } from '@/constants/env';
 
 enum OperationEnum {
 	Login = 'login',
@@ -20,12 +21,16 @@ const Profile = () => {
 
 	const onSuccess = async (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
 		const { tokenId } = res as GoogleLoginResponse;
-		const result = await authenticateUserByGoogle(tokenId);
-		if (result) {
+		const accessToken = await authenticateUserByGoogle(tokenId);
+
+		console.log('google userInfo: ', res);
+
+		if (accessToken) {
 			message.success('登录成功，页面即将刷新。');
+			localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
 			setTimeout(() => {
 				window.location.reload();
-			}, 3000);
+			}, 1000);
 		} else errorNotify('登录失败。');
 	};
 	const onFailure = (err: Error) => {

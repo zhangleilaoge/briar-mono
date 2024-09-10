@@ -1,3 +1,4 @@
+import { LocalStorageKey } from '@/constants/env';
 import { errorNotify } from '@/utils/notify';
 import { createAlova } from 'alova';
 import fetchAdapter from 'alova/fetch';
@@ -9,6 +10,7 @@ const alovaInstance = createAlova({
 	responded: {
 		onSuccess: (response) => response?.json?.() || response,
 		onError: (error) => {
+			console.log('error:', error);
 			errorNotify(error);
 			throw error;
 		}
@@ -20,8 +22,10 @@ const alovaInstance = createAlova({
 			expire: 100
 		}
 	},
+
 	beforeRequest({ config }) {
 		config.credentials = 'include';
+		config.headers.Authorization = `Bearer ${localStorage.getItem(LocalStorageKey.AccessToken)}`;
 	}
 });
 

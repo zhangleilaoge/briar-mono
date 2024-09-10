@@ -1,55 +1,66 @@
-import { Body, Controller, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Request } from '@nestjs/common';
 import { UserService } from '../services/UserService';
-import { COOKIE_MAX_AGE } from 'briar-shared';
-import { Cookies } from '@/decorators/Cookies';
+import { JwtService } from '@nestjs/jwt';
+import { Public } from '@/decorators/Public';
+
 @Controller('api/user')
 export class AppController {
-  constructor(private readonly UserService: UserService) {}
+  constructor(
+    private readonly UserService: UserService,
+    private jwtService: JwtService,
+  ) {}
 
+  @Public()
   @Post('createAnonymousUser')
-  async createAnonymousUser(@Res({ passthrough: true }) response) {
+  async createAnonymousUser() {
     const data = await this.UserService.createAnonymousUser();
-
-    response.setCookie('userId', data.id, {
-      httpOnly: true,
-      secure: true,
-      maxAge: COOKIE_MAX_AGE,
-      path: '/',
+    // 当前只有新建匿名用户以及登录用户有 accesstoken
+    const accessToken = await this.jwtService.signAsync({
+      sub: data.id,
     });
 
-    return data;
+    return {
+      userInfo: data,
+      accessToken,
+    };
   }
 
-  @Post('logout')
-  async logout(@Res({ passthrough: true }) response) {
-    response.cookie('userId', '', {
-      maxAge: 0,
-      httpOnly: true,
-      secure: true,
-      path: '/',
-    });
+  // @Post('logout')
+  // async logout(@Res({ passthrough: true }) response) {
+  //   response.cookie('userId', '', {
+  //     maxAge: 0,
+  //     httpOnly: true,
+  //     secure: true,
+  //     path: '/',
+  //   });
 
-    return true;
-  }
+  //   return true;
+  // }
 
   @Get('getUserInfo')
-  async getUserInfo(@Cookies('userId') userId: number) {
-    const data = await this.UserService.getUserInfo(userId);
+  async getUserInfo(@Request() req) {
+    const data = await this.UserService.getUserInfo(req.user.id);
 
     return data;
   }
 
   @Post('authenticateUserByGoogle')
   async authenticateUserByGoogle(
-    @Res({ passthrough: true }) response,
     @Body('tokenId') tokenId: string,
-    @Cookies('userId') userId: number,
+    @Request() req,
   ) {
-    const data = await this.UserService.authenticateUserByGoogle(
+    const userId = await this.UserService.authenticateUserByGoogle(
       tokenId,
-      userId,
-      response,
+      req.user.id,
     );
-    return data;
+
+    if (userId) {
+      const accessToken = await this.jwtService.signAsync({
+        sub: userId,
+      });
+      return accessToken;
+    }
+
+    return false;
   }
 }

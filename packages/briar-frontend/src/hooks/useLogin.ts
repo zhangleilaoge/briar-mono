@@ -6,6 +6,7 @@ import {
 	getUserInfo,
 	logout as logoutApi
 } from '@/api/user';
+import { LocalStorageKey } from '@/constants/env';
 
 const useLogin = () => {
 	const [userInfo, setUserInfo] = useState<IUserInfoDTO>({
@@ -15,14 +16,16 @@ const useLogin = () => {
 	});
 
 	const init = async () => {
-		const userData = await getUserInfo();
-		if (userData) {
-			setUserInfo(userData);
+		const userInfo = await getUserInfo();
+		if (userInfo.id) {
+			setUserInfo(userInfo);
 			return;
 		}
 
-		const newUserData = await createAnonymousUserApi();
-		setUserInfo(newUserData);
+		const { userInfo: newUserInfo, accessToken } = await createAnonymousUserApi();
+
+		localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
+		setUserInfo(newUserInfo);
 	};
 
 	useEffect(() => {
@@ -48,7 +51,7 @@ const useLogin = () => {
 
 		setTimeout(() => {
 			window.location.reload();
-		}, 3000);
+		}, 1000);
 	}, []);
 
 	return {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserDalService } from './dal/UserDalService';
 import { OAuth2Client } from 'google-auth-library';
-import { CLIENT_ID, COOKIE_MAX_AGE } from 'briar-shared';
+import { CLIENT_ID } from 'briar-shared';
 
 @Injectable()
 export class UserService {
@@ -21,11 +21,7 @@ export class UserService {
     }
   }
 
-  async authenticateUserByGoogle(
-    tokenId: string,
-    userId: number,
-    response: any,
-  ) {
+  async authenticateUserByGoogle(tokenId: string, userId: number) {
     const client = new OAuth2Client();
     const ticket = await client.verifyIdToken({
       idToken: tokenId,
@@ -41,13 +37,7 @@ export class UserService {
 
     // 1. google 账号已绑定账号 => 返回绑定的账号
     if (user?.id) {
-      response.setCookie('userId', user.id, {
-        httpOnly: true,
-        secure: true,
-        maxAge: COOKIE_MAX_AGE,
-        path: '/',
-      });
-      return true;
+      return user?.id;
     }
 
     // 2. google 账号未绑定账号 => 绑定当前账号
@@ -59,6 +49,6 @@ export class UserService {
       email: payload.email,
       googleId: payload.sub,
     });
-    return true;
+    return userId;
   }
 }

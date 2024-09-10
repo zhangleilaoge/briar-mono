@@ -1,5 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import fastifyCookie from '@fastify/cookie';
 import { MainModule } from './modules/MainModule';
 import {
   FastifyAdapter,
@@ -19,10 +18,6 @@ async function bootstrap() {
     MainModule,
     new FastifyAdapter(),
   );
-
-  app.register(fastifyCookie, {
-    secret: 'my-secret', // for cookies signature
-  });
 
   app.enableCors({
     origin: origins,

@@ -1,6 +1,6 @@
 import { IConversationDTO, IMessageDTO } from 'briar-shared';
 import { CONVERSATION_DESC, ConversationEnum } from '../constants';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { isAfter, isBefore, subDays } from 'date-fns';
 import { IMenuRouterConfig } from '@/types/router';
 import { MenuItem } from '../components/menu-item';
@@ -11,6 +11,7 @@ import {
 	updateConversation as updateConversationApi,
 	findMessagesByConversationId
 } from '@/api/ai';
+import CommonContext from '@/context/common';
 
 const initTime = Date.now();
 
@@ -20,6 +21,7 @@ const useConversationList = () => {
 	const [currentConversationKey, setCurrentConversationKey] = useState<number>();
 	const [selectedConversationKeys, setSelectedConversationKeys] = useState<number[]>([]);
 	const [multiSelectMode, setMultiSelectMode] = useState(false);
+	const { userInfo } = useContext(CommonContext);
 
 	const inMultiSelectMode = useCallback(() => {
 		setMultiSelectMode(true);
@@ -140,8 +142,8 @@ const useConversationList = () => {
 	}, [conversationList, deleteConversation, updateConversation]);
 
 	useEffect(() => {
-		refreshConversationList();
-	}, []);
+		userInfo.id && refreshConversationList();
+	}, [userInfo.id]);
 
 	return {
 		menuConfig,

@@ -13,10 +13,10 @@
     "start": "cross-env NODE_ENV=production node dist/main  "
   },
   "dependencies": {
-    "@fastify/cookie": "^9.4.0",
     "@fastify/static": "^7.0.4",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/jwt": "^10.2.0",
     "@nestjs/platform-fastify": "^10.3.10",
     "@nestjs/sequelize": "^10.0.1",
     "@nestjs/serve-static": "^4.0.2",

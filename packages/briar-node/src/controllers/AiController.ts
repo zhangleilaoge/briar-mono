@@ -1,7 +1,14 @@
-import { Body, Controller, Get, Post, Query, Sse } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Sse,
+  Request,
+} from '@nestjs/common';
 import { AiService } from '../services/AiService';
 import { IConversationDTO, ModelEnum, RoleEnum } from 'briar-shared';
-import { Cookies } from '@/decorators/Cookies';
 import { ConversationDalService } from '@/services/dal/ConversationDalService';
 import { MessageDalService } from '@/services/dal/MessageDalService';
 @Controller('api/ai')
@@ -47,8 +54,8 @@ export class AppController {
   }
 
   @Get('getConversationList')
-  async getConversationList(@Cookies('userId') userId = 0) {
-    return this.AiService.getConversationList(userId);
+  async getConversationList(@Request() req) {
+    return this.AiService.getConversationList(req.user.id || 0);
   }
 
   @Get('findMessagesByConversationId')
@@ -59,12 +66,9 @@ export class AppController {
   }
 
   @Post('createConversation')
-  async createConversation(
-    @Body('title') title: string,
-    @Cookies('userId') userId: number,
-  ) {
+  async createConversation(@Body('title') title: string, @Request() req) {
     const data = await this.ConversationDalService.create({
-      userId,
+      userId: req.user.id,
       title,
     });
 
