@@ -14,9 +14,10 @@ export class UserService {
 
   async getUserInfo(userId: number) {
     try {
-      const user = (await this.userDalService.findOne({ userId })).toJSON();
+      const user = (await this.userDalService.findOne({ userId }))?.toJSON();
       return user;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }

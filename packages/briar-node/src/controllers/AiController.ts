@@ -11,6 +11,7 @@ import { AiService } from '../services/AiService';
 import { IConversationDTO, ModelEnum, RoleEnum } from 'briar-shared';
 import { ConversationDalService } from '@/services/dal/ConversationDalService';
 import { MessageDalService } from '@/services/dal/MessageDalService';
+import { Public } from '@/decorators/Public';
 @Controller('api/ai')
 export class AppController {
   constructor(
@@ -31,6 +32,8 @@ export class AppController {
   //   return data;
   // }
 
+  // sse 貌似不支持自定义 header，只能放行了
+  @Public()
   @Get('chatRequestStream')
   @Sse('sse')
   async chatRequestStream(
@@ -55,7 +58,7 @@ export class AppController {
 
   @Get('getConversationList')
   async getConversationList(@Request() req) {
-    return this.AiService.getConversationList(req.user.id || 0);
+    return this.AiService.getConversationList(req.user.sub || 0);
   }
 
   @Get('findMessagesByConversationId')
@@ -68,7 +71,7 @@ export class AppController {
   @Post('createConversation')
   async createConversation(@Body('title') title: string, @Request() req) {
     const data = await this.ConversationDalService.create({
-      userId: req.user.id,
+      userId: req.user.sub,
       title,
     });
 

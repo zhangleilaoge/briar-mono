@@ -190,7 +190,7 @@ const Conversation: FC = () => {
 					onCompositionStart={handleComposition}
 					// @ts-ignore
 					onCompositionEnd={handleComposition}
-					maxLength={500}
+					maxLength={1900}
 				/>
 				<Button
 					icon={loading ? <XFilled /> : <ArrowUpOutlined />}

@@ -1,11 +1,7 @@
 import { CLIENT_ID, IUserInfoDTO } from 'briar-shared';
 import { gapi } from 'gapi-script';
 import { useCallback, useEffect, useState } from 'react';
-import {
-	createAnonymousUser as createAnonymousUserApi,
-	getUserInfo,
-	logout as logoutApi
-} from '@/api/user';
+import { createAnonymousUser as createAnonymousUserApi, getUserInfo } from '@/api/user';
 import { LocalStorageKey } from '@/constants/env';
 
 const useLogin = () => {
@@ -41,7 +37,7 @@ const useLogin = () => {
 	}, []);
 
 	const logout = useCallback(async () => {
-		await logoutApi();
+		localStorage.removeItem(LocalStorageKey.AccessToken);
 
 		setUserInfo({
 			id: 0,

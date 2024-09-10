@@ -39,7 +39,7 @@ export class AppController {
 
   @Get('getUserInfo')
   async getUserInfo(@Request() req) {
-    const data = await this.UserService.getUserInfo(req.user.id);
+    const data = await this.UserService.getUserInfo(req.user.sub);
 
     return data;
   }
@@ -51,7 +51,7 @@ export class AppController {
   ) {
     const userId = await this.UserService.authenticateUserByGoogle(
       tokenId,
-      req.user.id,
+      req.user.sub,
     );
 
     if (userId) {

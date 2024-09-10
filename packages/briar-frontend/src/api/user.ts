@@ -14,4 +14,4 @@ export const authenticateUserByGoogle = (tokenId: string) =>
 		tokenId
 	});
 
-export const logout = () => alovaInstance.Post(`/user/logout`);
+// export const logout = () => alovaInstance.Post(`/user/logout`);
