@@ -38,7 +38,7 @@ export class ConversationDalService {
   async getConversationList(userId: number) {
     return await this.conversationModel.findAll({
       where: { userId },
-      order: [['createdAt', 'DESC']],
+      order: [['updatedAt', 'DESC']],
     });
   }
 

@@ -20,6 +20,7 @@ dotenv.config({ path: '../../.env' });
       database: 'briar',
       autoLoadModels: true, // 如果希望自动加载
       synchronize: true, // 在开发环境中可能使用，生产环境建议关闭
+      timezone: '+08:00', // 设置时区为 UTC+8
     }),
     SequelizeModule.forFeature([ConversationModel, UserModel, MessageModel]), // 注册特定模型以用于DI
   ],

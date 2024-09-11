@@ -61,18 +61,30 @@ const useConversationList = () => {
 		});
 	}, []);
 
-	const deleteConversation = useCallback(async (id: number) => {
-		await deleteConversationApi({ ids: [id] });
-		refreshConversationList();
-		setMessageArr([]);
-	}, []);
+	const deleteConversation = useCallback(
+		async (id: number) => {
+			await deleteConversationApi({ ids: [id] });
+			refreshConversationList();
+
+			setMessageArr([]);
+			if (currentConversationKey === id) {
+				setCurrentConversationKey(undefined);
+			}
+		},
+		[currentConversationKey]
+	);
 
 	const deleteSelectedConversation = useCallback(async () => {
 		await deleteConversationApi({ ids: selectedConversationKeys });
 		setSelectedConversationKeys([]);
 		setMultiSelectMode(false);
 		refreshConversationList();
-	}, [selectedConversationKeys]);
+
+		setMessageArr([]);
+		if (selectedConversationKeys.includes(currentConversationKey || 0)) {
+			setCurrentConversationKey(undefined);
+		}
+	}, [currentConversationKey, selectedConversationKeys]);
 
 	const currentConversation: IConversationDTO | undefined = useMemo(() => {
 		if (!currentConversationKey) {
