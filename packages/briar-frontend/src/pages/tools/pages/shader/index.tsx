@@ -16,6 +16,9 @@ void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     gl_FragColor=vec4(st.x,st.y,0.0,1.0);
 }`);
+	// const [vertexShader] = useState(`        void main() {
+	//         gl_Position = vec4( position, 1.0 );
+	//     }`);
 	const renderRef = useRef<THREE.WebGLRenderer>();
 	const camera = new THREE.Camera();
 	const clock = new THREE.Clock();
@@ -35,7 +38,8 @@ void main() {
 		if (!renderRef.current) return;
 		uniforms.u_time.value += clock.getDelta();
 		renderRef.current.render(scene, camera);
-	}, [camera, clock, scene]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const animate = useCallback(() => {
 		aniRef.current = requestAnimationFrame(animate);
@@ -56,22 +60,26 @@ void main() {
 		});
 
 		const mesh = new THREE.Mesh(geometry, material);
-		scene.add(mesh);
 
-		renderRef.current = new THREE.WebGLRenderer();
-		renderRef.current.setPixelRatio(window.devicePixelRatio);
-		container.appendChild(renderRef.current.domElement);
+		if (!scene.children.includes(mesh)) {
+			scene.add(mesh);
 
-		onWindowResize();
-		window.addEventListener('resize', onWindowResize, false);
+			renderRef.current = new THREE.WebGLRenderer();
+			renderRef.current.setPixelRatio(window.devicePixelRatio);
+			container.appendChild(renderRef.current.domElement);
 
-		animate();
+			onWindowResize();
+			window.addEventListener('resize', onWindowResize, false);
+
+			animate();
+		}
 
 		return () => {
 			aniRef.current && cancelAnimationFrame(aniRef.current);
 			window.removeEventListener('resize', onWindowResize);
 		};
-	}, [animate, camera.position, frag, onWindowResize, scene]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<div className={s.CanvasContainer}>
