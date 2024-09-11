@@ -1,15 +1,24 @@
 import { Button, Checkbox, Dropdown, Input, InputRef, MenuProps, theme } from 'antd';
 import s from './style.module.scss';
-import { DeleteFilled, EditFilled, EllipsisOutlined } from '@ant-design/icons';
+import {
+	DeleteFilled,
+	EditFilled,
+	EllipsisOutlined,
+	StarFilled,
+	StarOutlined
+} from '@ant-design/icons';
 import { IConversationDTO } from 'briar-shared';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import ClickOutside from '@/components/ClickOutSide';
 import ConversationContext from '../../context/conversation';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+// import StarCheckbox from '@/components/StarCheckBox';
 
 enum OperationEnum {
 	Edit = 'edit',
-	Delete = 'delete'
+	Delete = 'delete',
+	marked = 'marked',
+	unmarked = 'unmarked'
 }
 
 export const MenuItem = ({
@@ -19,9 +28,9 @@ export const MenuItem = ({
 }: {
 	conversation: IConversationDTO;
 	deleteConversation: (id: number) => void;
-	updateConversation: (_: IConversationDTO, updateToTop?: boolean) => void;
+	updateConversation: (_: IConversationDTO) => void;
 }) => {
-	const { title } = conversation;
+	const { title, marked } = conversation;
 	const inputRef = useRef<InputRef>(null);
 	const [isEditing, setIsEditing] = useState(false);
 	const [editValue, setEditValue] = useState(title || '');
@@ -53,15 +62,16 @@ export const MenuItem = ({
 		[conversation.id, selectedConversationKeys, setSelectedConversationKeys]
 	);
 
+	const onMarkedChange = useCallback(() => {
+		updateConversation({ ...conversation, marked: !conversation.marked });
+	}, [conversation, updateConversation]);
+
 	const finishEdit = useCallback(async () => {
 		setIsEditing(false);
-		await updateConversation(
-			{
-				...conversation,
-				title: editValue || conversationTitle
-			},
-			false
-		);
+		await updateConversation({
+			...conversation,
+			title: editValue || conversationTitle
+		});
 	}, [conversation, conversationTitle, editValue, updateConversation]);
 
 	const items: MenuProps['items'] = [
@@ -80,7 +90,39 @@ export const MenuItem = ({
 					}}
 				>
 					<EditFilled />
-					rename
+					重命名
+				</div>
+			)
+		},
+		!marked && {
+			key: OperationEnum.marked,
+			label: (
+				<div
+					className={s.DropdownItem}
+					onClick={(e) => {
+						onMarkedChange();
+						setDropdownOpen(false);
+						e.stopPropagation();
+					}}
+				>
+					<StarFilled />
+					收藏
+				</div>
+			)
+		},
+		marked && {
+			key: OperationEnum.unmarked,
+			label: (
+				<div
+					className={s.DropdownItem}
+					onClick={(e) => {
+						onMarkedChange();
+						setDropdownOpen(false);
+						e.stopPropagation();
+					}}
+				>
+					<StarOutlined />
+					取消收藏
 				</div>
 			)
 		},
@@ -97,11 +139,11 @@ export const MenuItem = ({
 					}}
 				>
 					<DeleteFilled />
-					delete
+					删除
 				</div>
 			)
 		}
-	];
+	].filter(Boolean) as MenuProps['items'];
 
 	useEffect(() => {
 		setEditValue(conversationTitle || '');
@@ -110,12 +152,20 @@ export const MenuItem = ({
 	return (
 		<div className={s.Conversation}>
 			<div className={s.ConversationContent}>
-				{multiSelectMode && (
+				{multiSelectMode ? (
 					<Checkbox
 						onChange={changeChecked}
 						checked={checked}
 						onClick={(e) => e.stopPropagation()}
 					></Checkbox>
+				) : (
+					marked && (
+						<StarFilled
+							style={{
+								color: 'rgb(242, 203, 81)'
+							}}
+						/>
+					)
 				)}
 				{isEditing ? (
 					<ClickOutside onClickOutside={finishEdit}>

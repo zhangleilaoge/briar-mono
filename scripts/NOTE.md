@@ -17,4 +17,10 @@ docker-compose exec <服务名称> sh
 
 ## 代理
 
-使用 charles 的 mapRemote 功能，即可用原始域名进行代理。
+使用 whistle 的 rule 功能
+
+```
+# 1. 前后端全部代理到本机8922端口
+restrained-hunter.website 127.0.0.1:8922
+
+```

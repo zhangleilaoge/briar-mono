@@ -11,4 +11,7 @@ export class ConversationModel extends Model<ConversationModel> {
     allowNull: false,
   })
   userId: number;
+
+  @Column
+  marked?: boolean;
 }

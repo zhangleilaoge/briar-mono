@@ -16,9 +16,6 @@ void main() {
     vec2 st = gl_FragCoord.xy/u_resolution.xy;
     gl_FragColor=vec4(st.x,st.y,0.0,1.0);
 }`);
-	// const [vertexShader] = useState(`        void main() {
-	//         gl_Position = vec4( position, 1.0 );
-	//     }`);
 	const renderRef = useRef<THREE.WebGLRenderer>();
 	const camera = new THREE.Camera();
 	const clock = new THREE.Clock();
@@ -38,7 +35,7 @@ void main() {
 		if (!renderRef.current) return;
 		uniforms.u_time.value += clock.getDelta();
 		renderRef.current.render(scene, camera);
-	}, []);
+	}, [camera, clock, scene]);
 
 	const animate = useCallback(() => {
 		aniRef.current = requestAnimationFrame(animate);
@@ -55,7 +52,6 @@ void main() {
 
 		const material = new THREE.ShaderMaterial({
 			uniforms: uniforms,
-			// vertexShader,
 			fragmentShader: frag
 		});
 
@@ -75,7 +71,7 @@ void main() {
 			aniRef.current && cancelAnimationFrame(aniRef.current);
 			window.removeEventListener('resize', onWindowResize);
 		};
-	}, []);
+	}, [animate, camera.position, frag, onWindowResize, scene]);
 
 	return (
 		<div className={s.CanvasContainer}>

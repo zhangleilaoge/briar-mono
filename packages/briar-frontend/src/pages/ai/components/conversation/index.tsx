@@ -160,6 +160,7 @@ const Conversation: FC = () => {
 		) {
 			shutDown();
 		}
+		scrollToBottom();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentConversation?.id]);
 

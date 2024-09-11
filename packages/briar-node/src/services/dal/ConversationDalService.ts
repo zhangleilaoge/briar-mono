@@ -35,10 +35,14 @@ export class ConversationDalService {
     });
   }
 
-  async getConversationList(userId: number) {
+  async getConversationList(userId: number, limit = 100) {
     return await this.conversationModel.findAll({
       where: { userId },
-      order: [['updatedAt', 'DESC']],
+      limit,
+      order: [
+        ['marked', 'DESC'],
+        ['updatedAt', 'DESC'],
+      ],
     });
   }
 
