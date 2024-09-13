@@ -27,4 +27,11 @@ export class MessageModel extends Model<MessageModel> {
     allowNull: false,
   })
   conversationId: number;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    defaultValue: '',
+  })
+  imgList: string;
 }

@@ -7,6 +7,8 @@ const ConversationContext = React.createContext({
 	currentConversation: undefined as IConversationDTO | undefined,
 	messageArr: [] as IMessageDTO[],
 	multiSelectMode: false,
+	createImgMode: false,
+	setCreateImgMode: (_createImgMode: boolean) => {},
 	updateConversation: (_conversation: IConversationDTO) => {},
 	createConversation: (_title: string) => {},
 	setCurrentConversationKey: (_key?: number) => {},

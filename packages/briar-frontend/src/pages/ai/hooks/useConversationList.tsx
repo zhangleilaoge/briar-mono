@@ -21,6 +21,7 @@ const useConversationList = () => {
 	const [currentConversationKey, setCurrentConversationKey] = useState<number>();
 	const [selectedConversationKeys, setSelectedConversationKeys] = useState<number[]>([]);
 	const [multiSelectMode, setMultiSelectMode] = useState(false);
+	const [createImgMode, setCreateImgMode] = useState(false);
 	const { userInfo } = useContext(CommonContext);
 
 	const inMultiSelectMode = useCallback(() => {
@@ -159,6 +160,7 @@ const useConversationList = () => {
 	}, [userInfo.id]);
 
 	return {
+		createImgMode,
 		menuConfig,
 		currentConversationKey,
 		currentConversation,
@@ -174,7 +176,8 @@ const useConversationList = () => {
 		setMessageArr,
 		clickMenuItem,
 		updateConversation,
-		refreshConversationList
+		refreshConversationList,
+		setCreateImgMode
 	};
 };
 

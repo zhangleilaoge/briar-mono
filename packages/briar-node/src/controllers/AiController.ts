@@ -12,8 +12,10 @@ import { IConversationDTO, ModelEnum, RoleEnum } from 'briar-shared';
 import { ConversationDalService } from '@/services/dal/ConversationDalService';
 import { MessageDalService } from '@/services/dal/MessageDalService';
 import { Public } from '@/decorators/Public';
+import { ICreateImgResponse } from 'briar-shared';
 @Controller('api/ai')
 export class AppController {
+  CosService: any;
   constructor(
     private readonly AiService: AiService,
     private readonly ConversationDalService: ConversationDalService,
@@ -54,6 +56,26 @@ export class AppController {
         },
       ],
     });
+  }
+
+  @Post('chatToCreateImg')
+  async chatToCreateImg(
+    @Body('content') content: string,
+    @Request() req,
+  ): Promise<ICreateImgResponse> {
+    const imgList = await this.AiService.createImg(content, ModelEnum.DallE3);
+    for (const img of imgList) {
+      await this.CosService.uploadImg2Cos(
+        `runtime-images/${req.user.sub}-${Date.now()}`,
+        img,
+      );
+    }
+
+    return {
+      imgList,
+      // imgDesc: `Here's xxx. Let me know if you'd like to make any adjustments!`,
+      imgDesc: '',
+    };
   }
 
   @Get('getConversationList')
@@ -109,11 +131,13 @@ export class AppController {
   @Post('updateMessage')
   async updateMessage(
     @Body('content') content: string,
+    @Body('imgList') imgList: string,
     @Body('id') id: number,
   ) {
     return this.MessageDalService.update({
       content,
       id,
+      imgList,
     });
   }
 }

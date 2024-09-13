@@ -23,6 +23,8 @@ function CodeConverter() {
 		multiSelectMode,
 		selectedConversationKeys,
 		messageArr,
+		createImgMode,
+		setCreateImgMode,
 		updateConversation,
 		createConversation,
 		setCurrentConversationKey,
@@ -38,10 +40,12 @@ function CodeConverter() {
 	return (
 		<ConversationContext.Provider
 			value={{
+				createImgMode,
 				currentConversation,
 				multiSelectMode,
 				selectedConversationKeys,
 				messageArr,
+				setCreateImgMode,
 				updateConversation,
 				createConversation,
 				setCurrentConversationKey,

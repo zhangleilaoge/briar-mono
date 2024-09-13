@@ -8,7 +8,8 @@ export enum RoleEnum {
 
 export enum ModelEnum {
 	Gpt4oMini = 'gpt-4o-mini',
-	Gpt4o = 'gpt-4o'
+	Gpt4o = 'gpt-4o',
+	DallE3 = 'dall-e-3'
 }
 
 export type IMessageDTO = IModel<{
@@ -16,12 +17,14 @@ export type IMessageDTO = IModel<{
 	content: string;
 	conversationId: number;
 	model: ModelEnum;
+	imgList?: string;
 }>;
 
 export type IConversationDTO = IModel<{
 	model: ModelEnum;
 	title?: string;
 	userId: number;
+	marked?: boolean;
 }>;
 
 // ====================== request params below ========================
@@ -31,9 +34,8 @@ export interface IChatRequestParams {
 	model: ModelEnum;
 }
 
-export interface ICreateMessageParams {
-	content: string;
-	conversationId: number;
-	model: ModelEnum;
-	role: RoleEnum;
+// ====================== response below ========================
+export interface ICreateImgResponse {
+	imgList: string[];
+	imgDesc: string;
 }

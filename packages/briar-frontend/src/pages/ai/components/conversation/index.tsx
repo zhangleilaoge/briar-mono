@@ -1,19 +1,20 @@
-import { Button, Popover, Radio, Select } from 'antd';
+import { Button } from 'antd';
 import s from './style.module.scss';
-import { ArrowUpOutlined, FormOutlined, XFilled } from '@ant-design/icons';
+import { ArrowUpOutlined, XFilled } from '@ant-design/icons';
 import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { RoleEnum } from 'briar-shared';
 import ConversationContext from '../../context/conversation';
 import Messages from '../messages';
-import { chatRequestStream, createMessage, updateMessage } from '@/api/ai';
+import { chatRequestStream, chatToCreateImg, createMessage, updateMessage } from '@/api/ai';
 
-import { useSSE } from 'alova/client';
+import { useRequest, useSSE } from 'alova/client';
 import useScroll from '../../hooks/useScroll';
 import TextArea from 'antd/es/input/TextArea';
 import { SSEHookReadyState } from '../../constants';
 import useGptModel from './hooks/useGptModel';
 import mainStyle from '@/styles/main.module.scss';
 import useCompositionInput from './hooks/useCompositionInput';
+import ConversationOpt from './components/ConversationOpt';
 
 const Conversation: FC = () => {
 	const [inputValue, setInputValue] = useState('');
@@ -23,18 +24,30 @@ const Conversation: FC = () => {
 		currentConversation,
 		setMessageArr,
 		refreshConversationList,
-		messageArr
+		messageArr,
+		createImgMode,
+		setCreateImgMode
 	} = useContext(ConversationContext);
 	const assistantAnswerRef = useRef('');
-	const readyForNewChat = () => {
-		setCurrentConversationKey(undefined);
-		setMessageArr([]);
-	};
+
 	const { selectOption, options, onChange } = useGptModel();
 	const { onMessage, send, close, readyState } = useSSE(chatRequestStream);
-	const loading = useMemo(() => {
+	const {
+		send: createImg,
+		onSuccess: onSuccessCreateImg,
+		loading: loadingCreateImg
+	} = useRequest(chatToCreateImg, {
+		immediate: false
+	});
+	const { send: updateMsg, onSuccess: onSuccessUpdateMsg } = useRequest(updateMessage, {
+		immediate: false
+	});
+	const queryLoading = useMemo(() => {
 		return (readyState as number) !== SSEHookReadyState.CLOSED;
 	}, [readyState]);
+	const loading = useMemo(() => {
+		return queryLoading || loadingCreateImg;
+	}, [loadingCreateImg, queryLoading]);
 	const { scrollToBottom } = useScroll(`.${s.Messages}`);
 	const { handleComposition, isCompositionRef } = useCompositionInput();
 
@@ -66,6 +79,25 @@ const Conversation: FC = () => {
 		scrollToBottom();
 	});
 
+	onSuccessCreateImg(({ data }) => {
+		const { imgList } = data;
+
+		updateMsg({
+			id: messageArr[messageArr.length - 1].id,
+			imgList: JSON.stringify(imgList)
+		});
+	});
+
+	onSuccessUpdateMsg(({ args }) => {
+		setMessageArr([
+			...messageArr.slice(0, -1),
+			{
+				...messageArr[messageArr.length - 1],
+				...args[0]
+			}
+		]);
+	});
+
 	// 询问发出时，创建对话以及创建用户消息和助手消息
 	const submit = async () => {
 		if (!inputValue || loading) {
@@ -89,19 +121,26 @@ const Conversation: FC = () => {
 			content: assistantAnswerRef.current,
 			role: RoleEnum.Assistant,
 			model: selectOption.value,
-			conversationId: conversation.id
+			conversationId: conversation.id,
+			imgList: createImgMode ? '[""]' : '[]'
 		});
 
 		setMessageArr([...messageArr, userMsg, assistantMsg]);
-
-		send({
-			query: inputValue,
-			model: selectOption.value,
-			conversationId: conversation?.id
-		});
-
 		setInputValue('');
 		scrollToBottom();
+
+		if (createImgMode) {
+			createImg({
+				content: inputValue
+			});
+			setCreateImgMode(false);
+		} else {
+			send({
+				query: inputValue,
+				model: selectOption.value,
+				conversationId: conversation?.id
+			});
+		}
 	};
 
 	const textareaPlaceholder = useMemo(() => {
@@ -128,21 +167,13 @@ const Conversation: FC = () => {
 
 	// 请求完成后，更新助手消息
 	useEffect(() => {
-		if (!loading) {
+		if (!queryLoading) {
 			const content = assistantAnswerRef.current || '请求超时,请稍后重试。';
 
 			if (messageArr.length && messageArr[messageArr.length - 1].role === RoleEnum.Assistant) {
-				updateMessage({
+				updateMsg({
 					content,
 					id: messageArr[messageArr.length - 1].id
-				}).then(() => {
-					setMessageArr([
-						...messageArr.slice(0, -1),
-						{
-							...messageArr[messageArr.length - 1],
-							content
-						}
-					]);
 				});
 			}
 
@@ -150,7 +181,7 @@ const Conversation: FC = () => {
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [loading]);
+	}, [queryLoading]);
 
 	// 切换对话，停止先前的消息流
 	useEffect(() => {
@@ -167,19 +198,7 @@ const Conversation: FC = () => {
 	return (
 		<div className={s.Container}>
 			<div className={s.Head}>
-				<Popover content="创建新对话">
-					<Radio.Group value={!currentConversation}>
-						<Radio.Button onClick={readyForNewChat} value={true}>
-							<FormOutlined />
-						</Radio.Button>
-					</Radio.Group>
-				</Popover>
-				<Select
-					value={selectOption.value}
-					style={{ width: 120 }}
-					onChange={onChange}
-					options={options}
-				/>
+				<ConversationOpt selectOption={selectOption} onChange={onChange} options={options} />
 			</div>
 			<div className={`${s.Messages} ${loading ? mainStyle.loadingCursor : ''}`}>
 				<Messages conversation={currentConversation} loading={loading} />

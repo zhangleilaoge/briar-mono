@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
-import { IMessageDTO, RoleEnum } from 'briar-shared';
+import { IMessageDTO, ModelEnum, RoleEnum } from 'briar-shared';
 import OpenAI from 'openai';
 import { map, Subject } from 'rxjs';
 import {
@@ -85,6 +85,18 @@ export class AiService {
         subject.error(err);
       });
     return subject.pipe(map((data: string) => data));
+  }
+
+  @Throttle(THROTTLE_CONFIG)
+  async createImg(query: string, model: ModelEnum) {
+    const response = await this.openai.images.generate({
+      model,
+      prompt: query,
+      n: 1,
+      size: '1024x1024',
+    });
+
+    return response.data.map((data) => data.url);
   }
 
   async getConversationList(userId: number) {

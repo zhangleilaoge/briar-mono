@@ -12,6 +12,7 @@
 	line-height: 22px;
 	gap: 24px;
 	align-items: flex-start;
+
 	p,
 	h1,
 	h2,
@@ -43,7 +44,7 @@
 		margin-block-start: 0.6em;
 	}
 
-	> div {
+	>div {
 		max-width: calc(100% - 78px);
 	}
 
@@ -57,8 +58,7 @@
 	color: $textColor;
 }
 
-.Assistant {
-}
+.Assistant {}
 
 .Content {
 	font-size: 16px;
@@ -91,7 +91,17 @@
 
 .CopyBtn {
 	color: #c8c9cc;
+
 	&:hover {
 		color: #7c8282 !important;
 	}
+}
+
+.Img {
+	max-width: 512px;
+	max-height: 512px;
+}
+
+.HideImg {
+	transform: scale(0)
 }

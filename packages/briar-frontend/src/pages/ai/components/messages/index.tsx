@@ -1,4 +1,4 @@
-import { IConversationDTO, RoleEnum } from 'briar-shared';
+import { IConversationDTO, RoleEnum, safeJsonParse } from 'briar-shared';
 import { FC, useContext, useEffect, useState } from 'react';
 import s from './style.module.scss';
 import { CheckCircleFilled, CopyOutlined } from '@ant-design/icons';
@@ -7,7 +7,7 @@ import Markdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/atom-one-dark.css';
 import { copyToClipboard } from '@/utils/document';
-import { Avatar, Button, message } from 'antd';
+import { Avatar, Button, message, Skeleton } from 'antd';
 import ReactDOM from 'react-dom';
 import ConversationContext from '../../context/conversation';
 import { format } from 'date-fns';
@@ -37,11 +37,29 @@ const CopyBtn = ({ content }: { content: string }) => {
 	);
 };
 
+const Img = ({ url }: { url: string }) => {
+	const [loadStatus, setLoadStatus] = useState(false);
+	return (
+		<>
+			{!loadStatus && <Skeleton.Image active key={url} className={s.Img} />}
+			<img
+				src={url}
+				alt="img"
+				className={`${s.Img} ${loadStatus ? '' : s.HideImg}`}
+				onLoad={() => {
+					setLoadStatus(true);
+				}}
+			/>
+		</>
+	);
+};
+
 const Message: FC<{
 	content: string;
 	role: RoleEnum;
 	date: number;
-}> = ({ content, role, date }) => {
+	imgList?: string[];
+}> = ({ content, role, date, imgList }) => {
 	const isUser = role === RoleEnum.User;
 
 	// 复制代码功能
@@ -83,6 +101,9 @@ const Message: FC<{
 					) : (
 						<Markdown rehypePlugins={[rehypeHighlight]}>{content || ' '}</Markdown>
 					)}
+					{imgList?.map((url) => {
+						return <Img url={url} key={url} />;
+					})}
 				</div>
 			</div>
 		</div>
@@ -99,12 +120,14 @@ const Messages: FC<{
 	return (
 		<>
 			{messageArr.map((message, index) => {
+				const imgList = message.imgList ? safeJsonParse(message.imgList) : [];
 				if (index === messageArr.length - 1 && loading && !message.content) {
 					return (
 						<Message
 							key={message.id}
 							content={desc}
 							role={message.role}
+							imgList={imgList}
 							date={new Date(message.createdAt).getTime()}
 						/>
 					);
@@ -114,6 +137,7 @@ const Messages: FC<{
 						key={message.id}
 						content={message.content}
 						role={message.role}
+						imgList={imgList}
 						date={new Date(message.createdAt).getTime()}
 					/>
 				);
