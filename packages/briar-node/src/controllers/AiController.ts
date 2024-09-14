@@ -13,13 +13,16 @@ import { ConversationDalService } from '@/services/dal/ConversationDalService';
 import { MessageDalService } from '@/services/dal/MessageDalService';
 import { Public } from '@/decorators/Public';
 import { ICreateImgResponse } from 'briar-shared';
+import { CosService } from '@/services/CosService';
+import { getFileExtension } from 'briar-shared';
+
 @Controller('api/ai')
 export class AppController {
-  CosService: any;
   constructor(
     private readonly AiService: AiService,
     private readonly ConversationDalService: ConversationDalService,
     private readonly MessageDalService: MessageDalService,
+    private readonly CosService: CosService,
   ) {}
 
   // @Post('chatRequest')
@@ -63,13 +66,20 @@ export class AppController {
     @Body('content') content: string,
     @Request() req,
   ): Promise<ICreateImgResponse> {
-    const imgList = await this.AiService.createImg(content, ModelEnum.DallE3);
-    for (const img of imgList) {
-      await this.CosService.uploadImg2Cos(
-        `runtime-images/${req.user.sub}-${Date.now()}`,
-        img,
-      );
-    }
+    const tempImgList = await this.AiService.createImg(
+      content,
+      ModelEnum.DallE2,
+    );
+
+    const imgList: string[] = await Promise.all(
+      tempImgList.map(async (img) => {
+        const imgUrl = (await this.CosService.uploadImg2Cos(
+          `runtime-images/${req.user.sub}-${Date.now()}.${getFileExtension(img)}`,
+          img,
+        )) as string;
+        return imgUrl;
+      }),
+    );
 
     return {
       imgList,

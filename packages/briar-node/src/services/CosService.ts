@@ -1,9 +1,10 @@
-import COS from 'cos-nodejs-sdk-v5';
+import * as COS from 'cos-nodejs-sdk-v5';
 import axios from 'axios';
+import 'dotenv/config';
 
 const cos = new COS({
-  SecretId: process.env.SecretId,
-  SecretKey: process.env.SecretKey,
+  SecretId: process.env.BRIAR_TX_SEC_ID,
+  SecretKey: process.env.BRIAR_TX_SEC_KEY,
 });
 
 import { Injectable } from '@nestjs/common';
@@ -22,8 +23,8 @@ export class CosService {
 
       cos.putObject(
         {
-          Bucket: 'briar-shanghai-1309736035',
-          Region: 'ap-shanghai',
+          Bucket: process.env.BRIAR_TX_BUCKET_NAME,
+          Region: process.env.BRIAR_TX_BUCKET_REGION,
           Key: key,
           StorageClass: 'STANDARD',
           Body: imgData.data, // 被上传的文件对象
@@ -32,7 +33,7 @@ export class CosService {
           if (err) {
             reject(err);
           } else {
-            resolve(data.Location);
+            resolve('https://' + data.Location);
           }
         },
       );
