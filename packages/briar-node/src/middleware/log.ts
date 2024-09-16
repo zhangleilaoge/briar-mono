@@ -1,15 +1,15 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { FastifyRequest, FastifyReply } from 'fastify';
 
 @Injectable()
 export class LogMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction) {
-    const { method, url, query, body } = req;
+  use(req: FastifyRequest, res: FastifyReply['raw'], next: () => void) {
     const start = Date.now();
 
     res.on('finish', () => {
+      const { method, originalUrl, query, body } = req;
       const duration = Date.now() - start;
-      let logMessage = `[${method}] ${url} - ${res.statusCode} - ${duration}ms`;
+      let logMessage = `[${method}] ${originalUrl} - ${res.statusCode} - ${duration}ms`;
       if (method === 'GET' && Object.keys(query).length > 0) {
         logMessage += ` - Query: ${JSON.stringify(query)}`;
       }
@@ -19,6 +19,10 @@ export class LogMiddleware implements NestMiddleware {
         logMessage += ` - Body: ${body}`;
       }
       console.log(logMessage);
+    });
+
+    res.on('error', (err) => {
+      console.error('Response error:', err);
     });
 
     next();

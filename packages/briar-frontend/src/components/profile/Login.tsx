@@ -70,7 +70,13 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn }) => {
 			<h1 className={s.SignText}>Sign in to Briar</h1>
 			<Form
 				onFinish={onFinish}
-				style={{ minWidth: 280, display: 'flex', gap: 8, flexDirection: 'column' }}
+				style={{
+					width: 472,
+					display: 'flex',
+					gap: 8,
+					flexDirection: 'column',
+					alignItems: 'center'
+				}}
 				layout="vertical"
 			>
 				<Form.Item<FieldType>
@@ -78,6 +84,7 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn }) => {
 					name="username"
 					rules={[{ required: true }]}
 					validateTrigger="onBlur"
+					style={{ width: 280 }}
 				>
 					<Input />
 				</Form.Item>
@@ -86,18 +93,19 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn }) => {
 					name="password"
 					rules={[{ required: true }]}
 					validateTrigger="onBlur"
+					style={{ width: 280 }}
 				>
 					<Input.Password />
 				</Form.Item>
-				<Form.Item
-					style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: 12 }}
-				>
+				<Form.Item style={{ width: 280, display: 'flex', justifyContent: 'center', marginTop: 12 }}>
 					<Button htmlType="submit">Sign in</Button>
 				</Form.Item>
-				<Divider>Additional Login Options</Divider>
-				<Button onClick={() => login()} type="primary" icon={<GoogleOutlined />}>
-					Sign in with Google
-				</Button>
+				<Divider plain>Additional Login Options</Divider>
+				<Form.Item style={{ width: 280, display: 'flex', justifyContent: 'center', marginTop: 12 }}>
+					<Button onClick={() => login()} type="primary" icon={<GoogleOutlined />}>
+						Sign in with Google
+					</Button>
+				</Form.Item>
 			</Form>
 		</>
 	);

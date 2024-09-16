@@ -8,7 +8,7 @@ import s from './style.module.scss';
 import { LocalStorageKey } from '@/constants/env';
 
 export type FieldType = {
-	username?: string;
+	username: string;
 	password?: string;
 	passwordCheck?: string;
 };
@@ -39,8 +39,14 @@ const Register: React.FC<IRegisterProps> = ({ finishSignUp }) => {
 		finishSignUp();
 	};
 
-	const checkUsername = async (username: string) => {
-		return !!(await checkUsernameApi(username));
+	const beforeCheck: FormProps<FieldType>['onFinish'] = async (val: FieldType) => {
+		const { username } = val;
+		if (!(await checkUsernameApi(username))) {
+			message.error('username already exists');
+			return;
+		}
+
+		onFinish(val);
 	};
 
 	return (
@@ -51,7 +57,7 @@ const Register: React.FC<IRegisterProps> = ({ finishSignUp }) => {
 			/>
 			<h1 className={s.SignText}>Sign up for Briar</h1>
 			<Form
-				onFinish={onFinish}
+				onFinish={beforeCheck}
 				style={{ minWidth: 280, display: 'flex', gap: 8, flexDirection: 'column' }}
 				layout="vertical"
 			>
@@ -62,15 +68,7 @@ const Register: React.FC<IRegisterProps> = ({ finishSignUp }) => {
 						{ required: true },
 						{ min: 4, message: 'username must be at least 4 characters' },
 						{ max: 16, message: 'username must be at most 16 characters' },
-						{ pattern: /^[a-zA-Z0-9_]+$/, message: 'username must be alphanumeric' },
-						{
-							async validator(_, value) {
-								if (!(await checkUsername(value))) {
-									return Promise.resolve();
-								}
-								return Promise.reject(new Error('username already exists'));
-							}
-						}
+						{ pattern: /^[a-zA-Z0-9_]+$/, message: 'username must be alphanumeric' }
 					]}
 					validateTrigger="onBlur"
 				>
