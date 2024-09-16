@@ -15,6 +15,7 @@ import useGptModel from './hooks/useGptModel';
 import mainStyle from '@/styles/main.module.scss';
 import useCompositionInput from './hooks/useCompositionInput';
 import ConversationOpt from './components/ConversationOpt';
+import { errorNotify } from '@/utils/notify';
 
 const Conversation: FC = () => {
 	const [inputValue, setInputValue] = useState('');
@@ -35,9 +36,11 @@ const Conversation: FC = () => {
 	const {
 		send: createImg,
 		onSuccess: onSuccessCreateImg,
+		onError: onErrorCreateImg,
 		loading: loadingCreateImg
 	} = useRequest(chatToCreateImg, {
-		immediate: false
+		immediate: false,
+		timeout: 60000
 	});
 	const { send: updateMsg, onSuccess: onSuccessUpdateMsg } = useRequest(updateMessage, {
 		immediate: false
@@ -85,6 +88,12 @@ const Conversation: FC = () => {
 		updateMsg({
 			id: messageArr[messageArr.length - 1].id,
 			imgList: JSON.stringify(imgList)
+		});
+	});
+
+	onErrorCreateImg((e) => {
+		errorNotify(e, {
+			prefix: '图片生成错误'
 		});
 	});
 

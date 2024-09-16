@@ -1,9 +1,16 @@
 import { message } from 'antd';
 
-export const errorNotify = (error: any) => {
+export const errorNotify = (
+	error: any,
+	option: {
+		prefix?: string;
+	} = {
+		prefix: ''
+	}
+) => {
 	const errStr = error?.message || error?.msg || error?.error || JSON.stringify(error);
 
 	if (['"SSE Error"'].includes(errStr)) return;
 
-	message.error(errStr);
+	message.error(option?.prefix + errStr);
 };
