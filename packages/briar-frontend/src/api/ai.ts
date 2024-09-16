@@ -31,4 +31,6 @@ export const updateMessage = (message: Partial<IMessageDTO>) =>
 	alovaInstance.Post(`/ai/updateMessage`, message);
 
 export const chatToCreateImg = (params: { content: string }) =>
-	alovaInstance.Post<ICreateImgResponse>(`/ai/chatToCreateImg`, params);
+	alovaInstance.Post<ICreateImgResponse>(`/ai/chatToCreateImg`, params, {
+		timeout: 60000
+	});

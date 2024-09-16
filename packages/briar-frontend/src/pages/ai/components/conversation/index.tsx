@@ -39,8 +39,7 @@ const Conversation: FC = () => {
 		onError: onErrorCreateImg,
 		loading: loadingCreateImg
 	} = useRequest(chatToCreateImg, {
-		immediate: false,
-		timeout: 60000
+		immediate: false
 	});
 	const { send: updateMsg, onSuccess: onSuccessUpdateMsg } = useRequest(updateMessage, {
 		immediate: false
