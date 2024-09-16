@@ -6,4 +6,12 @@ export type IUserInfoDTO = IModel<{
 	email?: string;
 	googleId?: string;
 	isAuthenticated?: boolean;
+	username?: string;
+	password?: string;
 }>;
+
+// ====================== response below ========================
+export interface IUserAccess {
+	userInfo: IUserInfoDTO;
+	accessToken: string;
+}

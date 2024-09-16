@@ -12,15 +12,16 @@ const useLogin = () => {
 	});
 
 	const init = async () => {
-		const userInfo = await getUserInfo();
+		const { accessToken, userInfo } = await getUserInfo();
 		if (userInfo.id) {
+			localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
 			setUserInfo(userInfo);
 			return;
 		}
 
-		const { userInfo: newUserInfo, accessToken } = await createAnonymousUserApi();
+		const { userInfo: newUserInfo, accessToken: newAccessToken } = await createAnonymousUserApi();
 
-		localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
+		localStorage.setItem(LocalStorageKey.AccessToken, newAccessToken);
 		setUserInfo(newUserInfo);
 	};
 

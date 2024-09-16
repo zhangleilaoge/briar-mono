@@ -15,6 +15,7 @@ import { Public } from '@/decorators/Public';
 import { ICreateImgResponse } from 'briar-shared';
 import { CosService } from '@/services/CosService';
 import { getFileExtension } from 'briar-shared';
+import { UserService } from '@/services/UserService';
 
 @Controller('api/ai')
 export class AppController {
@@ -70,11 +71,12 @@ export class AppController {
       content,
       ModelEnum.DallE2,
     );
+    const userId = UserService.getUserIdByJwt(req);
 
     const imgList: string[] = await Promise.all(
       tempImgList.map(async (img) => {
         const imgUrl = (await this.CosService.uploadImg2Cos(
-          `runtime-images/${req.user.sub}-${Date.now()}.${getFileExtension(img)}`,
+          `runtime-images/${userId}-${Date.now()}.${getFileExtension(img)}`,
           img,
         )) as string;
         return imgUrl;
@@ -90,7 +92,8 @@ export class AppController {
 
   @Get('getConversationList')
   async getConversationList(@Request() req) {
-    return this.AiService.getConversationList(req.user.sub || 0);
+    const userId = UserService.getUserIdByJwt(req);
+    return this.AiService.getConversationList(userId || 0);
   }
 
   @Get('findMessagesByConversationId')
@@ -102,12 +105,13 @@ export class AppController {
 
   @Post('createConversation')
   async createConversation(@Body('title') title: string, @Request() req) {
+    const userId = UserService.getUserIdByJwt(req);
     const data = await this.ConversationDalService.create({
-      userId: req.user.sub,
+      userId,
       title,
     });
 
-    return data.toJSON();
+    return data;
   }
 
   @Post('deleteConversation')

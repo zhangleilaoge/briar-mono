@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserModel } from '@/model/UserModel';
 import { Op } from 'sequelize';
+import { SafeReturn } from '@/guards/auth';
+
+const SENSITIVE_FIELDS = ['password', 'isAuthenticated'];
 
 @Injectable()
 export class UserDalService {
@@ -10,32 +13,45 @@ export class UserDalService {
     private readonly userModel: typeof UserModel,
   ) {}
 
-  async create({
-    name = '匿名用户',
-    profileImg = '',
-    email = '',
-    googleId = '',
-  }): Promise<UserModel> {
-    return await this.userModel.create({
-      name,
-      profileImg,
-      email,
-      googleId,
-    });
+  @SafeReturn(SENSITIVE_FIELDS)
+  async create({ name = '', profileImg = '', email = '', googleId = '' }) {
+    return (
+      await this.userModel.create({
+        name,
+        profileImg,
+        email,
+        googleId,
+      })
+    ).dataValues;
   }
 
   async delete(id: number) {
     return await this.userModel.destroy({ where: { id } });
   }
 
-  async findOne({ userId, googleId }: { userId?: number; googleId?: string }) {
+  @SafeReturn(SENSITIVE_FIELDS)
+  async getUser({
+    userId,
+    googleId,
+    password,
+    username,
+  }: {
+    userId?: number;
+    googleId?: string;
+    password?: string;
+    username?: string;
+  }) {
     const orMatch = [];
     if (userId) orMatch.push({ id: userId });
     if (googleId) orMatch.push({ googleId });
+    if (password) orMatch.push({ password });
+    if (username) orMatch.push({ username });
 
-    return await this.userModel.findOne({
-      where: { [Op.or]: orMatch },
-    });
+    return (
+      await this.userModel.findOne({
+        where: { [Op.or]: orMatch },
+      })
+    )?.dataValues;
   }
 
   async update(data: Partial<UserModel>) {

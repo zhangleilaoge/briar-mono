@@ -29,5 +29,5 @@
 			// "briar-shared": ["../briar-shared/src/index.ts"]
 		}
 	},
-	"include": ["src"]
+	"include": ["src", "declare"]
 }

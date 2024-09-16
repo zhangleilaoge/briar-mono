@@ -1,44 +1,40 @@
 import CommonContext from '@/context/common';
-import { LoginOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons';
+import { LoginOutlined, LogoutOutlined, SignatureOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, message, Modal } from 'antd';
 import { useContext, useMemo, useState } from 'react';
-import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
-import { clientId } from '@/constants/user';
 import s from './style.module.scss';
-import { errorNotify } from '@/utils/notify';
 import { ItemType } from 'antd/es/menu/interface';
-import { authenticateUserByGoogle } from '@/api/user';
-import { LocalStorageKey } from '@/constants/env';
+import Register from './Register';
+import Login from './Login';
+import { clientId } from '@/constants/user';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 enum OperationEnum {
 	Login = 'login',
-	Logout = 'logout'
+	Logout = 'logout',
+	Register = 'register'
 }
 
 const Profile = () => {
 	const { userInfo, logout } = useContext(CommonContext);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-
-	const onSuccess = async (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-		const { tokenId } = res as GoogleLoginResponse;
-		const accessToken = await authenticateUserByGoogle(tokenId);
-
-		console.log('google userInfo: ', res);
-
-		if (accessToken) {
-			message.success('登录成功，页面即将刷新。');
-			localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
-			setTimeout(() => {
-				window.location.reload();
-			}, 1000);
-		} else errorNotify('登录失败。');
-	};
-	const onFailure = (err: Error) => {
-		errorNotify(err);
-	};
+	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
 
 	const dropdownItems = useMemo(() => {
 		return [
+			!userInfo?.isAuthenticated && {
+				key: OperationEnum.Register,
+				icon: <SignatureOutlined />,
+				label: (
+					<a
+						onClick={async () => {
+							setIsRegisterModalOpen(true);
+						}}
+					>
+						sign up
+					</a>
+				)
+			},
 			!userInfo?.isAuthenticated && {
 				key: OperationEnum.Login,
 				icon: <LoginOutlined />,
@@ -69,10 +65,20 @@ const Profile = () => {
 		].filter(Boolean) as ItemType[];
 	}, [logout, userInfo?.isAuthenticated]);
 
+	const displayName = useMemo(() => {
+		return (userInfo.name || '')?.slice(0, 5);
+	}, [userInfo.name]);
+
 	return (
 		<>
 			<Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
-				<Avatar size={40} src={userInfo.profileImg || ''} icon={<UserOutlined />} />
+				<Avatar
+					size={40}
+					src={userInfo.profileImg || ''}
+					icon={displayName || userInfo.profileImg ? null : <UserOutlined />}
+				>
+					{displayName}
+				</Avatar>
 			</Dropdown>
 			<Modal
 				open={isModalOpen}
@@ -83,14 +89,21 @@ const Profile = () => {
 				}}
 			>
 				<div className={s.ModalContent}>
-					<GoogleLogin
-						clientId={clientId}
-						buttonText="Sign in with Google"
-						onSuccess={onSuccess}
-						onFailure={onFailure}
-						cookiePolicy={'single_host_origin'}
-						isSignedIn={true}
-					/>
+					<GoogleOAuthProvider clientId={clientId}>
+						<Login finishSignIn={() => setIsModalOpen(false)} />
+					</GoogleOAuthProvider>
+				</div>
+			</Modal>
+			<Modal
+				open={isRegisterModalOpen}
+				footer={null}
+				closable={false}
+				onCancel={() => {
+					setIsRegisterModalOpen(false);
+				}}
+			>
+				<div className={s.ModalContent}>
+					<Register finishSignUp={() => setIsRegisterModalOpen(false)} />
 				</div>
 			</Modal>
 		</>

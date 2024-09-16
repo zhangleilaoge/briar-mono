@@ -21,7 +21,7 @@ export class ConversationDalService {
       userId,
     });
 
-    return conversation;
+    return conversation.dataValues;
   }
 
   @FollowDelete('conversationId')
@@ -36,14 +36,16 @@ export class ConversationDalService {
   }
 
   async getConversationList(userId: number, limit = 100) {
-    return await this.conversationModel.findAll({
-      where: { userId },
-      limit,
-      order: [
-        ['marked', 'DESC'],
-        ['updatedAt', 'DESC'],
-      ],
-    });
+    return (
+      await this.conversationModel.findAll({
+        where: { userId },
+        limit,
+        order: [
+          ['marked', 'DESC'],
+          ['updatedAt', 'DESC'],
+        ],
+      })
+    ).map((c) => c.dataValues);
   }
 
   async update(id: number, conversation: Partial<IConversationDTO>) {

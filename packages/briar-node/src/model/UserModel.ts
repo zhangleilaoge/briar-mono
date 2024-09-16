@@ -6,6 +6,12 @@ export class UserModel extends Model<UserModel> {
   name?: string;
 
   @Column
+  username?: string;
+
+  @Column
+  password?: string;
+
+  @Column
   profileImg?: string;
 
   @Column

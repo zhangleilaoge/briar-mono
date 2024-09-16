@@ -100,9 +100,8 @@ export class AiService {
   }
 
   async getConversationList(userId: number) {
-    const conversationList = (
-      await this.conversationDalService.getConversationList(userId)
-    ).map((conversation) => conversation.toJSON());
+    const conversationList =
+      await this.conversationDalService.getConversationList(userId);
     return conversationList;
   }
 

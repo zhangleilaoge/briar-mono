@@ -24,7 +24,7 @@ export class MessageDalService {
   }): Promise<MessageModel> {
     return (
       await this.messageModel.create({ content, role, conversationId, model })
-    ).toJSON();
+    ).dataValues;
   }
 
   async update(data: Partial<MessageModel>) {
@@ -41,7 +41,7 @@ export class MessageDalService {
           ['id', 'DESC'],
         ],
       })
-      .then((messages) => messages.reverse().map((msg) => msg.toJSON()));
+      .then((messages) => messages.reverse().map((msg) => msg.dataValues));
   }
 }
 

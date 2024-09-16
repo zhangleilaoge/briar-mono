@@ -1,40 +1,62 @@
 import { Injectable } from '@nestjs/common';
 import { UserDalService } from './dal/UserDalService';
-import { OAuth2Client } from 'google-auth-library';
-import { CLIENT_ID } from 'briar-shared';
+import { IUserInfoDTO } from 'briar-shared';
+import axios from 'axios';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userDalService: UserDalService) {}
+  constructor(
+    private readonly userDalService: UserDalService,
+    private jwtService: JwtService,
+  ) {}
 
-  async createAnonymousUser() {
-    const user = (await this.userDalService.create({})).toJSON();
-    return user;
+  static getUserIdByJwt(query: {
+    [key: string]: any;
+    user?: {
+      sub: number;
+    };
+  }) {
+    return query.user?.sub;
   }
 
-  async getUserInfo(userId: number) {
+  async getUserByJwt(query: {
+    [key: string]: any;
+    user?: {
+      sub: number;
+    };
+  }) {
+    const userId = await UserService.getUserIdByJwt(query);
+
     try {
-      const user = (await this.userDalService.findOne({ userId }))?.toJSON();
-      return user;
+      const user = await this.userDalService.getUser({ userId });
+      return user as IUserInfoDTO;
     } catch (error) {
       console.error(error);
       return null;
     }
   }
 
-  async authenticateUserByGoogle(tokenId: string, userId: number) {
-    const client = new OAuth2Client();
-    const ticket = await client.verifyIdToken({
-      idToken: tokenId,
-      audience: CLIENT_ID,
+  async getLoginUser(username: string, password: string) {
+    const user = await this.userDalService.getUser({ username, password });
+    return user as IUserInfoDTO;
+  }
+
+  async createAnonymousUser() {
+    const user = await this.userDalService.create({});
+    return user as IUserInfoDTO;
+  }
+
+  async authenticateUserByGoogle(googleAccessToken: string, userId: number) {
+    const userInfo: any = await axios({
+      method: 'get',
+      url: `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${googleAccessToken}`,
+      responseType: 'stream',
     });
-    const payload = ticket.getPayload();
 
-    if (!payload) return false;
+    if (!userInfo) return false;
 
-    const user = (
-      await this.userDalService.findOne({ googleId: payload.sub })
-    )?.toJSON();
+    const user = await this.userDalService.getUser({ googleId: userInfo.sub });
 
     // 1. google 账号已绑定账号 => 返回绑定的账号
     if (user?.id) {
@@ -45,11 +67,29 @@ export class UserService {
     await this.userDalService.update({
       isAuthenticated: true,
       id: userId,
-      name: payload.name,
-      profileImg: payload.picture,
-      email: payload.email,
-      googleId: payload.sub,
+      name: userInfo.name,
+      profileImg: userInfo.picture,
+      email: userInfo.email,
+      googleId: userInfo.sub,
     });
     return userId;
+  }
+
+  async checkUsername(username: string) {
+    return !!(await this.userDalService.getUser({ username }))?.id;
+  }
+
+  async signUp(userInfo: Partial<IUserInfoDTO>) {
+    return this.userDalService.update({
+      ...userInfo,
+      isAuthenticated: true,
+    });
+  }
+
+  async createJwt(userId: number) {
+    const accessToken = await this.jwtService.signAsync({
+      sub: userId,
+    });
+    return accessToken;
   }
 }
