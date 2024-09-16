@@ -92,7 +92,7 @@ const Conversation: FC = () => {
 
 	onErrorCreateImg((e) => {
 		errorNotify(e, {
-			prefix: '图片生成错误'
+			prefix: '图片生成错误：'
 		});
 	});
 

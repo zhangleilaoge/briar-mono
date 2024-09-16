@@ -6,6 +6,7 @@ import {
   Query,
   Sse,
   Request,
+  UseGuards,
 } from '@nestjs/common';
 import { AiService } from '../services/AiService';
 import { IConversationDTO, ModelEnum, RoleEnum } from 'briar-shared';
@@ -16,6 +17,8 @@ import { ICreateImgResponse } from 'briar-shared';
 import { CosService } from '@/services/CosService';
 import { getFileExtension } from 'briar-shared';
 import { UserService } from '@/services/UserService';
+import { RateLimiterGuard } from '@/guards/rate-limit';
+import { RateLimited } from '@/decorators/RateLimit';
 
 @Controller('api/ai')
 export class AppController {
@@ -38,7 +41,6 @@ export class AppController {
   //   return data;
   // }
 
-  // sse 貌似不支持自定义 header，只能放行了
   @Public()
   @Get('chatRequestStream')
   @Sse('sse')
@@ -63,6 +65,8 @@ export class AppController {
   }
 
   @Post('chatToCreateImg')
+  @UseGuards(RateLimiterGuard)
+  @RateLimited({ points: 10, duration: 60 * 60 * 24, key: 'chatRequestStream' })
   async chatToCreateImg(
     @Body('content') content: string,
     @Request() req,

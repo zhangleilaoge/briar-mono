@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { UserModel } from '@/model/UserModel';
 import { Op } from 'sequelize';
-import { SafeReturn } from '@/guards/auth';
+import { SafeReturn } from '@/decorators/SafeReturn';
 
 const SENSITIVE_FIELDS = ['password'];
 

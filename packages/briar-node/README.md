@@ -22,6 +22,30 @@ briar-node
 └── tsconfig.json
 ```
 
+### 通用能力
+
+#### 1. ip 限流
+
+```typescript
+  @Post('fn')
+  @UseGuards(fn)
+  @RateLimited({ points: 10, duration: 60 * 60 * 24, key: 'fn' }) // 24 小时内最多调用 10次
+  async fn(
+  ) {
+    ...
+  }
+```
+
+#### 2. jwt 解析
+
+```typescript
+  @Get('fn')
+  async fn(@Request() req) {
+    const data = await this.UserService.getUserByJwt(req);
+    ...
+  }
+```
+
 ### 部署
 
 部署之前，在根目录请参照如下代码添加 .env 文件：
