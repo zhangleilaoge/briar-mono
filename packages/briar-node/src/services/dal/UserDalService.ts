@@ -4,7 +4,7 @@ import { UserModel } from '@/model/UserModel';
 import { Op } from 'sequelize';
 import { SafeReturn } from '@/guards/auth';
 
-const SENSITIVE_FIELDS = ['password', 'isAuthenticated'];
+const SENSITIVE_FIELDS = ['password'];
 
 @Injectable()
 export class UserDalService {

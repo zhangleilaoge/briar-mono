@@ -44,7 +44,7 @@ const Profile = () => {
 							setIsModalOpen(true);
 						}}
 					>
-						login
+						sign in
 					</a>
 				)
 			},
