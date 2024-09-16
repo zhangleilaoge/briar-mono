@@ -4,6 +4,7 @@ zhangleilaoge 的个人博客网站，以及工具集。
 
 ### 项目结构
 
+```
 briar-mono
 ├── Dockerfile.nginx // docker 相关
 ├── Dockerfile.node // docker 相关
@@ -17,3 +18,4 @@ briar-mono
 │ ├── briar-shared // briar 公用类型、方法
 │ └── vue-code-converter // vue2 代码转换工具
 ├── scripts
+```

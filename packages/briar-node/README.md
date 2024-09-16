@@ -4,6 +4,7 @@ briar 服务端仓库
 
 ### 项目结构
 
+```
 briar-node
 ├── nest-cli.json // nest 配置
 ├── src
@@ -19,6 +20,7 @@ briar-node
 │ └── utils
 ├── tsconfig.build.json
 └── tsconfig.json
+```
 
 ### 部署
 
