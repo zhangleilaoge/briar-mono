@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import { Injectable } from '@nestjs/common';
 import { IMessageDTO, ModelEnum, RoleEnum } from 'briar-shared';
 import OpenAI from 'openai';
@@ -7,10 +9,11 @@ import {
   MAX_STREAM_TOKEN,
   OPEN_AI_BASE_URL,
 } from 'src/constants/ai';
+
+import { getLimitedMessages } from '@/utils/ai';
+
 import { ConversationDalService } from './dal/ConversationDalService';
 import { MessageDalService } from './dal/MessageDalService';
-import 'dotenv/config';
-import { getLimitedMessages } from '@/utils/ai';
 
 @Injectable()
 export class AiService {
@@ -79,12 +82,16 @@ export class AiService {
   }
 
   async createImg(query: string, model: ModelEnum) {
+    console.log('图片生成开始');
+
     const response = await this.openai.images.generate({
       model,
       prompt: query,
       n: 1,
       size: '1024x1024',
     });
+
+    console.log('图片生成完成：', JSON.stringify(response.data));
 
     return response.data.map((data) => data.url);
   }

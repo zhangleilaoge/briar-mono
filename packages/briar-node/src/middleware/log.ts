@@ -1,5 +1,6 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { format } from 'date-fns';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 @Injectable()
 export class LogMiddleware implements NestMiddleware {
@@ -9,7 +10,7 @@ export class LogMiddleware implements NestMiddleware {
     const log = () => {
       const { method, originalUrl, query, body } = req;
       const duration = Date.now() - start;
-      let logMessage = `[${method}] ${originalUrl} - ${res.statusCode} - ${duration}ms`;
+      let logMessage = `${format(Date.now(), 'yyyy-MM-dd HH:mm:ss')} [${method}] ${originalUrl} - ${res.statusCode} - ${duration}ms`;
       if (method === 'GET' && Object.keys(query).length > 0) {
         logMessage += ` - Query: ${JSON.stringify(query)}`;
       }
