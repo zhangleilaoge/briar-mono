@@ -1,15 +1,16 @@
-import { Routes } from 'react-router-dom';
 import { Layout, Menu, theme } from 'antd';
-import mainStyle from '@/styles/main.module.scss';
 import { Content } from 'antd/es/layout/layout';
+import Sider from 'antd/es/layout/Sider';
+import { useContext, useMemo } from 'react';
+import { Routes } from 'react-router-dom';
+
 import Footer from '@/components/Footer';
 import { SIDER_MENU_ROUTER_CONFIG, ToolsPathKeyEnum } from '@/constants/router';
-import useLevelPath from '@/hooks/useLevelPath';
-import { findSuperiorRouterConfig, getRoutes } from '@/utils/router';
-import { useContext, useMemo } from 'react';
-import Sider from 'antd/es/layout/Sider';
-import useSider from '@/hooks/useSider';
 import CommonContext from '@/context/common';
+import useLevelPath from '@/hooks/useLevelPath';
+import useSider from '@/hooks/useSider';
+import mainStyle from '@/styles/main.module.scss';
+import { findSuperiorRouterConfig, getRoutes } from '@/utils/router';
 
 function CodeConverter() {
 	const { isCollapsed, setIsCollapsed } = useSider();
