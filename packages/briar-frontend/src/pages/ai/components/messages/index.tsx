@@ -1,16 +1,19 @@
+import 'highlight.js/styles/atom-one-dark.css';
+
+import { CheckCircleFilled, CopyOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Avatar, Button, message, Skeleton, Tooltip } from 'antd';
 import { IConversationDTO, RoleEnum, safeJsonParse } from 'briar-shared';
+import { format } from 'date-fns';
 import { FC, useContext, useEffect, useState } from 'react';
-import s from './style.module.scss';
-import { CheckCircleFilled, CopyOutlined } from '@ant-design/icons';
-import useLoadingDesc from './hooks/useLoadingDesc';
+import ReactDOM from 'react-dom';
 import Markdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
-import 'highlight.js/styles/atom-one-dark.css';
+
 import { copyToClipboard } from '@/utils/document';
-import { Avatar, Button, message, Skeleton } from 'antd';
-import ReactDOM from 'react-dom';
+
 import ConversationContext from '../../context/conversation';
-import { format } from 'date-fns';
+import useLoadingDesc from './hooks/useLoadingDesc';
+import s from './style.module.scss';
 
 const BRIAR_PROFILE =
 	'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/121280494_p0_master1200.jpg';
@@ -39,6 +42,12 @@ const CopyBtn = ({ content }: { content: string }) => {
 
 const Img = ({ url }: { url: string }) => {
 	const [loadStatus, setLoadStatus] = useState(false);
+	const [loadError, setLoadError] = useState(false);
+
+	if (loadError) {
+		return <Skeleton.Node>图片已失效</Skeleton.Node>;
+	}
+
 	return (
 		<>
 			{!loadStatus && <Skeleton.Image active key={url} className={s.Img} />}
@@ -48,6 +57,9 @@ const Img = ({ url }: { url: string }) => {
 				className={`${s.Img} ${loadStatus ? '' : s.HideImg}`}
 				onLoad={() => {
 					setLoadStatus(true);
+				}}
+				onError={() => {
+					setLoadError(true);
 				}}
 			/>
 		</>
@@ -95,15 +107,27 @@ const Message: FC<{
 			{!isUser && <Avatar size={54} src={BRIAR_PROFILE} />}
 			<div>
 				<div className={s.Date}>{format(date, 'yyyy-MM-dd HH:mm:ss')}</div>
-				<div className={`${s.Content}`}>
-					{isUser ? (
-						content || ''
-					) : (
-						<Markdown rehypePlugins={[rehypeHighlight]}>{content || ' '}</Markdown>
-					)}
-					{imgList?.map((url) => {
-						return <Img url={url} key={url} />;
-					})}
+				<div className={`${s.ContentArea}`}>
+					<div className={`${s.Content}`}>
+						{isUser ? (
+							content || ''
+						) : (
+							<Markdown rehypePlugins={[rehypeHighlight]}>{content || ' '}</Markdown>
+						)}
+						{imgList?.map((url) => {
+							return <Img url={url} key={url} />;
+						})}
+					</div>
+					{imgList?.length ? (
+						<div className={s.ImgTip}>
+							<Tooltip
+								placement={isUser ? 'left' : 'right'}
+								title="Please ensure that image materials are saved promptly, as generated results will be retained for a maximum of one month."
+							>
+								<InfoCircleOutlined />
+							</Tooltip>
+						</div>
+					) : null}
 				</div>
 			</div>
 		</div>

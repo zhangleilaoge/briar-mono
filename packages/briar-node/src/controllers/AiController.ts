@@ -4,21 +4,23 @@ import {
   Get,
   Post,
   Query,
-  Sse,
   Request,
+  Sse,
   UseGuards,
 } from '@nestjs/common';
-import { AiService } from '../services/AiService';
 import { IConversationDTO, ModelEnum, RoleEnum } from 'briar-shared';
+import { ICreateImgResponse } from 'briar-shared';
+import { getFileExtension } from 'briar-shared';
+
+import { Public } from '@/decorators/Public';
+import { RateLimited } from '@/decorators/RateLimit';
+import { RateLimiterGuard } from '@/guards/rate-limit';
+import { CosService } from '@/services/CosService';
 import { ConversationDalService } from '@/services/dal/ConversationDalService';
 import { MessageDalService } from '@/services/dal/MessageDalService';
-import { Public } from '@/decorators/Public';
-import { ICreateImgResponse } from 'briar-shared';
-import { CosService } from '@/services/CosService';
-import { getFileExtension } from 'briar-shared';
 import { UserService } from '@/services/UserService';
-import { RateLimiterGuard } from '@/guards/rate-limit';
-import { RateLimited } from '@/decorators/RateLimit';
+
+import { AiService } from '../services/AiService';
 
 @Controller('api/ai')
 export class AppController {

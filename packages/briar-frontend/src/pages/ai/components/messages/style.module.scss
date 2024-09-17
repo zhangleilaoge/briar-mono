@@ -44,7 +44,7 @@
 		margin-block-start: 0.6em;
 	}
 
-	>div {
+	> div {
 		max-width: calc(100% - 78px);
 	}
 
@@ -58,24 +58,30 @@
 	color: $textColor;
 }
 
-.Assistant {}
-
 .Content {
 	font-size: 16px;
 	border-radius: 24px;
 	padding: 16px 20px;
-	background-color: #f5f5f5;
+	background-color: $selectedColor;
 	white-space: pre-wrap;
 }
 
-.Assistant .Content {
-	background-color: $selectedColor;
-	color: white;
-	margin-right: 120px;
+.Assistant {
+	.ContentArea {
+		color: white;
+		margin-right: 120px;
+		display: flex;
+	}
 }
 
-.User .Content {
-	margin-left: 120px;
+.User {
+	.ContentArea {
+		margin-left: 120px;
+		display: flex;
+	}
+	.Content {
+		background-color: #f5f5f5;
+	}
 }
 
 .Date {
@@ -102,6 +108,15 @@
 	max-height: 512px;
 }
 
+.ImgTip {
+	color: #c8c9cc;
+	font-size: 16px;
+	display: flex;
+	align-items: center;
+	padding: 16px 8px;
+}
+
 .HideImg {
-	transform: scale(0)
+	transform: scale(0);
+	position: absolute;
 }

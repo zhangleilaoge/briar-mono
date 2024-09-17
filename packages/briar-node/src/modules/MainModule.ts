@@ -1,12 +1,16 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { AiModule } from './AiModule';
-import { UserModule } from './UserModule';
-import { TemplateModule } from './templateModule';
-import { LogMiddleware } from '@/middleware/log';
-import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
 import 'dotenv/config';
+
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
+import { ScheduleModule } from '@nestjs/schedule';
+
 import { AuthGuard } from '@/guards/auth';
+import { LogMiddleware } from '@/middleware/log';
+
+import { AiModule } from './AiModule';
+import { TemplateModule } from './templateModule';
+import { UserModule } from './UserModule';
 @Module({
   imports: [
     AiModule,
@@ -17,6 +21,7 @@ import { AuthGuard } from '@/guards/auth';
       secret: process.env.BRIAR_JWT_SECRET,
       signOptions: { expiresIn: '30 days' },
     }),
+    ScheduleModule.forRoot(),
   ],
   providers: [
     {

@@ -7,7 +7,7 @@ module.exports = {
 	},
 	extends: ['plugin:react/recommended', 'plugin:@typescript-eslint/recommended'],
 	parser: '@typescript-eslint/parser',
-	plugins: ['@typescript-eslint', 'react-hooks'],
+	plugins: ['@typescript-eslint', 'react-hooks', 'simple-import-sort'],
 	parserOptions: {
 		ecmaVersion: 'latest', // 指定ECMAScript 语法为最新
 		sourceType: 'module', // 指定代码为 ECMAScript 模块
@@ -40,6 +40,8 @@ module.exports = {
 				varsIgnorePattern: '^_', // 忽略以 _ 开头的变量
 				caughtErrorsIgnorePattern: '^_'
 			}
-		]
+		],
+		'simple-import-sort/imports': 'error',
+		'simple-import-sort/exports': 'error'
 	}
 };
