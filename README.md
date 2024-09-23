@@ -19,3 +19,7 @@ briar-mono
 │ └── vue-code-converter // vue2 代码转换工具
 ├── scripts
 ```
+
+### 部署
+
+1. 在 ./assets/ssl 目录添加 ssl 相关的 .crt 和 key
