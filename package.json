@@ -4,6 +4,7 @@
 	"description": "briar-mono仓库",
 	"main": "index.js",
 	"scripts": {
+		"init": "sh ./scripts/assets-init.sh",
 		"bootstrap": "lerna bootstrap",
 		"publish": "lerna publish",
 		"dev": "lerna run dev --parallel",

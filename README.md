@@ -20,6 +20,19 @@ briar-mono
 ├── scripts
 ```
 
+### 初始化
+
+```
+# 更新包依赖
+pnpm run install
+
+# 更新子仓库
+git submodule update --init --recursive
+
+# 初始化配置
+pnpm run init
+```
+
 ### 部署
 
 1. 在 ./assets/ssl 目录添加 ssl 相关的 .crt 和 key

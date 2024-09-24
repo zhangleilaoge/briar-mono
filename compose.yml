@@ -9,6 +9,7 @@ services:
       - briar-static:/briar-mono/packages/briar-frontend/dist
     ports:
       - '8922:8922'
+    command: sh -c "./scripts/assets-init.sh"
   briar-nginx:
     image: zhangleilaoge/briar-nginx
     build:
