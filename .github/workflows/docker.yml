@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          submodules: true # 这将自动更新子模块
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -24,10 +26,7 @@ jobs:
 
       - name: Update submodule
         run: |
-          git config --global user.name ${{ secrets.DOCKER_USERNAME }}
-          git submodule update  --init --recursive --remote -f
-        env:
-          GITHUB_TOKEN: ${{ secrets.DOCKER_GITHUB_TOKEN }}
+          sh ./scripts/assets-init.sh
 
       - name: Prune Docker system
         run: |
