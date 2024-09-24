@@ -9,7 +9,10 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# 2. Docker run
+# 2. Init project
+sh ./scripts/assets-init.sh
+
+# 3. Docker run
 echo "Trying to run docker..."
 sudo docker stop $(sudo docker ps -aq)
 sudo docker rm $(sudo docker ps -a -q)

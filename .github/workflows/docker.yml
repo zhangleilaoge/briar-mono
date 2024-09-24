@@ -26,6 +26,10 @@ jobs:
         run: |
           docker system prune -a -f
 
+      - name: project init
+        run: |
+          sh ./scripts/assets-init.sh
+
       - name: Build and run using Docker Compose
         run: |
           docker compose build
