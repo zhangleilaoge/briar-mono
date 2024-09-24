@@ -3,9 +3,37 @@ import react from '@vitejs/plugin-react-swc';
 import viteCompression from 'vite-plugin-compression';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 import externalGlobals from 'rollup-plugin-external-globals';
+import { ViteEjsPlugin } from 'vite-plugin-ejs';
 
-const config = () => {
-	// const isProd = mode === "production"
+const external = [
+	'typescript',
+	'prettier',
+	'prettier/parser-babel',
+	'prettier/parser-postcss',
+	'prettier/parser-typescript',
+	'prettier/parser-html'
+];
+
+const externalPlugin = externalGlobals({
+	typescript: 'ts',
+	prettier: 'prettier',
+	'prettier/parser-babel': 'prettierPlugins.babel',
+	'prettier/parser-postcss': 'prettierPlugins.postcss',
+	'prettier/parser-typescript': 'prettierPlugins.typescript',
+	'prettier/parser-html': 'prettierPlugins.html'
+});
+
+const externalOutputGlobals = {
+	typescript: 'ts',
+	prettier: 'prettier',
+	'prettier/parser-babel': 'prettierPlugins.babel',
+	'prettier/parser-postcss': 'prettierPlugins.postcss',
+	'prettier/parser-typescript': 'prettierPlugins.typescript',
+	'prettier/parser-html': 'prettierPlugins.html'
+};
+
+const config = ({ mode }: { mode: string }) => {
+	const quick = mode === 'quick';
 
 	return defineConfig({
 		plugins: [
@@ -18,13 +46,10 @@ const config = () => {
 				customSplitting: {
 					typescript: ['typescript']
 				}
+			}),
+			ViteEjsPlugin({
+				quick
 			})
-			// visualizer({
-			//   open: true, // 注意这里要设置为true，否则无效，如果存在本地服务端口，将在打包后自动展示
-			//   gzipSize: true,
-			//   brotliSize: true,
-			//   filename: "./dist/stats.html",
-			// }),
 		],
 		build: {
 			minify: 'terser',
@@ -34,47 +59,18 @@ const config = () => {
 				}
 			},
 			rollupOptions: {
-				external: [
-					'typescript',
-					'prettier',
-					'prettier/parser-babel',
-					'prettier/parser-postcss',
-					'prettier/parser-typescript',
-					'prettier/parser-html'
-				],
-				plugins: [
-					externalGlobals({
-						typescript: 'ts',
-						prettier: 'prettier',
-						'prettier/parser-babel': 'prettierPlugins.babel',
-						'prettier/parser-postcss': 'prettierPlugins.postcss',
-						'prettier/parser-typescript': 'prettierPlugins.typescript',
-						'prettier/parser-html': 'prettierPlugins.html'
-					})
-				],
+				external: quick ? external : [],
+				plugins: quick ? [externalPlugin] : [],
 				output: {
-					globals: {
-						typescript: 'ts',
-						prettier: 'prettier',
-						'prettier/parser-babel': 'prettierPlugins.babel',
-						'prettier/parser-postcss': 'prettierPlugins.postcss',
-						'prettier/parser-typescript': 'prettierPlugins.typescript',
-						'prettier/parser-html': 'prettierPlugins.html'
-					},
+					globals: quick ? externalOutputGlobals : {},
 					chunkFileNames: 'static/js/[name]-[hash].js',
 					entryFileNames: 'static/js/[name]-[hash].js',
 					assetFileNames: 'static/[ext]/[name]-[hash].[ext]'
-					// manualChunks(id: string) {
-					// 	if (id.includes('node_modules')) {
-					// 		return id.toString().split('node_modules/')[1].split('/')[0].toString();
-					// 	}
-					// }
 				}
 			},
 			reportCompressedSize: false,
 			sourcemap: false
 		},
-		// base: isProd && cdnUrl ? cdnUrl : "/",
 		resolve: {
 			alias: {
 				'@': '/src'

@@ -156,6 +156,9 @@ importers:
       vite-plugin-compression:
         specifier: ^0.5.1
         version: 0.5.1(vite@5.3.5)
+      vite-plugin-ejs:
+        specifier: ^1.7.0
+        version: 1.7.0(vite@5.3.5)
 
   packages/briar-node:
     dependencies:
@@ -3521,6 +3524,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /async@3.2.6:
+    resolution: {integrity: sha512-htCUDlxyyCLMgaM3xXg0C0LW2xqfuQ6p05pCEIsXuyQ+a1koYKTuBMzRNwmybfLgvJDMd0r1LTn4+E0Ti6C2AA==}
+    dev: true
+
   /asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
@@ -4524,6 +4531,14 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
+  /ejs@3.1.10:
+    resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
+    engines: {node: '>=0.10.0'}
+    hasBin: true
+    dependencies:
+      jake: 10.9.2
+    dev: true
+
   /electron-to-chromium@1.5.6:
     resolution: {integrity: sha512-jwXWsM5RPf6j9dPYzaorcBSUg6AiqocPEyMpkchkvntaH9HGfOOMZwxMJjDY/XEs3T5dM7uyH1VhRMkqUU9qVw==}
     dev: true
@@ -5127,6 +5142,12 @@ packages:
     engines: {node: '>=18'}
     dependencies:
       flat-cache: 5.0.0
+    dev: true
+
+  /filelist@1.0.4:
+    resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
+    dependencies:
+      minimatch: 5.1.6
     dev: true
 
   /fill-range@7.1.1:
@@ -6454,6 +6475,17 @@ packages:
       '@pkgjs/parseargs': 0.11.0
     dev: true
 
+  /jake@10.9.2:
+    resolution: {integrity: sha512-2P4SQ0HrLQ+fw6llpLnOaGAvN2Zu6778SJMrCUwns4fOoG9ayrTiZk3VV8sCPkVZF8ab0zksVpS8FDY5pRCNBA==}
+    engines: {node: '>=10'}
+    hasBin: true
+    dependencies:
+      async: 3.2.6
+      chalk: 4.1.2
+      filelist: 1.0.4
+      minimatch: 3.1.2
+    dev: true
+
   /jest-worker@27.5.1:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
@@ -7424,6 +7456,13 @@ packages:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
     dependencies:
       brace-expansion: 1.1.11
+
+  /minimatch@5.1.6:
+    resolution: {integrity: sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==}
+    engines: {node: '>=10'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: true
 
   /minimatch@9.0.3:
     resolution: {integrity: sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==}
@@ -11016,6 +11055,15 @@ packages:
       vite: 5.3.5(sass@1.77.8)(terser@5.31.3)
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /vite-plugin-ejs@1.7.0(vite@5.3.5):
+    resolution: {integrity: sha512-JNP3zQDC4mSbfoJ3G73s5mmZITD8NGjUmLkq4swxyahy/W0xuokK9U9IJGXw7KCggq6UucT6hJ0p+tQrNtqTZw==}
+    peerDependencies:
+      vite: '>=5.0.0'
+    dependencies:
+      ejs: 3.1.10
+      vite: 5.3.5(sass@1.77.8)(terser@5.31.3)
     dev: true
 
   /vite@5.3.5(sass@1.77.8)(terser@5.31.3):
