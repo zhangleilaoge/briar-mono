@@ -1,21 +1,28 @@
-import { LocalStorageKey } from '@/constants/env';
-import { errorNotify } from '@/utils/notify';
 import { createAlova } from 'alova';
 import fetchAdapter from 'alova/fetch';
 import reactHook from 'alova/react';
+
+import { isDev, LocalStorageKey } from '@/constants/env';
+import { errorNotify } from '@/utils/notify';
 
 const alovaInstance = createAlova({
 	requestAdapter: fetchAdapter(),
 	statesHook: reactHook,
 	responded: {
-		onSuccess: (response) => response?.json?.() || response,
+		onSuccess: (response) => {
+			if (response.status >= 400) {
+				throw new Error(response.statusText);
+			}
+
+			return response?.json?.() || response;
+		},
 		onError: (error) => {
 			console.log('error:', error);
 			errorNotify(error);
 			throw error;
 		}
 	},
-	baseURL: '/api',
+	baseURL: isDev ? 'https://www.restrained-hunter.website/api' : '/api',
 	timeout: 20000,
 	cacheFor: {
 		GET: {

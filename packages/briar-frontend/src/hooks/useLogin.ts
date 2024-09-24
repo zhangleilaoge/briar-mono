@@ -1,6 +1,7 @@
-import { CLIENT_ID, IUserInfoDTO } from 'briar-shared';
+import { CLIENT_ID, IUserAccess, IUserInfoDTO } from 'briar-shared';
 import { gapi } from 'gapi-script';
 import { useCallback, useEffect, useState } from 'react';
+
 import { createAnonymousUser as createAnonymousUserApi, getUserInfo } from '@/api/user';
 import { LocalStorageKey } from '@/constants/env';
 
@@ -12,8 +13,8 @@ const useLogin = () => {
 	});
 
 	const init = async () => {
-		const { accessToken, userInfo } = await getUserInfo();
-		if (userInfo.id) {
+		const { accessToken, userInfo } = await getUserInfo().catch(() => ({}) as IUserAccess);
+		if (userInfo?.id) {
 			localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
 			setUserInfo(userInfo);
 			return;

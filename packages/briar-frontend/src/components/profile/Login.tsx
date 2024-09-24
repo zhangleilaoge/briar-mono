@@ -1,14 +1,15 @@
-import React from 'react';
+import { GoogleOutlined } from '@ant-design/icons';
+import { useGoogleLogin } from '@react-oauth/google';
 import type { FormProps } from 'antd';
 import { Button, Divider, Form, Input, message } from 'antd';
 import md5 from 'md5-es';
-import { authenticateUserByGoogle, signIn } from '@/api/user';
+import React from 'react';
 
-import s from './style.module.scss';
-import { useGoogleLogin } from '@react-oauth/google';
+import { authenticateUserByGoogle, signIn } from '@/api/user';
 import { LocalStorageKey } from '@/constants/env';
 import { errorNotify } from '@/utils/notify';
-import { GoogleOutlined } from '@ant-design/icons';
+
+import s from './style.module.scss';
 
 export type FieldType = {
 	username?: string;
@@ -46,6 +47,7 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn }) => {
 			const googleAccessToken = tokenResponse.access_token;
 			const accessToken = await authenticateUserByGoogle(googleAccessToken);
 			console.log('google response: ', tokenResponse);
+			console.log('accessToken: ', accessToken);
 
 			if (accessToken) {
 				message.success('登录成功，页面即将刷新。');
