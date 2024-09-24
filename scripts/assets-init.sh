@@ -6,8 +6,6 @@ SSL_TARGET_DIR="./assets/ssl"
 ENV_SOURCE_DIR="./briar-assets/briar-node"
 ENV_TARGET_DIR="./packages/briar-node"
 
-git submodule update --init --recursive
-
 copy_files() {
     local SOURCE_DIR="$1"
     local TARGET_DIR="$2"

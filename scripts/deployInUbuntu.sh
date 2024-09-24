@@ -10,6 +10,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # 2. Init project
+git submodule update --init --recursive
 sh ./scripts/assets-init.sh
 
 # 3. Docker run
