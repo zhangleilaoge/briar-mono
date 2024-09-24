@@ -1,5 +1,7 @@
 name: Docker Compose CI
 
+token: ${{ secrets.DOCKER_GITHUB_TOKEN }}
+
 on:
   push:
     branches:
