@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  ForbiddenException,
   Get,
   Post,
   Query,
@@ -60,24 +61,31 @@ export class AppController {
   async chatToCreateImg(
     @Body('content') content: string,
   ): Promise<ICreateImgResponse> {
-    const tempImgList = await this.aiService.createImg(
-      content,
-      ModelEnum.DallE2,
-    );
-    const userId = this.contextService.get().userId;
+    let imgList = [];
+    try {
+      const tempImgList: string[] = await this.aiService.createImg(
+        content,
+        ModelEnum.DallE2,
+      );
+      const userId = this.contextService.get().userId;
 
-    const imgList: string[] = await Promise.all(
-      tempImgList.map(async (img) => {
-        const imgUrl = (await this.cosService.uploadImg2Cos(
-          `runtime-images/${userId}-${Date.now()}.${getFileExtension(img)}`,
-          img,
-        )) as string;
-        return imgUrl;
-      }),
-    ).catch((error) => {
-      this.logger.error(error);
-      return [];
-    });
+      imgList = await Promise.all(
+        tempImgList.map(async (img) => {
+          const imgUrl = (await this.cosService.uploadImg2Cos(
+            `runtime-images/${userId}-${Date.now()}.${getFileExtension(img)}`,
+            img,
+          )) as string;
+          return imgUrl;
+        }),
+      ).catch((error) => {
+        this.logger.error(error);
+        return [];
+      });
+    } catch (error) {
+      this.logger.error(error, '图片生成失败：');
+
+      throw new ForbiddenException(error);
+    }
 
     return {
       imgList,

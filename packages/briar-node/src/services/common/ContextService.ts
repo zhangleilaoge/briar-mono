@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
+interface IContext {
+  userId?: number;
+}
+
 @Injectable()
 export class ContextService {
-  private context: Record<string, any> = {};
+  private context: IContext = {};
 
   setValue(key: string, value: any) {
     this.context[key] = value;

@@ -1,21 +1,22 @@
-import { Button } from 'antd';
-import s from './style.module.scss';
 import { ArrowUpOutlined, XFilled } from '@ant-design/icons';
-import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { RoleEnum } from 'briar-shared';
-import ConversationContext from '../../context/conversation';
-import Messages from '../messages';
-import { chatRequestStream, chatToCreateImg, createMessage, updateMessage } from '@/api/ai';
-
 import { useRequest, useSSE } from 'alova/client';
-import useScroll from '../../hooks/useScroll';
+import { Button } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import { SSEHookReadyState } from '../../constants';
-import useGptModel from './hooks/useGptModel';
+import { RoleEnum } from 'briar-shared';
+import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
+
+import { chatRequestStream, chatToCreateImg, createMessage, updateMessage } from '@/api/ai';
 import mainStyle from '@/styles/main.module.scss';
-import useCompositionInput from './hooks/useCompositionInput';
-import ConversationOpt from './components/ConversationOpt';
 import { errorNotify } from '@/utils/notify';
+
+import { SSEHookReadyState } from '../../constants';
+import ConversationContext from '../../context/conversation';
+import useScroll from '../../hooks/useScroll';
+import Messages from '../messages';
+import ConversationOpt from './components/ConversationOpt';
+import useCompositionInput from './hooks/useCompositionInput';
+import useGptModel from './hooks/useGptModel';
+import s from './style.module.scss';
 
 const Conversation: FC = () => {
 	const [inputValue, setInputValue] = useState('');

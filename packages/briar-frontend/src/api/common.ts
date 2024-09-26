@@ -10,12 +10,12 @@ const alovaInstance = createAlova({
 	statesHook: reactHook,
 	responded: {
 		onSuccess: async (response) => {
-			const rawResponse = await response?.json?.();
-			if (rawResponse.statusCode >= 400) {
+			if (response.status >= 400) {
+				const rawResponse = await response?.json?.();
 				throw new Error(rawResponse?.message || JSON.stringify(rawResponse));
 			}
 
-			return rawResponse || response;
+			return response?.json?.() || response;
 		},
 		onError: (error) => {
 			console.log('error:', error);
