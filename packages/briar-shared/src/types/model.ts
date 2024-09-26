@@ -3,3 +3,5 @@ export type IModel<T> = T & {
 	updatedAt: string;
 	id: number;
 };
+
+export type PureModel<T> = Omit<T, 'createdAt' | 'updatedAt' | 'id'>;

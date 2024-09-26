@@ -1,32 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { UserDalService } from './dal/UserDalService';
-import { IUserInfoDTO } from 'briar-shared';
-import axios from 'axios';
 import { JwtService } from '@nestjs/jwt';
+import axios from 'axios';
+import { IUserInfoDTO } from 'briar-shared';
+
+import { ContextService } from './common/ContextService';
+import { UserDalService } from './dal/UserDalService';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly userDalService: UserDalService,
+    private contextService: ContextService,
     private jwtService: JwtService,
   ) {}
 
-  static getUserIdByJwt(query: {
-    [key: string]: any;
-    user?: {
-      sub: number;
-    };
-  }) {
-    return query.user?.sub;
-  }
-
-  async getUserByJwt(query: {
-    [key: string]: any;
-    user?: {
-      sub: number;
-    };
-  }) {
-    const userId = await UserService.getUserIdByJwt(query);
+  async getUserByJwt() {
+    const userId = this.contextService.get().userId;
 
     try {
       const user = await this.userDalService.getUser({ userId });

@@ -9,7 +9,8 @@ import { AuthGuard } from '@/guards/auth';
 import { LogMiddleware } from '@/middleware/log';
 
 import { AiModule } from './AiModule';
-import { TemplateModule } from './templateModule';
+import { CommonModule } from './common/CommonModule';
+import { TemplateModule } from './common/templateModule';
 import { UserModule } from './UserModule';
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserModule } from './UserModule';
       signOptions: { expiresIn: '30 days' },
     }),
     ScheduleModule.forRoot(),
+    CommonModule, // 添加这里
   ],
   providers: [
     {

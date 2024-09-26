@@ -12,9 +12,11 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { differenceInMonths } from 'date-fns';
 
+import { LogService } from './LogService';
+
 @Injectable()
 export class CosService {
-  constructor() {}
+  constructor(private readonly logger: LogService) {}
 
   async uploadImg2Cos(key, imgUrl) {
     return await new Promise(async (resolve, reject) => {
@@ -46,7 +48,9 @@ export class CosService {
   @Cron(CronExpression.EVERY_WEEK)
   clearRuntimeImgs() {
     const clear = (keys: string[]) => {
-      console.log('start clear:', keys);
+      const logger = this.logger;
+      logger.log(`start clear: ${JSON.stringify(keys)}`);
+
       cos.deleteMultipleObject(
         {
           Bucket: process.env.BRIAR_TX_BUCKET_NAME,
@@ -55,9 +59,9 @@ export class CosService {
         },
         function (err) {
           if (err) {
-            console.log(err);
+            logger.error(err);
           } else {
-            console.log('clear success, total:', keys.length);
+            logger.log(`clear success, total: ${keys.length}`);
           }
         },
       );
@@ -71,8 +75,9 @@ export class CosService {
         Delimiter: '/',
       },
       function (err, data) {
+        const logger = this.logger;
         if (err) {
-          console.log(err);
+          logger.error(err);
         } else {
           const imgsToBeClear = data.Contents.filter(({ LastModified }) => {
             const existMonth = differenceInMonths(new Date(), LastModified);

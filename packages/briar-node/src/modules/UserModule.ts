@@ -1,12 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from '../controllers/UserController';
-import { UserService } from '../services/UserService';
-import { DatabaseModule } from './DataBaseModule';
+
 import { UserDalService } from '@/services/dal/UserDalService';
 
+import { AppController } from '../controllers/UserController';
+import { UserService } from '../services/UserService';
+import { CommonModule } from './common/CommonModule';
+
 @Module({
-  imports: [DatabaseModule],
+  imports: [CommonModule],
   controllers: [AppController],
-  providers: [UserService, UserDalService],
+  providers: [
+    // 业务逻辑
+    UserService,
+    UserDalService,
+  ],
 })
 export class UserModule {}

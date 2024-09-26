@@ -6,15 +6,20 @@ import {
   HttpCode,
   Post,
   Query,
-  Request,
 } from '@nestjs/common';
-import { UserService } from '../services/UserService';
-import { Public } from '@/decorators/Public';
 import { IUserAccess } from 'briar-shared';
+
+import { Public } from '@/decorators/Public';
+import { ContextService } from '@/services/common/ContextService';
+
+import { UserService } from '../services/UserService';
 
 @Controller('api/user')
 export class AppController {
-  constructor(private readonly UserService: UserService) {}
+  constructor(
+    private readonly UserService: UserService,
+    private contextService: ContextService,
+  ) {}
 
   @Public()
   @Post('createAnonymousUser')
@@ -29,8 +34,9 @@ export class AppController {
   }
 
   @Get('getUserInfo')
-  async getUserInfo(@Request() req): Promise<IUserAccess> {
-    const data = await this.UserService.getUserByJwt(req);
+  async getUserInfo(): Promise<IUserAccess> {
+    const data = await this.UserService.getUserByJwt();
+
     const accessToken = data ? await this.UserService.createJwt(data.id) : null;
 
     return {
@@ -47,13 +53,10 @@ export class AppController {
 
   @Post('authenticateUserByGoogle')
   @HttpCode(200)
-  async authenticateUserByGoogle(
-    @Body('tokenId') tokenId: string,
-    @Request() req,
-  ) {
+  async authenticateUserByGoogle(@Body('tokenId') tokenId: string) {
     const userId = await this.UserService.authenticateUserByGoogle(
       tokenId,
-      req.user.sub,
+      this.contextService.get().userId,
     );
 
     if (userId) {
@@ -68,15 +71,15 @@ export class AppController {
   async signUp(
     @Body('username') username: string,
     @Body('password') password: string,
-    @Request() req,
   ): Promise<IUserAccess> {
+    const userId = this.contextService.get().userId;
     await this.UserService.signUp({
       username,
       password,
-      id: req.user.sub,
+      id: userId,
       name: username,
     });
-    const data = await this.UserService.getUserByJwt(req);
+    const data = await this.UserService.getUserByJwt();
 
     const accessToken = await this.UserService.createJwt(data.id);
 

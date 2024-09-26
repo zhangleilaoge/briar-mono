@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
+import * as dotenv from 'dotenv';
 
 import { ConversationModel } from '@/model/ConversationModel';
-import { UserModel } from '@/model/UserModel';
+import { LogModel } from '@/model/LogModel';
 import { MessageModel } from '@/model/MessageModel';
-import * as dotenv from 'dotenv';
+import { UserModel } from '@/model/UserModel';
 
 // 如若只有一个.env，直接 import 'dotenv/config' 而不用指定 .env 也可以
 dotenv.config({ path: '../../.env' });
@@ -22,7 +23,12 @@ dotenv.config({ path: '../../.env' });
       synchronize: true, // 在开发环境中可能使用，生产环境建议关闭
       timezone: '+08:00', // 设置时区为 UTC+8
     }),
-    SequelizeModule.forFeature([ConversationModel, UserModel, MessageModel]), // 注册特定模型以用于DI
+    SequelizeModule.forFeature([
+      ConversationModel,
+      UserModel,
+      MessageModel,
+      LogModel,
+    ]), // 注册特定模型以用于DI
   ],
   exports: [SequelizeModule],
 })

@@ -1,7 +1,12 @@
 import 'dotenv/config';
 
 import { Injectable } from '@nestjs/common';
-import { IMessageDTO, ModelEnum, RoleEnum } from 'briar-shared';
+import {
+  IConversationDTO,
+  IMessageDTO,
+  ModelEnum,
+  RoleEnum,
+} from 'briar-shared';
 import OpenAI from 'openai';
 import { map, Subject } from 'rxjs';
 import {
@@ -12,8 +17,10 @@ import {
 
 import { getLimitedMessages } from '@/utils/ai';
 
+import { ContextService } from './common/ContextService';
 import { ConversationDalService } from './dal/ConversationDalService';
 import { MessageDalService } from './dal/MessageDalService';
+import { LogService } from './LogService';
 
 @Injectable()
 export class AiService {
@@ -25,6 +32,8 @@ export class AiService {
   constructor(
     private readonly conversationDalService: ConversationDalService,
     private readonly messageDalService: MessageDalService,
+    private readonly logger: LogService,
+    private contextService: ContextService,
   ) {}
 
   // async chatRequest(prompt: string) {
@@ -70,7 +79,8 @@ export class AiService {
           }
           subject.complete();
         } catch (err) {
-          console.error(err);
+          this.logger.error(err);
+
           subject.error(err);
         }
       })
@@ -82,7 +92,7 @@ export class AiService {
   }
 
   async createImg(query: string, model: ModelEnum) {
-    console.log('图片生成开始');
+    this.logger.log('图片生成开始');
 
     const response = await this.openai.images.generate({
       model,
@@ -91,14 +101,16 @@ export class AiService {
       size: '1024x1024',
     });
 
-    console.log('图片生成完成：', JSON.stringify(response.data));
+    this.logger.log(`图片生成完成: ${JSON.stringify(response.data)}`);
 
     return response.data.map((data) => data.url);
   }
 
-  async getConversationList(userId: number) {
+  async getConversationList() {
     const conversationList =
-      await this.conversationDalService.getConversationList(userId);
+      await this.conversationDalService.getConversationList(
+        this.contextService.get().userId,
+      );
     return conversationList;
   }
 
@@ -106,5 +118,52 @@ export class AiService {
     const messages =
       await this.messageDalService.findMessagesByConversationId(conversationId);
     return messages;
+  }
+
+  async createConversation(title: string) {
+    const conversation = await this.conversationDalService.create({
+      title,
+      userId: this.contextService.get().userId,
+    });
+    return conversation;
+  }
+
+  async updateConversation(
+    id: number,
+    conversation: Partial<IConversationDTO>,
+  ) {
+    return this.conversationDalService.update(id, conversation);
+  }
+
+  async deleteConversation(ids: number[]) {
+    return this.conversationDalService.delete(ids);
+  }
+
+  async createMessage({
+    content,
+    model,
+    conversationId,
+    role = RoleEnum.User,
+  }: {
+    content: string;
+    model: ModelEnum;
+    conversationId: number;
+    role?: RoleEnum;
+  }) {
+    const message = await this.messageDalService.create({
+      content,
+      model,
+      conversationId,
+      role,
+    });
+    return message;
+  }
+
+  async updateMessage(id: number, content: string, imgList: string) {
+    return this.messageDalService.update({
+      content,
+      id,
+      imgList,
+    });
   }
 }
