@@ -9,12 +9,13 @@ const alovaInstance = createAlova({
 	requestAdapter: fetchAdapter(),
 	statesHook: reactHook,
 	responded: {
-		onSuccess: (response) => {
-			if (response.status >= 400) {
-				throw new Error(response.statusText);
+		onSuccess: async (response) => {
+			const rawResponse = await response?.json?.();
+			if (rawResponse.statusCode >= 400) {
+				throw new Error(rawResponse?.message || JSON.stringify(rawResponse));
 			}
 
-			return response?.json?.() || response;
+			return rawResponse || response;
 		},
 		onError: (error) => {
 			console.log('error:', error);

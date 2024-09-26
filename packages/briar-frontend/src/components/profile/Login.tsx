@@ -29,9 +29,14 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn }) => {
 		const { accessToken } = await signIn({
 			username: values.username,
 			password: md5.hash(values.password || '')
+		}).catch((err) => {
+			message.destroy();
+			errorNotify(err);
+			return { accessToken: '' };
 		});
-		message.destroy();
+
 		if (accessToken) {
+			message.destroy();
 			message.success('登录成功，页面即将刷新。');
 			localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
 			setTimeout(() => {

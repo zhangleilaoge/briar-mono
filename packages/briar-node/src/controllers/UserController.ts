@@ -100,7 +100,7 @@ export class AppController {
 
     const data = await this.UserService.getLoginUser(username, password);
 
-    if (!data) {
+    if (!data?.id) {
       throw new ForbiddenException('用户不存在或密码错误');
     }
 
