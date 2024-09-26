@@ -14,8 +14,8 @@ dotenv.config({ path: '../../.env' });
   imports: [
     SequelizeModule.forRoot({
       dialect: 'mysql', // 根据你的数据库类型设置
-      host: 'sh-cdb-ecumhe7a.sql.tencentcdb.com',
-      port: 27200,
+      host: process.env.BRIAR_DATABASE_HOST,
+      port: +process.env.BRIAR_DATABASE_PORT,
       username: process.env.BRIAR_DATABASE_USER,
       password: process.env.BRIAR_DATABASE_PASSWORD,
       database: 'briar',

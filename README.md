@@ -33,10 +33,6 @@ git submodule update --init --recursive
 pnpm run init
 ```
 
-### 部署
-
-1. 在 ./assets/ssl 目录添加 ssl 相关的 .crt 和 key
-
 ### 开发
 
 使用 whistle 进行本地代理开发
