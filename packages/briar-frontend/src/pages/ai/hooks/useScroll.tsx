@@ -20,6 +20,16 @@ const useScroll = (querySelectorStr: string) => {
 		}, 1000);
 	};
 
+	const quickScrollToTop = () => {
+		if (dom) {
+			const tempScrollBehavior = dom.style.scrollBehavior;
+
+			dom.style.scrollBehavior = 'auto';
+			dom.scrollTop = 0;
+			dom.style.scrollBehavior = tempScrollBehavior;
+		}
+	};
+
 	const scrollToBottom = () => {
 		// 禁用滚动期间触发自动滚动，延长禁用时间
 		if (!isAutoScrollEnabled) {
@@ -35,7 +45,6 @@ const useScroll = (querySelectorStr: string) => {
 	};
 
 	const handleScroll = useCallback(() => {
-		console.log('handleScroll', dom.scrollTop);
 		if (dom) {
 			// 离底部一个父组件的高度，认为远离底部
 			if (dom.scrollHeight - dom.scrollTop > 2 * dom.clientHeight) {
@@ -73,6 +82,7 @@ const useScroll = (querySelectorStr: string) => {
 
 	return {
 		scrollToBottom,
+		quickScrollToTop,
 		isNearBottom
 	};
 };

@@ -51,7 +51,7 @@ const Conversation: FC = () => {
 	const loading = useMemo(() => {
 		return queryLoading || loadingCreateImg;
 	}, [loadingCreateImg, queryLoading]);
-	const { scrollToBottom } = useScroll(`.${s.Messages}`);
+	const { scrollToBottom, quickScrollToTop } = useScroll(`.${s.Messages}`);
 	const { handleComposition, isCompositionRef } = useCompositionInput();
 
 	// 现在 sse 的 error 太弱了，没有任何提示作用，先注释了
@@ -200,6 +200,7 @@ const Conversation: FC = () => {
 		) {
 			shutDown();
 		}
+		quickScrollToTop();
 		scrollToBottom();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentConversation?.id]);
