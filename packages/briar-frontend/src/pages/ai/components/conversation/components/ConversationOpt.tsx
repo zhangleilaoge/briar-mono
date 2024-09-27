@@ -1,7 +1,10 @@
 import { FileImageOutlined, FormOutlined } from '@ant-design/icons';
 import { Popover, Radio, Select } from 'antd';
-import { FC, useContext } from 'react';
-import ConversationContext from '../../../context/conversation';
+import { FC } from 'react';
+
+import { useContainer } from '@/hooks/useContainer';
+import { conversationContainer } from '@/pages/ai/container/conversationContainer';
+
 import useGptModel from '../hooks/useGptModel';
 import s from '../style.module.scss';
 
@@ -14,7 +17,7 @@ const ConversationOpt: FC<IConversationProps> = ({ selectOption, options, onChan
 		createImgMode,
 		setCreateImgMode,
 		setMessageArr
-	} = useContext(ConversationContext);
+	} = useContainer(conversationContainer);
 
 	const readyForNewChat = () => {
 		setCurrentConversationKey(undefined);

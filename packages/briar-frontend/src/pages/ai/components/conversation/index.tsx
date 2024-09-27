@@ -3,14 +3,15 @@ import { useRequest, useSSE } from 'alova/client';
 import { Button } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { RoleEnum } from 'briar-shared';
-import { FC, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { chatRequestStream, chatToCreateImg, createMessage, updateMessage } from '@/api/ai';
+import { useContainer } from '@/hooks/useContainer';
 import mainStyle from '@/styles/main.module.scss';
 import { errorNotify } from '@/utils/notify';
 
 import { SSEHookReadyState } from '../../constants';
-import ConversationContext from '../../context/conversation';
+import { conversationContainer } from '../../container/conversationContainer';
 import useScroll from '../../hooks/useScroll';
 import Messages from '../messages';
 import ConversationOpt from './components/ConversationOpt';
@@ -20,6 +21,7 @@ import s from './style.module.scss';
 
 const Conversation: FC = () => {
 	const [inputValue, setInputValue] = useState('');
+
 	const {
 		createConversation,
 		setCurrentConversationKey,
@@ -29,7 +31,7 @@ const Conversation: FC = () => {
 		messageArr,
 		createImgMode,
 		setCreateImgMode
-	} = useContext(ConversationContext);
+	} = useContainer(conversationContainer);
 	const assistantAnswerRef = useRef('');
 
 	const { selectOption, options, onChange } = useGptModel();

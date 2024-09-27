@@ -1,5 +1,3 @@
-import { Button, Checkbox, Dropdown, Input, InputRef, MenuProps, theme } from 'antd';
-import s from './style.module.scss';
 import {
 	DeleteFilled,
 	EditFilled,
@@ -7,11 +5,16 @@ import {
 	StarFilled,
 	StarOutlined
 } from '@ant-design/icons';
-import { IConversationDTO } from 'briar-shared';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import ClickOutside from '@/components/ClickOutSide';
-import ConversationContext from '../../context/conversation';
+import { Button, Checkbox, Dropdown, Input, InputRef, MenuProps, theme } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { IConversationDTO } from 'briar-shared';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import ClickOutside from '@/components/ClickOutSide';
+import { useContainer } from '@/hooks/useContainer';
+
+import { conversationContainer } from '../../container/conversationContainer';
+import s from './style.module.scss';
 // import StarCheckbox from '@/components/StarCheckBox';
 
 enum OperationEnum {
@@ -36,7 +39,7 @@ export const MenuItem = ({
 	const [editValue, setEditValue] = useState(title || '');
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const { multiSelectMode, selectedConversationKeys, setSelectedConversationKeys } =
-		useContext(ConversationContext);
+		useContainer(conversationContainer);
 
 	const checked = useMemo(() => {
 		return selectedConversationKeys.includes(conversation.id);

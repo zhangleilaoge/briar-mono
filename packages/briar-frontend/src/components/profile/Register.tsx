@@ -1,11 +1,12 @@
-import React from 'react';
 import type { FormProps } from 'antd';
 import { Button, Form, Input, message } from 'antd';
 import md5 from 'md5-es';
+import React from 'react';
+
 import { checkUsername as checkUsernameApi, signUp } from '@/api/user';
+import { LocalStorageKey } from '@/constants/env';
 
 import s from './style.module.scss';
-import { LocalStorageKey } from '@/constants/env';
 
 export type FieldType = {
 	username: string;

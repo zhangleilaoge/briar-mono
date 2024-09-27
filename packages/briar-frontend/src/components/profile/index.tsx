@@ -1,13 +1,15 @@
-import CommonContext from '@/context/common';
 import { LoginOutlined, LogoutOutlined, SignatureOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Dropdown, message, Modal } from 'antd';
-import { useContext, useMemo, useState } from 'react';
-import s from './style.module.scss';
-import { ItemType } from 'antd/es/menu/interface';
-import Register from './Register';
-import Login from './Login';
-import { clientId } from '@/constants/user';
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Avatar, Dropdown, message, Modal } from 'antd';
+import { ItemType } from 'antd/es/menu/interface';
+import { useContext, useMemo, useState } from 'react';
+
+import { clientId } from '@/constants/user';
+import CommonContext from '@/context/common';
+
+import Login from './Login';
+import Register from './Register';
+import s from './style.module.scss';
 
 enum OperationEnum {
 	Login = 'login',
@@ -87,6 +89,7 @@ const Profile = () => {
 				onCancel={() => {
 					setIsModalOpen(false);
 				}}
+				destroyOnClose
 			>
 				<div className={s.ModalContent}>
 					<GoogleOAuthProvider clientId={clientId}>
@@ -101,6 +104,7 @@ const Profile = () => {
 				onCancel={() => {
 					setIsRegisterModalOpen(false);
 				}}
+				destroyOnClose
 			>
 				<div className={s.ModalContent}>
 					<Register finishSignUp={() => setIsRegisterModalOpen(false)} />

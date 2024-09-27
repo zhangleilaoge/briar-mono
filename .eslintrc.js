@@ -29,6 +29,7 @@ module.exports = {
 		'@typescript-eslint/no-explicit-any': 'off',
 		'@typescript-eslint/ban-ts-comment': 'off',
 		'react/react-in-jsx-scope': 'off',
+		'react/prop-types': 'off',
 		// 检查 Hooks 的使用规则
 		'react-hooks/rules-of-hooks': 'error',
 		// 检查依赖项的声明

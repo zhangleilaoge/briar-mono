@@ -4,14 +4,15 @@ import { CheckCircleFilled, CopyOutlined, InfoCircleOutlined } from '@ant-design
 import { Avatar, Button, message, Skeleton, Tooltip } from 'antd';
 import { IConversationDTO, RoleEnum, safeJsonParse } from 'briar-shared';
 import { format } from 'date-fns';
-import { FC, useContext, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Markdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 
+import { useContainer } from '@/hooks/useContainer';
 import { copyToClipboard } from '@/utils/document';
 
-import ConversationContext from '../../context/conversation';
+import { conversationContainer } from '../../container/conversationContainer';
 import useLoadingDesc from './hooks/useLoadingDesc';
 import s from './style.module.scss';
 
@@ -139,7 +140,7 @@ const Messages: FC<{
 	loading?: boolean;
 }> = ({ loading }) => {
 	const { desc } = useLoadingDesc();
-	const { messageArr } = useContext(ConversationContext);
+	const { messageArr } = useContainer(conversationContainer);
 
 	return (
 		<>

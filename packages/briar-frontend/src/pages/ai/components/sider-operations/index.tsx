@@ -5,9 +5,11 @@ import {
 	MenuUnfoldOutlined
 } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
+
+import { useContainer } from '@/hooks/useContainer';
+
+import { conversationContainer } from '../../container/conversationContainer';
 import s from './style.module.scss';
-import { useContext } from 'react';
-import ConversationContext from '../../context/conversation';
 
 //
 const SiderOperations = ({
@@ -18,7 +20,7 @@ const SiderOperations = ({
 	isCollapsed: boolean;
 }) => {
 	const { multiSelectMode, inMultiSelectMode, outMultiSelectMode, deleteSelectedConversation } =
-		useContext(ConversationContext);
+		useContainer(conversationContainer);
 	return (
 		<div className={s.SiderOperations}>
 			<div className={multiSelectMode ? '' : s.hideBtn}>

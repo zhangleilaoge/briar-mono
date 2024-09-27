@@ -31,7 +31,7 @@ async function bootstrap() {
       'Content-Range',
     ], // 可以公开的响应头
     credentials: true,
-    maxAge: 20000,
+    maxAge: 30000,
   });
 
   // 生产环境在 docker 环境运行，所以 ip 地址为 0.0.0.0

@@ -24,7 +24,7 @@ const alovaInstance = createAlova({
 		}
 	},
 	baseURL: isDev ? 'https://www.restrained-hunter.website/api' : '/api',
-	timeout: 20000,
+	timeout: 30000,
 	cacheFor: {
 		GET: {
 			expire: 100
