@@ -7,7 +7,7 @@ import { AppController } from '../../controllers/TemplateController';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../../briar-frontend/dist'),
+      rootPath: join(__dirname, '../../../../briar-frontend/dist'),
       serveRoot: '',
       exclude: ['/api*'],
     }),
