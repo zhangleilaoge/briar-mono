@@ -1,7 +1,8 @@
+import { ExperimentOutlined, InteractionOutlined } from '@ant-design/icons';
+import { lazy, LazyExoticComponent } from 'react';
+
 import CompositionApiIntro from '@/pages/tools/pages/composition-style-intro';
 import { IMenuRouterConfig } from '@/types/router';
-import { ExperimentOutlined, InteractionOutlined } from '@ant-design/icons';
-import { lazy } from 'react';
 
 export enum MenuKeyEnum {
 	Tools = 'tools',
@@ -20,7 +21,7 @@ export const MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
 	{
 		key: MenuKeyEnum.Ai,
 		label: 'AI',
-		component: lazy(() => import('../pages/ai'))
+		component: lazy(() => import('../pages/ai')) as LazyExoticComponent<() => JSX.Element>
 	},
 	{
 		key: MenuKeyEnum.Tools,
