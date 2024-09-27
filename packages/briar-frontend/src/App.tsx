@@ -1,20 +1,20 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import s from './styles/main.module.scss';
 import { ConfigProvider, Menu, Spin } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { BRIAR_ICON } from './constants/img';
 import { Suspense } from 'react';
-import { MENU_ROUTER_CONFIG, MenuKeyEnum } from './constants/router';
-import { getRoutes } from './utils/router';
-import useLevelPath from './hooks/useLevelPath';
-import CommonContext from './context/common';
-import { THEME } from './constants/styles';
-import useFullScreen from './hooks/useFullScreen';
-import FloatBtn from './components/FloatBtn';
-import Page404 from './pages/404';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
-import useLogin from './hooks/useLogin';
+import FloatBtn from './components/FloatBtn';
 import Profile from './components/profile';
+import { BRIAR_ICON } from './constants/img';
+import { MENU_ROUTER_CONFIG, MenuKeyEnum } from './constants/router';
+import { THEME } from './constants/styles';
+import CommonContext from './context/common';
+import useFullScreen from './hooks/useFullScreen';
+import useLevelPath from './hooks/useLevelPath';
+import useLogin from './hooks/useLogin';
+import Page404 from './pages/404';
+import s from './styles/main.module.scss';
+import { getRoutes } from './utils/router';
 
 function App() {
 	const { menuKey, onLevelPathChange } = useLevelPath();

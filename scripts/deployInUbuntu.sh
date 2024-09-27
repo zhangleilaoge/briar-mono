@@ -1,5 +1,8 @@
 #!/bin/bash
 
+GITHUB_USER=$1
+GITHUB_TOKEN=$2
+
 # 1. Git pull
 echo "Pulling latest changes from git..."
 git stash
@@ -10,6 +13,8 @@ if [ $? -ne 0 ]; then
 fi
 
 # 2. Init project
+git config --file .gitmodules submodule.briar-assets.url https://$GITHUB_USER:$GITHUB_TOKEN@github.com/zhangleilaoge/briar-assets.git
+git submodule sync
 git submodule update --init --recursive
 sh ./scripts/assets-init.sh
 
