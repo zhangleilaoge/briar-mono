@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
-import { AppController } from '../../controllers/TemplateController';
-
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -12,7 +10,7 @@ import { AppController } from '../../controllers/TemplateController';
       exclude: ['/api*'],
     }),
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [],
 })
 export class TemplateModule {}
