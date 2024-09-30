@@ -103,7 +103,7 @@ export class AiService {
 
     this.logger.log(`图片生成完成: ${JSON.stringify(response.data)}`);
 
-    return response.data.map((data) => data.url);
+    return response.data[0].url;
   }
 
   async getConversationList() {

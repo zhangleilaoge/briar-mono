@@ -5,7 +5,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { RoleEnum } from 'briar-shared';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
-import { chatRequestStream, chatToCreateImg, createMessage, updateMessage } from '@/api/ai';
+import { chatRequestStream, createMessage, genImg, updateMessage } from '@/api/ai';
 import { useContainer } from '@/hooks/useContainer';
 import mainStyle from '@/styles/main.module.scss';
 import { errorNotify } from '@/utils/notify';
@@ -41,7 +41,7 @@ const Conversation: FC = () => {
 		onSuccess: onSuccessCreateImg,
 		onError: onErrorCreateImg,
 		loading: loadingCreateImg
-	} = useRequest(chatToCreateImg, {
+	} = useRequest(genImg, {
 		immediate: false
 	});
 	const { send: updateMsg, onSuccess: onSuccessUpdateMsg } = useRequest(updateMessage, {

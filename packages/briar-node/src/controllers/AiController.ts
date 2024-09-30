@@ -62,32 +62,22 @@ export class AppController {
     });
   }
 
-  @Post('chatToCreateImg')
+  @Post('genImg')
   @Ability(AbilityEnum.CreateImg)
   @UseGuards(AbilityGuard)
-  async chatToCreateImg(
-    @Body('content') content: string,
-  ): Promise<ICreateImgResponse> {
-    let imgList = [];
+  async genImg(@Body('content') content: string): Promise<ICreateImgResponse> {
+    let imgUrl = '';
     try {
-      const tempImgList: string[] = await this.aiService.createImg(
+      const tempImg: string = await this.aiService.createImg(
         content,
         ModelEnum.DallE2,
       );
       const userId = this.contextService.get().userId;
 
-      imgList = await Promise.all(
-        tempImgList.map(async (img) => {
-          const imgUrl = (await this.cosService.uploadImg2Cos(
-            `runtime-images/${userId}-${Date.now()}.${getFileExtension(img)}`,
-            img,
-          )) as string;
-          return imgUrl;
-        }),
-      ).catch((error) => {
-        this.logger.error(error);
-        return [];
-      });
+      imgUrl = (await this.cosService.uploadImg2Cos(
+        `runtime-images/${userId}-${Date.now()}.${getFileExtension(tempImg)}`,
+        tempImg,
+      )) as string;
     } catch (error) {
       this.logger.error(error, '图片生成失败：');
 
@@ -95,7 +85,7 @@ export class AppController {
     }
 
     return {
-      imgList,
+      imgList: [imgUrl],
       imgDesc: '',
     };
   }

@@ -1,6 +1,7 @@
 import { IChatRequestParams, IConversationDTO, IMessageDTO } from 'briar-shared';
-import alovaInstance, { getQueryFromObj } from './common';
 import { ICreateImgResponse } from 'briar-shared';
+
+import alovaInstance, { getQueryFromObj } from './common';
 // export const chatRequest = (params: IChatRequestParams) =>
 // 	alovaInstance.Post<OpenAI.Chat.Completions.ChatCompletion>('/ai/chatRequest', params);
 
@@ -30,7 +31,7 @@ export const createMessage = (params: Partial<IMessageDTO>) =>
 export const updateMessage = (message: Partial<IMessageDTO>) =>
 	alovaInstance.Post(`/ai/updateMessage`, message);
 
-export const chatToCreateImg = (params: { content: string }) =>
-	alovaInstance.Post<ICreateImgResponse>(`/ai/chatToCreateImg`, params, {
+export const genImg = (params: { content: string }) =>
+	alovaInstance.Post<ICreateImgResponse>(`/ai/genImg`, params, {
 		timeout: 60000
 	});
