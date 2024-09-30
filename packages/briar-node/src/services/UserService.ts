@@ -5,6 +5,7 @@ import { IUserInfoDTO } from 'briar-shared';
 
 import { ContextService } from './common/ContextService';
 import { UserDalService } from './dal/UserDalService';
+import { UserAbilityService } from './UserAbilityService';
 
 @Injectable()
 export class UserService {
@@ -12,6 +13,7 @@ export class UserService {
     private readonly userDalService: UserDalService,
     private contextService: ContextService,
     private jwtService: JwtService,
+    private userAbilityService: UserAbilityService,
   ) {}
 
   async getUserByJwt() {
@@ -33,6 +35,9 @@ export class UserService {
 
   async createAnonymousUser() {
     const user = await this.userDalService.create({});
+    this.contextService.setValue('userId', user.id);
+    await this.userAbilityService.initUserAbilityLimit();
+
     return user as IUserInfoDTO;
   }
 

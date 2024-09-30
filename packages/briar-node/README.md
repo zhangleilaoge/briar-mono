@@ -36,7 +36,19 @@ briar-node
   }
 ```
 
-#### 2. jwt 解析
+#### 2. 能力点限流
+
+```typescript
+  @Post('fn')
+  @Ability(AbilityEnum.xx) // 该接口调用将会走 ability_usage_limit 表的限制规则
+  @UseGuards(AbilityGuard)
+  async fn(
+  ) {
+    ...
+  }
+```
+
+#### 3. jwt 解析
 
 ```typescript
   @Get('fn')

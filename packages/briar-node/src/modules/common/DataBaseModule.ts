@@ -5,6 +5,10 @@ import * as dotenv from 'dotenv';
 import { ConversationModel } from '@/model/ConversationModel';
 import { LogModel } from '@/model/LogModel';
 import { MessageModel } from '@/model/MessageModel';
+import {
+  AbilityUsageLimitModel,
+  AbilityUsageRecordModel,
+} from '@/model/UserAbilityModel';
 import { UserModel } from '@/model/UserModel';
 
 // 如若只有一个.env，直接 import 'dotenv/config' 而不用指定 .env 也可以
@@ -29,6 +33,8 @@ dotenv.config({ path: '../../.env' });
       UserModel,
       MessageModel,
       LogModel,
+      AbilityUsageLimitModel,
+      AbilityUsageRecordModel,
     ]), // 注册特定模型以用于DI
   ],
   exports: [SequelizeModule],

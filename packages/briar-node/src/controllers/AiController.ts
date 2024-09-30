@@ -6,15 +6,20 @@ import {
   Post,
   Query,
   Sse,
-  // UseGuards,
+  UseGuards,
 } from '@nestjs/common';
-import { IConversationDTO, ModelEnum, RoleEnum } from 'briar-shared';
+import {
+  AbilityEnum,
+  IConversationDTO,
+  ModelEnum,
+  RoleEnum,
+} from 'briar-shared';
 import { ICreateImgResponse } from 'briar-shared';
 import { getFileExtension } from 'briar-shared';
 
+import { Ability } from '@/decorators/ability';
 import { Public } from '@/decorators/Public';
-import { RateLimited } from '@/decorators/RateLimit';
-// import { RateLimiterGuard } from '@/guards/rate-limit';
+import { AbilityGuard } from '@/guards/ability';
 import { ContextService } from '@/services/common/ContextService';
 import { CosService } from '@/services/CosService';
 import { MessageDalService } from '@/services/dal/MessageDalService';
@@ -35,6 +40,8 @@ export class AppController {
   @Public()
   @Get('chatRequestStream')
   @Sse('sse')
+  @Ability(AbilityEnum.Chat)
+  @UseGuards(AbilityGuard)
   async chatRequestStream(
     @Query('query') query: string,
     @Query('model') model: ModelEnum,
@@ -56,8 +63,8 @@ export class AppController {
   }
 
   @Post('chatToCreateImg')
-  // @UseGuards(RateLimiterGuard)
-  @RateLimited({ points: 10, duration: 60 * 60 * 24, key: 'chatToCreateImg' })
+  @Ability(AbilityEnum.CreateImg)
+  @UseGuards(AbilityGuard)
   async chatToCreateImg(
     @Body('content') content: string,
   ): Promise<ICreateImgResponse> {

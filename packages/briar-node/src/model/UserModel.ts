@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 @Table({ tableName: 'users' })
 export class UserModel extends Model<UserModel> {
@@ -25,7 +25,4 @@ export class UserModel extends Model<UserModel> {
     type: DataType.BOOLEAN,
   })
   isAuthenticated?: boolean;
-
-  // @HasMany(() => ConversationModel)
-  // conversations: ConversationModel[];
 }

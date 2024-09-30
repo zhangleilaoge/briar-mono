@@ -1,5 +1,5 @@
 import { ModelEnum, RoleEnum } from 'briar-shared';
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 @Table({ tableName: 'messages' })
 export class MessageModel extends Model<MessageModel> {
@@ -21,7 +21,6 @@ export class MessageModel extends Model<MessageModel> {
   })
   content: string;
 
-  // @BelongsTo(() => ConversationModel)
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
