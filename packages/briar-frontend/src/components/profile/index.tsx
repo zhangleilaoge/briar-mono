@@ -20,7 +20,7 @@ enum OperationEnum {
 const Profile = () => {
 	const { userInfo, logout } = useContext(CommonContext);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+	const [modelType, setModelType] = useState(OperationEnum.Login);
 
 	const dropdownItems = useMemo(() => {
 		return [
@@ -30,7 +30,8 @@ const Profile = () => {
 				label: (
 					<a
 						onClick={async () => {
-							setIsRegisterModalOpen(true);
+							setModelType(OperationEnum.Register);
+							setIsModalOpen(true);
 						}}
 					>
 						sign up
@@ -43,6 +44,7 @@ const Profile = () => {
 				label: (
 					<a
 						onClick={async () => {
+							setModelType(OperationEnum.Login);
 							setIsModalOpen(true);
 						}}
 					>
@@ -56,8 +58,14 @@ const Profile = () => {
 				label: (
 					<a
 						onClick={() => {
-							message.success('登出成功，页面即将刷新。');
-							logout();
+							Modal.confirm({
+								title: '退出登录',
+								content: '确认要退出登录吗？',
+								onOk: () => {
+									message.success('登出成功，页面即将刷新。');
+									logout();
+								}
+							});
 						}}
 					>
 						logout
@@ -70,6 +78,27 @@ const Profile = () => {
 	const displayName = useMemo(() => {
 		return (userInfo.name || '')?.slice(0, 5);
 	}, [userInfo.name]);
+
+	const modelContent = useMemo(() => {
+		switch (modelType) {
+			case OperationEnum.Login:
+				return (
+					<div className={s.ModalContent}>
+						<GoogleOAuthProvider clientId={clientId}>
+							<Login finishSignIn={() => setIsModalOpen(false)} />
+						</GoogleOAuthProvider>
+					</div>
+				);
+			case OperationEnum.Register:
+				return (
+					<div className={s.ModalContent}>
+						<Register finishSignUp={() => setIsModalOpen(false)} />
+					</div>
+				);
+			default:
+				return null;
+		}
+	}, [modelType]);
 
 	return (
 		<>
@@ -91,24 +120,7 @@ const Profile = () => {
 				}}
 				destroyOnClose
 			>
-				<div className={s.ModalContent}>
-					<GoogleOAuthProvider clientId={clientId}>
-						<Login finishSignIn={() => setIsModalOpen(false)} />
-					</GoogleOAuthProvider>
-				</div>
-			</Modal>
-			<Modal
-				open={isRegisterModalOpen}
-				footer={null}
-				closable={false}
-				onCancel={() => {
-					setIsRegisterModalOpen(false);
-				}}
-				destroyOnClose
-			>
-				<div className={s.ModalContent}>
-					<Register finishSignUp={() => setIsRegisterModalOpen(false)} />
-				</div>
+				{modelContent}
 			</Modal>
 		</>
 	);
