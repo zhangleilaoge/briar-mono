@@ -4,6 +4,7 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  Scope,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
@@ -12,7 +13,7 @@ import { FastifyRequest } from 'fastify';
 
 import { IS_PUBLIC_KEY } from '@/decorators/Public';
 import { ContextService } from '@/services/common/ContextService';
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
@@ -26,7 +27,6 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]);
     if (isPublic) {
-      // 💡 See this condition
       return true;
     }
 
@@ -41,7 +41,8 @@ export class AuthGuard implements CanActivate {
       });
 
       this.contextService.setValue('userId', payload.sub);
-    } catch {
+    } catch (e) {
+      console.log(e);
       throw new UnauthorizedException();
     }
     return true;

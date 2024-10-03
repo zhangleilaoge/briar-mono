@@ -15,7 +15,6 @@ import {
   RoleEnum,
 } from 'briar-shared';
 import { ICreateImgResponse } from 'briar-shared';
-import { getFileExtension } from 'briar-shared';
 
 import { Ability } from '@/decorators/ability';
 import { Public } from '@/decorators/Public';
@@ -40,8 +39,6 @@ export class AppController {
   @Public()
   @Get('chatRequestStream')
   @Sse('sse')
-  @Ability(AbilityEnum.Chat)
-  @UseGuards(AbilityGuard)
   async chatRequestStream(
     @Query('query') query: string,
     @Query('model') model: ModelEnum,
@@ -68,16 +65,7 @@ export class AppController {
   async genImg(@Body('content') content: string): Promise<ICreateImgResponse> {
     let imgUrl = '';
     try {
-      const tempImg: string = await this.aiService.createImg(
-        content,
-        ModelEnum.DallE2,
-      );
-      const userId = this.contextService.get().userId;
-
-      imgUrl = (await this.cosService.uploadImg2Cos(
-        `runtime-images/${userId}-${Date.now()}.${getFileExtension(tempImg)}`,
-        tempImg,
-      )) as string;
+      imgUrl = await this.aiService.createImg(content, ModelEnum.DallE2);
     } catch (error) {
       this.logger.error(error, '图片生成失败：');
 

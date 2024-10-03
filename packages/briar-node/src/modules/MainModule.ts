@@ -7,7 +7,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 import { AuthGuard } from '@/guards/auth';
 
-// import { LogMiddleware } from '@/middleware/log';
 import { LogInterceptor } from '../interceptor/log';
 import { AiModule } from './AiModule';
 import { CommonModule } from './common/CommonModule';
@@ -24,7 +23,7 @@ import { UserModule } from './UserModule';
       signOptions: { expiresIn: '30 days' },
     }),
     ScheduleModule.forRoot(),
-    CommonModule, // 添加这里
+    CommonModule,
   ],
   providers: [
     {
@@ -37,8 +36,4 @@ import { UserModule } from './UserModule';
     },
   ],
 })
-export class MainModule {
-  // configure(consumer: MiddlewareConsumer) {
-  //   consumer.apply(LogMiddleware).forRoutes('*');
-  // }
-}
+export class MainModule {}

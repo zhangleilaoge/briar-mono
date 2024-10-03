@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 
 interface IContext {
   userId?: number;
 }
 
-@Injectable()
+/** 请求级别的上下文，类似 express 中的 context */
+@Injectable({ scope: Scope.REQUEST })
 export class ContextService {
   private context: IContext = {};
 

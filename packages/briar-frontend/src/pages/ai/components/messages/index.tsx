@@ -123,7 +123,7 @@ const Message: FC<{
 						<div className={s.ImgTip}>
 							<Tooltip
 								placement={isUser ? 'left' : 'right'}
-								title="Please ensure that image materials are saved promptly, as generated results will be retained for a maximum of one month."
+								title="Please ensure that image materials are saved promptly, as generated results will be retained for a maximum of one hour."
 							>
 								<InfoCircleOutlined />
 							</Tooltip>

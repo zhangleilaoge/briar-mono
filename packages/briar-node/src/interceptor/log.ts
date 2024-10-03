@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
+  Scope,
 } from '@nestjs/common';
 import { format } from 'date-fns';
 import { Observable } from 'rxjs';
@@ -12,7 +13,7 @@ import { ContextService } from '@/services/common/ContextService';
 
 const ssePaths = ['/api/ai/chatRequestStream'];
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class LogInterceptor implements NestInterceptor {
   constructor(private readonly contextService: ContextService) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {

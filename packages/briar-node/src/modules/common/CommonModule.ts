@@ -19,7 +19,6 @@ import { DatabaseModule } from './DataBaseModule';
   ],
   exports: [
     DatabaseModule,
-
     ContextService,
     LogService,
     LogDalService,

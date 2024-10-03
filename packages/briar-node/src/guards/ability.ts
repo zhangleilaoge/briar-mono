@@ -5,11 +5,13 @@ import {
   ExecutionContext,
   ForbiddenException,
   Injectable,
+  Scope,
 } from '@nestjs/common';
 
 import { USER_ABILITY_KEY } from '@/decorators/ability';
 import { UserAbilityService } from '@/services/UserAbilityService';
-@Injectable()
+
+@Injectable({ scope: Scope.REQUEST })
 export class AbilityGuard implements CanActivate {
   constructor(private userAbilityService: UserAbilityService) {}
 
