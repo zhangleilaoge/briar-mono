@@ -35,6 +35,12 @@ export interface IChatRequestParams {
 	model: ModelEnum;
 }
 
+export interface IGetMessagesParams {
+	conversationId: number;
+	endTime?: number;
+	pageSize?: number;
+}
+
 // ====================== response below ========================
 export interface ICreateImgResponse {
 	imgList: string[];

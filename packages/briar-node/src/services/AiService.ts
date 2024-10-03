@@ -114,10 +114,16 @@ export class AiService {
     return conversationList;
   }
 
-  async getContextMessages(conversationId: number) {
-    const messages =
-      await this.messageDalService.findMessagesByConversationId(conversationId);
-    return messages;
+  async getMessages(
+    conversationId: number,
+    endTime = Date.now(),
+    pageSize = 50,
+  ) {
+    return await this.messageDalService.findMessages(
+      conversationId,
+      endTime,
+      pageSize,
+    );
   }
 
   async createConversation(title: string) {

@@ -44,7 +44,7 @@ export class AppController {
     @Query('model') model: ModelEnum,
     @Query('conversationId') conversationId: number,
   ) {
-    const messageArr = await this.aiService.getContextMessages(conversationId);
+    const messageArr = (await this.aiService.getMessages(conversationId)).items;
 
     return this.aiService.chatRequestStream({
       messages: [
@@ -83,11 +83,13 @@ export class AppController {
     return this.aiService.getConversationList();
   }
 
-  @Get('findMessagesByConversationId')
-  async findMessagesByConversationId(
+  @Get('getMessages')
+  async getMessages(
     @Query('conversationId') conversationId: number,
+    @Query('pageSize') pageSize = 50,
+    @Query('endTime') endTime = Date.now(),
   ) {
-    return this.messageDalService.findMessagesByConversationId(conversationId);
+    return this.aiService.getMessages(+conversationId, +endTime, +pageSize);
   }
 
   @Post('createConversation')

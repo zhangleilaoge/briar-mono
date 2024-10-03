@@ -5,8 +5,8 @@ import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
 	createConversation as createConversationApi,
 	deleteConversation as deleteConversationApi,
-	findMessagesByConversationId,
 	getConversationList,
+	getMessages,
 	updateConversation as updateConversationApi
 } from '@/api/ai';
 import CommonContext from '@/context/common';
@@ -16,10 +16,13 @@ import { MenuItem } from '../components/menu-item';
 import { CONVERSATION_DESC, ConversationEnum } from '../constants';
 
 const initTime = Date.now();
+const MESSAGE_PAGE_SIZE = 20;
 
 const useConversationList = () => {
 	const [conversationList, setConversationList] = useState<IConversationDTO[]>([]);
 	const [messageArr, setMessageArr] = useState<IMessageDTO[]>([]);
+	// const [totalMessages, setTotalMessages] = useState(0);
+	const [hasMoreMessages, setHasMoreMessages] = useState(false);
 	const [currentConversationKey, setCurrentConversationKey] = useState<number>();
 	const [selectedConversationKeys, setSelectedConversationKeys] = useState<number[]>([]);
 	const [multiSelectMode, setMultiSelectMode] = useState(false);
@@ -37,10 +40,24 @@ const useConversationList = () => {
 
 	const clickMenuItem = (key: number) => {
 		setCurrentConversationKey(key);
-		findMessagesByConversationId(key).then((data) => {
-			setMessageArr(data);
+		getMessages({
+			conversationId: key,
+			pageSize: MESSAGE_PAGE_SIZE
+		}).then(({ items }) => {
+			setHasMoreMessages(MESSAGE_PAGE_SIZE <= items.length);
+			setMessageArr(items);
 		});
 	};
+
+	const loadMoreMessages = useCallback(async () => {
+		const { items: messages } = await getMessages({
+			conversationId: currentConversationKey as number,
+			endTime: new Date(messageArr[0].createdAt).getTime(),
+			pageSize: MESSAGE_PAGE_SIZE
+		});
+		setHasMoreMessages(MESSAGE_PAGE_SIZE <= messages.length);
+		setMessageArr([...messages, ...messageArr]);
+	}, [currentConversationKey, messageArr]);
 
 	const refreshConversationList = async () => {
 		const list = await getConversationList();
@@ -169,6 +186,7 @@ const useConversationList = () => {
 		multiSelectMode,
 		selectedConversationKeys,
 		messageArr,
+		hasMoreMessages,
 		createConversation,
 		setCurrentConversationKey,
 		deleteSelectedConversation,
@@ -179,7 +197,8 @@ const useConversationList = () => {
 		clickMenuItem,
 		updateConversation,
 		refreshConversationList,
-		setCreateImgMode
+		setCreateImgMode,
+		loadMoreMessages
 	};
 };
 

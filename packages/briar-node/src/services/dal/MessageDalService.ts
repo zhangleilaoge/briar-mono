@@ -1,8 +1,9 @@
-import { MessageModel } from '@/model/MessageModel';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { ModelEnum, RoleEnum } from 'briar-shared';
 import { Op } from 'sequelize';
+
+import { MessageModel } from '@/model/MessageModel';
 
 @Injectable()
 export class MessageDalService {
@@ -31,17 +32,29 @@ export class MessageDalService {
     return await this.messageModel.update(data, { where: { id: data.id } });
   }
 
-  async findMessagesByConversationId(conversationId: number, limit = 100) {
-    return this.messageModel
-      .findAll({
-        where: { conversationId },
-        limit,
-        order: [
-          ['createdAt', 'DESC'],
-          ['id', 'DESC'],
-        ],
-      })
-      .then((messages) => messages.reverse().map((msg) => msg.dataValues));
+  async findMessages(conversationId: number, endTime = Date.now(), limit = 50) {
+    const totalCount = await this.messageModel.count({
+      where: {
+        conversationId,
+        createdAt: { [Op.lt]: new Date(endTime) },
+      },
+    });
+
+    const messages = await this.messageModel.findAll({
+      where: { conversationId, createdAt: { [Op.lt]: new Date(endTime) } },
+      limit,
+      order: [
+        ['createdAt', 'DESC'],
+        ['id', 'DESC'],
+      ],
+    });
+
+    const messageData = messages.reverse().map((msg) => msg.dataValues);
+
+    return {
+      total: totalCount,
+      items: messageData,
+    };
   }
 }
 

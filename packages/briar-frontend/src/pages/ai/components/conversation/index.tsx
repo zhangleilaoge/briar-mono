@@ -1,7 +1,5 @@
-import { ArrowUpOutlined, XFilled } from '@ant-design/icons';
 import { useRequest, useSSE } from 'alova/client';
 import { Button } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
 import { RoleEnum } from 'briar-shared';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -15,7 +13,7 @@ import { conversationContainer } from '../../container/conversationContainer';
 import useScroll from '../../hooks/useScroll';
 import Messages from '../messages';
 import ConversationOpt from './components/ConversationOpt';
-import useCompositionInput from './hooks/useCompositionInput';
+import Input from './components/Input';
 import useGptModel from './hooks/useGptModel';
 import s from './style.module.scss';
 
@@ -23,17 +21,20 @@ const Conversation: FC = () => {
 	const [inputValue, setInputValue] = useState('');
 
 	const {
-		createConversation,
-		setCurrentConversationKey,
-		currentConversation,
-		setMessageArr,
-		refreshConversationList,
 		messageArr,
 		createImgMode,
+		currentConversation,
+		hasMoreMessages,
+		createConversation,
+		loadMoreMessages,
+		setCurrentConversationKey,
+		setMessageArr,
+		refreshConversationList,
 		setCreateImgMode
 	} = useContainer(conversationContainer);
 	const assistantAnswerRef = useRef('');
-
+	// 加载更多状态
+	const [fetching, setFetching] = useState(false);
 	const { selectOption, options, onChange } = useGptModel();
 	const { onMessage, send, close, readyState } = useSSE(chatRequestStream);
 	const {
@@ -50,11 +51,11 @@ const Conversation: FC = () => {
 	const queryLoading = useMemo(() => {
 		return (readyState as number) !== SSEHookReadyState.CLOSED;
 	}, [readyState]);
+	// 消息询问状态
 	const loading = useMemo(() => {
 		return queryLoading || loadingCreateImg;
 	}, [loadingCreateImg, queryLoading]);
 	const { scrollToBottom, quickScrollToTop } = useScroll(`.${s.Messages}`);
-	const { handleComposition, isCompositionRef } = useCompositionInput();
 
 	// 现在 sse 的 error 太弱了，没有任何提示作用，先注释了
 	// onError((e) => {
@@ -154,32 +155,21 @@ const Conversation: FC = () => {
 		}
 	};
 
-	const textareaPlaceholder = useMemo(() => {
-		if (!currentConversation) {
-			return '输入聊天内容，开启新的对话。';
-		}
-
-		return '继续输入内容以获取回答。';
-	}, [currentConversation]);
-
-	const onTextAreaKeydown: React.KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
-		if (e.key === 'Enter' && !e.shiftKey && !isCompositionRef.current) {
-			e.preventDefault();
-			submit();
-		}
+	const loadMore = async () => {
+		loadMoreMessages();
+		setFetching(true);
 	};
 
 	const shutDown = async () => {
 		close();
-		assistantAnswerRef.current = '';
 		setInputValue('');
-		scrollToBottom();
 	};
 
 	// 请求完成后，更新助手消息
 	useEffect(() => {
 		if (!queryLoading) {
-			const content = assistantAnswerRef.current || '请求超时,请稍后重试。';
+			const content = assistantAnswerRef.current;
+			assistantAnswerRef.current = '';
 
 			if (messageArr.length && messageArr[messageArr.length - 1].role === RoleEnum.Assistant) {
 				updateMsg({
@@ -202,10 +192,21 @@ const Conversation: FC = () => {
 		) {
 			shutDown();
 		}
-		quickScrollToTop();
-		scrollToBottom();
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentConversation?.id]);
+
+	// 切换对话，新对话加载完成时，滚动到底部
+	useEffect(() => {
+		if (!messageArr?.[0]?.conversationId) return;
+		quickScrollToTop();
+		scrollToBottom();
+	}, [messageArr?.[0]?.conversationId]);
+
+	// 消息加载完后，还原加载更多按钮
+	useEffect(() => {
+		setFetching(false);
+	}, [messageArr]);
 
 	return (
 		<div className={s.Container}>
@@ -213,30 +214,26 @@ const Conversation: FC = () => {
 				<ConversationOpt selectOption={selectOption} onChange={onChange} options={options} />
 			</div>
 			<div className={`${s.Messages} ${loading ? mainStyle.loadingCursor : ''}`}>
+				{hasMoreMessages ? (
+					<div className={s.loadMore}>
+						<Button
+							type="text"
+							onClick={loadMore}
+							loading={fetching}
+							disabled={loading || fetching}
+						>
+							加载更多
+						</Button>
+					</div>
+				) : null}
 				<Messages conversation={currentConversation} loading={loading} />
 			</div>
-			<div className={s.Input}>
-				<TextArea
-					placeholder={textareaPlaceholder}
-					value={inputValue}
-					onChange={(e) => setInputValue(e.target.value)}
-					size="large"
-					autoSize={{ minRows: 1, maxRows: 6 }}
-					onKeyDown={onTextAreaKeydown}
-					// @ts-ignore
-					onCompositionStart={handleComposition}
-					// @ts-ignore
-					onCompositionEnd={handleComposition}
-					maxLength={1900}
-				/>
-				<Button
-					icon={loading ? <XFilled /> : <ArrowUpOutlined />}
-					onClick={submit}
-					className={s.SubmitBtn}
-					shape="circle"
-					danger={loading}
-				></Button>
-			</div>
+			<Input
+				loading={loading}
+				inputValue={inputValue}
+				setInputValue={setInputValue}
+				submit={submit}
+			/>
 		</div>
 	);
 };
