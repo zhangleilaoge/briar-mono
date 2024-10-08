@@ -135,4 +135,9 @@ export class AppController {
   ) {
     return this.aiService.updateMessage(id, content, imgList);
   }
+
+  @Get('getDosage')
+  async getDosage() {
+    return this.aiService.getDosage();
+  }
 }

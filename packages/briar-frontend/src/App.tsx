@@ -44,7 +44,7 @@ function App() {
 						<Menu
 							mode="horizontal"
 							selectedKeys={[menuKey]}
-							items={MENU_ROUTER_CONFIG}
+							items={MENU_ROUTER_CONFIG.filter(({ hide }) => !hide)}
 							onClick={({ key }) => onLevelPathChange(key as MenuKeyEnum)}
 							className={s.Menu}
 							theme={'light'}

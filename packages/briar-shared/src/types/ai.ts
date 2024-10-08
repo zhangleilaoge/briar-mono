@@ -9,7 +9,7 @@ export enum RoleEnum {
 export enum ModelEnum {
 	Gpt4oMini = 'gpt-4o-mini',
 	Gpt4o = 'gpt-4o',
-	DallE3 = 'dall-e-3',
+	// DallE3 = 'dall-e-3',
 	DallE2 = 'dall-e-2'
 }
 
@@ -46,3 +46,12 @@ export interface ICreateImgResponse {
 	imgList: string[];
 	imgDesc: string;
 }
+
+export type IUsageDetail = {
+	time: string;
+	promptTokens: number;
+	completionTokens: number;
+	totalTokens: number;
+	count: number;
+	cost: number;
+}[];

@@ -3,6 +3,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Avatar, Dropdown, message, Modal } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
 import { useContext, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { clientId } from '@/constants/user';
 import CommonContext from '@/context/common';
@@ -21,6 +22,7 @@ const Profile = () => {
 	const { userInfo, logout } = useContext(CommonContext);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modelType, setModelType] = useState(OperationEnum.Login);
+	const navigate = useNavigate();
 
 	const dropdownItems = useMemo(() => {
 		return [
@@ -100,6 +102,10 @@ const Profile = () => {
 		}
 	}, [modelType]);
 
+	const goSettings = () => {
+		navigate('/settings');
+	};
+
 	return (
 		<>
 			<Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
@@ -107,6 +113,8 @@ const Profile = () => {
 					size={40}
 					src={userInfo.profileImg || ''}
 					icon={displayName || userInfo.profileImg ? null : <UserOutlined />}
+					style={{ cursor: 'pointer' }}
+					onClick={goSettings}
 				>
 					{displayName}
 				</Avatar>

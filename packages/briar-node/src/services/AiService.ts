@@ -1,9 +1,12 @@
 import 'dotenv/config';
 
 import { Injectable } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import axios from 'axios';
 import {
   IConversationDTO,
   IMessageDTO,
+  IUsageDetail,
   ModelEnum,
   RoleEnum,
 } from 'briar-shared';
@@ -22,6 +25,8 @@ import { ConversationDalService } from './dal/ConversationDalService';
 import { MessageDalService } from './dal/MessageDalService';
 import { LogService } from './LogService';
 
+const models = [ModelEnum.Gpt4oMini, ModelEnum.Gpt4o, ModelEnum.DallE2];
+
 @Injectable()
 export class AiService {
   openai = new OpenAI({
@@ -36,17 +41,48 @@ export class AiService {
     private contextService: ContextService,
   ) {}
 
-  // async chatRequest(prompt: string) {
-  //   const completion = await this.openai.chat.completions.create({
-  //     messages: [
-  //       { role: RoleEnum.System, content: prompt },
-  //       ...params.messages,
-  //     ],
-  //     model: ModelEnum.Gpt4oMini,
-  //   });
+  async getDosage() {
+    const result = await axios({
+      method: 'POST',
+      url: 'https://api.chatanywhere.tech/v1/query/usage_details',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: process.env.BRIAR_API_KEY || DEFAULT_FREE_API_KEY,
+      },
+      data: {
+        model: 'gpt-4o-mini%',
+        hours: 24,
+      },
+    });
 
-  //   return completion;
-  // }
+    return result.data;
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_10AM)
+  async writeDosage() {
+    const results: IUsageDetail[] = (
+      await Promise.all(
+        models.map((model) =>
+          axios({
+            method: 'POST',
+            url: 'https://api.chatanywhere.tech/v1/query/usage_details',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: process.env.BRIAR_API_KEY || DEFAULT_FREE_API_KEY,
+            },
+            data: {
+              model: `${model}%`,
+              hours: 24,
+            },
+          }),
+        ),
+      )
+    ).map((result) => result.data);
+    // 定时任务看用量
+    // const dayResults = results.map((result ) => {
+    //   return result.
+    // })
+  }
 
   async chatRequestStream(params: {
     messages: Omit<IMessageDTO, 'createdAt' | 'updatedAt' | 'id'>[];

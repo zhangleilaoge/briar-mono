@@ -5,14 +5,14 @@ import { Suspense, useContext, useMemo } from 'react';
 import { Routes } from 'react-router-dom';
 
 import Footer from '@/components/Footer';
-import { TOOLS_ROUTER_CONFIG, ToolsPathKeyEnum } from '@/constants/router';
+import { SETTINGS_ROUTER_CONFIG, SettingsPathKeyEnum } from '@/constants/router';
 import CommonContext from '@/context/common';
 import useLevelPath from '@/hooks/useLevelPath';
 import useSider from '@/hooks/useSider';
 import mainStyle from '@/styles/main.module.scss';
 import { findSuperiorRouterConfig, getRoutes } from '@/utils/router';
 
-function CodeConverter() {
+function Settings() {
 	const { isCollapsed, setIsCollapsed } = useSider();
 	const { fullScreenInfo } = useContext(CommonContext);
 	const {
@@ -22,7 +22,7 @@ function CodeConverter() {
 	const { menuKey, onLevelPathChange } = useLevelPath(2);
 
 	const defaultOpenKeys = useMemo(() => {
-		return findSuperiorRouterConfig(menuKey, TOOLS_ROUTER_CONFIG);
+		return findSuperiorRouterConfig(menuKey, SETTINGS_ROUTER_CONFIG);
 	}, [menuKey]);
 
 	return (
@@ -39,7 +39,7 @@ function CodeConverter() {
 					selectedKeys={[menuKey]}
 					defaultOpenKeys={defaultOpenKeys}
 					className={mainStyle.SiderMenu}
-					items={TOOLS_ROUTER_CONFIG}
+					items={SETTINGS_ROUTER_CONFIG}
 					onClick={({ key }) => onLevelPathChange(key)}
 				/>
 			</Sider>
@@ -60,9 +60,7 @@ function CodeConverter() {
 							</div>
 						}
 					>
-						<Routes>
-							{getRoutes(TOOLS_ROUTER_CONFIG, ToolsPathKeyEnum.CompositionStyleConverter)}
-						</Routes>
+						<Routes>{getRoutes(SETTINGS_ROUTER_CONFIG, SettingsPathKeyEnum.Dosage)}</Routes>
 					</Suspense>
 				</Content>
 				<Footer />
@@ -71,4 +69,4 @@ function CodeConverter() {
 	);
 }
 
-export default CodeConverter;
+export default Settings;

@@ -39,3 +39,5 @@ export const genImg = (params: { content: string }) =>
 	alovaInstance.Post<ICreateImgResponse>(`/ai/genImg`, params, {
 		timeout: 60000
 	});
+
+export const getDosage = () => alovaInstance.Get('/ai/getDosage');

@@ -1,4 +1,4 @@
-import { ExperimentOutlined, InteractionOutlined } from '@ant-design/icons';
+import { BarChartOutlined, ExperimentOutlined, InteractionOutlined } from '@ant-design/icons';
 import { lazy, LazyExoticComponent } from 'react';
 
 import CompositionApiIntro from '@/pages/tools/pages/composition-style-intro';
@@ -6,7 +6,8 @@ import { IMenuRouterConfig } from '@/types/router';
 
 export enum MenuKeyEnum {
 	Tools = 'tools',
-	Ai = 'ai'
+	Ai = 'ai',
+	Settings = 'settings'
 }
 
 export enum ToolsPathKeyEnum {
@@ -15,6 +16,12 @@ export enum ToolsPathKeyEnum {
 	CompositionStyleIntro = 'composition-style-intro',
 	Playground = 'playground',
 	Shader = 'shader'
+}
+
+export enum SettingsPathKeyEnum {
+	Manager = 'manager',
+	Profile = 'profile',
+	Dosage = 'dosage'
 }
 
 export const MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
@@ -27,10 +34,16 @@ export const MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
 		key: MenuKeyEnum.Tools,
 		label: '工具',
 		component: lazy(() => import('../pages/tools'))
+	},
+	{
+		key: MenuKeyEnum.Settings,
+		label: '设置',
+		component: lazy(() => import('../pages/settings')),
+		hide: true
 	}
 ];
 
-export const SIDER_MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
+export const TOOLS_ROUTER_CONFIG: IMenuRouterConfig[] = [
 	{
 		key: ToolsPathKeyEnum.CodeConverter,
 		label: '代码转换',
@@ -57,6 +70,21 @@ export const SIDER_MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
 				key: ToolsPathKeyEnum.Shader,
 				label: 'shader',
 				component: lazy(() => import('../pages/tools/pages/shader'))
+			}
+		]
+	}
+];
+
+export const SETTINGS_ROUTER_CONFIG: IMenuRouterConfig[] = [
+	{
+		key: SettingsPathKeyEnum.Manager,
+		label: '管理',
+		icon: <BarChartOutlined />,
+		children: [
+			{
+				key: SettingsPathKeyEnum.Dosage,
+				label: 'dosage',
+				component: lazy(() => import('../pages/settings/pages/dosage'))
 			}
 		]
 	}
