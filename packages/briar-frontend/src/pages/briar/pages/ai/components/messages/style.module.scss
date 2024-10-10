@@ -1,0 +1,122 @@
+@import '@/pages/briar/styles/var.module.scss';
+
+.CopyButton {
+	position: absolute;
+	right: 12px;
+	top: 12px;
+	background: transparent;
+}
+
+.Message {
+	display: flex;
+	line-height: 22px;
+	gap: 24px;
+	align-items: flex-start;
+
+	p,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	ol,
+	ul,
+	pre {
+		margin-block-start: 0em;
+		margin-block-end: 0em;
+		max-width: 756px;
+	}
+
+	pre {
+		background: #1a1621;
+		border-radius: 12px;
+		position: relative;
+	}
+
+	ol,
+	ul,
+	li {
+		white-space: normal;
+	}
+
+	li {
+		margin-block-start: 0.6em;
+	}
+
+	> div {
+		max-width: calc(100% - 78px);
+	}
+
+	:global(.ant-avatar) {
+		flex-shrink: 0 !important;
+	}
+}
+
+.User {
+	flex-direction: row-reverse;
+	color: $textColor;
+}
+
+.Content {
+	font-size: 16px;
+	border-radius: 24px;
+	padding: 16px 20px;
+	background-color: $selectedColor;
+	white-space: pre-wrap;
+}
+
+.Assistant {
+	.ContentArea {
+		color: white;
+		margin-right: 120px;
+		display: flex;
+	}
+}
+
+.User {
+	.ContentArea {
+		margin-left: 120px;
+		display: flex;
+	}
+	.Content {
+		background-color: #f5f5f5;
+	}
+}
+
+.Date {
+	display: flex;
+	justify-content: flex-end;
+	color: #a2a6a6;
+	margin-bottom: 8px;
+}
+
+.Assistant .Date {
+	justify-content: flex-start;
+}
+
+.CopyBtn {
+	color: #c8c9cc;
+
+	&:hover {
+		color: #7c8282 !important;
+	}
+}
+
+.Img {
+	max-width: 512px;
+	max-height: 512px;
+}
+
+.ImgTip {
+	color: #c8c9cc;
+	font-size: 16px;
+	display: flex;
+	align-items: center;
+	padding: 16px 8px;
+}
+
+.HideImg {
+	transform: scale(0);
+	position: absolute;
+}

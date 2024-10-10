@@ -3,6 +3,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { join } from 'path';
 
 import { localHost } from './constants/env';
 import { MainModule } from './modules/MainModule';
@@ -19,6 +20,11 @@ async function bootstrap() {
     MainModule,
     new FastifyAdapter(),
   );
+
+  app.useStaticAssets({
+    root: join(__dirname, '../../../../briar-frontend/dist/briar'),
+    prefix: '/briar',
+  });
 
   app.enableCors({
     origin: origins,

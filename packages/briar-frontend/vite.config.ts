@@ -1,10 +1,10 @@
-import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import viteCompression from 'vite-plugin-compression';
-import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 import externalGlobals from 'rollup-plugin-external-globals';
+import { defineConfig } from 'vite';
+import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
+import viteCompression from 'vite-plugin-compression';
 import { ViteEjsPlugin } from 'vite-plugin-ejs';
-
+import mpa from 'vite-plugin-mpa';
 const external = [
 	'typescript',
 	'prettier',
@@ -49,6 +49,10 @@ const config = ({ mode }: { mode: string }) => {
 			}),
 			ViteEjsPlugin({
 				quick
+			}),
+			// @ts-ignore
+			mpa.default({
+				open: false
 			})
 		],
 		build: {

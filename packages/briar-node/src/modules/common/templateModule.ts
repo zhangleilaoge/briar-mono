@@ -4,11 +4,31 @@ import { join } from 'path';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../../../briar-frontend/dist'),
-      serveRoot: '',
-      exclude: ['/api*'],
-    }),
+    // ServeStaticModule.forRoot(
+    //   {
+    //     rootPath: join(__dirname, '../../../../briar-frontend/dist'),
+    //     renderPath: '/briar',
+    //     exclude: ['/api*'],
+    //   },
+    //   {
+    //     rootPath: join(__dirname, '../../../../briar-frontend/dist/static'),
+    //     renderPath: '/static',
+    //     exclude: ['/api*'],
+    //   },
+    // ),
+    // ServeStaticModule.forRoot(
+    //   // {
+    //   //   rootPath: join(__dirname, '../../../../briar-frontend/dist/briar'),
+    //   //   renderPath: '/briar',
+    //   //   exclude: ['/api*'],
+    //   // },
+    //   {
+    //     rootPath: join(__dirname, '../../../../briar-frontend/dist/static'),
+    //     renderPath: '/static',
+    //     exclude: ['/api*'],
+    //     serveRoot: '/static',
+    //   },
+    // ),
   ],
   controllers: [],
   providers: [],
