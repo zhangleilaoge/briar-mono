@@ -6,6 +6,15 @@ export const safeJsonParse = (str: string) => {
 	}
 };
 
+export const safePromise = async <T>(promise: Promise<T>): Promise<[any, T | null]> => {
+	try {
+		const result = await promise;
+		return [null, result];
+	} catch (error) {
+		return [error, null];
+	}
+};
+
 export function getFileExtension(url: string) {
 	// 去掉查询部分
 	const baseUrl = url.split('?')[0];

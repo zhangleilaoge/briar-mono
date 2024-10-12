@@ -1,0 +1,15 @@
+.minus {
+	margin-left: 12px;
+}
+
+.btns {
+	:global(.ant-form-item-control-input-content) {
+		display: flex;
+		gap: 12px;
+		width: 100%;
+	}
+}
+
+.plan {
+	max-width: 400px;
+}

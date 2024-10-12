@@ -1,4 +1,4 @@
-import { ExperimentOutlined, InteractionOutlined } from '@ant-design/icons';
+import { CarOutlined, ExperimentOutlined, InteractionOutlined } from '@ant-design/icons';
 import { lazy, LazyExoticComponent } from 'react';
 
 import CompositionApiIntro from '@/pages/briar/pages/tools/pages/composition-style-intro';
@@ -14,7 +14,9 @@ export enum ToolsPathKeyEnum {
 	CompositionStyleConverter = 'composition-style-converter',
 	CompositionStyleIntro = 'composition-style-intro',
 	Playground = 'playground',
-	Shader = 'shader'
+	Shader = 'shader',
+	Pragmatic = 'pragmatic',
+	CommuteCalculator = 'commute-calculator'
 }
 
 export const MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
@@ -57,6 +59,18 @@ export const SIDER_MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
 				key: ToolsPathKeyEnum.Shader,
 				label: 'shader',
 				component: lazy(() => import('../pages/tools/pages/shader'))
+			}
+		]
+	},
+	{
+		key: ToolsPathKeyEnum.Pragmatic,
+		label: '日常便利',
+		icon: <CarOutlined />,
+		children: [
+			{
+				key: ToolsPathKeyEnum.CommuteCalculator,
+				label: '通勤计算器',
+				component: lazy(() => import('../pages/tools/pages/commute-calculator'))
 			}
 		]
 	}
