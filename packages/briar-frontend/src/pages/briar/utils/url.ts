@@ -1,29 +1,39 @@
 export enum QueryKeyEnum {
-  displayMode = "displayMode",
+	DisplayMode = 'displayMode',
+	AmapKey = 'amapKey',
+	AmapToken = 'amapToken'
 }
 
 interface IUrlParams {
-  [QueryKeyEnum.displayMode]?: "normal" | "full"
+	[QueryKeyEnum.DisplayMode]?: 'normal' | 'full';
+	[QueryKeyEnum.AmapKey]?: string;
+	[QueryKeyEnum.AmapToken]?: string;
 }
 
 export const getUrlParams = (url = window.location.href): IUrlParams => {
-  const urlObj = new URL(url)
-  const urlSearchParams = urlObj.searchParams
-  const paramObj = Object.fromEntries(urlSearchParams)
-  return paramObj
-}
+	const urlObj = new URL(url);
+	const urlSearchParams = urlObj.searchParams;
+	const paramObj = Object.fromEntries(urlSearchParams);
+	return paramObj;
+};
 
-export function updateURLParameter(key: string, value?: string) {
-  // 获取当前 URL
-  const url = new URL(window.location.href)
+export function updateURLParameter(
+	params: Record<string, string | undefined | null>,
+	silent = true
+) {
+	// 获取当前 URL
+	const url = new URL(window.location.href);
 
-  // 更新或添加指定的搜索参数
-  if (key && value) {
-    url.searchParams.set(key, value)
-  } else if (key) {
-    url.searchParams.delete(key)
-  }
+	Object.entries(params).forEach(([key, value]) => {
+		if (!value) {
+			url.searchParams.delete(key);
+		} else {
+			url.searchParams.set(key, value);
+		}
+	});
 
-  // 使用 History API 更新浏览器的地址栏，不刷新页面
-  window.history.pushState({}, "", url)
+	// 使用 History API 更新浏览器的地址栏，不刷新页面
+	silent ? window.history.pushState({}, '', url) : (window.location.href = url.toString());
+
+	return url.toString();
 }

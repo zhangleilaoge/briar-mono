@@ -37,6 +37,32 @@ const alovaInstance = createAlova({
 	}
 });
 
+export const outerAlovaInstance = createAlova({
+	requestAdapter: fetchAdapter(),
+	statesHook: reactHook,
+	responded: {
+		onSuccess: async (response) => {
+			if (response.status >= 400) {
+				const rawResponse = await response?.json?.();
+				throw new Error(rawResponse?.message || JSON.stringify(rawResponse));
+			}
+
+			return response?.json?.() || response;
+		},
+		onError: (error) => {
+			console.log('error:', error);
+			errorNotify(error);
+			throw error;
+		}
+	},
+	timeout: 30000,
+	cacheFor: {
+		GET: {
+			expire: 100
+		}
+	}
+});
+
 export const getQueryFromObj = (obj: Record<string, any>) => {
 	if (!obj) return '';
 	return Object.keys(obj)

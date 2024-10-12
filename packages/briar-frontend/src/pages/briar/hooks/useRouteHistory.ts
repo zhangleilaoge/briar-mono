@@ -23,13 +23,13 @@ const useRouteHistory = () => {
 
 		if (currentHref !== window.location.href || !oldHref) return;
 
-		const oldDisplayMode = getUrlParams(oldHref)?.[QueryKeyEnum.displayMode];
-		const newDisplayMode = getUrlParams(currentHref)?.[QueryKeyEnum.displayMode];
+		const oldDisplayMode = getUrlParams(oldHref)?.[QueryKeyEnum.DisplayMode];
+		const newDisplayMode = getUrlParams(currentHref)?.[QueryKeyEnum.DisplayMode];
 
 		if (oldDisplayMode && !newDisplayMode) {
 			const url = new URL(currentHref);
 
-			url.searchParams.set(QueryKeyEnum.displayMode, oldDisplayMode);
+			url.searchParams.set(QueryKeyEnum.DisplayMode, oldDisplayMode);
 			navigate(`${url.pathname}${url.search}`);
 		}
 	}, [hrefHistory, navigate]);

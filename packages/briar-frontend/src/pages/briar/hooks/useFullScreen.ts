@@ -26,13 +26,13 @@ const useFullScreen = () => {
 	}, [location, triggerUpdate]);
 
 	const inFullScreen = useCallback(() => {
-		updateURLParameter(QueryKeyEnum.displayMode);
+		updateURLParameter({ [QueryKeyEnum.DisplayMode]: null });
 		localStorage.setItem(LocalStorageKey.FullScreen, 'full');
 		triggerUpdate();
 	}, [triggerUpdate]);
 
 	const outFullScreen = useCallback(() => {
-		updateURLParameter(QueryKeyEnum.displayMode);
+		updateURLParameter({ [QueryKeyEnum.DisplayMode]: null });
 		localStorage.setItem(LocalStorageKey.FullScreen, 'normal');
 		triggerUpdate();
 	}, [triggerUpdate]);

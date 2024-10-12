@@ -1,7 +1,7 @@
 import AMapLoader from '@amap/amap-jsapi-loader';
 
-const DEFAULT_KEY = '66f986e3f2c27331f9f55c60a5bd7689';
-const DAFAULT_TOKEN = 'bcfb91afee148295929a226899ccb27b';
+export const DEFAULT_KEY = '66f986e3f2c27331f9f55c60a5bd7689';
+export const DAFAULT_TOKEN = 'bcfb91afee148295929a226899ccb27b';
 
 // const key2 = 'd442bce78bb4568ebf51c562c434664a';
 // const token2 = '0c3bb7fdd9c79ede38a0c4a5dfec8b6e';

@@ -1,10 +1,12 @@
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Divider, Form, FormProps, Input, Select } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 
 import { errorNotify } from '@/pages/briar/utils/notify';
+import { getUrlParams, QueryKeyEnum, updateURLParameter } from '@/pages/briar/utils/url';
 
 import Grid from './components/grid';
+import Help from './components/help';
+import useLocationOption from './hooks/useLocationOption';
 import { init } from './init';
 import styles from './style.module.scss';
 import { IRowData, ISearchResult, ISource } from './type';
@@ -35,15 +37,30 @@ export type FieldType = {
 };
 
 const CommuteCalculator = () => {
-	const [formVal, setFormVal] = useState({
+	const [formVal, setFormVal] = useState<FieldType>({
 		city: '杭州',
 		starts: ['金都新城'],
-		ends: [''],
+		ends: [],
 		mode: TravelMode.Transfer
 	});
 	const [map, setMap] = useState<any>(null);
 	const [gridData, setGridData] = useState<any[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [fail, setFail] = useState(false);
+	const { onSearch, options, clearOptions } = useLocationOption();
+
+	const initMap = (key?: string, token?: string) => {
+		console.log(getUrlParams());
+		init(
+			key || getUrlParams()[QueryKeyEnum.AmapKey],
+			token || getUrlParams()[QueryKeyEnum.AmapToken]
+		).then((mapInstance) => {
+			if (!mapInstance) {
+				errorNotify('地图实例初始化失败，请刷新页面重试。');
+			}
+			setMap(mapInstance);
+		});
+	};
 
 	const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
 		if (!map) {
@@ -51,7 +68,15 @@ const CommuteCalculator = () => {
 			return;
 		}
 		if (values.token && values.key) {
-			await init(values.key, values.token);
+			updateURLParameter(
+				{
+					[QueryKeyEnum.AmapToken]: values.token,
+					[QueryKeyEnum.AmapKey]: values.key
+				},
+				false
+			);
+
+			return;
 		}
 
 		setFormVal(values);
@@ -110,6 +135,7 @@ const CommuteCalculator = () => {
 									});
 								} else {
 									errorNotify('驾驶路线数据查询失败' + result);
+									setFail(true);
 									reject();
 								}
 							}
@@ -152,6 +178,7 @@ const CommuteCalculator = () => {
 									});
 								} else {
 									errorNotify('骑行路线数据查询失败' + result);
+									setFail(true);
 									reject();
 								}
 							}
@@ -223,6 +250,7 @@ const CommuteCalculator = () => {
 									});
 								} else {
 									errorNotify('公交路线数据查询失败' + result);
+									setFail(true);
 									reject();
 								}
 							}
@@ -235,12 +263,7 @@ const CommuteCalculator = () => {
 	);
 
 	useEffect(() => {
-		init().then((mapInstance) => {
-			if (!mapInstance) {
-				errorNotify('地图实例初始化失败，请刷新页面重试。');
-			}
-			setMap(mapInstance);
-		});
+		initMap();
 	}, []);
 
 	useEffect(() => {
@@ -281,7 +304,8 @@ const CommuteCalculator = () => {
 					};
 				}
 
-				if (Reflect.ownKeys(rowData).length === 1) {
+				// @ts-ignore
+				if (Reflect.ownKeys(rowData).filter((key) => rowData[key]).length === 1) {
 					continue;
 				}
 
@@ -328,112 +352,50 @@ const CommuteCalculator = () => {
 					>
 						<Input style={{ width: '400px' }} />
 					</Form.Item>
-					<Form.Item<FieldType> label="高德地图 key" labelCol={{ span: 4 }} name="key">
+					<Form.Item<FieldType>
+						label="高德地图 key"
+						labelCol={{ span: 4 }}
+						name="key"
+						tooltip={<Help />}
+						hidden={!fail}
+					>
 						<Input style={{ width: '400px' }} />
 					</Form.Item>
-					<Form.Item<FieldType> label="高德地图 token" labelCol={{ span: 4 }} name="token">
+					<Form.Item<FieldType>
+						label="高德地图 token"
+						labelCol={{ span: 4 }}
+						name="token"
+						hidden={!fail}
+						tooltip={<Help />}
+					>
 						<Input style={{ width: '400px' }} />
 					</Form.Item>
-					<Form.List name="starts">
-						{(fields, { add, remove }, { errors }) => (
-							<>
-								{fields.map((field, index) => (
-									<Form.Item
-										labelCol={{ span: 4 }}
-										wrapperCol={{ offset: index === 0 ? 0 : 4 }}
-										label={index === 0 ? '起点' : ''}
-										required={false}
-										key={field.key}
-									>
-										<Form.Item
-											{...field}
-											validateTrigger={['onChange', 'onBlur']}
-											rules={[
-												{
-													required: true,
-													whitespace: true,
-													message: '请输入起点'
-												}
-											]}
-											noStyle
-										>
-											<Input style={{ width: '400px' }} />
-										</Form.Item>
-										{fields.length > 1 ? (
-											<MinusCircleOutlined
-												className={styles.minus}
-												onClick={() => remove(field.name)}
-											/>
-										) : null}
-									</Form.Item>
-								))}
-								<Form.Item>
-									<Button
-										type="dashed"
-										onClick={() => add()}
-										style={{ marginLeft: '20%' }}
-										icon={<PlusOutlined />}
-									>
-										增加起点
-									</Button>
-									<Form.ErrorList errors={errors} />
-								</Form.Item>
-							</>
-						)}
-					</Form.List>
-					<Form.List name="ends">
-						{(fields, { add, remove }, { errors }) => (
-							<>
-								{fields.map((field, index) => (
-									<Form.Item
-										labelCol={{ span: 4 }}
-										wrapperCol={{ offset: index === 0 ? 0 : 4 }}
-										label={index === 0 ? '终点' : ''}
-										required={false}
-										key={field.key}
-									>
-										<Form.Item
-											{...field}
-											validateTrigger={['onChange', 'onBlur']}
-											rules={[
-												{
-													required: true,
-													whitespace: true,
-													message: '请输入终点'
-												}
-											]}
-											noStyle
-										>
-											<Input style={{ width: '400px' }} />
-										</Form.Item>
-										{fields.length > 1 ? (
-											<MinusCircleOutlined
-												className={styles.minus}
-												onClick={() => remove(field.name)}
-											/>
-										) : null}
-									</Form.Item>
-								))}
-								<Form.Item>
-									<Button
-										type="dashed"
-										onClick={() => add()}
-										style={{ marginLeft: '20%' }}
-										icon={<PlusOutlined />}
-									>
-										增加终点
-									</Button>
-									<Form.ErrorList errors={errors} />
-								</Form.Item>
-							</>
-						)}
-					</Form.List>
+					<Form.Item labelCol={{ span: 4 }} label={'起点'} name={'starts'} required={false}>
+						<Select
+							mode="tags"
+							style={{ width: '400px' }}
+							onChange={clearOptions}
+							options={options}
+							onSearch={onSearch}
+							onBlur={clearOptions}
+						/>
+					</Form.Item>
+					<Form.Item labelCol={{ span: 4 }} label={'终点'} name={'ends'} required={false}>
+						<Select
+							mode="tags"
+							style={{ width: '400px' }}
+							onChange={clearOptions}
+							options={options}
+							onSearch={onSearch}
+							onBlur={clearOptions}
+						/>
+					</Form.Item>
 					<Form.Item<FieldType> label="出行方式" labelCol={{ span: 4 }} name="mode">
 						<Select style={{ width: '400px' }} options={TRAVEL_MODE_OPTS} />
 					</Form.Item>
 					<Form.Item wrapperCol={{ offset: 4 }} className={styles.btns}>
 						<Button htmlType="submit" type="primary">
-							查询
+							{fail ? '使用自定义秘钥，点击此按钮刷新页面后，重新尝试' : '查询'}
 						</Button>
 						<Button onClick={download}>导出 Excel</Button>
 					</Form.Item>
