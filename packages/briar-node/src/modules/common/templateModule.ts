@@ -27,12 +27,17 @@ export class TemplateModule {
           !url.startsWith('/static') &&
           firstLevelPath
         ) {
-          fs.createReadStream(
-            join(
-              __dirname,
-              `../../../../briar-frontend/dist/${firstLevelPath}/index.html`,
-            ),
-          ).pipe(res);
+          const filePath = join(
+            __dirname,
+            `../../../../briar-frontend/dist/${firstLevelPath}/index.html`,
+          );
+
+          // 检查文件是否存在
+          if (fs.existsSync(filePath)) {
+            fs.createReadStream(filePath).pipe(res);
+          } else {
+            next();
+          }
         } else {
           next();
         }
