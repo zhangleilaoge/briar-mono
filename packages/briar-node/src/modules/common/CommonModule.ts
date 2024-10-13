@@ -7,9 +7,10 @@ import { RateLimiterGuardService } from '@/services/guard/RateLimiterGuardServic
 import { LogService } from '@/services/LogService';
 
 import { DatabaseModule } from './DataBaseModule';
+import { ScheduleTaskModule } from './ScheduleTaskModule';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, ScheduleTaskModule],
   providers: [
     ContextService,
     LogService,

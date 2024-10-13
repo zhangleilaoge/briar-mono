@@ -19,9 +19,6 @@ import { ICreateImgResponse } from 'briar-shared';
 import { Ability } from '@/decorators/ability';
 import { Public } from '@/decorators/Public';
 import { AbilityGuard } from '@/guards/ability';
-import { ContextService } from '@/services/common/ContextService';
-import { CosService } from '@/services/CosService';
-import { MessageDalService } from '@/services/dal/MessageDalService';
 import { LogService } from '@/services/LogService';
 
 import { AiService } from '../services/AiService';
@@ -30,9 +27,6 @@ import { AiService } from '../services/AiService';
 export class AppController {
   constructor(
     private readonly aiService: AiService,
-    private readonly messageDalService: MessageDalService,
-    private readonly cosService: CosService,
-    private contextService: ContextService,
     private readonly logger: LogService,
   ) {}
 
