@@ -6,11 +6,12 @@ import TextArea from 'antd/es/input/TextArea';
 import Prism from 'prismjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { copyToClipboard } from '@/pages/briar/utils/document';
+
 import { DEMO } from './constants/demo';
 import { COMPOSITION_API_CONFIG } from './constants/formConfig';
 import s from './style.module.scss';
 import { IConfigForm } from './type';
-import { copyToClipboard } from '@/pages/briar/utils/document';
 
 const CompositionStyleConvert = () => {
 	const [inputType, setInputType] = useState<InputType>();
@@ -154,7 +155,7 @@ const CompositionStyleConvert = () => {
 						</div>
 					</div>
 					<pre className={`lang-javascript ${s.OutputCode}`} ref={outputRef}>
-						<code className="code-output-content">{output}</code>
+						<code className="code-output-content">{output ? output : '正在加载中，请稍后...'}</code>
 					</pre>
 				</div>
 			</div>

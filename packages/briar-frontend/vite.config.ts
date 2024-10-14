@@ -52,7 +52,8 @@ const config = ({ mode }: { mode: string }) => {
 			}),
 			// @ts-ignore
 			mpa.default({
-				open: false
+				open: false,
+				defaultEntries: './src/pages/briar/index.html'
 			})
 		],
 		build: {
