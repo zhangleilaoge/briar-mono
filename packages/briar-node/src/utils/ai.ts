@@ -1,5 +1,4 @@
 import { IMessageDTO } from 'briar-shared';
-
 import { encode } from 'gpt-tokenizer';
 
 export const getLimitedMessages = (

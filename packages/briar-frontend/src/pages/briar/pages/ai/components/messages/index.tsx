@@ -2,22 +2,26 @@ import 'highlight.js/styles/atom-one-dark.css';
 
 import { CheckCircleFilled, CopyOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Avatar, Button, message, Skeleton, Tooltip } from 'antd';
-import { IConversationDTO, RoleEnum, safeJsonParse } from 'briar-shared';
+import {
+	getRandomGirl,
+	IConversationDTO,
+	RoleEnum,
+	safeJsonParse,
+	StardewValleyGirl
+} from 'briar-shared';
 import { format } from 'date-fns';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Markdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 
+import { STARDEW_VALLEY_GRIL } from '@/pages/briar/constants/img';
 import { useContainer } from '@/pages/briar/hooks/useContainer';
 import { copyToClipboard } from '@/pages/briar/utils/document';
 
 import { conversationContainer } from '../../container/conversationContainer';
 import useLoadingDesc from './hooks/useLoadingDesc';
 import s from './style.module.scss';
-
-const BRIAR_PROFILE =
-	'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/121280494_p0_master1200.jpg';
 
 const CopyBtn = ({ content }: { content: string }) => {
 	const [copied, setCopied] = useState(false);
@@ -72,7 +76,8 @@ const Message: FC<{
 	role: RoleEnum;
 	date: number;
 	imgList?: string[];
-}> = ({ content, role, date, imgList }) => {
+	assistantProfile?: string;
+}> = ({ content, role, date, imgList, assistantProfile }) => {
 	const isUser = role === RoleEnum.User;
 
 	// 复制代码功能
@@ -105,7 +110,7 @@ const Message: FC<{
 
 	return (
 		<div className={`${s.Message} ${isUser ? s.User : s.Assistant}`}>
-			{!isUser && <Avatar size={54} src={BRIAR_PROFILE} />}
+			{!isUser && <Avatar size={54} src={assistantProfile} />}
 			<div>
 				<div className={s.Date}>{format(date, 'yyyy-MM-dd HH:mm:ss')}</div>
 				<div className={`${s.ContentArea}`}>
@@ -138,9 +143,15 @@ const Message: FC<{
 const Messages: FC<{
 	conversation?: IConversationDTO;
 	loading?: boolean;
-}> = ({ loading }) => {
+}> = ({ loading, conversation }) => {
 	const { desc } = useLoadingDesc();
 	const { messageArr } = useContainer(conversationContainer);
+	const assistantProfile = useMemo(() => {
+		return (
+			STARDEW_VALLEY_GRIL[conversation?.profile as StardewValleyGirl] ||
+			STARDEW_VALLEY_GRIL[getRandomGirl()]
+		);
+	}, [conversation]);
 
 	return (
 		<>
@@ -154,6 +165,7 @@ const Messages: FC<{
 							role={message.role}
 							imgList={imgList}
 							date={new Date(message.createdAt).getTime()}
+							assistantProfile={assistantProfile}
 						/>
 					);
 				}
@@ -164,6 +176,7 @@ const Messages: FC<{
 						role={message.role}
 						imgList={imgList}
 						date={new Date(message.createdAt).getTime()}
+						assistantProfile={assistantProfile}
 					/>
 				);
 			})}

@@ -2,10 +2,12 @@ import 'dotenv/config';
 
 import { Injectable } from '@nestjs/common';
 import {
+  getRandomGirl,
   IConversationDTO,
   IMessageDTO,
   ModelEnum,
   RoleEnum,
+  STARDEW_VALLEY_GIRL_DESC,
 } from 'briar-shared';
 import OpenAI from 'openai';
 import { map, Subject } from 'rxjs';
@@ -50,8 +52,12 @@ export class AiService {
 
   async chatRequestStream(params: {
     messages: Omit<IMessageDTO, 'createdAt' | 'updatedAt' | 'id'>[];
+    conversationId: number;
   }) {
     const subject = new Subject();
+    const conversation = await this.conversationDalService.getConversation(
+      params.conversationId,
+    );
 
     this.openai.chat.completions
       .create(
@@ -59,7 +65,9 @@ export class AiService {
           messages: [
             {
               role: RoleEnum.System,
-              content: 'You are a helpful assistant.',
+              content:
+                STARDEW_VALLEY_GIRL_DESC[conversation.profile] ||
+                'You are a helpful assistant.',
             },
             ...getLimitedMessages(params.messages),
           ],
@@ -130,6 +138,7 @@ export class AiService {
     const conversation = await this.conversationDalService.create({
       title,
       userId: this.contextService.get().userId,
+      profile: getRandomGirl(),
     });
     return conversation;
   }

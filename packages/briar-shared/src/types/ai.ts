@@ -1,3 +1,4 @@
+import { StardewValleyGirl } from './common';
 import { IModel } from './model';
 
 export enum RoleEnum {
@@ -25,6 +26,7 @@ export type IConversationDTO = IModel<{
 	model: ModelEnum;
 	title?: string;
 	userId: number;
+	profile?: StardewValleyGirl;
 	marked?: boolean;
 }>;
 

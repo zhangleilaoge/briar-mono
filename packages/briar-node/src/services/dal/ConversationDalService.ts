@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { ConversationModel } from '@/model/ConversationModel';
-import { Op } from 'sequelize';
 import { IConversationDTO } from 'briar-shared';
-import { FollowDelete } from './MessageDalService';
+import { Op } from 'sequelize';
+
+import { ConversationModel } from '@/model/ConversationModel';
 import { MessageModel } from '@/model/MessageModel';
+
+import { FollowDelete } from './MessageDalService';
 
 @Injectable()
 export class ConversationDalService {
@@ -15,10 +17,11 @@ export class ConversationDalService {
     private readonly messageModel: typeof MessageModel,
   ) {}
 
-  async create({ userId, title }): Promise<ConversationModel> {
+  async create({ userId, title, profile }): Promise<ConversationModel> {
     const conversation = await this.conversationModel.create({
       title: title.slice(0, 25),
       userId,
+      profile,
     });
 
     return conversation.dataValues;
@@ -46,6 +49,14 @@ export class ConversationDalService {
         ],
       })
     ).map((c) => c.dataValues);
+  }
+
+  async getConversation(conversationId: number) {
+    return (
+      await this.conversationModel.findOne({
+        where: { id: conversationId },
+      })
+    ).dataValues;
   }
 
   async update(id: number, conversation: Partial<IConversationDTO>) {

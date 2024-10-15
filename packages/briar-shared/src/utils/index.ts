@@ -1,3 +1,5 @@
+import { StardewValleyGirl } from '../types/common';
+
 export const safeJsonParse = (str: string) => {
 	try {
 		return JSON.parse(str);
@@ -29,3 +31,16 @@ export function getFileExtension(url: string) {
 		return ''; // 如果没有找到后缀
 	}
 }
+
+export const getRandomGirl = () => {
+	const girls = [
+		StardewValleyGirl.Emily,
+		StardewValleyGirl.Haley,
+		StardewValleyGirl.Penny,
+		StardewValleyGirl.Robin,
+		StardewValleyGirl.Caroline,
+		StardewValleyGirl.Abigail
+	];
+
+	return girls[Math.floor(Math.random() * girls.length)];
+};

@@ -1,4 +1,5 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { StardewValleyGirl } from 'briar-shared';
+import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 @Table({ tableName: 'conversations' })
 export class ConversationModel extends Model<ConversationModel> {
@@ -14,4 +15,10 @@ export class ConversationModel extends Model<ConversationModel> {
 
   @Column
   marked?: boolean;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  profile: StardewValleyGirl;
 }
