@@ -10,6 +10,7 @@ import { useContainer } from '@/pages/briar/hooks/useContainer';
 import useSider from '@/pages/briar/hooks/useSider';
 import mainStyle from '@/pages/briar/styles/main.module.scss';
 
+import { ThemeColor } from '../../constants/styles';
 import Conversation from './components/conversation';
 import SiderOperations from './components/sider-operations';
 import { conversationContainer } from './container/conversationContainer';
@@ -45,7 +46,7 @@ function AiPage() {
 						padding: 24,
 						margin: 0,
 						minHeight: 280,
-						background: '#efeaed',
+						background: ThemeColor.selectedBgColor,
 						borderRadius: borderRadiusLG
 					}}
 				>

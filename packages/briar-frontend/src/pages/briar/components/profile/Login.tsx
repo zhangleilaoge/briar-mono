@@ -9,8 +9,6 @@ import { authenticateUserByGoogle, signIn } from '@/pages/briar/api/user';
 import { LocalStorageKey } from '@/pages/briar/constants/env';
 import { errorNotify } from '@/pages/briar/utils/notify';
 
-import s from './style.module.scss';
-
 export type FieldType = {
 	username?: string;
 	password?: string;
@@ -70,11 +68,6 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn }) => {
 
 	return (
 		<>
-			<img
-				src="https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/apple-touch-icon.png"
-				style={{ width: 64, height: 64 }}
-			/>
-			<h1 className={s.SignText}>Sign in to Briar</h1>
 			<Form
 				onFinish={onFinish}
 				style={{

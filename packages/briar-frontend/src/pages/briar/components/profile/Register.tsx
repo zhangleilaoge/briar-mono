@@ -6,8 +6,6 @@ import React from 'react';
 import { checkUsername as checkUsernameApi, signUp } from '@/pages/briar/api/user';
 import { LocalStorageKey } from '@/pages/briar/constants/env';
 
-import s from './style.module.scss';
-
 export type FieldType = {
 	username: string;
 	password?: string;
@@ -52,11 +50,6 @@ const Register: React.FC<IRegisterProps> = ({ finishSignUp }) => {
 
 	return (
 		<>
-			<img
-				src="https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/apple-touch-icon.png"
-				style={{ width: 64, height: 64 }}
-			/>
-			<h1 className={s.SignText}>Sign up for Briar</h1>
 			<Form
 				onFinish={beforeCheck}
 				style={{ minWidth: 280, display: 'flex', gap: 8, flexDirection: 'column' }}
