@@ -1,7 +1,7 @@
 export enum ThemeColor {
 	selectedColor = '#84a8d6',
 	textColor = '#0d1115',
-	selectedBgColor = '#f3f6fb',
+	selectedBgColor = '#e6eef7',
 	activeBgColor = '#eddde8'
 }
 
