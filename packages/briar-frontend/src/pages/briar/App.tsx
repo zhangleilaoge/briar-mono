@@ -5,7 +5,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import FloatBtn from './components/FloatBtn';
 import Profile from './components/profile';
-import { BRIAR_ICON } from './constants/img';
 import { MENU_ROUTER_CONFIG, MenuKeyEnum } from './constants/router';
 import { THEME } from './constants/styles';
 import CommonContext from './context/common';
