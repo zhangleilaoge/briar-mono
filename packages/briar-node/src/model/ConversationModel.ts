@@ -21,4 +21,7 @@ export class ConversationModel extends Model<ConversationModel> {
     allowNull: true,
   })
   profile: StardewValleyGirl;
+
+  @Column
+  prompt: string;
 }

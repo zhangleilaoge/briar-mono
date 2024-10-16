@@ -17,11 +17,12 @@ export class ConversationDalService {
     private readonly messageModel: typeof MessageModel,
   ) {}
 
-  async create({ userId, title, profile }): Promise<ConversationModel> {
+  async create({ userId, title, profile, prompt }): Promise<ConversationModel> {
     const conversation = await this.conversationModel.create({
       title: title.slice(0, 25),
       userId,
       profile,
+      prompt,
     });
 
     return conversation.dataValues;

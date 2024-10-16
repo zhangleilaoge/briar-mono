@@ -75,7 +75,7 @@ const useConversationList = () => {
 	};
 
 	const updateConversation = useCallback((conversation: IConversationDTO) => {
-		updateConversationApi(conversation).then(() => {
+		return updateConversationApi(conversation).then(() => {
 			refreshConversationList();
 		});
 	}, []);

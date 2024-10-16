@@ -201,6 +201,7 @@ const Conversation: FC = () => {
 		if (!messageArr?.[0]?.conversationId) return;
 		quickScrollToTop();
 		scrollToBottom();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [messageArr?.[0]?.conversationId]);
 
 	// 消息加载完后，还原加载更多按钮
@@ -226,7 +227,7 @@ const Conversation: FC = () => {
 						</Button>
 					</div>
 				) : null}
-				<Messages conversation={currentConversation} loading={loading} />
+				<Messages loading={loading} />
 			</div>
 			<Input
 				loading={loading}

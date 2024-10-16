@@ -65,9 +65,7 @@ export class AiService {
           messages: [
             {
               role: RoleEnum.System,
-              content:
-                STARDEW_VALLEY_GIRL_DESC[conversation.profile] ||
-                'You are a helpful assistant.',
+              content: conversation.prompt || 'You are a helpful assistant.',
             },
             ...getLimitedMessages(params.messages),
           ],
@@ -135,10 +133,12 @@ export class AiService {
   }
 
   async createConversation(title: string) {
+    const girl = getRandomGirl();
     const conversation = await this.conversationDalService.create({
       title,
       userId: this.contextService.get().userId,
-      profile: getRandomGirl(),
+      profile: girl,
+      prompt: STARDEW_VALLEY_GIRL_DESC[girl],
     });
     return conversation;
   }

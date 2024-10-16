@@ -28,6 +28,7 @@ export type IConversationDTO = IModel<{
 	userId: number;
 	profile?: StardewValleyGirl;
 	marked?: boolean;
+	prompt?: string;
 }>;
 
 // ====================== request params below ========================
