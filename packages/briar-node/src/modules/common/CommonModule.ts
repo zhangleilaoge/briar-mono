@@ -8,9 +8,10 @@ import { LogService } from '@/services/LogService';
 
 import { DatabaseModule } from './DataBaseModule';
 import { ScheduleTaskModule } from './ScheduleTaskModule';
+import { TemplateModule } from './templateModule';
 
 @Module({
-  imports: [DatabaseModule, ScheduleTaskModule],
+  imports: [DatabaseModule, ScheduleTaskModule, TemplateModule],
   providers: [
     ContextService,
     LogService,

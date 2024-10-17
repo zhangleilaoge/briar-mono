@@ -37,6 +37,7 @@ const alovaInstance = createAlova({
 	}
 });
 
+/** 调用外部接口使用 */
 export const outerAlovaInstance = createAlova({
 	requestAdapter: fetchAdapter(),
 	statesHook: reactHook,

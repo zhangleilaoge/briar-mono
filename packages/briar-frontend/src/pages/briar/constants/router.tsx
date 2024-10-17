@@ -1,4 +1,9 @@
-import { CarOutlined, ExperimentOutlined, InteractionOutlined } from '@ant-design/icons';
+import {
+	CarOutlined,
+	ExperimentOutlined,
+	InteractionOutlined,
+	ToolOutlined
+} from '@ant-design/icons';
 import { lazy, LazyExoticComponent } from 'react';
 
 import CompositionApiIntro from '@/pages/briar/pages/tools/pages/composition-style-intro';
@@ -16,7 +21,9 @@ export enum ToolsPathKeyEnum {
 	Playground = 'playground',
 	Shader = 'shader',
 	Pragmatic = 'pragmatic',
-	CommuteCalculator = 'commute-calculator'
+	CommuteCalculator = 'commute-calculator',
+	Utility = 'utility',
+	ShortUrl = 'short-url'
 }
 
 export const MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
@@ -51,18 +58,6 @@ export const SIDER_MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
 		]
 	},
 	{
-		key: ToolsPathKeyEnum.Playground,
-		label: 'Playground',
-		icon: <ExperimentOutlined />,
-		children: [
-			{
-				key: ToolsPathKeyEnum.Shader,
-				label: 'shader',
-				component: lazy(() => import('../pages/tools/pages/shader'))
-			}
-		]
-	},
-	{
 		key: ToolsPathKeyEnum.Pragmatic,
 		label: '日常便利',
 		icon: <CarOutlined />,
@@ -71,6 +66,31 @@ export const SIDER_MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
 				key: ToolsPathKeyEnum.CommuteCalculator,
 				label: '通勤计算器',
 				component: lazy(() => import('../pages/tools/pages/commute-calculator'))
+			}
+		]
+	},
+	{
+		key: ToolsPathKeyEnum.Utility,
+		label: '实用工具',
+		icon: <ToolOutlined />,
+		children: [
+			{
+				key: ToolsPathKeyEnum.ShortUrl,
+				label: '短链生成',
+				component: lazy(() => import('../pages/tools/pages/short-url'))
+			}
+			// todo 短链查询
+		]
+	},
+	{
+		key: ToolsPathKeyEnum.Playground,
+		label: 'Playground',
+		icon: <ExperimentOutlined />,
+		children: [
+			{
+				key: ToolsPathKeyEnum.Shader,
+				label: 'shader',
+				component: lazy(() => import('../pages/tools/pages/shader'))
 			}
 		]
 	}

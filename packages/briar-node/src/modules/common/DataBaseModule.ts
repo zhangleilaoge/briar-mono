@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv';
 import { ConversationModel } from '@/model/ConversationModel';
 import { LogModel } from '@/model/LogModel';
 import { MessageModel } from '@/model/MessageModel';
+import { ShortUrlModel } from '@/model/ShortUrlModel';
 import {
   AbilityUsageLimitModel,
   AbilityUsageRecordModel,
@@ -30,6 +31,7 @@ dotenv.config({ path: '../../.env' });
     }),
     SequelizeModule.forFeature([
       ConversationModel,
+      ShortUrlModel,
       UserModel,
       MessageModel,
       LogModel,

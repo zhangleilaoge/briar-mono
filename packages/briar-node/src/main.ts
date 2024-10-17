@@ -4,15 +4,8 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 
-import { localHost } from './constants/env';
+import { localHost, origins } from './constants/env';
 import { MainModule } from './modules/MainModule';
-
-const origins = [
-  /http(s)?:\/\/(www\.)?restrained-hunter\.website/,
-  /http(s)?:\/\/localhost:5173/,
-  /http(s)?:\/\/127\.0\.0\.1:5173/,
-  /http(s)?:\/\/122\.51\.158\.41:5173/,
-];
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(

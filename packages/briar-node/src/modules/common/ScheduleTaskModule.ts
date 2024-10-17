@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 
 import { ScheduleService } from '@/services/common/ScheduleService';
+import { ShortUrlDalService } from '@/services/dal/ShortUrlDalService';
+
+import { DatabaseModule } from './DataBaseModule';
 
 @Module({
-  imports: [],
+  imports: [DatabaseModule],
   controllers: [],
-  providers: [ScheduleService],
+  providers: [ShortUrlDalService, ScheduleService],
 })
 export class ScheduleTaskModule {}
