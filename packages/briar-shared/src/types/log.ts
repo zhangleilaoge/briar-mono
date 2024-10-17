@@ -10,4 +10,5 @@ export type ILogDTO = IModel<{
 	userId: number;
 	type: LogTypeEnum;
 	content: string;
+	ip: string;
 }>;

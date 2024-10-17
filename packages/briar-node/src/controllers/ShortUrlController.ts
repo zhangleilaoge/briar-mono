@@ -1,12 +1,24 @@
-import { Body, Controller, Get, Param, Post, Redirect } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Redirect,
+} from '@nestjs/common';
 
 import { UrlEnum } from '@/constants/env';
 import { Public } from '@/decorators/Public';
+import { LogService } from '@/services/LogService';
 import { ShortUrlService } from '@/services/ShortUrlService';
 
 @Controller('')
 export class ShortUrlController {
-  constructor(private readonly shortUrlService: ShortUrlService) {}
+  constructor(
+    private readonly shortUrlService: ShortUrlService,
+    private readonly logService: LogService,
+  ) {}
 
   @Public()
   @Get(':code')
@@ -20,6 +32,9 @@ export class ShortUrlController {
         statusCode: 302,
       };
     }
+
+    this.logService.log('短链跳转：' + longUrl);
+
     return {
       url: longUrl,
       statusCode: 302,
@@ -33,5 +48,22 @@ export class ShortUrlController {
     return {
       shortUrl: UrlEnum.Base + code,
     };
+  }
+
+  @Get('/api/shortUrl/getShortUrlList')
+  async getShortUrlList(
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
+    @Query('url') url: string = '',
+  ) {
+    const data = await this.shortUrlService.getShortUrlList(
+      {
+        page,
+        pageSize,
+      },
+      url,
+    );
+
+    return data;
   }
 }

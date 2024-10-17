@@ -4,7 +4,7 @@ import {
 	ICreateImgResponse,
 	IGetMessagesParams,
 	IMessageDTO,
-	IPageResult
+	IMessagesResult
 } from 'briar-shared';
 
 import alovaInstance, { getQueryFromObj } from './common';
@@ -27,7 +27,7 @@ export const updateConversation = (conversation: Partial<IConversationDTO>) =>
 	alovaInstance.Post(`/ai/updateConversation`, conversation);
 
 export const getMessages = (params: IGetMessagesParams) =>
-	alovaInstance.Get<IPageResult<IMessageDTO>>(`/ai/getMessages?${getQueryFromObj(params)}`);
+	alovaInstance.Get<IMessagesResult<IMessageDTO>>(`/ai/getMessages?${getQueryFromObj(params)}`);
 
 export const createMessage = (params: Partial<IMessageDTO>) =>
 	alovaInstance.Post<IMessageDTO>(`/ai/createMessage`, params);

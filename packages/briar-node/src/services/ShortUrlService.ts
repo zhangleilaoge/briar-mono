@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { IPageInfo } from 'briar-shared';
 
 import { ContextService } from './common/ContextService';
 import { ShortUrlDalService } from './dal/ShortUrlDalService';
@@ -12,10 +13,11 @@ export class ShortUrlService {
   ) {}
 
   async createShortUrl(url: string) {
-    const uniqueCode = await this.shortUrlDalService.findOneEmptyCode();
+    let uniqueCode = await this.shortUrlDalService.findOneEmptyCode();
 
     if (!uniqueCode) {
-      // 个人项目应该没那么大流量，短链用尽的情况暂不考虑
+      await this.shortUrlDalService.createEmptyShortCode();
+      uniqueCode = await this.shortUrlDalService.findOneEmptyCode();
     }
 
     this.shortUrlDalService.updateShortUrl(
@@ -29,5 +31,13 @@ export class ShortUrlService {
 
   async getShortUrlByCode(code: string) {
     return this.shortUrlDalService.findOneByCode(code);
+  }
+
+  async getShortUrlList(pagination: IPageInfo, url: string) {
+    return this.shortUrlDalService.getList(
+      pagination,
+      this.contextService.get().userId,
+      url,
+    );
   }
 }

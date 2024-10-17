@@ -17,4 +17,7 @@ export class LogModel extends Model<LogModel> {
     defaultValue: '',
   })
   content: string;
+
+  @Column
+  ip: string;
 }

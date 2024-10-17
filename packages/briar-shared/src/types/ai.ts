@@ -49,3 +49,8 @@ export interface ICreateImgResponse {
 	imgList: string[];
 	imgDesc: string;
 }
+
+export interface IMessagesResult<T> {
+	total: number;
+	items: T[];
+}

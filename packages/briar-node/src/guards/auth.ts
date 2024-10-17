@@ -22,15 +22,22 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
+
+    // 设置 ip 地址
+    this.contextService.setValue(
+      'ip',
+      request.headers['x-forwarded-for'] || '',
+    );
+
     if (isPublic) {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
@@ -40,6 +47,7 @@ export class AuthGuard implements CanActivate {
         secret: process.env.BRIAR_JWT_SECRET,
       });
 
+      // 设置 userId
       this.contextService.setValue('userId', payload.sub);
     } catch (e) {
       console.log(e);

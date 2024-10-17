@@ -1,8 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { difference } from 'lodash';
-
-import { generateRandomStr } from '@/utils/hash';
 
 import { ShortUrlDalService } from '../dal/ShortUrlDalService';
 
@@ -17,13 +14,6 @@ export class ScheduleService {
   }
   @Cron(CronExpression.EVERY_DAY_AT_4AM)
   async createEmptyShortCode() {
-    // 生成 100 个随机字符
-    const randomStrs = new Array(100).fill(0).map(() => generateRandomStr(6));
-    const repeatCodes =
-      await this.shortUrlDalService.findRepeatCodes(randomStrs);
-
-    // 过滤掉数据库中重复的随机字符串，然后批量插入
-    const newRandomStrs = difference(randomStrs, repeatCodes);
-    await this.shortUrlDalService.batchCreate(newRandomStrs);
+    await this.shortUrlDalService.createEmptyShortCode();
   }
 }

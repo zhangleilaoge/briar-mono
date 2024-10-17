@@ -12,30 +12,30 @@ export class LogService implements LoggerService {
   ) {}
 
   async log(content = '') {
-    const userId = this.contextService.get().userId;
+    const { userId, ip } = this.contextService.get();
     const type = LogTypeEnum.Info;
 
     console.log(`${type}(userId=${userId}): ${content}`);
 
-    await this.logDalService.create({ content, type, userId });
+    await this.logDalService.create({ content, type, userId, ip });
   }
 
   async error(error, content = '') {
-    const userId = this.contextService.get().userId;
+    const { userId, ip } = this.contextService.get();
     const type = LogTypeEnum.Error;
 
     console.log(
       `${type}(userId=${userId}): ${content} ${(error as any)?.message || JSON.stringify(error)}`,
     );
-    await this.logDalService.create({ content, type, userId });
+    await this.logDalService.create({ content, type, userId, ip });
   }
 
   async warn(content = '') {
     const type = LogTypeEnum.Warning;
-    const userId = this.contextService.get().userId;
+    const { userId, ip } = this.contextService.get();
 
     console.log(`${type}(userId=${userId}): ${content}`);
 
-    await this.logDalService.create({ content, type, userId });
+    await this.logDalService.create({ content, type, userId, ip });
   }
 }

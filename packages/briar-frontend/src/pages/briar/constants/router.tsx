@@ -23,7 +23,8 @@ export enum ToolsPathKeyEnum {
 	Pragmatic = 'pragmatic',
 	CommuteCalculator = 'commute-calculator',
 	Utility = 'utility',
-	ShortUrl = 'short-url'
+	ShortUrl = 'short-url',
+	ShortUrlList = 'short-url-list'
 }
 
 export const MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
@@ -78,8 +79,12 @@ export const SIDER_MENU_ROUTER_CONFIG: IMenuRouterConfig[] = [
 				key: ToolsPathKeyEnum.ShortUrl,
 				label: '短链生成',
 				component: lazy(() => import('../pages/tools/pages/short-url'))
+			},
+			{
+				key: ToolsPathKeyEnum.ShortUrlList,
+				label: '短链查询',
+				component: lazy(() => import('../pages/tools/pages/short-url-list'))
 			}
-			// todo 短链查询
 		]
 	},
 	{

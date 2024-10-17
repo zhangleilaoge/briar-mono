@@ -1,6 +1,12 @@
+export interface IPageInfo {
+	page: number;
+	pageSize: number;
+	total?: number;
+}
+
 export interface IPageResult<T> {
-	total: number;
 	items: T[];
+	paginator: IPageInfo;
 }
 
 export enum StardewValleyGirl {
