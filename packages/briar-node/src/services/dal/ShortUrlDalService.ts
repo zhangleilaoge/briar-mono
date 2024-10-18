@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { IPageInfo } from 'briar-shared';
+import { IPageInfo, UrlEnum } from 'briar-shared';
 import { difference } from 'lodash';
 import { Op } from 'sequelize';
 
@@ -45,6 +45,7 @@ export class ShortUrlDalService {
   async getList(pagination: IPageInfo, userId: number, url: string) {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;
+    const code = url.replace(UrlEnum.Base, '');
 
     const { count, rows } = await this.shortUrlModel.findAndCountAll({
       limit: pageSize,
@@ -52,9 +53,10 @@ export class ShortUrlDalService {
       order: [['createdAt', 'DESC']], // 以创建时间降序排列
       where: {
         creator: userId,
-        url: {
-          [Op.like]: `%${url}%`, // 确保 URL 包含传入的 url
-        },
+        [Op.or]: [
+          { url: { [Op.like]: `%${url}%` } }, // 确保 URL 包含传入的 url
+          { code: { [Op.like]: `%${code}%` } }, // 确保 code 包含传入的 url
+        ],
       },
     });
 

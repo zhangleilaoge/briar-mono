@@ -43,7 +43,7 @@ export class ShortUrlController {
 
   @Post('/api/shortUrl/createShortUrl')
   async createShortUrl(@Body('url') url: string) {
-    const code = await this.shortUrlService.createShortUrl(url);
+    const code = await this.shortUrlService.createShortUrl(url.trim());
 
     return {
       shortUrl: UrlEnum.Base + code,
@@ -61,7 +61,7 @@ export class ShortUrlController {
         page,
         pageSize,
       },
-      url,
+      url.trim(),
     );
 
     return data;

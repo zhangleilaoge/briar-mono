@@ -69,7 +69,7 @@ const ShortUrList = () => {
 	return (
 		<div>
 			<Form.Item label="url" name="url">
-				<Input placeholder="输入 URL" onChange={handleSearchInput} className="mr-[8px]" />
+				<Input placeholder="输入原始链接或短链" onChange={handleSearchInput} className="mr-[8px]" />
 			</Form.Item>
 			<Button type="primary" onClick={handleSearch}>
 				搜索

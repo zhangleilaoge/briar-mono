@@ -27,7 +27,7 @@ const ShortUrl = () => {
 		<>
 			<Form onFinish={onFinish}>
 				<Form.Item<FieldType> label="url" name="url">
-					<Input placeholder="输入 URL" />
+					<Input placeholder="输入原始链接" />
 				</Form.Item>
 				<Form.Item>
 					<Button htmlType="submit" type="primary">
