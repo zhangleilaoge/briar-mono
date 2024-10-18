@@ -1,7 +1,8 @@
 import { ConfigProvider, Menu, Spin } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { Suspense } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { UrlEnum } from 'briar-shared';
+import { Suspense, useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
 
 import FloatBtn from './components/FloatBtn';
 import Profile from './components/profile';
@@ -11,9 +12,16 @@ import CommonContext from './context/common';
 import useFullScreen from './hooks/useFullScreen';
 import useLevelPath from './hooks/useLevelPath';
 import useLogin from './hooks/useLogin';
-import Page404 from './pages/404';
 import s from './styles/main.module.scss';
 import { getRoutes } from './utils/router';
+
+const NotFoundRedirect = ({ fullUrl }: { fullUrl: string }) => {
+	useEffect(() => {
+		window.location.href = fullUrl;
+	}, [fullUrl]);
+
+	return null; // 组件不渲染任何内容
+};
 
 function App() {
 	const { menuKey, onLevelPathChange } = useLevelPath();
@@ -65,8 +73,7 @@ function App() {
 				>
 					<Routes>
 						{getRoutes(MENU_ROUTER_CONFIG, MenuKeyEnum.Tools)}
-						<Route path="/404" Component={Page404} />
-						<Route path="/*" element={<Navigate to="/404" replace />} />
+						<Route path="/*" element={<NotFoundRedirect fullUrl={UrlEnum.NotFound} />} />
 					</Routes>
 				</Suspense>
 			</CommonContext.Provider>
