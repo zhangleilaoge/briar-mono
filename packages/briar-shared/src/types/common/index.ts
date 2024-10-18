@@ -17,3 +17,8 @@ export enum StardewValleyGirl {
 	Penny = 'Penny',
 	Robin = 'Robin'
 }
+
+export enum UrlEnum {
+	Base = 'https://restrained-hunter.website/',
+	NotFound = 'https://restrained-hunter.website/briar/404'
+}

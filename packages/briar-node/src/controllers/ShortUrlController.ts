@@ -7,8 +7,8 @@ import {
   Query,
   Redirect,
 } from '@nestjs/common';
+import { UrlEnum } from 'briar-shared';
 
-import { UrlEnum } from '@/constants/env';
 import { Public } from '@/decorators/Public';
 import { LogService } from '@/services/LogService';
 import { ShortUrlService } from '@/services/ShortUrlService';

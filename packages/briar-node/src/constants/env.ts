@@ -8,8 +8,3 @@ export const origins = [
   /http(s)?:\/\/127\.0\.0\.1:5173/,
   /http(s)?:\/\/122\.51\.158\.41:5173/,
 ];
-
-export enum UrlEnum {
-  Base = 'https://restrained-hunter.website/',
-  NotFound = 'https://restrained-hunter.website/briar/404',
-}
