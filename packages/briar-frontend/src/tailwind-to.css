@@ -632,24 +632,12 @@ video {
   margin-bottom: 12px;
 }
 
-.mb-\[16px\] {
-  margin-bottom: 16px;
-}
-
 .mr-\[8px\] {
   margin-right: 8px;
 }
 
 .mt-\[16px\] {
   margin-top: 16px;
-}
-
-.mb-\[14px\] {
-  margin-bottom: 14px;
-}
-
-.mb-\[24px\] {
-  margin-bottom: 24px;
 }
 
 .block {
@@ -682,14 +670,6 @@ video {
 
 .w-\[280px\] {
   width: 280px;
-}
-
-.w-\[300px\] {
-  width: 300px;
-}
-
-.w-\[200px\] {
-  width: 200px;
 }
 
 .transform {
