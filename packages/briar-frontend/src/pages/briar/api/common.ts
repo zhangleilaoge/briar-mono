@@ -23,7 +23,7 @@ const alovaInstance = createAlova({
 			throw error;
 		}
 	},
-	baseURL: isDev ? 'https://www.restrained-hunter.website/api' : '/api',
+	baseURL: isDev ? 'https://stardew.site/api' : '/api',
 	timeout: 30000,
 	cacheFor: {
 		GET: {

@@ -22,6 +22,6 @@ docker compose logs -f <服务名称>
 
 ```
 # 1. 前后端全部代理到本机8922端口
-restrained-hunter.website 127.0.0.1:8922
+stardew.site 127.0.0.1:8922
 
 ```

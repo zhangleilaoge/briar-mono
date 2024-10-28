@@ -43,7 +43,7 @@ vue 代码转换工具，目前支持两种格式转换：
 
 ### 2.1 在线转换
 
-> 转化平台在线代码转换：https://restrained-hunter.website/tools/composition-style-converter?displayMode=full
+> 转化平台在线代码转换：https://stardew.site/briar/tools/composition-style-converter?displayMode=full
 
 ### 2.2 脚本转换
 
@@ -70,26 +70,26 @@ npm add @briar/vue-code-converter
 在代码中直接调用转换方法：
 
 ```javascript
-import { convert } from "@briar/vue-code-converter"
+import { convert } from '@briar/vue-code-converter';
 
 const { output, warning } = convert(input, {
-  // 设置为 true 开启非法语法告警
-  strict: true,
-  // 设置输出结果的 prettier 格式化参数，类型与 prettier.format 的 option 类型一致（https://www.prettier.cn/docs/options.html）
-  // 以下为默认值
-  prettier: {
-    parser: "vue",
-    plugins: [parserHtml],
-    singleQuote: true,
-    semi: true,
-    printWidth: 80,
-    tabWidth: 2,
-    useTabs: false,
-    trailingComma: "none",
-    bracketSpacing: true,
-    vueIndentScriptAndStyle: false,
-  },
-})
+	// 设置为 true 开启非法语法告警
+	strict: true,
+	// 设置输出结果的 prettier 格式化参数，类型与 prettier.format 的 option 类型一致（https://www.prettier.cn/docs/options.html）
+	// 以下为默认值
+	prettier: {
+		parser: 'vue',
+		plugins: [parserHtml],
+		singleQuote: true,
+		semi: true,
+		printWidth: 80,
+		tabWidth: 2,
+		useTabs: false,
+		trailingComma: 'none',
+		bracketSpacing: true,
+		vueIndentScriptAndStyle: false
+	}
+});
 ```
 
 ## 四、需要手动处理的场景
