@@ -19,6 +19,6 @@ export enum StardewValleyGirl {
 }
 
 export enum UrlEnum {
-	Base = 'https://restrained-hunter.website/',
-	NotFound = 'https://restrained-hunter.website/404'
+	Base = 'https://stardew.site/',
+	NotFound = 'https://stardew.site/404'
 }
