@@ -38,7 +38,6 @@ export function getRoutes(
 				<Route
 					path={`${item.key}/*`}
 					Component={availablePage.includes(item.key) ? item.component : NoAccess}
-					// Component={item.component}
 					key={item.key}
 				/>
 			))

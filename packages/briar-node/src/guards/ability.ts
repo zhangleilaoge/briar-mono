@@ -11,6 +11,7 @@ import {
 import { USER_ABILITY_KEY } from '@/decorators/Ability';
 import { UserAbilityService } from '@/services/UserAbilityService';
 
+/** 能力权限控制守卫 */
 @Injectable({ scope: Scope.REQUEST })
 export class AbilityGuard implements CanActivate {
   constructor(private userAbilityService: UserAbilityService) {}
