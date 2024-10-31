@@ -5,25 +5,43 @@ import { useCallback, useEffect, useState } from 'react';
 import { createAnonymousUser as createAnonymousUserApi, getUserInfo } from '@/pages/briar/api/user';
 import { LocalStorageKey } from '@/pages/briar/constants/env';
 
+const DEFAULT_USER_INFO = {
+	id: 0,
+	createdAt: '',
+	updatedAt: '',
+	roles: []
+};
+
+const hideLoading = () => {
+	const loadingScreen = document.getElementById('loading-screen');
+
+	setTimeout(() => {
+		loadingScreen && (loadingScreen.style.display = 'none');
+	}, 100);
+};
+
 const useLogin = () => {
-	const [userInfo, setUserInfo] = useState<IUserInfoDTO>({
-		id: 0,
-		createdAt: '',
-		updatedAt: ''
-	});
+	const [userInfo, setUserInfo] = useState<IUserInfoDTO>(DEFAULT_USER_INFO);
+	const [availablePage, setAvailablePage] = useState<string[]>([]);
 
 	const init = async () => {
-		const { accessToken, userInfo } = await getUserInfo().catch(() => ({}) as IUserAccess);
-		if (userInfo?.id) {
-			localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
-			setUserInfo(userInfo);
-			return;
+		let {
+			accessToken,
+			userInfo,
+			availablePage = []
+		} = await getUserInfo().catch(() => ({}) as IUserAccess);
+
+		if (!userInfo?.id) {
+			const data = await createAnonymousUserApi();
+			userInfo = data.userInfo;
+			accessToken = data.accessToken;
+			availablePage = data.availablePage || [];
 		}
 
-		const { userInfo: newUserInfo, accessToken: newAccessToken } = await createAnonymousUserApi();
-
-		localStorage.setItem(LocalStorageKey.AccessToken, newAccessToken);
-		setUserInfo(newUserInfo);
+		localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
+		setAvailablePage(availablePage);
+		setUserInfo(userInfo);
+		hideLoading();
 	};
 
 	useEffect(() => {
@@ -41,11 +59,7 @@ const useLogin = () => {
 	const logout = useCallback(async () => {
 		localStorage.removeItem(LocalStorageKey.AccessToken);
 
-		setUserInfo({
-			id: 0,
-			createdAt: '',
-			updatedAt: ''
-		});
+		setUserInfo(DEFAULT_USER_INFO);
 
 		setTimeout(() => {
 			window.location.reload();
@@ -54,6 +68,7 @@ const useLogin = () => {
 
 	return {
 		userInfo,
+		availablePage,
 		setUserInfo,
 		logout
 	};

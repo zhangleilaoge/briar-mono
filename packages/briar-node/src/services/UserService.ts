@@ -1,7 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import axios from 'axios';
-import { IUserInfoDTO } from 'briar-shared';
+import {
+  EMAIL_REG,
+  IPageInfo,
+  IRoleDTO,
+  IUserInfoDTO,
+  MOBILE_REG,
+} from 'briar-shared';
+
+import { RoleEnum } from '@/constants/user';
 
 import { ContextService } from './common/ContextService';
 import { UserDalService } from './dal/UserDalService';
@@ -77,6 +85,7 @@ export class UserService {
     return this.userDalService.update({
       ...userInfo,
       isAuthenticated: true,
+      roles: [RoleEnum.Registered],
     });
   }
 
@@ -85,5 +94,89 @@ export class UserService {
       sub: userId,
     });
     return accessToken;
+  }
+
+  async createRole({
+    name,
+    desc,
+    menuKeys,
+  }: Pick<IRoleDTO, 'name' | 'desc' | 'menuKeys'>) {
+    const result = await this.userDalService.createRole({
+      name,
+      desc,
+      menuKeys,
+    });
+    return result;
+  }
+
+  async updateRole({
+    name,
+    desc,
+    menuKeys,
+    id,
+  }: Pick<IRoleDTO, 'name' | 'desc' | 'menuKeys' | 'id'>) {
+    const result = await this.userDalService.updateRole({
+      name,
+      desc,
+      menuKeys,
+      id,
+    });
+    return result;
+  }
+
+  async updateUser({ id, roles }: Pick<IUserInfoDTO, 'id' | 'roles'>) {
+    const result = await this.userDalService.update({
+      id,
+      roles,
+    });
+    return result;
+  }
+
+  async getRoleList() {
+    const result = await this.userDalService.getRoles();
+    return result;
+  }
+
+  async getAvailablePage(roles: number[]) {
+    // 默认为游客
+    if (!roles.length) {
+      roles.push(RoleEnum.Traveler);
+    }
+    const menuKeys = (await this.getRoleList())
+      .filter((role) => roles.includes(role.id))
+      .map((role) => role.menuKeys)
+      .flat();
+
+    return Array.from(new Set(menuKeys));
+  }
+
+  async getUserList(pagination: IPageInfo, keyword: string, roles: number[]) {
+    let name: string | undefined;
+    let mobile: string | undefined;
+    let email: string | undefined;
+    let id: number | undefined;
+
+    if (keyword) {
+      name = keyword;
+      if (!isNaN(+keyword)) {
+        id = +keyword;
+      }
+    }
+
+    if (EMAIL_REG.test(keyword)) {
+      email = keyword;
+    }
+
+    if (MOBILE_REG.test(keyword)) {
+      mobile = keyword;
+    }
+
+    return await this.userDalService.getUserList(pagination, {
+      name,
+      mobile,
+      email,
+      id,
+      roles,
+    });
   }
 }

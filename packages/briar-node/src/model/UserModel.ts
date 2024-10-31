@@ -25,4 +25,25 @@ export class UserModel extends Model<UserModel> {
     type: DataType.BOOLEAN,
   })
   isAuthenticated?: boolean;
+
+  @Column({
+    type: DataType.JSON,
+    defaultValue: [],
+  })
+  roles: Array<number>;
+}
+
+@Table({ tableName: 'roles' })
+export class RolesModel extends Model<RolesModel> {
+  @Column
+  name?: string;
+
+  @Column
+  desc?: string;
+
+  @Column({
+    type: DataType.JSON,
+    defaultValue: [],
+  })
+  menuKeys: Array<string>;
 }

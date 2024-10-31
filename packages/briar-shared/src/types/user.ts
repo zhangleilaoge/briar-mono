@@ -1,3 +1,4 @@
+import { IPageInfo } from './common';
 import { IModel } from './model';
 
 export enum AbilityEnum {
@@ -37,10 +38,27 @@ export type IUserInfoDTO = IModel<{
 	isAuthenticated?: boolean;
 	username?: string;
 	password?: string;
+	roles: Array<number>;
+}>;
+
+export type IRoleDTO = IModel<{
+	name: string;
+	desc: string;
+	menuKeys: Array<string>;
 }>;
 
 // ====================== response below ========================
 export interface IUserAccess {
 	userInfo: IUserInfoDTO;
 	accessToken: string;
+	availablePage?: string[];
 }
+
+export interface IRolesWithUserCount extends IRoleDTO {
+	userCount: number;
+}
+
+export type IGetUserListParams = IPageInfo & {
+	keyword: string;
+	roles: string[];
+};

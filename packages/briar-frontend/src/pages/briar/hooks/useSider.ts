@@ -1,17 +1,13 @@
-import { LocalStorageKey } from '@/pages/briar/constants/env';
 import { safeJsonParse } from 'briar-shared';
 import { useEffect, useState } from 'react';
 
+import { LocalStorageKey } from '@/pages/briar/constants/env';
+
 const useSider = () => {
-	const [isCollapsed, _setIsCollapsed] = useState(false);
+	const [isCollapsed, _setIsCollapsed] = useState(
+		safeJsonParse(localStorage.getItem(LocalStorageKey.Sider) || 'false') || false
+	);
 	const [needUpdate, setNeedUpdate] = useState(false);
-
-	useEffect(() => {
-		const siderStatus =
-			safeJsonParse(localStorage.getItem(LocalStorageKey.Sider) || 'false') || false;
-
-		_setIsCollapsed(siderStatus);
-	}, []);
 
 	useEffect(() => {
 		if (!needUpdate) {

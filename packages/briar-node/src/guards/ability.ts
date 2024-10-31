@@ -8,7 +8,7 @@ import {
   Scope,
 } from '@nestjs/common';
 
-import { USER_ABILITY_KEY } from '@/decorators/ability';
+import { USER_ABILITY_KEY } from '@/decorators/Ability';
 import { UserAbilityService } from '@/services/UserAbilityService';
 
 @Injectable({ scope: Scope.REQUEST })

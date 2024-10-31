@@ -12,6 +12,7 @@ import Register from './Register';
 import s from './style.module.scss';
 
 enum OperationEnum {
+	Name = 'name',
 	Login = 'login',
 	Logout = 'logout',
 	Register = 'register'
@@ -24,6 +25,11 @@ const Profile = () => {
 
 	const dropdownItems = useMemo(() => {
 		return [
+			{
+				key: OperationEnum.Name,
+				label: userInfo?.name,
+				disabled: true
+			},
 			!userInfo?.isAuthenticated && {
 				key: OperationEnum.Register,
 				icon: <SignatureOutlined />,

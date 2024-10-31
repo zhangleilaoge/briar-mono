@@ -15,7 +15,7 @@ import { ContextService } from '@/services/common/ContextService';
 import { UserService } from '../services/UserService';
 
 @Controller('api/user')
-export class AppController {
+export class UserController {
   constructor(
     private readonly UserService: UserService,
     private contextService: ContextService,
@@ -26,22 +26,30 @@ export class AppController {
   async createAnonymousUser(): Promise<IUserAccess> {
     const data = await this.UserService.createAnonymousUser();
     const accessToken = await this.UserService.createJwt(data.id);
+    const availablePage = await this.UserService.getAvailablePage(data.roles);
 
     return {
       userInfo: data,
       accessToken,
+      availablePage,
     };
   }
 
   @Get('getUserInfo')
   async getUserInfo(): Promise<IUserAccess> {
     const data = await this.UserService.getUserByJwt();
+    let accessToken = '';
+    let availablePage = [];
 
-    const accessToken = data ? await this.UserService.createJwt(data.id) : null;
+    if (data) {
+      accessToken = await this.UserService.createJwt(data.id);
+      availablePage = await this.UserService.getAvailablePage(data.roles);
+    }
 
     return {
       userInfo: data,
       accessToken,
+      availablePage,
     };
   }
 
@@ -110,5 +118,78 @@ export class AppController {
       userInfo: data,
       accessToken,
     };
+  }
+
+  @Post('addRole')
+  async addRole(
+    @Body('name') name: string,
+    @Body('desc') desc: string,
+    @Body('menuKeys') menuKeys: string[],
+  ) {
+    // 只有超管能调用 todo
+    const result = await this.UserService.createRole({ name, desc, menuKeys });
+
+    return {
+      result,
+    };
+  }
+
+  @Post('updateRole')
+  async updateRole(
+    @Body('name') name: string,
+    @Body('desc') desc: string,
+    @Body('menuKeys') menuKeys: string[],
+    @Body('id') id: number,
+  ) {
+    const result = await this.UserService.updateRole({
+      name,
+      desc,
+      menuKeys,
+      id,
+    });
+
+    return {
+      result,
+    };
+  }
+
+  @Post('updateUser')
+  async updateUser(@Body('roles') roles: number[], @Body('id') id: number) {
+    const result = await this.UserService.updateUser({
+      roles,
+      id,
+    });
+
+    return {
+      result,
+    };
+  }
+
+  @Get('getRoleList')
+  async getRoleList() {
+    // 只有超管能调用 todo
+    const data = await this.UserService.getRoleList();
+
+    return data;
+  }
+
+  @Get('getUserList')
+  async getUserList(
+    @Query('keyword') keyword: string = '',
+    @Query('roles') roles: string = '',
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
+  ) {
+    // 只有超管能调用 todo
+    const data = await this.UserService.getUserList(
+      {
+        page,
+        pageSize,
+      },
+      keyword,
+      roles ? roles.split(',').map(Number) : [],
+    );
+
+    return data;
   }
 }

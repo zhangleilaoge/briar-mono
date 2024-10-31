@@ -1,33 +1,30 @@
 import { ConfigProvider, Menu, Spin } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { UrlEnum } from 'briar-shared';
-import { Suspense, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Suspense, useMemo } from 'react';
+import { Routes } from 'react-router-dom';
 
 import FloatBtn from './components/FloatBtn';
 import Profile from './components/profile';
-import { MENU_ROUTER_CONFIG, MenuKeyEnum } from './constants/router';
+import { MenuKeyEnum, ROUTER_CONFIG } from './constants/router';
 import { THEME } from './constants/styles';
 import CommonContext from './context/common';
 import useFullScreen from './hooks/useFullScreen';
 import useLevelPath from './hooks/useLevelPath';
 import useLogin from './hooks/useLogin';
+import useRouteHistory from './hooks/useRouteHistory';
 import s from './styles/main.module.scss';
-import { getRoutes } from './utils/router';
-
-const NotFoundRedirect = ({ fullUrl }: { fullUrl: string }) => {
-	useEffect(() => {
-		window.location.href = fullUrl;
-	}, [fullUrl]);
-
-	return null; // 组件不渲染任何内容
-};
+import { getRoutes, removeChildren } from './utils/router';
 
 function App() {
 	const { menuKey, onLevelPathChange } = useLevelPath();
 	const { fullScreen, HeaderClass, SiderClass, LayoutClass, inFullScreen, outFullScreen } =
 		useFullScreen();
-	const { userInfo, logout } = useLogin();
+	const { userInfo, availablePage, logout } = useLogin();
+	const headerRoutes = useMemo(() => {
+		return removeChildren(ROUTER_CONFIG.filter((item) => availablePage.includes(item.key)));
+	}, [availablePage]);
+
+	useRouteHistory();
 
 	return (
 		<ConfigProvider theme={THEME}>
@@ -38,6 +35,7 @@ function App() {
 						SiderClass,
 						LayoutClass
 					},
+					availablePage,
 					userInfo,
 					inFullScreen,
 					outFullScreen,
@@ -56,7 +54,7 @@ function App() {
 						<Menu
 							mode="horizontal"
 							selectedKeys={[menuKey]}
-							items={MENU_ROUTER_CONFIG}
+							items={headerRoutes}
 							onClick={({ key }) => onLevelPathChange(key)}
 							className={s.Menu}
 							theme={'light'}
@@ -71,10 +69,7 @@ function App() {
 						</div>
 					}
 				>
-					<Routes>
-						{getRoutes(MENU_ROUTER_CONFIG, MenuKeyEnum.Tools)}
-						<Route path="/*" element={<NotFoundRedirect fullUrl={UrlEnum.NotFound} />} />
-					</Routes>
+					<Routes>{getRoutes(ROUTER_CONFIG, availablePage, MenuKeyEnum.Tools_1)}</Routes>
 				</Suspense>
 			</CommonContext.Provider>
 		</ConfigProvider>

@@ -13,6 +13,7 @@ const CommonContext = React.createContext({
 	outFullScreen: () => {},
 	/** 用户 */
 	userInfo: {} as IUserInfoDTO,
+	availablePage: [] as string[],
 	logout: () => {}
 });
 

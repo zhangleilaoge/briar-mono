@@ -23,6 +23,7 @@ import { UserModule } from './UserModule';
     CommonModule,
     AiModule,
     UserModule,
+    /** 不要改变 ShortUrlModule 最末位的顺序 */
     ShortUrlModule,
   ],
   providers: [

@@ -47,6 +47,8 @@ export class AuthGuard implements CanActivate {
         secret: process.env.BRIAR_JWT_SECRET,
       });
 
+      console.log(payload, '23???');
+
       // 设置 userId
       this.contextService.setValue('userId', payload.sub);
     } catch (e) {

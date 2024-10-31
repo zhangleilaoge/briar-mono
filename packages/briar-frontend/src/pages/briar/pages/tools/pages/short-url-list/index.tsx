@@ -67,7 +67,7 @@ const ShortUrList = () => {
 	};
 
 	return (
-		<div>
+		<Form>
 			<Form.Item label="url" name="url">
 				<Input placeholder="输入原始链接或短链" onChange={handleSearchInput} className="mr-[8px]" />
 			</Form.Item>
@@ -88,7 +88,7 @@ const ShortUrList = () => {
 				}}
 				scroll={{ x: '100%' }}
 			/>
-		</div>
+		</Form>
 	);
 };
 

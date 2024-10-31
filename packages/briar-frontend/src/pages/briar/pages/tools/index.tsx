@@ -5,16 +5,20 @@ import { Suspense, useContext, useMemo } from 'react';
 import { Routes } from 'react-router-dom';
 
 import Footer from '@/pages/briar/components/Footer';
-import { SIDER_MENU_ROUTER_CONFIG, ToolsPathKeyEnum } from '@/pages/briar/constants/router';
+import { MenuKeyEnum, ROUTER_CONFIG } from '@/pages/briar/constants/router';
 import CommonContext from '@/pages/briar/context/common';
 import useLevelPath from '@/pages/briar/hooks/useLevelPath';
 import useSider from '@/pages/briar/hooks/useSider';
 import mainStyle from '@/pages/briar/styles/main.module.scss';
-import { findSuperiorRouterConfig, getRoutes } from '@/pages/briar/utils/router';
+import {
+	findSuperiorRouterConfig,
+	getRouterConfigByKey,
+	getRoutes
+} from '@/pages/briar/utils/router';
 
 function CodeConverter() {
 	const { isCollapsed, setIsCollapsed } = useSider();
-	const { fullScreenInfo } = useContext(CommonContext);
+	const { fullScreenInfo, availablePage } = useContext(CommonContext);
 	const {
 		token: { colorBgContainer, borderRadiusLG }
 	} = theme.useToken();
@@ -22,8 +26,13 @@ function CodeConverter() {
 	const { menuKey, onLevelPathChange } = useLevelPath(2);
 
 	const defaultOpenKeys = useMemo(() => {
-		return findSuperiorRouterConfig(menuKey, SIDER_MENU_ROUTER_CONFIG);
+		const key = findSuperiorRouterConfig(menuKey, ROUTER_CONFIG);
+		return key ? [key] : [];
 	}, [menuKey]);
+
+	const routers = useMemo(() => {
+		return getRouterConfigByKey(MenuKeyEnum.Tools_1, ROUTER_CONFIG)?.children;
+	}, []);
 
 	return (
 		<Layout>
@@ -39,7 +48,7 @@ function CodeConverter() {
 					selectedKeys={[menuKey]}
 					defaultOpenKeys={defaultOpenKeys}
 					className={mainStyle.SiderMenu}
-					items={SIDER_MENU_ROUTER_CONFIG}
+					items={routers}
 					onClick={({ key }) => onLevelPathChange(key)}
 				/>
 			</Sider>
@@ -61,7 +70,7 @@ function CodeConverter() {
 						}
 					>
 						<Routes>
-							{getRoutes(SIDER_MENU_ROUTER_CONFIG, ToolsPathKeyEnum.CompositionStyleConverter)}
+							{getRoutes(routers, availablePage, MenuKeyEnum.CompositionStyleConverter_3)}
 						</Routes>
 					</Suspense>
 				</Content>

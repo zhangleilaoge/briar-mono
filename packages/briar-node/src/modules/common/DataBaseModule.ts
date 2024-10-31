@@ -10,7 +10,7 @@ import {
   AbilityUsageLimitModel,
   AbilityUsageRecordModel,
 } from '@/model/UserAbilityModel';
-import { UserModel } from '@/model/UserModel';
+import { RolesModel, UserModel } from '@/model/UserModel';
 
 // 如若只有一个.env，直接 import 'dotenv/config' 而不用指定 .env 也可以
 dotenv.config({ path: '../../.env' });
@@ -33,6 +33,7 @@ dotenv.config({ path: '../../.env' });
       ConversationModel,
       ShortUrlModel,
       UserModel,
+      RolesModel,
       MessageModel,
       LogModel,
       AbilityUsageLimitModel,

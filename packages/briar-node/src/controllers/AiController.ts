@@ -16,7 +16,7 @@ import {
 } from 'briar-shared';
 import { ICreateImgResponse } from 'briar-shared';
 
-import { Ability } from '@/decorators/ability';
+import { Ability } from '@/decorators/Ability';
 import { Public } from '@/decorators/Public';
 import { AbilityGuard } from '@/guards/ability';
 import { LogService } from '@/services/LogService';

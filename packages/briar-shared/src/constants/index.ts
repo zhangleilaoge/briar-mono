@@ -1,5 +1,6 @@
 import { StardewValleyGirl } from '../types/common';
 
+export * from './reg';
 export * from './user';
 
 export const STARDEW_VALLEY_GIRL_DESC = {

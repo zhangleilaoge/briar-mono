@@ -1,8 +1,8 @@
-import { getUrlParams, QueryKeyEnum } from '@/pages/briar/utils/url';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-// 暂时用不到
+import { getUrlParams, QueryKeyEnum } from '@/pages/briar/utils/url';
+
 const useRouteHistory = () => {
 	const location = useLocation();
 	const navigate = useNavigate();

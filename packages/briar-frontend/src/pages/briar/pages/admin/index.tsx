@@ -18,7 +18,7 @@ import {
 
 function CodeConverter() {
 	const { isCollapsed, setIsCollapsed } = useSider();
-	const { fullScreenInfo } = useContext(CommonContext);
+	const { fullScreenInfo, availablePage } = useContext(CommonContext);
 	const {
 		token: { colorBgContainer, borderRadiusLG }
 	} = theme.useToken();
@@ -69,7 +69,7 @@ function CodeConverter() {
 							</div>
 						}
 					>
-						<Routes>{getRoutes(routers, MenuKeyEnum.RoleList_3)}</Routes>
+						<Routes>{getRoutes(routers, availablePage, MenuKeyEnum.RoleList_3)}</Routes>
 					</Suspense>
 				</Content>
 				<Footer />

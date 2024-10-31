@@ -6,6 +6,7 @@ import { ShortUrlService } from '@/services/ShortUrlService';
 
 import { CommonModule } from './common/CommonModule';
 
+/** 记得保持这个模块的优先级最低，因为此模块的 controller 内部有全局匹配逻辑 */
 @Module({
   imports: [CommonModule],
   controllers: [ShortUrlController],

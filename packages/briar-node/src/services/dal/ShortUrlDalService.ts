@@ -99,7 +99,6 @@ export class ShortUrlDalService {
     return repeatCodes;
   }
 
-  // 这个方法聚合了逻辑，其实不应该出现在 dal，但是上层逻辑因为生命周期原因不能复用
   async createEmptyShortCode() {
     // 生成 100 个随机字符
     const randomStrs = new Array(100).fill(0).map(() => generateRandomStr(6));
