@@ -16,7 +16,7 @@ import {
 	getRoutes
 } from '@/pages/briar/utils/router';
 
-function CodeConverter() {
+function Admin() {
 	const { isCollapsed, setIsCollapsed } = useSider();
 	const { fullScreenInfo, availablePage } = useContext(CommonContext);
 	const {
@@ -78,4 +78,4 @@ function CodeConverter() {
 	);
 }
 
-export default CodeConverter;
+export default Admin;

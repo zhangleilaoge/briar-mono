@@ -206,7 +206,6 @@
 										policy: TransferAMap.TransferPolicy.LEAST_TIME //乘车策略
 									});
 									transfer.search(source, (status, result) => {
-										console.log(result);
 										// result即是对应的公交路线数据信息，相关数据结构文档请参考  https://lbs.amap.com/api/javascript-api/reference/route-search#m_TransferResult
 										if (status === 'complete') {
 											const plans = result.plans.map((plan) => {
@@ -261,7 +260,6 @@
 										panel: 'panel'
 									});
 									driving.search(source, (status, result) => {
-										console.log(result);
 										if (status === 'complete') {
 											const minDistance = result.routes.reduce((a, b) =>
 												a.distance < b.distance ? a : b
@@ -356,7 +354,6 @@
 								[this.formData.target1]: result1,
 								[this.formData.target2]: result2
 							});
-							console.log(this.dataList);
 						}
 						this.loading = false;
 						this.draw();

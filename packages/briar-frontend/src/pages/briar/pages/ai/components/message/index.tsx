@@ -6,6 +6,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Markdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
+import remarkGfm from 'remark-gfm';
 
 import { STARDEW_VALLEY_GRIL } from '@/pages/briar/constants/img';
 import { useContainer } from '@/pages/briar/hooks/useContainer';
@@ -166,7 +167,7 @@ const Message: FC<IMessageProps> = ({ content, role, date, imgList }) => {
 						{isUser ? (
 							content || ''
 						) : (
-							<Markdown rehypePlugins={[rehypeHighlight]}>{content || ' '}</Markdown>
+							<Markdown rehypePlugins={[rehypeHighlight, remarkGfm]}>{content || ' '}</Markdown>
 						)}
 						{imgList?.map((url) => {
 							return <Img url={url} key={url} />;

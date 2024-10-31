@@ -46,7 +46,6 @@ const Role = () => {
 	const onStartEdit = useCallback(
 		(user: IUserInfoDTO) => {
 			setIsModalOpen(true);
-			console.log;
 			editForm.setFieldsValue({
 				...user
 			});
@@ -59,7 +58,6 @@ const Role = () => {
 	}, [onStartEdit, roleList]);
 
 	const defaultSearchFormValue = useMemo(() => {
-		console.log(state);
 		return {
 			roles: state?.roleId ? [state.roleId] : []
 		};

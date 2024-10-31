@@ -26,7 +26,6 @@ const Role = () => {
 	});
 
 	const onFinish = (values: FieldType) => {
-		console.log('values: ', values);
 		if (model === ModelType.Create) {
 			addRole(values)
 				.then(() => {

@@ -71,7 +71,6 @@ export class ShortUrlDalService {
   }
 
   async updateShortUrl(code: string, url: string, creator: number) {
-    console.log(url, creator);
     await this.shortUrlModel.update(
       {
         url,

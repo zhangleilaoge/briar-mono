@@ -63,14 +63,6 @@ export class UserDalService {
     if (password) orMatch.push({ password });
     if (username) orMatch.push({ username });
 
-    const test = (
-      await this.userModel.findOne({
-        where: { [Op.or]: orMatch },
-      })
-    ).dataValues;
-
-    console.log(test);
-
     return (
       await this.userModel.findOne({
         where: { [Op.or]: orMatch },
@@ -146,8 +138,6 @@ export class UserDalService {
     if (name) orMatch.push({ username: name, name });
     if (mobile) orMatch.push({ mobile });
     if (email) orMatch.push({ email });
-
-    console.log('233', roles);
 
     const { count, rows } = await this.userModel.findAndCountAll({
       limit: pageSize,

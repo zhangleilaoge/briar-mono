@@ -63,7 +63,6 @@ export const getCols = (navigate: NavigateFunction, onStartEdit: (role: IRoleDTO
 			title: '操作',
 			key: 'action',
 			render: (data) => {
-				console.log(data);
 				return (
 					<Button type="link" onClick={() => onStartEdit(data)} className="p-0">
 						编辑

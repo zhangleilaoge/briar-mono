@@ -1,25 +1,20 @@
-.IntroContainer {
-    display: flex;
-    justify-content: center;
+.Intro {
+	width: 680px;
+	margin-bottom: 48px;
 
-    .Intro {
-        width: 680px;
-        margin-bottom: 48px;
+	.ButtonContainer {
+		display: flex;
+		gap: 32px;
+		margin: 32px 0;
+	}
 
-        .ButtonContainer {
-            display: flex;
-            gap: 32px;
-            margin: 32px 0;
-        }
+	.ImgContainer {
+		img {
+			width: 680px;
+		}
+	}
 
-        .ImgContainer {
-            img {
-                width: 680px;
-            }
-        }
-
-        h3 {
-            margin-top: 42px;
-        }
-    }
+	h3 {
+		margin-top: 42px;
+	}
 }

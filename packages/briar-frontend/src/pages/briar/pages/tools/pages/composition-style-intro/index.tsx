@@ -6,6 +6,7 @@ import { MenuKeyEnum } from '@/pages/briar/constants/router';
 
 import { VUE_CODE_CONVERTER_GITHUB_URL } from '../../constants';
 import s from './style.module.scss';
+
 const CompositionApiIntro = () => {
 	const navigate = useNavigate();
 	const start = () => {
@@ -13,7 +14,7 @@ const CompositionApiIntro = () => {
 	};
 
 	return (
-		<div className={s.IntroContainer}>
+		<div className="flex justify-center prose max-w-none">
 			<div className={s.Intro}>
 				<h1>vue-code-converter 🔨</h1>
 				<div className={s.ButtonContainer}>
@@ -40,7 +41,7 @@ const CompositionApiIntro = () => {
 				</div>
 				<h3>一、简介</h3>
 				<p>
-					一个用于将 vue2-option-style 和 vue2-Decorate-style 转换为 composition-api-style
+					一个用于将 vue2-option-style 和 vue2-decorate-style 转换为 composition-api-style
 					的代码转换工具。
 				</p>
 				<h3>二、相关链接</h3>

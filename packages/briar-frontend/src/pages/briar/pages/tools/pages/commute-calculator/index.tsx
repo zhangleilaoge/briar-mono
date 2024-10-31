@@ -50,7 +50,6 @@ const CommuteCalculator = () => {
 	const { onSearch, options, clearOptions } = useLocationOption();
 
 	const initMap = (key?: string, token?: string) => {
-		console.log(getUrlParams());
 		init(
 			key || getUrlParams()[QueryKeyEnum.AmapKey],
 			token || getUrlParams()[QueryKeyEnum.AmapToken]
