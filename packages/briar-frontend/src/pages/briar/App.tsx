@@ -5,7 +5,7 @@ import { Routes } from 'react-router-dom';
 
 import FloatBtn from './components/FloatBtn';
 import Profile from './components/profile';
-import { MenuKeyEnum, ROUTER_CONFIG } from './constants/router';
+import { DEFAULT_MENU_KEY, MenuKeyEnum, ROUTER_CONFIG } from './constants/router';
 import { THEME } from './constants/styles';
 import CommonContext from './context/common';
 import useFullScreen from './hooks/useFullScreen';
@@ -69,7 +69,9 @@ function App() {
 						</div>
 					}
 				>
-					<Routes>{getRoutes(ROUTER_CONFIG, availablePage, MenuKeyEnum.Tools_1)}</Routes>
+					<Routes>
+						{getRoutes(ROUTER_CONFIG, availablePage, DEFAULT_MENU_KEY[MenuKeyEnum.Briar_0])}
+					</Routes>
 				</Suspense>
 			</CommonContext.Provider>
 		</ConfigProvider>

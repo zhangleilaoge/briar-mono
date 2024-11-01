@@ -17,7 +17,7 @@ const hideLoading = () => {
 
 	setTimeout(() => {
 		loadingScreen && (loadingScreen.style.display = 'none');
-	}, 100);
+	}, 200);
 };
 
 const useLogin = () => {

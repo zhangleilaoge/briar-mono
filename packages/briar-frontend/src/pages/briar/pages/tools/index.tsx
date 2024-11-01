@@ -5,7 +5,7 @@ import { Suspense, useContext, useMemo } from 'react';
 import { Routes } from 'react-router-dom';
 
 import Footer from '@/pages/briar/components/Footer';
-import { MenuKeyEnum, ROUTER_CONFIG } from '@/pages/briar/constants/router';
+import { DEFAULT_MENU_KEY, MenuKeyEnum, ROUTER_CONFIG } from '@/pages/briar/constants/router';
 import CommonContext from '@/pages/briar/context/common';
 import useLevelPath from '@/pages/briar/hooks/useLevelPath';
 import useSider from '@/pages/briar/hooks/useSider';
@@ -26,7 +26,8 @@ function CodeConverter() {
 	const { menuKey, onLevelPathChange } = useLevelPath(2);
 
 	const defaultOpenKeys = useMemo(() => {
-		const key = findSuperiorRouterConfig(menuKey, ROUTER_CONFIG);
+		const key =
+			findSuperiorRouterConfig(menuKey, ROUTER_CONFIG) || DEFAULT_MENU_KEY[MenuKeyEnum.Tools_1];
 		return key ? [key] : [];
 	}, [menuKey]);
 
@@ -70,7 +71,7 @@ function CodeConverter() {
 						}
 					>
 						<Routes>
-							{getRoutes(routers, availablePage, MenuKeyEnum.CompositionStyleConverter_3)}
+							{getRoutes(routers, availablePage, DEFAULT_MENU_KEY[MenuKeyEnum.CodeConverter_2])}
 						</Routes>
 					</Suspense>
 				</Content>

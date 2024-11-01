@@ -39,7 +39,7 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.Admin_1]: '控制台',
 
 	[MenuKeyEnum.CodeConverter_2]: '代码转换',
-	[MenuKeyEnum.Pragmatic_2]: '日常遍历',
+	[MenuKeyEnum.Pragmatic_2]: '日常便利',
 	[MenuKeyEnum.Utility_2]: '实用工具',
 	[MenuKeyEnum.Playground_2]: '实验室',
 	[MenuKeyEnum.User_2]: '用户管理',
@@ -52,6 +52,14 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.ShortUrlList_3]: '短链查询',
 	[MenuKeyEnum.RoleList_3]: '角色列表',
 	[MenuKeyEnum.UserList_3]: '用户列表'
+};
+
+export const DEFAULT_MENU_KEY = {
+	[MenuKeyEnum.Briar_0]: MenuKeyEnum.Ai_1,
+	[MenuKeyEnum.Tools_1]: MenuKeyEnum.CodeConverter_2,
+	[MenuKeyEnum.Admin_1]: MenuKeyEnum.User_2,
+	[MenuKeyEnum.User_2]: MenuKeyEnum.RoleList_3,
+	[MenuKeyEnum.CodeConverter_2]: MenuKeyEnum.CompositionStyleConverter_3
 };
 
 export const ROUTER_CONFIG: IMenuRouterConfig[] = [

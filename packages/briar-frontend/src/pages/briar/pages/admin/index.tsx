@@ -5,7 +5,7 @@ import { Suspense, useContext, useMemo } from 'react';
 import { Routes } from 'react-router-dom';
 
 import Footer from '@/pages/briar/components/Footer';
-import { MenuKeyEnum, ROUTER_CONFIG } from '@/pages/briar/constants/router';
+import { DEFAULT_MENU_KEY, MenuKeyEnum, ROUTER_CONFIG } from '@/pages/briar/constants/router';
 import CommonContext from '@/pages/briar/context/common';
 import useLevelPath from '@/pages/briar/hooks/useLevelPath';
 import useSider from '@/pages/briar/hooks/useSider';
@@ -15,7 +15,6 @@ import {
 	getRouterConfigByKey,
 	getRoutes
 } from '@/pages/briar/utils/router';
-
 function Admin() {
 	const { isCollapsed, setIsCollapsed } = useSider();
 	const { fullScreenInfo, availablePage } = useContext(CommonContext);
@@ -26,8 +25,10 @@ function Admin() {
 	const { menuKey, onLevelPathChange } = useLevelPath(2);
 
 	const defaultOpenKeys = useMemo(() => {
-		const key = findSuperiorRouterConfig(menuKey, ROUTER_CONFIG);
-		return key ? [key] : [];
+		const key =
+			findSuperiorRouterConfig(menuKey, ROUTER_CONFIG) || DEFAULT_MENU_KEY[MenuKeyEnum.Admin_1];
+
+		return [key];
 	}, [menuKey]);
 
 	const routers = useMemo(() => {
@@ -69,7 +70,9 @@ function Admin() {
 							</div>
 						}
 					>
-						<Routes>{getRoutes(routers, availablePage, MenuKeyEnum.RoleList_3)}</Routes>
+						<Routes>
+							{getRoutes(routers, availablePage, DEFAULT_MENU_KEY[MenuKeyEnum.User_2])}
+						</Routes>
 					</Suspense>
 				</Content>
 				<Footer />
