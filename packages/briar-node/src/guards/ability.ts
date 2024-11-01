@@ -8,8 +8,9 @@ import {
   Scope,
 } from '@nestjs/common';
 
-import { USER_ABILITY_KEY } from '@/decorators/Ability';
 import { UserAbilityService } from '@/services/UserAbilityService';
+
+import { USER_ABILITY_KEY } from '../decorators/Ability';
 
 /** 能力权限控制守卫 */
 @Injectable({ scope: Scope.REQUEST })
