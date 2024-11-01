@@ -48,7 +48,19 @@ briar-node
   }
 ```
 
-#### 3. jwt 解析
+#### 3. 角色权限控制
+
+```typescript
+  @UseGuards(RoleGuard)
+  @Role([RoleEnum.Admin]) // 仅当用户拥有 Admin 权限时才可调用接口
+  @UseGuards(RoleGuard)
+  async fn(
+  ) {
+    ...
+  }
+```
+
+#### 4. jwt 解析
 
 ```typescript
   @Get('fn')
