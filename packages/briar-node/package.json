@@ -13,6 +13,7 @@
     "start": "cross-env NODE_ENV=production node dist/main  "
   },
   "dependencies": {
+    "@fastify/compress": "7.0.3",
     "@fastify/static": "^7.0.4",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",

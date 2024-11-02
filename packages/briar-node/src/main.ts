@@ -1,3 +1,4 @@
+import compression from '@fastify/compress';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -12,6 +13,9 @@ async function bootstrap() {
     MainModule,
     new FastifyAdapter(),
   );
+
+  // @ts-ignore
+  await app.register(compression, { encodings: ['gzip', 'deflate'] });
 
   app.enableCors({
     origin: origins,
