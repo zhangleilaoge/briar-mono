@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { copyToClipboard } from '@/pages/briar/utils/document';
 
+import useLoadingDesc from '../../../ai/components/messages/hooks/useLoadingDesc';
 import { DEMO } from './constants/demo';
 import { COMPOSITION_API_CONFIG } from './constants/formConfig';
 import s from './style.module.scss';
@@ -20,6 +21,7 @@ const CompositionStyleConvert = () => {
 	// 输入与输入
 	const [input, setInput] = useState<string>(DEMO[InputType.OptionStyle]);
 	const [output, setOutput] = useState<string>('');
+	const { desc } = useLoadingDesc();
 
 	// domRef
 	const outputRef = useRef<HTMLPreElement>(null);
@@ -65,10 +67,10 @@ const CompositionStyleConvert = () => {
 	useEffect(() => {
 		const codeElement = outputRef?.current;
 		if (codeElement) {
-			codeElement.textContent = output;
+			codeElement.textContent = output || '正在加载中，请稍后' + desc;
 			Prism.highlightElement(codeElement);
 		}
-	}, [output]);
+	}, [desc, output]);
 
 	useEffect(() => {
 		try {
@@ -155,7 +157,7 @@ const CompositionStyleConvert = () => {
 						</div>
 					</div>
 					<pre className={`lang-javascript ${s.OutputCode}`} ref={outputRef}>
-						<code className="code-output-content">{output ? output : '正在加载中，请稍后...'}</code>
+						<code className="code-output-content">{output}</code>
 					</pre>
 				</div>
 			</div>
