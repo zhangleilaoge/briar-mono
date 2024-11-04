@@ -30,7 +30,8 @@ export enum MenuKeyEnum {
 	ShortUrl_3 = 'short-url',
 	ShortUrlList_3 = 'short-url-list',
 	RoleList_3 = 'role-list',
-	UserList_3 = 'user-list'
+	UserList_3 = 'user-list',
+	Calculator_3 = 'calculator'
 }
 
 export const MENU_KEY_NAMES = {
@@ -51,7 +52,8 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.ShortUrl_3]: '短链生成',
 	[MenuKeyEnum.ShortUrlList_3]: '短链查询',
 	[MenuKeyEnum.RoleList_3]: '角色列表',
-	[MenuKeyEnum.UserList_3]: '用户列表'
+	[MenuKeyEnum.UserList_3]: '用户列表',
+	[MenuKeyEnum.Calculator_3]: '计算器'
 };
 
 export const DEFAULT_MENU_KEY = {
@@ -99,6 +101,12 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 						key: MenuKeyEnum.CommuteCalculator_3,
 						label: MENU_KEY_NAMES[MenuKeyEnum.CommuteCalculator_3],
 						component: lazy(() => import('../pages/tools/pages/commute-calculator'))
+					},
+					{
+						key: MenuKeyEnum.Calculator_3,
+						label: MENU_KEY_NAMES[MenuKeyEnum.Calculator_3],
+						// @ts-ignore
+						component: lazy(() => import('../pages/tools/pages/calculator/App.jsx'))
 					}
 				]
 			},
