@@ -18,7 +18,7 @@ const btnValues = [
 	[0, '.', '=']
 ];
 
-const toLocaleString = (num: number) =>
+const toLocaleString = (num: number | string) =>
 	String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, '$1 ');
 const removeSpaces = (num: number | string) => num.toString().replace(/\s/g, '');
 const math = (a: number, b: number, sign: string) =>
@@ -42,12 +42,14 @@ const App = ({ onEqual }: { onEqual: (res: string | number) => void }) => {
 			e.preventDefault();
 			const value = e.target.innerHTML;
 			if (removeSpaces(calc.num).length < 16) {
+				const keepComma = calc.num.toString().includes('.') && +value === 0;
+				const afterComma = keepComma ? calc.num.toString().split('.')[1] : '';
+				console.log(keepComma, afterComma);
 				setCalc({
 					...calc,
-					num:
-						+removeSpaces(calc.num) % 1 === 0 && !calc.num.toString().includes('.')
-							? toLocaleString(Number(removeSpaces(calc.num + value)))
-							: toLocaleString(+calc.num + +value),
+					num: toLocaleString(
+						Number(removeSpaces(calc.num + value)) + (keepComma ? '.' + afterComma + value : '')
+					),
 					res: !calc.sign ? 0 : calc.res
 				});
 			}
@@ -62,7 +64,7 @@ const App = ({ onEqual }: { onEqual: (res: string | number) => void }) => {
 
 			setCalc({
 				...calc,
-				num: !calc.num.toString().includes('.') ? calc.num + value : calc.num
+				num: calc.num.toString().includes('.') ? calc.num : calc.num + value
 			});
 		},
 		[calc]
@@ -99,7 +101,8 @@ const App = ({ onEqual }: { onEqual: (res: string | number) => void }) => {
 			setCalc({
 				...calc,
 				res,
-				num: 0
+				num: 0,
+				sign: ''
 			});
 		}
 	}, [calc, onEqual]);
