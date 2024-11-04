@@ -237,6 +237,7 @@ const Calculator = () => {
 						columns={columns}
 						scroll={{ x: '100%' }}
 						rowKey={(row) => row.createdAt}
+						pagination={{ pageSize: 6 }}
 					/>
 				</div>
 			</div>
