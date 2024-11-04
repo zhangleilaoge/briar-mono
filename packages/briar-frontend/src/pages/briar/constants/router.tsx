@@ -105,8 +105,7 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 					{
 						key: MenuKeyEnum.Calculator_3,
 						label: MENU_KEY_NAMES[MenuKeyEnum.Calculator_3],
-						// @ts-ignore
-						component: lazy(() => import('../pages/tools/pages/calculator/App.jsx'))
+						component: lazy(() => import('../pages/tools/pages/calculator'))
 					}
 				]
 			},
