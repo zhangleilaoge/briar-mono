@@ -16,4 +16,6 @@ export class ScheduleService {
   async createEmptyShortCode() {
     await this.shortUrlDalService.createEmptyShortCode();
   }
+
+  // todo 增加页面权限的默认级别，以及根据级别自动刷角色权限的定时任务
 }
