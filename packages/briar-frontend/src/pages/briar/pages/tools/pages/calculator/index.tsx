@@ -5,6 +5,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import React from 'react';
 
 import { LocalStorageKey } from '@/pages/briar/constants/env';
+import { leFormatNumber } from '@/pages/briar/utils/format';
 
 // @ts-ignore
 import Cal from './App';
@@ -233,7 +234,16 @@ const Calculator = () => {
 					<Table
 						components={components}
 						rowSelection={rowSelection}
-						dataSource={data}
+						dataSource={data.map(
+							(item) =>
+								({
+									...item,
+									result: leFormatNumber({
+										value: item.result,
+										isAmount: true
+									})
+								}) as any
+						)}
 						columns={columns}
 						scroll={{ x: '100%' }}
 						rowKey={(row) => row.createdAt}
