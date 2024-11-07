@@ -39,7 +39,13 @@ export class LogInterceptor implements NestInterceptor {
           if (method === 'GET' && Object.keys(request.query).length > 0) {
             logMessage += `【query: ${JSON.stringify(request.query)}】`;
           } else if (method === 'POST') {
-            logMessage += `【body: ${JSON.stringify(request.body)}】`;
+            let body = JSON.stringify(request.body);
+            if (body.length > 500) {
+              body =
+                body.slice(0, 500) +
+                `...(省略超出的 ${body.length - 500} 字符)`;
+            }
+            logMessage += `【body: ${body}】`;
           }
 
           console.log(logMessage);

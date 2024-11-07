@@ -86,6 +86,9 @@ importers:
       antd:
         specifier: ^5.19.3
         version: 5.19.3(date-fns@3.6.0)(react-dom@18.3.1)(react@18.3.1)
+      antd-img-crop:
+        specifier: ^4.23.0
+        version: 4.23.0(antd@5.19.3)(react-dom@18.3.1)(react@18.3.1)
       briar-shared:
         specifier: ^0.0.8
         version: link:../briar-shared
@@ -3400,6 +3403,20 @@ packages:
   /ansi-styles@6.2.1:
     resolution: {integrity: sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==}
     engines: {node: '>=12'}
+
+  /antd-img-crop@4.23.0(antd@5.19.3)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-JtQoUmR3GqXoG+hsYXRxCBC60AgUKbbvArbnd8/5UmmuyVcQzBnumfoQTdC9wczWQuxRIpkPwsdOge6CCeepqg==}
+    peerDependencies:
+      antd: '>=4.0.0'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      antd: 5.19.3(date-fns@3.6.0)(react-dom@18.3.1)(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-easy-crop: 5.1.0(react-dom@18.3.1)(react@18.3.1)
+      tslib: 2.6.3
+    dev: false
 
   /antd@5.19.3(date-fns@3.6.0)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-rhGI6yyZ4dA2MWl9bfO0MZjtNwWdzITpp3u7pKLiQpTjJYFlpF5wDFgGaG1or3sqyBihvqcO/OF1hSggmWczbQ==}
@@ -8204,6 +8221,10 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /normalize-wheel@1.0.1:
+    resolution: {integrity: sha512-1OnlAPZ3zgrk8B91HyRj+eVv+kS5u+Z0SCsak6Xil/kmgEia50ga7zfkumayonZrImffAxPU/5WcyGhzetHNPA==}
+    dev: false
+
   /npm-bundled@1.1.2:
     resolution: {integrity: sha1-lEx4eJvXOQNbcLqiylzDK42GC8E=, tarball: https://registry.npmmirror.com/npm-bundled/download/npm-bundled-1.1.2.tgz}
     dependencies:
@@ -9654,6 +9675,18 @@ packages:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
+    dev: false
+
+  /react-easy-crop@5.1.0(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-UsYeF/N7zoqtfOSD+2xSt1nRaoBYCI2YLkzmq+hi+aVepS4/bAMhbrLwJtDAP60jsVzWRiQCX7JG+ZtfWcHsiw==}
+    peerDependencies:
+      react: '>=16.4.0'
+      react-dom: '>=16.4.0'
+    dependencies:
+      normalize-wheel: 1.0.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      tslib: 2.6.3
     dev: false
 
   /react-fast-compare@3.2.2:

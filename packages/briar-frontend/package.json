@@ -19,6 +19,7 @@
 		"ahooks": "^3.8.1",
 		"alova": "^3.0.8",
 		"antd": "^5.19.3",
+		"antd-img-crop": "^4.23.0",
 		"briar-shared": "^0.0.8",
 		"date-fns": "^3.6.0",
 		"gapi-script": "^1.2.0",

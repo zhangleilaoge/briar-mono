@@ -3,10 +3,12 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Avatar, Dropdown, message, Modal } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
 import { useContext, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { clientId } from '@/pages/briar/constants/user';
 import CommonContext from '@/pages/briar/context/common';
 
+import { MenuKeyEnum } from '../../constants/router';
 import Login from './Login';
 import Register from './Register';
 import s from './style.module.scss';
@@ -19,9 +21,10 @@ enum OperationEnum {
 }
 
 const Profile = () => {
-	const { userInfo, logout } = useContext(CommonContext);
+	const { userInfo, logout, availablePage } = useContext(CommonContext);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modelType, setModelType] = useState(OperationEnum.Login);
+	const navigate = useNavigate();
 
 	const dropdownItems = useMemo(() => {
 		return [
@@ -106,6 +109,10 @@ const Profile = () => {
 		}
 	}, [modelType]);
 
+	const personalAccess = useMemo(() => {
+		return availablePage.includes(MenuKeyEnum.Personal_1);
+	}, [availablePage]);
+
 	return (
 		<>
 			<Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
@@ -113,6 +120,13 @@ const Profile = () => {
 					size={40}
 					src={userInfo.profileImg || ''}
 					icon={displayName || userInfo.profileImg ? null : <UserOutlined />}
+					className="cursor-pointer"
+					onClick={() => {
+						if (!personalAccess) {
+							return;
+						}
+						navigate('/' + MenuKeyEnum.Personal_1);
+					}}
 				>
 					{displayName}
 				</Avatar>

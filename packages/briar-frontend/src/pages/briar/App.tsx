@@ -21,7 +21,9 @@ function App() {
 		useFullScreen();
 	const { userInfo, availablePage, logout } = useLogin();
 	const headerRoutes = useMemo(() => {
-		return removeChildren(ROUTER_CONFIG.filter((item) => availablePage.includes(item.key)));
+		return removeChildren(
+			ROUTER_CONFIG.filter((item) => availablePage.includes(item.key) && !item.hideInHeader)
+		);
 	}, [availablePage]);
 
 	useRouteHistory();

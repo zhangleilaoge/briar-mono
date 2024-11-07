@@ -41,3 +41,6 @@ export const getUserList = (data: IGetUserListParams) =>
 
 export const updateUser = (role: Pick<IUserInfoDTO, 'id' | 'roles'>) =>
 	alovaInstance.Post(`/user/updateUser`, role);
+
+export const updateSelf = (role: Pick<IUserInfoDTO, 'name' | 'profileImg' | 'email'>) =>
+	alovaInstance.Post(`/user/updateSelf`, role);

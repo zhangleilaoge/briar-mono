@@ -57,6 +57,25 @@ export class UserController {
     };
   }
 
+  @Post('updateSelf')
+  async updateSelf(
+    @Body('name') name: string,
+    @Body('email') email: string,
+    @Body('profileImg') profileImg: string,
+  ) {
+    const userId = this.contextService.get().userId;
+    const result = await this.userService.updateUser({
+      id: userId,
+      name,
+      email,
+      profileImg,
+    });
+
+    return {
+      result,
+    };
+  }
+
   @Get('checkUsername')
   async checkUsername(@Query('username') username: string) {
     const result = await this.userService.checkUsername(username);
