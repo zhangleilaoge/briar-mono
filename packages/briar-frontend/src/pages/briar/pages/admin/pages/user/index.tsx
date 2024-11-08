@@ -94,8 +94,9 @@ const Role = () => {
 		updateUser(editForm.getFieldsValue()).then(() => {
 			message.success('编辑成功');
 			setPageInfo(DEFAULT_PAGE_INFO);
+			search(DEFAULT_PAGE_INFO);
 		});
-	}, [editForm]);
+	}, [editForm, search]);
 
 	const onFinish = useCallback(() => {
 		search(DEFAULT_PAGE_INFO);

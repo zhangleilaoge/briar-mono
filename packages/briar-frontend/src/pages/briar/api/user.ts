@@ -1,4 +1,5 @@
 import {
+	ICheckUsername,
 	IGetUserListParams,
 	IPageResult,
 	IRoleDTO,
@@ -20,7 +21,7 @@ export const authenticateUserByGoogle = (googleAccessToken: string) =>
 	});
 
 export const checkUsername = (username: string) =>
-	alovaInstance.Get<boolean>(`/user/checkUsername?username=${username}`);
+	alovaInstance.Get<ICheckUsername>(`/user/checkUsername?username=${username}`);
 
 export const signUp = (userInfo: Partial<IUserInfoDTO>) =>
 	alovaInstance.Post<IUserAccess>(`/user/signUp`, userInfo);

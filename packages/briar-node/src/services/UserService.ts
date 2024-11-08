@@ -78,7 +78,9 @@ export class UserService {
   }
 
   async checkUsername(username: string) {
-    return !!(await this.userDalService.getUser({ username }))?.id;
+    return {
+      alreadyExists: !!(await this.userDalService.getUser({ username }))?.id,
+    };
   }
 
   async signUp(userInfo: Partial<IUserInfoDTO>) {
