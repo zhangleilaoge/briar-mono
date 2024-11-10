@@ -6,7 +6,9 @@ import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { addRole, getRoleList, updateRole } from '@/pages/briar/api/user';
+import { ROUTER_CONFIG } from '@/pages/briar/constants/router';
 import { errorNotify } from '@/pages/briar/utils/notify';
+import { getRouterConfigByKey } from '@/pages/briar/utils/router';
 
 import { getCols, INIT_FORM_VALUES, MODEL_OPT_NAME, MODEL_TYPE_NAME, TREE_DATA } from './constants';
 import { FieldType, ICheckKeys, ModelType } from './type';
@@ -24,10 +26,22 @@ const Role = () => {
 	onSuccess(({ data }) => {
 		setTableData(data);
 	});
-
 	const onFinish = (values: FieldType) => {
+		const { menuKeys } = values;
+		const formattedMenuKeys = Array.from(
+			new Set(
+				menuKeys
+					.map((key) => {
+						const router = getRouterConfigByKey(key, ROUTER_CONFIG);
+
+						return [key, ...(router?.children?.map((item) => item.key) || [])];
+					})
+					.flat()
+			)
+		);
+
 		if (model === ModelType.Create) {
-			addRole(values)
+			addRole({ ...values, menuKeys: formattedMenuKeys })
 				.then(() => {
 					setIsModalOpen(false);
 					message.success('添加角色成功');
@@ -42,7 +56,7 @@ const Role = () => {
 				return;
 			}
 			// @ts-ignore 已对 id 有效性进行校验
-			updateRole(values)
+			updateRole({ ...values, menuKeys: formattedMenuKeys })
 				.then(() => {
 					setIsModalOpen(false);
 					message.success('编辑角色成功');

@@ -78,7 +78,9 @@ export class UserService {
   }
 
   async checkUsername(username: string) {
-    return !!(await this.userDalService.getUser({ username }))?.id;
+    return {
+      alreadyExists: !!(await this.userDalService.getUser({ username }))?.id,
+    };
   }
 
   async signUp(userInfo: Partial<IUserInfoDTO>) {
@@ -124,11 +126,8 @@ export class UserService {
     return result;
   }
 
-  async updateUser({ id, roles }: Pick<IUserInfoDTO, 'id' | 'roles'>) {
-    const result = await this.userDalService.update({
-      id,
-      roles,
-    });
+  async updateUser(data: Partial<IUserInfoDTO>) {
+    const result = await this.userDalService.update(data);
     return result;
   }
 

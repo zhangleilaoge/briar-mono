@@ -62,3 +62,7 @@ export type IGetUserListParams = IPageInfo & {
 	keyword: string;
 	roles: string[];
 };
+
+export interface ICheckUsername {
+	alreadyExists: boolean;
+}

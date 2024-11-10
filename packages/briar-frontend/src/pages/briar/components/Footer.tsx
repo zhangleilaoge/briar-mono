@@ -1,11 +1,15 @@
 import { Footer as AntdFooter } from 'antd/es/layout/layout';
-import s from '@/pages/briar/styles/main.module.scss';
 
 const Footer = () => {
 	return (
-		<AntdFooter className={s.Footer}>
+		<AntdFooter className="text-center text-slate-600">
 			<div> Briar ©{new Date().getFullYear()} Created by zhangleilaoge</div>
-			<a href="https://beian.miit.gov.cn" target="_blank" rel="noreferrer">
+			<a
+				href="https://beian.miit.gov.cn"
+				target="_blank"
+				rel="noreferrer"
+				className="text-slate-400"
+			>
 				浙ICP备2024116093号
 			</a>
 		</AntdFooter>

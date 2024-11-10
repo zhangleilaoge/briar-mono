@@ -40,7 +40,8 @@ const Register: React.FC<IRegisterProps> = ({ finishSignUp }) => {
 
 	const beforeCheck: FormProps<FieldType>['onFinish'] = async (val: FieldType) => {
 		const { username } = val;
-		if (!(await checkUsernameApi(username))) {
+		const { alreadyExists } = await checkUsernameApi(username);
+		if (alreadyExists) {
 			message.error('username already exists');
 			return;
 		}

@@ -1,16 +1,17 @@
 import 'dotenv/config';
 
+import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as COS from 'cos-nodejs-sdk-v5';
+
+import { LogService } from './LogService';
 
 const cos = new COS({
   SecretId: process.env.BRIAR_TX_SEC_ID,
   SecretKey: process.env.BRIAR_TX_SEC_KEY,
 });
 
-import { Injectable } from '@nestjs/common';
-
-import { LogService } from './LogService';
+const runtimePath = 'runtime-images';
 
 @Injectable()
 export class CosService {
@@ -31,6 +32,27 @@ export class CosService {
           Key: key,
           StorageClass: 'STANDARD',
           Body: imgData.data, // 被上传的文件对象
+        },
+        function (err, data) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve('https://' + data.Location);
+          }
+        },
+      );
+    });
+  }
+
+  async uploadBase64ToCos(key, base64Url) {
+    return await new Promise(async (resolve, reject) => {
+      cos.putObject(
+        {
+          Bucket: process.env.BRIAR_TX_BUCKET_NAME,
+          Region: process.env.BRIAR_TX_BUCKET_REGION,
+          Key: runtimePath + '/' + String(Date.now()) + key,
+          StorageClass: 'STANDARD',
+          Body: Buffer.from(base64Url.split(',')[1], 'base64'), // 被上传的文件对象
         },
         function (err, data) {
           if (err) {
