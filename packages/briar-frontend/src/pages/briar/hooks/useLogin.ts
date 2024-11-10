@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { CLIENT_ID, IUserAccess, IUserInfoDTO } from 'briar-shared';
 import { gapi } from 'gapi-script';
 import { useCallback, useEffect, useState } from 'react';
@@ -32,6 +33,10 @@ const useLogin = () => {
 		} = await getUserInfo().catch(() => ({}) as IUserAccess);
 
 		if (!userInfo?.id) {
+			if (localStorage.getItem(LocalStorageKey.AccessToken)) {
+				message.warning('登录过期，已自动退出登录。');
+			}
+
 			const data = await createAnonymousUserApi();
 			userInfo = data.userInfo;
 			accessToken = data.accessToken;
