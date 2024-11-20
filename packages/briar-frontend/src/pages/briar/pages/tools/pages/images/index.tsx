@@ -1,6 +1,7 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, List, message, Modal, Upload } from 'antd';
-import { IMaterial, IPageInfo } from 'briar-shared';
+import { Image as Img } from 'antd';
+import { IMaterial, IPageInfo, THUMB_URL_SUFFIX } from 'briar-shared';
 import { useCallback, useEffect, useState } from 'react';
 
 import { createImgMaterial, getImgMaterials, uploadBase64 } from '@/pages/briar/api/material';
@@ -15,7 +16,7 @@ const DEFAULT_PAGE_INFO: IPageInfo = {
 
 const Images = () => {
 	const [imgs, setImgs] = useState<IMaterial[]>([]);
-	const [uploadList, setUploadList] = useState<Pick<IMaterial, 'name' | 'thumbUrl'>[]>([]);
+	const [uploadList, setUploadList] = useState<Pick<IMaterial, 'name' | 'url' | 'thumbUrl'>[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const customRequest: (options: any) => void = ({ onSuccess, file }) => {
@@ -27,7 +28,7 @@ const Images = () => {
 				base64: reader.result as string
 			});
 
-			setUploadList((pre) => [...pre, { name: file.name, thumbUrl: url }]);
+			setUploadList((pre) => [...pre, { name: file.name, thumbUrl: url + THUMB_URL_SUFFIX, url }]);
 
 			onSuccess?.('');
 		};
@@ -79,11 +80,15 @@ const Images = () => {
 					width={480}
 				>
 					<Upload
+						multiple
 						accept="image/*"
 						customRequest={customRequest}
 						listType="picture-card"
 						showUploadList={{
 							showPreviewIcon: false
+						}}
+						onRemove={(file) => {
+							setUploadList((pre) => pre.filter((item) => item.name !== file.name));
 						}}
 					>
 						<button style={{ border: 0, background: 'none' }} type="button">
@@ -93,7 +98,6 @@ const Images = () => {
 					</Upload>
 				</Modal>
 			</div>
-
 			<List
 				grid={{
 					gutter: 32
@@ -101,7 +105,13 @@ const Images = () => {
 				dataSource={imgs}
 				renderItem={(item) => (
 					<List.Item>
-						<Image data={item} />
+						<Img.PreviewGroup
+							items={imgs.map((img) => ({
+								src: img.url
+							}))}
+						>
+							<Image data={item} />
+						</Img.PreviewGroup>
 					</List.Item>
 				)}
 				pagination={{

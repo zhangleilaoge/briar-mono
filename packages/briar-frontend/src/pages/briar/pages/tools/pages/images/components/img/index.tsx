@@ -13,7 +13,7 @@ const ImageItem = ({ data }: { data: IMaterial }) => {
 			label: (
 				<span
 					onClick={() => {
-						copyToClipboard(data.thumbUrl);
+						copyToClipboard(data?.url || data?.thumbUrl);
 						message.success('复制成功');
 					}}
 				>
@@ -26,7 +26,7 @@ const ImageItem = ({ data }: { data: IMaterial }) => {
 			label: (
 				<span
 					onClick={() => {
-						download(data.thumbUrl, data.name);
+						download(data?.url || data?.thumbUrl, data.name);
 						message.success('下载成功');
 					}}
 				>
@@ -44,7 +44,9 @@ const ImageItem = ({ data }: { data: IMaterial }) => {
 				</Dropdown>
 			</div>
 			<Img
-				preview={true}
+				preview={{
+					src: data.url
+				}}
 				src={data.thumbUrl}
 				alt={data.name}
 				width={60}

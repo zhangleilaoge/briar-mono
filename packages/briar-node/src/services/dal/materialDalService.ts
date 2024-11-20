@@ -13,15 +13,15 @@ export class MaterialDalService {
   ) {}
 
   async createImgMaterial(
-    files: Pick<IMaterial, 'name' | 'thumbUrl' | 'userId'>[],
+    files: Pick<IMaterial, 'name' | 'thumbUrl' | 'userId' | 'url'>[],
   ) {
     const userId = files[0].userId;
-    const thumbUrls = files.map((file) => file.thumbUrl);
+    const urls = files.map((file) => file.url);
 
     const existingMaterials = await this.materialModel.findAll({
       where: {
-        thumbUrl: {
-          [Op.in]: thumbUrls,
+        url: {
+          [Op.in]: urls,
         },
         userId,
       },

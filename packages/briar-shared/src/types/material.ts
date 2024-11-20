@@ -4,6 +4,7 @@ export interface IMaterial {
 	type?: string;
 	thumbUrl: string;
 	userId?: number;
+	url?: string;
 }
 
 // ====================== response below ========================

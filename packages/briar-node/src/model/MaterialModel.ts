@@ -10,4 +10,7 @@ export class MaterialModel extends Model<MaterialModel> {
 
   @Column
   thumbUrl: string;
+
+  @Column
+  url: string;
 }

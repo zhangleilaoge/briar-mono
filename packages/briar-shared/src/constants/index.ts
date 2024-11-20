@@ -1,5 +1,6 @@
 import { StardewValleyGirl } from '../types/common';
 
+export * from './cos';
 export * from './reg';
 export * from './user';
 

@@ -1,7 +1,7 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Divider, Form, Input, message } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { IMaterial } from 'briar-shared';
+import { IMaterial, THUMB_URL_SUFFIX } from 'briar-shared';
 import { useContext, useEffect, useRef, useState } from 'react';
 
 import { uploadBase64 } from '@/pages/briar/api/material';
@@ -51,7 +51,7 @@ const Account = () => {
 				base64: reader.result as string
 			});
 
-			urlMapRef.current[file.name] = url;
+			urlMapRef.current[file.name] = url + THUMB_URL_SUFFIX;
 
 			onSuccess?.('');
 		};
