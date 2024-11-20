@@ -44,7 +44,8 @@ const alovaInstance = createAlova({
 				: `${method.url}?${queryParamsStr}`;
 
 			// 不删除的话 alova 里面还会对 `params` 再次处理
-			delete method.config.params;
+			// @ts-ignore
+			delete method.config.params as any;
 		}
 	}
 });
