@@ -11,7 +11,7 @@ import { MainModule } from './modules/MainModule';
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     MainModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({ bodyLimit: 10048576 }),
   );
 
   // @ts-ignore

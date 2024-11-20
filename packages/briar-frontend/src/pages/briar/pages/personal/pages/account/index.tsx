@@ -1,7 +1,7 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Divider, Form, Input, message } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { IFile } from 'briar-shared';
+import { IMaterial } from 'briar-shared';
 import { useContext, useEffect, useRef, useState } from 'react';
 
 import { uploadBase64 } from '@/pages/briar/api/material';
@@ -12,7 +12,7 @@ import CommonContext from '@/pages/briar/context/common';
 interface FieldType {
 	name: string;
 	username: string;
-	profileImg: IFile[];
+	profileImg: IMaterial[];
 	email: string;
 }
 

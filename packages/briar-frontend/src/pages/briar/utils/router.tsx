@@ -87,6 +87,35 @@ export const getRouterConfigByKey = (key: string, routerConfig: IMenuRouterConfi
 	return findRouter(routerConfig, key);
 };
 
+export const getAvailableRoutes = (
+	config: IMenuRouterConfig[] = [],
+	availablePages: string[] = []
+) => {
+	const _config: IMenuRouterConfig[] = config
+		.map((item) => {
+			if (availablePages.includes(item.key)) {
+				if (item.children) {
+					const children = getAvailableRoutes(item.children || [], availablePages);
+
+					if (children.length > 0) {
+						return {
+							...item,
+							children
+						};
+					}
+
+					return null;
+				}
+				return item;
+			}
+
+			return null;
+		})
+		.filter(Boolean) as IMenuRouterConfig[];
+
+	return _config;
+};
+
 /** 去除路由下的子路由 */
 export const removeChildren = (config: IMenuRouterConfig[]) => {
 	const _config = config.map((item) => {
@@ -97,4 +126,43 @@ export const removeChildren = (config: IMenuRouterConfig[]) => {
 	});
 
 	return _config;
+};
+
+/** @deprecated */
+export const getAccessibleRoutes = (config: IMenuRouterConfig[], keys: string[]) => {
+	const _config = config
+		.map((item) => {
+			if (keys.includes(item.key)) {
+				return item;
+			}
+			const children = getAccessibleRoutes(item.children || [], keys);
+
+			if (children.length > 0) {
+				return {
+					...item,
+					children
+				};
+			}
+		})
+		.filter(Boolean) as IMenuRouterConfig[];
+
+	return _config;
+};
+
+export const getAvailablePages = (config: IMenuRouterConfig[], availablePages: string[]) => {
+	const result: string[] = [...availablePages];
+
+	const addFatherToAvailablePages = (key: string) => {
+		const father = findSuperiorRouterConfig(key, config);
+		if (father && !result.includes(father)) {
+			result.push(father);
+			addFatherToAvailablePages(father);
+		}
+	};
+
+	availablePages.forEach((item) => {
+		addFatherToAvailablePages(item);
+	});
+
+	return result;
 };

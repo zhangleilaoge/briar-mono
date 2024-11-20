@@ -6,6 +6,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { createAnonymousUser as createAnonymousUserApi, getUserInfo } from '@/pages/briar/api/user';
 import { LocalStorageKey } from '@/pages/briar/constants/env';
 
+import { ROUTER_CONFIG } from '../constants/router';
+import { getAvailablePages } from '../utils/router';
+
 const DEFAULT_USER_INFO = {
 	id: 0,
 	createdAt: '',
@@ -29,7 +32,7 @@ const useLogin = () => {
 		let {
 			accessToken,
 			userInfo,
-			availablePage = []
+			availablePage: availablePages = []
 		} = await getUserInfo().catch(() => ({}) as IUserAccess);
 
 		if (!userInfo?.id) {
@@ -40,11 +43,12 @@ const useLogin = () => {
 			const data = await createAnonymousUserApi();
 			userInfo = data.userInfo;
 			accessToken = data.accessToken;
-			availablePage = data.availablePage || [];
+			availablePages = data.availablePage || [];
 		}
 
 		localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
-		setAvailablePage(availablePage);
+		const accessPages = getAvailablePages(ROUTER_CONFIG, availablePages);
+		setAvailablePage(accessPages);
 		setUserInfo(userInfo);
 		hideLoading();
 	};

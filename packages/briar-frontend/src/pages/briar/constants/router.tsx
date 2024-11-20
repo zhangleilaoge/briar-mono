@@ -1,6 +1,7 @@
 import {
 	CarOutlined,
 	ExperimentOutlined,
+	FileImageOutlined,
 	InteractionOutlined,
 	ToolOutlined,
 	UserOutlined
@@ -25,6 +26,7 @@ export enum MenuKeyEnum {
 	Playground_2 = 'playground',
 	User_2 = 'user',
 	Account_2 = 'account',
+	Images_2 = 'images',
 
 	CompositionStyleConverter_3 = 'composition-style-converter',
 	CompositionStyleIntro_3 = 'composition-style-intro',
@@ -49,6 +51,7 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.Playground_2]: '实验室',
 	[MenuKeyEnum.User_2]: '用户管理',
 	[MenuKeyEnum.Account_2]: '账号管理',
+	[MenuKeyEnum.Images_2]: '图片管理',
 
 	[MenuKeyEnum.CompositionStyleConverter_3]: 'composition-api转换器',
 	[MenuKeyEnum.CompositionStyleIntro_3]: 'composition-api转换介绍',
@@ -97,6 +100,12 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 						component: lazy(() => import('../pages/tools/pages/composition-style-converter'))
 					}
 				]
+			},
+			{
+				key: MenuKeyEnum.Images_2,
+				label: MENU_KEY_NAMES[MenuKeyEnum.Images_2],
+				icon: <FileImageOutlined />,
+				component: lazy(() => import('../pages/tools/pages/images'))
 			},
 			{
 				key: MenuKeyEnum.Pragmatic_2,

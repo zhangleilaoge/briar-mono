@@ -1,7 +1,9 @@
-export interface IFile {
+export interface IMaterial {
+	id: number;
 	name: string;
-	type: string;
+	type?: string;
 	thumbUrl: string;
+	userId?: number;
 }
 
 // ====================== response below ========================

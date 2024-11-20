@@ -4,8 +4,6 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as COS from 'cos-nodejs-sdk-v5';
 
-import { LogService } from './LogService';
-
 const cos = new COS({
   SecretId: process.env.BRIAR_TX_SEC_ID,
   SecretKey: process.env.BRIAR_TX_SEC_KEY,
@@ -15,7 +13,7 @@ const runtimePath = 'runtime-images';
 
 @Injectable()
 export class CosService {
-  constructor(private readonly logger: LogService) {}
+  constructor() {}
 
   async uploadImg2Cos(key, imgUrl) {
     return await new Promise(async (resolve, reject) => {

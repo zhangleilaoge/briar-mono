@@ -24,7 +24,7 @@ briar-mono
 
 ```
 # 更新包依赖
-pnpm run install
+pnpm install
 
 # 更新子仓库
 git submodule update --init --recursive

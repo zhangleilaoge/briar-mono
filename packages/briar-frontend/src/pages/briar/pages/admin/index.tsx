@@ -12,6 +12,7 @@ import useSider from '@/pages/briar/hooks/useSider';
 import mainStyle from '@/pages/briar/styles/main.module.scss';
 import {
 	findSuperiorRouterConfig,
+	getAvailableRoutes,
 	getRouterConfigByKey,
 	getRoutes
 } from '@/pages/briar/utils/router';
@@ -49,7 +50,7 @@ function Admin() {
 					selectedKeys={[menuKey]}
 					defaultOpenKeys={defaultOpenKeys}
 					className={mainStyle.SiderMenu}
-					items={routers}
+					items={getAvailableRoutes(routers, availablePage)}
 					onClick={({ key }) => onLevelPathChange(key)}
 				/>
 			</Sider>

@@ -1,6 +1,7 @@
 import { createAlova } from 'alova';
 import fetchAdapter from 'alova/fetch';
 import reactHook from 'alova/react';
+import qs from 'qs';
 
 import { isDev, LocalStorageKey } from '@/pages/briar/constants/env';
 import { errorNotify } from '@/pages/briar/utils/notify';
@@ -31,9 +32,20 @@ const alovaInstance = createAlova({
 		}
 	},
 
-	beforeRequest({ config }) {
-		config.credentials = 'include';
-		config.headers.Authorization = `Bearer ${localStorage.getItem(LocalStorageKey.AccessToken)}`;
+	beforeRequest(method) {
+		method.config.credentials = 'include';
+		method.config.headers.Authorization = `Bearer ${localStorage.getItem(LocalStorageKey.AccessToken)}`;
+		if (method.config.params) {
+			const queryParamsStr = qs.stringify(method.config.params, { arrayFormat: 'brackets' });
+			if (queryParamsStr === '') return;
+
+			method.url = method.url.includes('?')
+				? `${method.url}&${queryParamsStr}`
+				: `${method.url}?${queryParamsStr}`;
+
+			// 不删除的话 alova 里面还会对 `params` 再次处理
+			delete method.config.params;
+		}
 	}
 });
 
