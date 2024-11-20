@@ -76,13 +76,15 @@ const Images = () => {
 					cancelText="取消"
 					okText="上传"
 					destroyOnClose
+					width={480}
 				>
 					<Upload
 						accept="image/*"
 						customRequest={customRequest}
 						listType="picture-card"
-						maxCount={3}
-						showUploadList={{}}
+						showUploadList={{
+							showPreviewIcon: false
+						}}
 					>
 						<button style={{ border: 0, background: 'none' }} type="button">
 							<PlusOutlined />
