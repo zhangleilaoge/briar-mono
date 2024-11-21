@@ -48,6 +48,17 @@ export class MaterialController {
     };
   }
 
+  @Post('/deleteImgMaterials')
+  async deleteImgMaterials(@Body('list') list: { id: number; name: string }[]) {
+    await this.materialService.deleteImgMaterials(
+      list,
+      this.contextService.get().userId,
+    );
+    return {
+      success: true,
+    };
+  }
+
   @Get('/getImgMaterials')
   async getImgMaterials(@Query() params: { pagination: IPageInfo }) {
     const { pagination } = qs.parse(params);

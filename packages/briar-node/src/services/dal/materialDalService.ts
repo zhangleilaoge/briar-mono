@@ -36,6 +36,20 @@ export class MaterialDalService {
     );
   }
 
+  async deleteImgMaterials(
+    list: { id: number; name: string }[],
+    userId: number,
+  ) {
+    return await this.materialModel.destroy({
+      where: {
+        id: {
+          [Op.in]: list.map((item) => item.id), // 只删除这些 ID 的记录
+        },
+        userId,
+      },
+    });
+  }
+
   async getImgMaterials(pagination: IPageInfo, userId: number) {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;

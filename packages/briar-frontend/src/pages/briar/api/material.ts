@@ -12,3 +12,8 @@ export const getImgMaterials = (data: { pagination: IPageInfo }) =>
 	alovaInstance.Get<IPageResult<IMaterial>>(`/material/getImgMaterials`, {
 		params: data
 	});
+
+export const deleteImgs = (data: { id: number; name: string }[]) =>
+	alovaInstance.Post('/material/deleteImgMaterials', {
+		list: data
+	});
