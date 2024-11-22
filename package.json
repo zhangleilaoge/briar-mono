@@ -19,7 +19,8 @@
 	},
 	"engines": {
 		"node": ">=18.17.0",
-		"pnpm": ">=8.15.9"
+		"pnpm": ">=8.15.9",
+		"python": ">=2.7.0"
 	},
 	"author": "zhangleilaoge",
 	"license": "ISC",

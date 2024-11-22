@@ -1,10 +1,16 @@
 import 'dotenv/config';
 
 import { Injectable } from '@nestjs/common';
+import * as brain from 'brain.js';
+import {
+  INeuralNetworkData,
+  INeuralNetworkDatum,
+} from 'brain.js/dist/neural-network';
 import {
   getRandomGirl,
   IConversationDTO,
   IMessageDTO,
+  ITrainData,
   ModelEnum,
   RoleEnum,
   STARDEW_VALLEY_GIRL_DESC,
@@ -180,5 +186,31 @@ export class AiService {
       id,
       imgList,
     });
+  }
+
+  async trainRNN({
+    isPrivate,
+    name,
+    trainData,
+  }: {
+    isPrivate: boolean;
+    name: string;
+    trainData: INeuralNetworkDatum<INeuralNetworkData, INeuralNetworkData>[];
+  }) {
+    const net = new brain.recurrent.RNN({ timeout: 10 * 60 * 1000 });
+
+    net
+      .trainAsync(
+        [
+          { input: [0, 0], output: [0] },
+          { input: [0, 1], output: [1] },
+          { input: [1, 0], output: [1] },
+          { input: [1, 1], output: [0] },
+        ],
+        options,
+      )
+      .then((res) => {
+        // do something with my trained network
+      });
   }
 }

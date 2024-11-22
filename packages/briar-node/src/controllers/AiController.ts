@@ -10,7 +10,9 @@ import {
 } from '@nestjs/common';
 import {
   AbilityEnum,
+  BrainModelEnum,
   IConversationDTO,
+  ITrainData,
   ModelEnum,
   RoleEnum,
 } from 'briar-shared';
@@ -129,5 +131,21 @@ export class AppController {
     @Body('id') id: number,
   ) {
     return this.aiService.updateMessage(id, content, imgList);
+  }
+
+  @Post('trainModel')
+  async trainModel(
+    @Body('isPrivate') isPrivate: boolean,
+    @Body('name') name: string,
+    @Body('name') trainData: ITrainData,
+    @Body('type') type: BrainModelEnum,
+  ) {
+    if (type === BrainModelEnum.RNN) {
+      this.aiService.trainRNN({ isPrivate, name, trainData });
+    }
+
+    return {
+      result: true,
+    };
   }
 }
