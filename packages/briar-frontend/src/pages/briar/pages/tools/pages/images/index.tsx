@@ -1,8 +1,8 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, List, message, Modal, Upload } from 'antd';
+import { Button, Checkbox, CheckboxProps, Divider, List, message, Modal, Spin, Upload } from 'antd';
 import { Image as Img } from 'antd';
-import { IMaterial, IPageInfo, RUNTIME_PREFIX, THUMB_URL_SUFFIX } from 'briar-shared';
-import { useCallback, useEffect, useState } from 'react';
+import { IMaterial, IPageInfo, THUMB_URL_SUFFIX } from 'briar-shared';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
 	createImgMaterial,
@@ -10,7 +10,8 @@ import {
 	getImgMaterials,
 	uploadBase64
 } from '@/pages/briar/api/material';
-import ClickOutside from '@/pages/briar/components/ClickOutSide';
+import SortList from '@/pages/briar/components/sort-list/SortList';
+import useGlobalClick from '@/pages/briar/hooks/useGlobalClick';
 
 import Image from './components/img';
 import useDisableMouseEvent from './hooks/useDisableMouseEvent';
@@ -21,13 +22,22 @@ const DEFAULT_PAGE_INFO: IPageInfo = {
 	total: 0
 };
 
+const frontendPagesize = 100;
+
 const Images = () => {
 	const [imgs, setImgs] = useState<IMaterial[]>([]);
+	const [sortedImg, setSortedImg] = useState<IMaterial[]>([]);
 	const [uploadList, setUploadList] = useState<Pick<IMaterial, 'name' | 'url' | 'thumbUrl'>[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedList, setSelectedList] = useState<number[]>([]);
 	const [loading, seLoading] = useState(false);
+	const [currentPage, setCurrentPage] = useState(1);
+	const { cancel } = useGlobalClick(() => setSelectedList([]));
 	useDisableMouseEvent();
+
+	const indeterminate = useMemo(() => {
+		return selectedList.length > 0 && selectedList.length < imgs.length;
+	}, [imgs.length, selectedList.length]);
 
 	const customRequest: (options: any) => void = ({ onSuccess, file }) => {
 		const reader = new FileReader();
@@ -41,7 +51,7 @@ const Images = () => {
 			setUploadList((pre) => [
 				...pre,
 				{
-					name: decodeURIComponent(url.split(RUNTIME_PREFIX)[1]),
+					name: file.name,
 					thumbUrl: url + THUMB_URL_SUFFIX,
 					url
 				}
@@ -101,14 +111,16 @@ const Images = () => {
 					if (pre.includes(id)) {
 						return [...pre];
 					} else if (pre.length > 0) {
-						const idIndex = imgs.findIndex((item) => item.id === id);
-						const anyOtherIndex = imgs.findIndex((item) => item.id !== id && pre.includes(item.id));
+						const idIndex = sortedImg.findIndex((item) => item.id === id);
+						const anyOtherIndex = sortedImg.findIndex(
+							(item) => item.id !== id && pre.includes(item.id)
+						);
 
 						// 将 idIndex 和 anyOtherIndex 之间的所有 id 加入到 pre 中
 						return Array.from(
 							new Set([
 								...pre,
-								...imgs
+								...sortedImg
 									.slice(Math.min(idIndex, anyOtherIndex), Math.max(idIndex, anyOtherIndex) + 1)
 									.map((item) => item.id)
 							])
@@ -121,8 +133,22 @@ const Images = () => {
 				}
 			});
 		},
-		[imgs]
+		[sortedImg]
 	);
+
+	const currentPageImgs = useMemo(() => {
+		return sortedImg.slice((currentPage - 1) * frontendPagesize, frontendPagesize);
+	}, [currentPage, sortedImg]);
+
+	const onCheckAllChange: CheckboxProps['onChange'] = (e) => {
+		setSelectedList(e.target.checked ? currentPageImgs.map((item) => item.id) : []);
+	};
+
+	const checkAll = useMemo(() => {
+		return (
+			selectedList.length === Math.min(imgs.length, frontendPagesize) && selectedList.length > 0
+		);
+	}, [imgs.length, selectedList.length]);
 
 	useEffect(() => {
 		!isModalOpen && setUploadList([]);
@@ -134,8 +160,10 @@ const Images = () => {
 
 	return (
 		<div>
-			<div className="mb-[32px]">
+			<div>
 				<Button onClick={() => setIsModalOpen(true)}>上传图片</Button>
+				<Divider plain></Divider>
+
 				<Modal
 					title="上传图片"
 					open={isModalOpen}
@@ -166,17 +194,33 @@ const Images = () => {
 					</Upload>
 				</Modal>
 			</div>
-			<ClickOutside onClickOutside={() => setSelectedList([])}>
+			<div className="mb-[32px] flex gap-[8px]" onClick={cancel}>
+				<Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
+					全选
+				</Checkbox>
+				<SortList
+					list={imgs}
+					setSortedList={setSortedImg}
+					sortByMap={[
+						{
+							key: 'name',
+							label: '名称'
+						}
+					]}
+				/>
+			</div>
+			{loading ? (
+				<Spin className="w-full h-full flex justify-center items-center" />
+			) : (
 				<List
 					grid={{
 						gutter: 32
 					}}
-					loading={loading}
-					dataSource={imgs}
+					dataSource={sortedImg}
 					renderItem={(item) => (
-						<List.Item>
+						<List.Item onClick={cancel}>
 							<Img.PreviewGroup
-								items={imgs.map((img) => ({
+								items={currentPageImgs.map((img) => ({
 									src: img.url
 								}))}
 							>
@@ -190,10 +234,15 @@ const Images = () => {
 						</List.Item>
 					)}
 					pagination={{
-						pageSize: 100
+						pageSize: frontendPagesize,
+						current: currentPage,
+						onChange: (page) => {
+							setCurrentPage(page);
+							setSelectedList([]);
+						}
 					}}
 				/>
-			</ClickOutside>
+			)}
 		</div>
 	);
 };

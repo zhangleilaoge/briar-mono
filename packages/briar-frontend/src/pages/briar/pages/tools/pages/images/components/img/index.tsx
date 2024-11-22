@@ -5,7 +5,8 @@ import { IMaterial } from 'briar-shared';
 import { useRef } from 'react';
 
 import LineText from '@/pages/briar/components/LineText';
-import { copyToClipboard, download } from '@/pages/briar/utils/document';
+import { copyImageToClipboard, copyToClipboard, download } from '@/pages/briar/utils/document';
+import { errorNotify } from '@/pages/briar/utils/notify';
 
 import s from './style.module.scss';
 ``;
@@ -27,10 +28,9 @@ const ImageItem = ({
 			e.preventDefault(); // 禁用默认行为
 		}
 
-		console.log();
 		if (
 			onSelect &&
-			(e.target === containerRef.current || e.target.className?.includes('can-click'))
+			(e.target === containerRef.current || e.target.className?.includes?.('can-click'))
 		) {
 			onSelect(data.id, e.shiftKey);
 		}
@@ -38,7 +38,7 @@ const ImageItem = ({
 
 	const items: MenuProps['items'] = [
 		{
-			key: 'copy',
+			key: 'copyLink',
 			label: (
 				<span
 					onClick={() => {
@@ -46,7 +46,25 @@ const ImageItem = ({
 						message.success('复制成功');
 					}}
 				>
-					复制
+					复制链接
+				</span>
+			)
+		},
+		{
+			key: 'copyImage',
+			label: (
+				<span
+					onClick={() => {
+						copyImageToClipboard(data?.url || data?.thumbUrl)
+							.then(() => {
+								message.success('复制成功');
+							})
+							.catch((e) => {
+								errorNotify(e);
+							});
+					}}
+				>
+					复制图片
 				</span>
 			)
 		},
@@ -56,10 +74,9 @@ const ImageItem = ({
 				<span
 					onClick={() => {
 						download(data?.url || data?.thumbUrl, data.name);
-						message.success('下载成功');
 					}}
 				>
-					下载
+					下载图片
 				</span>
 			)
 		},
@@ -73,7 +90,7 @@ const ImageItem = ({
 						});
 					}}
 				>
-					删除
+					删除图片
 				</span>
 			)
 		}
@@ -86,7 +103,7 @@ const ImageItem = ({
 			onClick={onClick}
 		>
 			<div className="absolute right-[8px] top-[4px] opacity-0 group-hover:opacity-100">
-				<Dropdown menu={{ items }}>
+				<Dropdown menu={{ items }} trigger={['click']}>
 					<EllipsisOutlined className="cursor-pointer text-[18px]" />
 				</Dropdown>
 			</div>
@@ -100,7 +117,7 @@ const ImageItem = ({
 				height={60}
 				className="object-cover"
 			/>
-			<LineText className="text-[12px] w-[84px] h-[36px]" line={2} text={data.name} />
+			<LineText className="text-[12px] w-[84px] h-[36px] can-click" line={2} text={data.name} />
 		</div>
 	);
 };

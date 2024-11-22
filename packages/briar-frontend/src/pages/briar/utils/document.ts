@@ -23,6 +23,41 @@ export function copyToClipboard(textToCopy: string) {
 	}
 }
 
+function getMimeType(url: string) {
+	const cleanUrl = url.split('?')[0]; // 取问号前的部分
+	const extension = cleanUrl.split('.').pop()?.toLowerCase();
+	switch (extension) {
+		case 'jpg':
+		case 'jpeg':
+			return 'image/jpeg';
+		case 'png':
+			return 'image/png';
+		case 'gif':
+			return 'image/gif';
+		case 'bmp':
+			return 'image/bmp';
+		case 'webp':
+			return 'image/webp';
+		case 'svg':
+			return 'image/svg+xml';
+		default:
+			return 'application/octet-stream'; // 其他类型可以返回默认类型
+	}
+}
+
+export async function copyImageToClipboard(imageUrl: string) {
+	const response = await fetch(imageUrl);
+	const blob = await response.blob(); // 将响应转换为 Blob 对象
+
+	// 自动识别 MIME 类型
+	const mimeType = getMimeType(imageUrl);
+	const item = new ClipboardItem({ [mimeType]: blob }); // 动态设置 MIME 类型
+
+	return navigator.clipboard.write([item]); // 写入剪贴板
+}
+
+// 根据 URL 扩展名获取 MIME 类型的辅助函数
+
 export const download = (link: string, picName: string) => {
 	const img = new Image();
 	img.setAttribute('crossOrigin', 'Anonymous');

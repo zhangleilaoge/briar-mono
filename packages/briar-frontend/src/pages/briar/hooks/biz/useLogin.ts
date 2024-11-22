@@ -6,8 +6,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { createAnonymousUser as createAnonymousUserApi, getUserInfo } from '@/pages/briar/api/user';
 import { LocalStorageKey } from '@/pages/briar/constants/env';
 
-import { ROUTER_CONFIG } from '../constants/router';
-import { getAvailablePages } from '../utils/router';
+import { ROUTER_CONFIG } from '../../constants/router';
+import { getAvailablePages } from '../../utils/router';
 
 const DEFAULT_USER_INFO = {
 	id: 0,

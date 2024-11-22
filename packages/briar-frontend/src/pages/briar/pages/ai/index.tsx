@@ -7,7 +7,7 @@ import Footer from '@/pages/briar/components/Footer';
 import CommonContext from '@/pages/briar/context/common';
 import { connectContainers } from '@/pages/briar/hooks/useContainer';
 import { useContainer } from '@/pages/briar/hooks/useContainer';
-import useSider from '@/pages/briar/hooks/useSider';
+import useSider from '@/pages/briar/hooks/biz/useSider';
 import mainStyle from '@/pages/briar/styles/main.module.scss';
 
 import { ThemeColor } from '../../constants/styles';

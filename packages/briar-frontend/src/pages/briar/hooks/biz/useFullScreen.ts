@@ -5,7 +5,7 @@ import { LocalStorageKey } from '@/pages/briar/constants/env';
 import s from '@/pages/briar/styles/main.module.scss';
 import { getUrlParams, QueryKeyEnum, updateURLParameter } from '@/pages/briar/utils/url';
 
-import useNeedUpdate from './useNeedUpdate';
+import useNeedUpdate from '../useNeedUpdate';
 const useFullScreen = () => {
 	const [fullScreen, setFullScreen] = useState(false);
 	const location = useLocation();

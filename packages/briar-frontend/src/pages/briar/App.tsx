@@ -8,10 +8,10 @@ import Profile from './components/profile';
 import { DEFAULT_MENU_KEY, MenuKeyEnum, ROUTER_CONFIG } from './constants/router';
 import { THEME } from './constants/styles';
 import CommonContext from './context/common';
-import useFullScreen from './hooks/useFullScreen';
-import useLevelPath from './hooks/useLevelPath';
-import useLogin from './hooks/useLogin';
-import useRouteHistory from './hooks/useRouteHistory';
+import useFullScreen from './hooks/biz/useFullScreen';
+import useLevelPath from './hooks/biz/useLevelPath';
+import useLogin from './hooks/biz/useLogin';
+import useRouteHistory from './hooks/biz/useRouteHistory';
 import s from './styles/main.module.scss';
 import { getRoutes, removeChildren } from './utils/router';
 

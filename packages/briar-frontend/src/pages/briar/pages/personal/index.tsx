@@ -7,8 +7,8 @@ import { Routes } from 'react-router-dom';
 import Footer from '@/pages/briar/components/Footer';
 import { DEFAULT_MENU_KEY, MenuKeyEnum, ROUTER_CONFIG } from '@/pages/briar/constants/router';
 import CommonContext from '@/pages/briar/context/common';
-import useLevelPath from '@/pages/briar/hooks/useLevelPath';
-import useSider from '@/pages/briar/hooks/useSider';
+import useLevelPath from '@/pages/briar/hooks/biz/useLevelPath';
+import useSider from '@/pages/briar/hooks/biz/useSider';
 import mainStyle from '@/pages/briar/styles/main.module.scss';
 import {
 	findSuperiorRouterConfig,
