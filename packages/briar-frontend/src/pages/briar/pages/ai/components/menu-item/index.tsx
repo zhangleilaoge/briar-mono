@@ -160,6 +160,7 @@ export const MenuItem = ({
 						onChange={changeChecked}
 						checked={checked}
 						onClick={(e) => e.stopPropagation()}
+						className="h-[40px]"
 					></Checkbox>
 				) : (
 					marked && (
@@ -201,6 +202,7 @@ export const MenuItem = ({
 					icon={<EllipsisOutlined className={s.EditConversation} />}
 					type="text"
 					onClick={(e) => e.stopPropagation()}
+					className="!w-[24px]"
 				></Button>
 			</Dropdown>
 		</div>
