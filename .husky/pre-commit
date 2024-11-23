@@ -1,1 +1,2 @@
+PATH="/usr/local/bin:$PATH"
 echo \"[Husky] pre-commit\" && pnpm run lint-staged

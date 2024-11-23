@@ -5,7 +5,7 @@ import { ThemeColor } from '../../constants/styles';
 interface SortListProps<T> {
 	list: T[];
 	setSortedList: (list: T[]) => void;
-	sortByMap: { key: keyof T; label: string }[];
+	sortByMap: { key: keyof T; label: string; compare?: (a: T, b: T) => number }[];
 }
 
 interface SortIndicatorProps {
@@ -60,14 +60,20 @@ function SortList<T>({ list, setSortedList, sortByMap }: SortListProps<T>) {
 
 			// Sort list based on selected sortBy and sortType
 			const sortedList = [...list].sort((a, b) => {
-				if (a[key] < b[key]) return newSortType === 'asc' ? -1 : 1;
-				if (a[key] > b[key]) return newSortType === 'asc' ? 1 : -1;
+				const compare =
+					sortByMap.find((item) => item.key === key)?.compare ||
+					((a: any, b: any) => a[key] < b[key] && a[key] !== b[key]);
+				if (compare(a, b)) {
+					return newSortType === 'asc' ? -1 : 1;
+				} else if (compare(b, a)) {
+					return newSortType === 'asc' ? 1 : -1;
+				}
 				return 0;
 			});
 
 			newSortType ? setSortedList?.(sortedList) : setSortedList?.(list);
 		},
-		[list, setSortedList, sortBy, sortType]
+		[list, setSortedList, sortBy, sortByMap, sortType]
 	);
 
 	useEffect(() => {
@@ -75,7 +81,7 @@ function SortList<T>({ list, setSortedList, sortByMap }: SortListProps<T>) {
 	}, [list, setSortedList]);
 
 	return (
-		<div className="cursor-pointer">
+		<div className="cursor-pointer flex gap-[12px]">
 			{sortByMap.map(({ key, label }) => (
 				<div key={String(key)}>
 					<span

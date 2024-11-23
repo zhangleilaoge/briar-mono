@@ -2,6 +2,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Checkbox, CheckboxProps, Divider, List, message, Modal, Spin, Upload } from 'antd';
 import { Image as Img } from 'antd';
 import { IMaterial, IPageInfo, THUMB_URL_SUFFIX } from 'briar-shared';
+import { uniq } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
@@ -91,13 +92,8 @@ const Images = () => {
 	}, []);
 
 	const onDelete = useCallback(
-		async (id: number, name: string) => {
-			(await deleteImgs([
-				{
-					id,
-					name
-				}
-			])) as unknown as Promise<any>;
+		async (data: { id: number; name: string }[]) => {
+			(await deleteImgs(data)) as unknown as Promise<any>;
 
 			refresh();
 		},
@@ -105,7 +101,7 @@ const Images = () => {
 	);
 
 	const onSelect = useCallback(
-		async (id: number, shiftKey: boolean) => {
+		async (id: number, shiftKey: boolean, isCommandPressed: boolean) => {
 			setSelectedList((pre) => {
 				if (shiftKey) {
 					if (pre.includes(id)) {
@@ -117,17 +113,17 @@ const Images = () => {
 						);
 
 						// 将 idIndex 和 anyOtherIndex 之间的所有 id 加入到 pre 中
-						return Array.from(
-							new Set([
-								...pre,
-								...sortedImg
-									.slice(Math.min(idIndex, anyOtherIndex), Math.max(idIndex, anyOtherIndex) + 1)
-									.map((item) => item.id)
-							])
-						);
+						return uniq([
+							...pre,
+							...sortedImg
+								.slice(Math.min(idIndex, anyOtherIndex), Math.max(idIndex, anyOtherIndex) + 1)
+								.map((item) => item.id)
+						]);
 					} else {
 						return [id];
 					}
+				} else if (isCommandPressed) {
+					return uniq([...pre, id]);
 				} else {
 					return [id];
 				}
@@ -150,6 +146,29 @@ const Images = () => {
 		);
 	}, [imgs.length, selectedList.length]);
 
+	const deleteSelected = () => {
+		if (selectedList.length === 0) {
+			message.error('请选中要删除的图片');
+			return;
+		}
+
+		Modal.confirm({
+			title: '提示',
+			content: `确认删除选中的图片吗？（共${selectedList.length}张图片）`,
+			okText: '确认',
+			cancelText: '取消',
+			onOk: async () => {
+				await onDelete(
+					selectedList.map((item) => ({
+						id: item,
+						name: imgs.find((img) => img.id === item)!.name
+					}))
+				);
+				setSelectedList([]);
+			}
+		});
+	};
+
 	useEffect(() => {
 		!isModalOpen && setUploadList([]);
 	}, [isModalOpen]);
@@ -161,9 +180,15 @@ const Images = () => {
 	return (
 		<div>
 			<div>
-				<Button onClick={() => setIsModalOpen(true)}>上传图片</Button>
+				<div className="flex gap-[12px]" onClick={cancel}>
+					<Button onClick={() => setIsModalOpen(true)}>上传图片</Button>
+					{selectedList.length > 0 && (
+						<Button onClick={deleteSelected} type="primary">
+							删除
+						</Button>
+					)}
+				</div>
 				<Divider plain></Divider>
-
 				<Modal
 					title="上传图片"
 					open={isModalOpen}
@@ -205,6 +230,15 @@ const Images = () => {
 						{
 							key: 'name',
 							label: '名称'
+						},
+						{
+							key: 'createdAt',
+							label: '创建日期',
+							compare: (a, b) => {
+								console.log(Date.parse(a.createdAt), Date.parse(b.createdAt));
+								return Date.parse(a.createdAt) - Date.parse(b.createdAt);
+							}
+							// compare: (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt)
 						}
 					]}
 				/>

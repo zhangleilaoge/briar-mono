@@ -5,6 +5,7 @@ export interface IMaterial {
 	thumbUrl: string;
 	userId?: number;
 	url?: string;
+	createdAt: string;
 }
 
 // ====================== response below ========================

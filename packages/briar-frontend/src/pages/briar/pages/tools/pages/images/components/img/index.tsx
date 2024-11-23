@@ -18,9 +18,9 @@ const ImageItem = ({
 	onSelect
 }: {
 	data: IMaterial;
-	onDelete: (id: number, name: string) => Promise<any>;
+	onDelete: (data: { id: number; name: string }[]) => Promise<any>;
 	selected?: boolean;
-	onSelect?: (id: number, shiftKey: boolean) => void;
+	onSelect?: (id: number, shiftKey: boolean, isCommandPressed: boolean) => void;
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const onClick = (e: any) => {
@@ -32,7 +32,8 @@ const ImageItem = ({
 			onSelect &&
 			(e.target === containerRef.current || e.target.className?.includes?.('can-click'))
 		) {
-			onSelect(data.id, e.shiftKey);
+			const isCommandPressed = e.ctrlKey || e.metaKey;
+			onSelect(data.id, e.shiftKey, isCommandPressed);
 		}
 	};
 
@@ -85,7 +86,12 @@ const ImageItem = ({
 			label: (
 				<span
 					onClick={() => {
-						onDelete(data.id, data.name).then(() => {
+						onDelete([
+							{
+								id: data.id,
+								name: data.name
+							}
+						]).then(() => {
 							message.success('删除成功');
 						});
 					}}
