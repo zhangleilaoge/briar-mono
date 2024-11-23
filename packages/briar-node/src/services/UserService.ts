@@ -5,6 +5,7 @@ import {
   EMAIL_REG,
   IPageInfo,
   IRoleDTO,
+  ISortInfo,
   IUserInfoDTO,
   MOBILE_REG,
 } from 'briar-shared';
@@ -149,7 +150,11 @@ export class UserService {
     return Array.from(new Set(menuKeys));
   }
 
-  async getUserList(pagination: IPageInfo, keyword: string, roles: number[]) {
+  async getUserList(
+    pagination: IPageInfo & ISortInfo,
+    keyword: string,
+    roles: number[],
+  ) {
     let name: string | undefined;
     let mobile: string | undefined;
     let email: string | undefined;

@@ -2,7 +2,18 @@ import { Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { IRoleDTO, IUserInfoDTO } from 'briar-shared';
 
-export const getCols = (roleList: IRoleDTO[], onStartEdit: (role: IUserInfoDTO) => void) => {
+export const getCols = ({
+	roleList,
+	onStartEdit,
+	sortBy,
+	sortType
+}: {
+	roleList: IRoleDTO[];
+	onStartEdit: (role: IUserInfoDTO) => void;
+	sortBy: string;
+	sortType: 'asc' | 'desc' | null;
+}) => {
+	const sortOrder = sortType ? (sortType === 'asc' ? 'ascend' : 'descend') : undefined;
 	const cols: ColumnsType<IUserInfoDTO> = [
 		{
 			title: 'id',
@@ -12,13 +23,17 @@ export const getCols = (roleList: IRoleDTO[], onStartEdit: (role: IUserInfoDTO) 
 		{
 			title: '角色名称',
 			key: 'name',
-			dataIndex: 'name'
+			dataIndex: 'name',
+			sorter: true,
+			sortOrder: sortBy === 'name' ? sortOrder : undefined
 		},
 		{
 			title: '创建时间',
 			key: 'createdAt',
 			dataIndex: 'createdAt',
-			render: (value) => new Date(value).toLocaleString()
+			render: (value) => new Date(value).toLocaleString(),
+			sorter: true,
+			sortOrder: sortBy === 'createdAt' ? sortOrder : undefined
 		},
 		{
 			title: '用户角色',

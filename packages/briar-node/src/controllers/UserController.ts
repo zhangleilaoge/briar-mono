@@ -207,12 +207,16 @@ export class UserController {
     @Query('roles') roles: string = '',
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
+    @Query('sortBy') sortBy: string,
+    @Query('sortType') sortType: 'asc' | 'desc' | '',
   ) {
     // 只有超管能调用 todo
     const data = await this.userService.getUserList(
       {
         page,
         pageSize,
+        sortBy,
+        sortType,
       },
       keyword,
       roles ? roles.split(',').map(Number) : [],

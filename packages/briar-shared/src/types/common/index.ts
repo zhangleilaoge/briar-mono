@@ -4,6 +4,11 @@ export interface IPageInfo {
 	total?: number;
 }
 
+export interface ISortInfo {
+	sortBy: string;
+	sortType: 'asc' | 'desc' | '' | null;
+}
+
 export interface IPageResult<T> {
 	items: T[];
 	paginator: IPageInfo;

@@ -319,6 +319,12 @@ importers:
 
   packages/briar-shared:
     dependencies:
+      '@types/lodash':
+        specifier: 4.14.74
+        version: 4.14.74
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
       tslib:
         specifier: ^2.6.3
         version: 2.6.3
@@ -2643,8 +2649,7 @@ packages:
     dev: true
 
   /@types/lodash@4.14.74:
-    resolution: {integrity: sha1-rDvY25iOf3A45dIr12p7oT+HYWg=, tarball: https://registry.npmmirror.com/@types/lodash/download/@types/lodash-4.14.74.tgz}
-    dev: true
+    resolution: {integrity: sha512-BZknw3E/z3JmCLqQVANcR17okqVTPZdlxvcIz0fJiJVLUCbSH1hK3zs9r634PVSmrzAxN+n/fxlVRiYoArdOIQ==}
 
   /@types/luxon@3.4.2:
     resolution: {integrity: sha512-TifLZlFudklWlMBfhubvgqTXRzLDI5pCbGa4P8a3wPyUQSW+1xQ5eDsreP9DWHX3tjq1ke96uYG/nwundroWcA==}

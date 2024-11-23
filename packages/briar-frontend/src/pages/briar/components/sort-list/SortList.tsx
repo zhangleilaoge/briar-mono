@@ -3,8 +3,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { ThemeColor } from '../../constants/styles';
 
 interface SortListProps<T> {
-	list: T[];
-	setSortedList: (list: T[]) => void;
+	className?: string;
+	list?: T[];
+	setSortedList?: (list: T[]) => void;
+	onSortChange?: (sortBy: keyof T, sortType: 'asc' | 'desc' | null) => void;
 	sortByMap: { key: keyof T; label: string; compare?: (a: T, b: T) => number }[];
 }
 
@@ -39,16 +41,26 @@ const SortIndicator: React.FC<SortIndicatorProps> = ({ sortType }) => {
 	);
 };
 
-function SortList<T>({ list, setSortedList, sortByMap }: SortListProps<T>) {
+function SortList<T>({
+	list,
+	setSortedList,
+	sortByMap,
+	onSortChange,
+	className = ''
+}: SortListProps<T>) {
 	const [sortType, setSortType] = useState<'asc' | 'desc' | null>(null);
 	const [sortBy, setSortBy] = useState<keyof T | null>(null);
 
 	const handleSortChange = useCallback(
 		(key: keyof T) => {
 			const currentSortTypeIndex = sortTypeSeq.indexOf(sortType);
+
 			const newSortType = sortTypeSeq[
 				(currentSortTypeIndex + 1) % sortTypeSeq.length
 			] as SortIndicatorProps['sortType'];
+
+			onSortChange?.(key, newSortType);
+
 			if (sortBy === key) {
 				// Toggle sort type
 				setSortType(newSortType);
@@ -59,7 +71,7 @@ function SortList<T>({ list, setSortedList, sortByMap }: SortListProps<T>) {
 			}
 
 			// Sort list based on selected sortBy and sortType
-			const sortedList = [...list].sort((a, b) => {
+			const sortedList = [...(list || [])].sort((a, b) => {
 				const compare =
 					sortByMap.find((item) => item.key === key)?.compare ||
 					((a: any, b: any) => a[key] < b[key] && a[key] !== b[key]);
@@ -71,17 +83,17 @@ function SortList<T>({ list, setSortedList, sortByMap }: SortListProps<T>) {
 				return 0;
 			});
 
-			newSortType ? setSortedList?.(sortedList) : setSortedList?.(list);
+			newSortType ? setSortedList?.(sortedList) : setSortedList?.(list || []);
 		},
-		[list, setSortedList, sortBy, sortByMap, sortType]
+		[list, onSortChange, setSortedList, sortBy, sortByMap, sortType]
 	);
 
 	useEffect(() => {
-		setSortedList?.(list);
+		setSortedList?.(list || []);
 	}, [list, setSortedList]);
 
 	return (
-		<div className="cursor-pointer flex gap-[12px]">
+		<div className={`cursor-pointer flex gap-[12px] ${className}`}>
 			{sortByMap.map(({ key, label }) => (
 				<div key={String(key)}>
 					<span

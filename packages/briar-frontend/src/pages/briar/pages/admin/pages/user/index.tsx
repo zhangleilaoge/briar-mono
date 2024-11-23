@@ -1,6 +1,7 @@
 import { useRequest } from 'alova/client';
 import { Button, Divider, Form, Input, message, Select, Table } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { SorterResult } from 'antd/es/table/interface';
 import { IPageInfo, IRoleDTO, IUserInfoDTO } from 'briar-shared';
 import { omitBy } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -10,7 +11,6 @@ import { getRoleList, getUserList, updateUser } from '@/pages/briar/api/user';
 
 import Edit from './components/edit';
 import { getCols } from './constants';
-
 interface FieldType {
 	keyword: string;
 	roles: number[];
@@ -30,6 +30,13 @@ const Role = () => {
 	const [searchForm] = useForm();
 	const [editForm] = useForm();
 	const { state } = useLocation();
+	const [sortInfo, setSortInfo] = useState<{
+		sortBy: string;
+		sortType: 'asc' | 'desc' | null;
+	}>({
+		sortBy: '',
+		sortType: null
+	});
 	const { onSuccess, loading, send } = useRequest(getUserList, {
 		immediate: false
 	});
@@ -54,8 +61,8 @@ const Role = () => {
 	);
 
 	const cols = useMemo(() => {
-		return getCols(roleList, onStartEdit);
-	}, [onStartEdit, roleList]);
+		return getCols({ roleList, onStartEdit, sortBy: sortInfo.sortBy, sortType: sortInfo.sortType });
+	}, [onStartEdit, roleList, sortInfo.sortBy, sortInfo.sortType]);
 
 	const defaultSearchFormValue = useMemo(() => {
 		return {
@@ -76,6 +83,7 @@ const Role = () => {
 
 			send({
 				...pageInfo,
+				...sortInfo,
 				...paginator,
 				...omitBy(
 					{
@@ -86,7 +94,7 @@ const Role = () => {
 				)
 			});
 		},
-		[searchForm, pageInfo, send]
+		[searchForm, pageInfo, send, sortInfo]
 	);
 
 	const editFinish = useCallback(() => {
@@ -115,11 +123,24 @@ const Role = () => {
 		search();
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [pageInfo.page]);
+	}, [pageInfo.page, sortInfo]);
 
 	useEffect(() => {
 		getRoleList().then(setRoleList);
 	}, []);
+
+	const handleChange = (
+		_1: any,
+		_2: any,
+		sorter: SorterResult<IUserInfoDTO> | SorterResult<IUserInfoDTO>[]
+	) => {
+		const _sorter = sorter as SorterResult<IUserInfoDTO>;
+		setSortInfo({
+			sortBy: _sorter.field as string,
+			sortType: _sorter.order ? (_sorter.order === 'ascend' ? 'asc' : 'desc') : null
+		});
+		setPageInfo(DEFAULT_PAGE_INFO);
+	};
 
 	return (
 		<div>
@@ -174,6 +195,7 @@ const Role = () => {
 						});
 					}
 				}}
+				onChange={handleChange}
 			/>
 		</div>
 	);

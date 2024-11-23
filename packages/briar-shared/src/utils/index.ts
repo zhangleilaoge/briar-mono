@@ -1,3 +1,5 @@
+import { isNil } from 'lodash';
+
 import { StardewValleyGirl } from '../types/common';
 
 export const safeJsonParse = (str: string) => {
@@ -43,4 +45,19 @@ export const getRandomGirl = () => {
 	];
 
 	return girls[Math.floor(Math.random() * girls.length)];
+};
+
+export const filterDummy = (value: any) => {
+	console.log(value);
+	if (
+		isNil(value) ||
+		value === 'null' ||
+		value === 'undefined' ||
+		value === 'NULL' ||
+		value === 'UNDEFINED'
+	) {
+		return false;
+	}
+
+	return true;
 };

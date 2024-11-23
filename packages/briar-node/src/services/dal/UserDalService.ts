@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { IPageInfo, IRoleDTO } from 'briar-shared';
+import { IPageInfo, IRoleDTO, ISortInfo } from 'briar-shared';
 import { omit } from 'lodash';
-import { Op, QueryTypes } from 'sequelize';
+import { Op, Order, QueryTypes } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 
 import { RoleEnum } from '@/constants/user';
 import { SafeReturn } from '@/decorators/SafeReturn';
 import { RolesModel, UserModel } from '@/model/UserModel';
+import { getOrderList } from '@/utils/common';
+
 const SENSITIVE_FIELDS = ['password'];
 
 @Injectable()
@@ -114,7 +116,7 @@ export class UserDalService {
   }
 
   async getUserList(
-    pagination: IPageInfo,
+    pagination: IPageInfo & ISortInfo,
     {
       name,
       mobile,
@@ -132,6 +134,8 @@ export class UserDalService {
   ) {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;
+    const sortBy = pagination.sortBy;
+    const sortType = pagination.sortType;
 
     const orMatch = [];
     if (id) orMatch.push({ id });
@@ -142,6 +146,7 @@ export class UserDalService {
     const { count, rows } = await this.userModel.findAndCountAll({
       limit: pageSize,
       offset: (page - 1) * pageSize,
+      order: getOrderList([{ sortBy, sortType }]) as Order,
       where: {
         [Op.and]: [
           ...(orMatch.length > 0 ? [{ [Op.or]: orMatch }] : []),
