@@ -9,6 +9,7 @@ import { RoleEnum } from '@/constants/user';
 import { SafeReturn } from '@/decorators/SafeReturn';
 import { RolesModel, UserModel } from '@/model/UserModel';
 import { getOrderList } from '@/utils/common';
+import { splitCondition } from '@/utils/dal';
 
 const SENSITIVE_FIELDS = ['password'];
 
@@ -115,33 +116,35 @@ export class UserDalService {
     >;
   }
 
-  async getUserList(
-    pagination: IPageInfo & ISortInfo,
-    {
-      name,
-      mobile,
-      email,
-      id,
-      roles,
-    }: {
-      name?: string;
-      username?: string;
-      mobile?: string;
-      email?: string;
-      id?: number;
-      roles?: number[];
-    },
-  ) {
+  async getUserList({
+    pagination,
+    sorter,
+    name,
+    mobile,
+    email,
+    id,
+    roles,
+  }: {
+    pagination: IPageInfo;
+    sorter: ISortInfo;
+    roles: number[];
+    name?: string;
+    mobile?: string;
+    email?: string;
+    id?: number;
+  }) {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;
-    const sortBy = pagination.sortBy;
-    const sortType = pagination.sortType;
+    const sortBy = sorter.sortBy;
+    const sortType = sorter.sortType;
 
-    const orMatch = [];
-    if (id) orMatch.push({ id });
-    if (name) orMatch.push({ username: name, name });
-    if (mobile) orMatch.push({ mobile });
-    if (email) orMatch.push({ email });
+    const orMatch = splitCondition({
+      id,
+      name: name ? { [Op.like]: `%${name}%` } : null,
+      username: name ? { [Op.like]: `%${name}%` } : null,
+      mobile,
+      email,
+    });
 
     const { count, rows } = await this.userModel.findAndCountAll({
       limit: pageSize,

@@ -1,13 +1,14 @@
 import { useRequest } from 'alova/client';
 import { Button, Divider, Form, Input, message, Select, Table } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { SorterResult } from 'antd/es/table/interface';
-import { IPageInfo, IRoleDTO, IUserInfoDTO } from 'briar-shared';
+import { SorterResult, TablePaginationConfig } from 'antd/es/table/interface';
+import { IPageInfo, IRoleDTO, ISortInfo, IUserInfoDTO } from 'briar-shared';
 import { omitBy } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { getRoleList, getUserList, updateUser } from '@/pages/briar/api/user';
+import { convertAntdPaginator, convertAntdSortInfo } from '@/pages/briar/utils/antd';
 
 import Edit from './components/edit';
 import { getCols } from './constants';
@@ -30,10 +31,7 @@ const Role = () => {
 	const [searchForm] = useForm();
 	const [editForm] = useForm();
 	const { state } = useLocation();
-	const [sortInfo, setSortInfo] = useState<{
-		sortBy: string;
-		sortType: 'asc' | 'desc' | null;
-	}>({
+	const [sortInfo, setSortInfo] = useState<ISortInfo>({
 		sortBy: '',
 		sortType: null
 	});
@@ -130,16 +128,12 @@ const Role = () => {
 	}, []);
 
 	const handleChange = (
-		_1: any,
-		_2: any,
+		pagination: TablePaginationConfig,
+		_: any,
 		sorter: SorterResult<IUserInfoDTO> | SorterResult<IUserInfoDTO>[]
 	) => {
-		const _sorter = sorter as SorterResult<IUserInfoDTO>;
-		setSortInfo({
-			sortBy: _sorter.field as string,
-			sortType: _sorter.order ? (_sorter.order === 'ascend' ? 'asc' : 'desc') : null
-		});
-		setPageInfo(DEFAULT_PAGE_INFO);
+		setSortInfo(convertAntdSortInfo(sorter as SorterResult<IUserInfoDTO>));
+		setPageInfo(convertAntdPaginator(pagination));
 	};
 
 	return (
@@ -187,13 +181,7 @@ const Role = () => {
 					total: pageInfo.total,
 					pageSize: pageInfo.pageSize,
 					current: pageInfo.page,
-					showSizeChanger: false,
-					onChange: (page) => {
-						setPageInfo({
-							...pageInfo,
-							page
-						});
-					}
+					showSizeChanger: false
 				}}
 				onChange={handleChange}
 			/>

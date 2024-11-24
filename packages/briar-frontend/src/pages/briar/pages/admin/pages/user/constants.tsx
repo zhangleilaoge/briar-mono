@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { IRoleDTO, IUserInfoDTO } from 'briar-shared';
+import { IRoleDTO, ISortInfo, IUserInfoDTO } from 'briar-shared';
 
 export const getCols = ({
 	roleList,
@@ -11,7 +11,7 @@ export const getCols = ({
 	roleList: IRoleDTO[];
 	onStartEdit: (role: IUserInfoDTO) => void;
 	sortBy: string;
-	sortType: 'asc' | 'desc' | null;
+	sortType: ISortInfo['sortType'];
 }) => {
 	const sortOrder = sortType ? (sortType === 'asc' ? 'ascend' : 'descend') : undefined;
 	const cols: ColumnsType<IUserInfoDTO> = [

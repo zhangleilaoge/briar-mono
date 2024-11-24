@@ -238,7 +238,6 @@ const Images = () => {
 								console.log(Date.parse(a.createdAt), Date.parse(b.createdAt));
 								return Date.parse(a.createdAt) - Date.parse(b.createdAt);
 							}
-							// compare: (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt)
 						}
 					]}
 				/>

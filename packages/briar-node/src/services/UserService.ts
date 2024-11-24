@@ -150,11 +150,17 @@ export class UserService {
     return Array.from(new Set(menuKeys));
   }
 
-  async getUserList(
-    pagination: IPageInfo & ISortInfo,
-    keyword: string,
-    roles: number[],
-  ) {
+  async getUserList({
+    pagination,
+    keyword,
+    roles,
+    sorter,
+  }: {
+    pagination: IPageInfo;
+    sorter: ISortInfo;
+    keyword: string;
+    roles: number[];
+  }) {
     let name: string | undefined;
     let mobile: string | undefined;
     let email: string | undefined;
@@ -175,7 +181,9 @@ export class UserService {
       mobile = keyword;
     }
 
-    return await this.userDalService.getUserList(pagination, {
+    return await this.userDalService.getUserList({
+      pagination,
+      sorter,
       name,
       mobile,
       email,

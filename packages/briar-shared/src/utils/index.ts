@@ -48,7 +48,6 @@ export const getRandomGirl = () => {
 };
 
 export const filterDummy = (value: any) => {
-	console.log(value);
 	if (
 		isNil(value) ||
 		value === 'null' ||
@@ -60,4 +59,8 @@ export const filterDummy = (value: any) => {
 	}
 
 	return true;
+};
+
+export const filterDummyObj = (obj: Record<string, any>) => {
+	return Object.fromEntries(Object.entries(obj).filter(([_, value]) => filterDummy(value)));
 };

@@ -8,7 +8,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { IUserAccess } from 'briar-shared';
+import { ISortInfo, IUserAccess } from 'briar-shared';
 
 import { RoleEnum } from '@/constants/user';
 import { Public } from '@/decorators/Public';
@@ -208,19 +208,21 @@ export class UserController {
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
     @Query('sortBy') sortBy: string,
-    @Query('sortType') sortType: 'asc' | 'desc' | '',
+    @Query('sortType') sortType: ISortInfo['sortType'],
   ) {
     // 只有超管能调用 todo
-    const data = await this.userService.getUserList(
-      {
+    const data = await this.userService.getUserList({
+      pagination: {
         page,
         pageSize,
+      },
+      sorter: {
         sortBy,
         sortType,
       },
       keyword,
-      roles ? roles.split(',').map(Number) : [],
-    );
+      roles: roles ? roles.split(',').map(Number) : [],
+    });
 
     return data;
   }
