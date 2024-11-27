@@ -57,7 +57,7 @@ const Register: React.FC<IRegisterProps> = ({ finishSignUp }) => {
 				layout="vertical"
 			>
 				<Form.Item<FieldType>
-					label="Username"
+					label="帐号"
 					name="username"
 					rules={[
 						{ required: true },
@@ -70,7 +70,7 @@ const Register: React.FC<IRegisterProps> = ({ finishSignUp }) => {
 					<Input />
 				</Form.Item>
 				<Form.Item<FieldType>
-					label="Password"
+					label="密码"
 					name="password"
 					rules={[
 						{ required: true },
@@ -83,7 +83,7 @@ const Register: React.FC<IRegisterProps> = ({ finishSignUp }) => {
 					<Input.Password />
 				</Form.Item>
 				<Form.Item<FieldType>
-					label="PasswordCheck"
+					label="密码确认"
 					name="passwordCheck"
 					validateTrigger="onBlur"
 					rules={[

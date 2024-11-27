@@ -43,7 +43,7 @@ const Profile = () => {
 							setIsModalOpen(true);
 						}}
 					>
-						sign up
+						注册
 					</a>
 				)
 			},
@@ -57,7 +57,7 @@ const Profile = () => {
 							setIsModalOpen(true);
 						}}
 					>
-						sign in
+						登录
 					</a>
 				)
 			},

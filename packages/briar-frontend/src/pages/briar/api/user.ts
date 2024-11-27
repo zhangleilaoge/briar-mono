@@ -20,6 +20,17 @@ export const authenticateUserByGoogle = (googleAccessToken: string) =>
 		googleAccessToken
 	});
 
+export const getMiniprogramCode = () =>
+	alovaInstance.Post<{
+		imgBase64: string;
+		code: string;
+	}>(`/wx/getMiniprogramCode`);
+
+export const getMiniprogramCodeStatus = () =>
+	alovaInstance.Post<{
+		imgCode: string;
+	}>(`/wx/getMiniprogramCodeStatus`);
+
 export const checkUsername = (username: string) =>
 	alovaInstance.Get<ICheckUsername>(`/user/checkUsername?username=${username}`);
 
