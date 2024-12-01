@@ -1,13 +1,13 @@
-import { GoogleOutlined } from '@ant-design/icons';
-import { useGoogleLogin } from '@react-oauth/google';
 import type { FormProps } from 'antd';
-import { Button, Divider, Form, Input, message } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import md5 from 'md5-es';
 import React from 'react';
 
-import { authenticateUserByGoogle, signIn } from '@/pages/briar/api/user';
+import { signIn } from '@/pages/briar/api/user';
 import { LocalStorageKey } from '@/pages/briar/constants/env';
 import { errorNotify } from '@/pages/briar/utils/notify';
+
+import { PASSWORD_RULES } from '../../constants/validateRules';
 
 export type FieldType = {
 	username?: string;
@@ -16,9 +16,10 @@ export type FieldType = {
 
 interface ILoginProps {
 	finishSignIn: () => void;
+	retrievePassword: () => void;
 }
 
-const Login: React.FC<ILoginProps> = ({ finishSignIn }) => {
+const Login: React.FC<ILoginProps> = ({ finishSignIn, retrievePassword }) => {
 	const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
 		message.loading({
 			content: '登录中，请稍等。',
@@ -45,26 +46,26 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn }) => {
 		finishSignIn();
 	};
 
-	const login = useGoogleLogin({
-		onSuccess: async (tokenResponse) => {
-			const googleAccessToken = tokenResponse.access_token;
-			const accessToken = await authenticateUserByGoogle(googleAccessToken);
-			console.log('google response: ', tokenResponse);
-			console.log('accessToken: ', accessToken);
+	// const login = useGoogleLogin({
+	// 	onSuccess: async (tokenResponse) => {
+	// 		const googleAccessToken = tokenResponse.access_token;
+	// 		const accessToken = await authenticateUserByGoogle(googleAccessToken);
+	// 		console.log('google response: ', tokenResponse);
+	// 		console.log('accessToken: ', accessToken);
 
-			if (accessToken) {
-				message.success('登录成功，页面即将刷新。');
-				localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
-				setTimeout(() => {
-					window.location.reload();
-				}, 1000);
-			} else errorNotify('登录失败。');
-		},
-		onError: (err) => {
-			console.log('Login Failed', err);
-			alert('登录失败。');
-		}
-	});
+	// 		if (accessToken) {
+	// 			message.success('登录成功，页面即将刷新。');
+	// 			localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
+	// 			setTimeout(() => {
+	// 				window.location.reload();
+	// 			}, 1000);
+	// 		} else errorNotify('登录失败。');
+	// 	},
+	// 	onError: (err) => {
+	// 		console.log('Login Failed', err);
+	// 		alert('登录失败。');
+	// 	}
+	// });
 
 	return (
 		<>
@@ -77,10 +78,10 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn }) => {
 					flexDirection: 'column',
 					alignItems: 'center'
 				}}
-				layout="vertical"
+				requiredMark={false}
 			>
 				<Form.Item<FieldType>
-					label="Username"
+					label="用户名"
 					name="username"
 					rules={[{ required: true }]}
 					validateTrigger="onBlur"
@@ -89,23 +90,28 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn }) => {
 					<Input />
 				</Form.Item>
 				<Form.Item<FieldType>
-					label="Password"
+					label="密码"
 					name="password"
-					rules={[{ required: true }]}
+					rules={PASSWORD_RULES}
 					validateTrigger="onBlur"
 					style={{ width: 280 }}
 				>
 					<Input.Password />
 				</Form.Item>
 				<Form.Item style={{ width: 280, display: 'flex', justifyContent: 'center', marginTop: 12 }}>
-					<Button htmlType="submit">Sign in</Button>
+					<div className="w-[240px] flex justify-between">
+						<Button htmlType="submit" className="w-[88px]" type="primary">
+							登录
+						</Button>
+						<Button onClick={() => retrievePassword()}>找回密码</Button>
+					</div>
 				</Form.Item>
-				<Divider plain>Additional Login Options</Divider>
+				{/* <Divider plain>Additional Login Options</Divider>
 				<Form.Item style={{ width: 280, display: 'flex', justifyContent: 'center', marginTop: 12 }}>
 					<Button onClick={() => login()} type="primary" icon={<GoogleOutlined />}>
 						Sign in with Google
 					</Button>
-				</Form.Item>
+				</Form.Item> */}
 			</Form>
 		</>
 	);

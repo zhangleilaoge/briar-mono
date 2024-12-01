@@ -20,8 +20,8 @@ export const authenticateUserByGoogle = (googleAccessToken: string) =>
 		googleAccessToken
 	});
 
-export const checkUsername = (username: string) =>
-	alovaInstance.Get<ICheckUsername>(`/user/checkUsername?username=${username}`);
+export const checkUserInfo = (key: string, value: string) =>
+	alovaInstance.Get<ICheckUsername>(`/user/checkUserInfo?key=${key}&value=${value}`);
 
 export const signUp = (userInfo: Partial<IUserInfoDTO>) =>
 	alovaInstance.Post<IUserAccess>(`/user/signUp`, userInfo);
@@ -43,5 +43,8 @@ export const getUserList = (data: IGetUserListParams) =>
 export const updateUser = (role: Pick<IUserInfoDTO, 'id' | 'roles'>) =>
 	alovaInstance.Post(`/user/updateUser`, role);
 
-export const updateSelf = (role: Pick<IUserInfoDTO, 'name' | 'profileImg' | 'email'>) =>
+export const updateSelf = (role: Pick<IUserInfoDTO, 'name' | 'profileImg' | 'email' | 'mobile'>) =>
 	alovaInstance.Post(`/user/updateSelf`, role);
+
+export const updatePassword = (data: { verifyCode: string; email: string; password: string }) =>
+	alovaInstance.Post(`/user/updatePassword`, data);

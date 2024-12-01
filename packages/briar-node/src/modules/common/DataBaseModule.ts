@@ -12,6 +12,7 @@ import {
   AbilityUsageRecordModel,
 } from '@/model/UserAbilityModel';
 import { RolesModel, UserModel } from '@/model/UserModel';
+import { VerifyCodeModel } from '@/model/VerifyModel';
 
 // 如若只有一个.env，直接 import 'dotenv/config' 而不用指定 .env 也可以
 dotenv.config({ path: '../../.env' });
@@ -40,6 +41,7 @@ dotenv.config({ path: '../../.env' });
       AbilityUsageLimitModel,
       AbilityUsageRecordModel,
       MaterialModel,
+      VerifyCodeModel,
     ]), // 注册特定模型以用于DI
   ],
   exports: [SequelizeModule],

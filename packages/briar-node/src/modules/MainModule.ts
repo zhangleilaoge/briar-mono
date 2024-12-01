@@ -13,6 +13,7 @@ import { CommonModule } from './common/CommonModule';
 import { MaterialModule } from './MaterialModule';
 import { ShortUrlModule } from './ShortUrlModule';
 import { UserModule } from './UserModule';
+import { VerifyModule } from './VerifyModule';
 @Module({
   imports: [
     JwtModule.register({
@@ -25,6 +26,7 @@ import { UserModule } from './UserModule';
     AiModule,
     UserModule,
     MaterialModule,
+    VerifyModule,
     /** 不要改变 ShortUrlModule 最末位的顺序 */
     ShortUrlModule,
   ],

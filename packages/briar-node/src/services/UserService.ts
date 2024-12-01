@@ -9,6 +9,7 @@ import {
   IUserInfoDTO,
   MOBILE_REG,
 } from 'briar-shared';
+import { Op } from 'sequelize';
 
 import { RoleEnum } from '@/constants/user';
 
@@ -37,8 +38,25 @@ export class UserService {
     }
   }
 
+  async getBaseInfoByEmail(email: string) {
+    try {
+      const user = await this.userDalService.getUser({ email });
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      };
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
   async getLoginUser(username: string, password: string) {
-    const user = await this.userDalService.getUser({ username, password });
+    const user = await this.userDalService.getUser(
+      { username, password },
+      Op.and,
+    );
     return user as IUserInfoDTO;
   }
 
@@ -78,9 +96,10 @@ export class UserService {
     return userId;
   }
 
-  async checkUsername(username: string) {
+  async checkUserInfo(key: string, value: string) {
     return {
-      alreadyExists: !!(await this.userDalService.getUser({ username }))?.id,
+      alreadyExists: !!(await this.userDalService.getUser({ [key]: value }))
+        ?.id,
     };
   }
 

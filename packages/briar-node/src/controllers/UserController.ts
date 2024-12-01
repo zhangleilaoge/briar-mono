@@ -8,13 +8,21 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ISortInfo, IUserAccess } from 'briar-shared';
+import {
+  ISortInfo,
+  IUserAccess,
+  VerifyScene,
+  VerifySceneSubject,
+} from 'briar-shared';
 
+import { EmailTemplate } from '@/constants/email';
 import { RoleEnum } from '@/constants/user';
 import { Public } from '@/decorators/Public';
 import { Role } from '@/decorators/Role';
 import { RoleGuard } from '@/guards/role';
 import { ContextService } from '@/services/common/ContextService';
+import { SendEmailService } from '@/services/SendEmailService';
+import { VerifyService } from '@/services/VerifyService';
 
 import { UserService } from '../services/UserService';
 
@@ -23,6 +31,8 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private contextService: ContextService,
+    private verifyService: VerifyService,
+    private sendEmailService: SendEmailService,
   ) {}
 
   @Public()
@@ -62,6 +72,7 @@ export class UserController {
     @Body('name') name: string,
     @Body('email') email: string,
     @Body('profileImg') profileImg: string,
+    @Body('mobile') mobile: string,
   ) {
     const userId = this.contextService.get().userId;
     const result = await this.userService.updateUser({
@@ -69,6 +80,7 @@ export class UserController {
       name,
       email,
       profileImg,
+      mobile,
     });
 
     return {
@@ -76,9 +88,12 @@ export class UserController {
     };
   }
 
-  @Get('checkUsername')
-  async checkUsername(@Query('username') username: string) {
-    const result = await this.userService.checkUsername(username);
+  @Get('checkUserInfo')
+  async checkUserInfo(
+    @Query('key') key: string,
+    @Query('value') value: string,
+  ) {
+    const result = await this.userService.checkUserInfo(key, value);
     return result;
   }
 
@@ -102,6 +117,8 @@ export class UserController {
   async signUp(
     @Body('username') username: string,
     @Body('password') password: string,
+    @Body('email') email: string = '',
+    @Body('mobile') mobile: string = '',
   ): Promise<IUserAccess> {
     const userId = this.contextService.get().userId;
     await this.userService.signUp({
@@ -109,6 +126,8 @@ export class UserController {
       password,
       id: userId,
       name: username,
+      email,
+      mobile,
     });
     const data = await this.userService.getUserByJwt();
 
@@ -152,6 +171,34 @@ export class UserController {
   ) {
     // 只有超管能调用 todo
     const result = await this.userService.createRole({ name, desc, menuKeys });
+
+    return {
+      result,
+    };
+  }
+
+  @Post('updatePassword')
+  async updatePassword(
+    @Body('email') email: string,
+    @Body('verifyCode') verifyCode: string,
+    @Body('password') password: string,
+  ) {
+    const { id } = await this.userService.getBaseInfoByEmail(email);
+
+    const checkResult = await this.verifyService.checkVerifyCode(
+      VerifyScene.RetrievePassword,
+      verifyCode,
+      email,
+    );
+
+    if (!checkResult) {
+      throw new ForbiddenException('验证码校验失败');
+    }
+
+    const result = await this.userService.updateUser({
+      id,
+      password,
+    });
 
     return {
       result,
@@ -225,5 +272,27 @@ export class UserController {
     });
 
     return data;
+  }
+
+  @Post('sendVerifyCode4RetrievePassword')
+  async sendVerifyCode4RetrievePassword(@Body('email') email: string) {
+    const code = await this.verifyService.createVerifyCode(
+      VerifyScene.RetrievePassword,
+      email,
+    );
+    const { name } = await this.userService.getBaseInfoByEmail(email);
+
+    await this.sendEmailService.sendEmail(email, {
+      TemplateData: {
+        name,
+        verificationCode: code,
+      },
+      TemplateID: EmailTemplate.RetrievePassword,
+      subject: VerifySceneSubject[VerifyScene.RetrievePassword],
+    });
+
+    return {
+      res: true,
+    };
   }
 }

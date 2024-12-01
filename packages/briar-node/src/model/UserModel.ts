@@ -31,6 +31,9 @@ export class UserModel extends Model<UserModel> {
     defaultValue: [],
   })
   roles: Array<number>;
+
+  @Column
+  mobile?: string;
 }
 
 @Table({ tableName: 'roles' })

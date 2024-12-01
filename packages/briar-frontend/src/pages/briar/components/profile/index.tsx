@@ -11,13 +11,18 @@ import CommonContext from '@/pages/briar/context/common';
 import { MenuKeyEnum } from '../../constants/router';
 import Login from './Login';
 import Register from './Register';
+import ResetPassword from './ResetPassword';
+import RetrievePassword from './RetrievePassword';
 import s from './style.module.scss';
 
-enum OperationEnum {
+export enum OperationEnum {
 	Name = 'name',
 	Login = 'login',
 	Logout = 'logout',
-	Register = 'register'
+	Register = 'register',
+	RetrievePassword = 'retrievePassword',
+	ResetPassword = 'resetPassword',
+	Personal = 'personal'
 }
 
 const Profile = () => {
@@ -25,6 +30,13 @@ const Profile = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modelType, setModelType] = useState(OperationEnum.Login);
 	const navigate = useNavigate();
+	// 重置密码用
+	const [checkedEmail, setCheckedEmail] = useState<string>('');
+	const [checkedCode, setCheckedCode] = useState<string>('');
+
+	const personalAccess = useMemo(() => {
+		return availablePage.includes(MenuKeyEnum.Personal_1);
+	}, [availablePage]);
 
 	const dropdownItems = useMemo(() => {
 		return [
@@ -32,6 +44,19 @@ const Profile = () => {
 				key: OperationEnum.Name,
 				label: userInfo?.name,
 				disabled: true
+			},
+			personalAccess && {
+				key: OperationEnum.Personal,
+				icon: <UserOutlined />,
+				label: (
+					<a
+						onClick={async () => {
+							navigate('/' + MenuKeyEnum.Personal_1);
+						}}
+					>
+						个人
+					</a>
+				)
 			},
 			!userInfo?.isAuthenticated && {
 				key: OperationEnum.Register,
@@ -43,7 +68,7 @@ const Profile = () => {
 							setIsModalOpen(true);
 						}}
 					>
-						sign up
+						注册
 					</a>
 				)
 			},
@@ -57,10 +82,11 @@ const Profile = () => {
 							setIsModalOpen(true);
 						}}
 					>
-						sign in
+						登录
 					</a>
 				)
 			},
+
 			userInfo?.isAuthenticated && {
 				key: OperationEnum.Logout,
 				icon: <LogoutOutlined />,
@@ -77,12 +103,12 @@ const Profile = () => {
 							});
 						}}
 					>
-						logout
+						登出
 					</a>
 				)
 			}
 		].filter(Boolean) as ItemType[];
-	}, [logout, userInfo?.isAuthenticated]);
+	}, [logout, navigate, personalAccess, userInfo?.isAuthenticated, userInfo?.name]);
 
 	const displayName = useMemo(() => {
 		return (userInfo.name || '')?.slice(0, 5);
@@ -94,7 +120,10 @@ const Profile = () => {
 				return (
 					<div className={s.ModalContent}>
 						<GoogleOAuthProvider clientId={clientId}>
-							<Login finishSignIn={() => setIsModalOpen(false)} />
+							<Login
+								finishSignIn={() => setIsModalOpen(false)}
+								retrievePassword={() => setModelType(OperationEnum.RetrievePassword)}
+							/>
 						</GoogleOAuthProvider>
 					</div>
 				);
@@ -104,14 +133,32 @@ const Profile = () => {
 						<Register finishSignUp={() => setIsModalOpen(false)} />
 					</div>
 				);
+			case OperationEnum.RetrievePassword:
+				return (
+					<div className={s.ModalContent}>
+						<RetrievePassword
+							finishCheckCode={(email: string, code: string) => {
+								setModelType(OperationEnum.ResetPassword);
+								setCheckedEmail(email);
+								setCheckedCode(code);
+							}}
+						/>
+					</div>
+				);
+			case OperationEnum.ResetPassword:
+				return (
+					<div className={s.ModalContent}>
+						<ResetPassword
+							checkedCode={checkedCode}
+							checkedEmail={checkedEmail}
+							finishReset={() => setIsModalOpen(false)}
+						/>
+					</div>
+				);
 			default:
 				return null;
 		}
-	}, [modelType]);
-
-	const personalAccess = useMemo(() => {
-		return availablePage.includes(MenuKeyEnum.Personal_1);
-	}, [availablePage]);
+	}, [checkedCode, checkedEmail, modelType]);
 
 	return (
 		<>
@@ -120,13 +167,6 @@ const Profile = () => {
 					size={40}
 					src={userInfo.profileImg || ''}
 					icon={displayName || userInfo.profileImg ? null : <UserOutlined />}
-					className="cursor-pointer"
-					onClick={() => {
-						if (!personalAccess) {
-							return;
-						}
-						navigate('/' + MenuKeyEnum.Personal_1);
-					}}
 				>
 					{displayName}
 				</Avatar>

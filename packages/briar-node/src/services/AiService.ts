@@ -2,12 +2,12 @@ import 'dotenv/config';
 
 import { Injectable } from '@nestjs/common';
 import {
-  getRandomGirl,
   IConversationDTO,
   IMessageDTO,
   ModelEnum,
   RoleEnum,
   STARDEW_VALLEY_GIRL_DESC,
+  StardewValleyGirl,
 } from 'briar-shared';
 import OpenAI from 'openai';
 import { map, Subject } from 'rxjs';
@@ -23,6 +23,19 @@ import { ContextService } from './common/ContextService';
 import { ConversationDalService } from './dal/ConversationDalService';
 import { MessageDalService } from './dal/MessageDalService';
 import { LogService } from './LogService';
+
+export const getRandomGirl = () => {
+  const girls = [
+    StardewValleyGirl.Emily,
+    StardewValleyGirl.Haley,
+    StardewValleyGirl.Penny,
+    StardewValleyGirl.Robin,
+    StardewValleyGirl.Caroline,
+    StardewValleyGirl.Abigail,
+  ];
+
+  return girls[Math.floor(Math.random() * girls.length)];
+};
 
 @Injectable()
 export class AiService {

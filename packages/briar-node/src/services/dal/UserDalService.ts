@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { IPageInfo, IRoleDTO, ISortInfo } from 'briar-shared';
 import { omit } from 'lodash';
@@ -49,32 +49,79 @@ export class UserDalService {
   }
 
   @SafeReturn(SENSITIVE_FIELDS)
-  async getUser({
-    userId,
-    googleId,
-    password,
-    username,
-  }: {
-    userId?: number;
-    googleId?: string;
-    password?: string;
-    username?: string;
-  }) {
-    const orMatch = [];
-    if (userId) orMatch.push({ id: userId });
-    if (googleId) orMatch.push({ googleId });
-    if (password) orMatch.push({ password });
-    if (username) orMatch.push({ username });
+  async getUser(
+    {
+      userId,
+      googleId,
+      password,
+      username,
+      email,
+    }: {
+      userId?: number;
+      googleId?: string;
+      password?: string;
+      username?: string;
+      email?: string;
+    },
+    optType = Op.or,
+  ) {
+    const orMatch = splitCondition({
+      id: userId,
+      googleId,
+      password,
+      username,
+      email,
+    });
 
     return (
       await this.userModel.findOne({
-        where: { [Op.or]: orMatch },
+        where: { [optType]: orMatch },
       })
     )?.dataValues;
   }
 
   async update(data: Partial<UserModel>) {
-    return await this.userModel.update(data, { where: { id: data.id } });
+    const { email, mobile, username, id } = data;
+
+    if (email) {
+      const existingEmailUser = await this.userModel.findOne({
+        where: {
+          email,
+          id: { [Op.ne]: id },
+        },
+      });
+      if (existingEmailUser) {
+        throw new ForbiddenException('当前 email 已经被使用'); // "The current email is already in use"
+      }
+    }
+
+    if (mobile) {
+      const existingMobileUser = await this.userModel.findOne({
+        where: {
+          mobile,
+          id: { [Op.ne]: id },
+        },
+      });
+
+      if (existingMobileUser) {
+        throw new ForbiddenException('当前 mobile 已经被使用'); // "The current mobile number is already in use"
+      }
+    }
+
+    if (username) {
+      const existingUsernameUser = await this.userModel.findOne({
+        where: {
+          username,
+          id: { [Op.ne]: id },
+        },
+      });
+
+      if (existingUsernameUser) {
+        throw new ForbiddenException('当前 username 已经被使用'); // "The current username is already in use"
+      }
+    }
+
+    return await this.userModel.update(data, { where: { id } });
   }
 
   async createRole({

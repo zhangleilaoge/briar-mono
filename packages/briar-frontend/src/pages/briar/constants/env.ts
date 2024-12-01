@@ -5,5 +5,6 @@ export enum LocalStorageKey {
 	Sider = 'briar-sider',
 	FullScreen = 'briar-full-screen',
 	AccessToken = 'briar-access-token',
-	CalculateResult = 'briar-calculate-result'
+	CalculateResult = 'briar-calculate-result',
+	SendVerifyCode = 'briar-send-verify-code'
 }

@@ -39,6 +39,7 @@ export type IUserInfoDTO = IModel<{
 	username?: string;
 	password?: string;
 	roles: Array<number>;
+	mobile?: string;
 }>;
 
 export type IRoleDTO = IModel<{

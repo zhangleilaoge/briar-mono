@@ -1,5 +1,13 @@
-import { StardewValleyGirl } from './common';
 import { IModel } from './model';
+
+export enum StardewValleyGirl {
+	Abigail = 'Abigail',
+	Caroline = 'Caroline',
+	Emily = 'Emily',
+	Haley = 'Haley',
+	Penny = 'Penny',
+	Robin = 'Robin'
+}
 
 export enum RoleEnum {
 	System = 'system',

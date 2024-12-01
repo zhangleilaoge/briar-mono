@@ -40,7 +40,8 @@
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "sequelize": "^6.37.3",
-    "sequelize-typescript": "^2.1.6"
+    "sequelize-typescript": "^2.1.6",
+    "tencentcloud-sdk-nodejs-ses": "^4.0.962"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

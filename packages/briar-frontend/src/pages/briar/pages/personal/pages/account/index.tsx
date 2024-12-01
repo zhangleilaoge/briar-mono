@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Form, Input, message } from 'antd';
+import { AutoComplete, Button, Divider, Form, Input, message } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { IMaterial, THUMB_URL_SUFFIX } from 'briar-shared';
 import { useContext, useEffect, useRef, useState } from 'react';
@@ -8,12 +8,14 @@ import { uploadBase64 } from '@/pages/briar/api/material';
 import { updateSelf } from '@/pages/briar/api/user';
 import CropUpload from '@/pages/briar/components/crop-upload';
 import CommonContext from '@/pages/briar/context/common';
+import useAutoCompleteEmail from '@/pages/briar/hooks/biz/useAutoCompleteEmail';
 
 interface FieldType {
 	name: string;
 	username: string;
 	profileImg: IMaterial[];
 	email: string;
+	mobile: string;
 }
 
 const Account = () => {
@@ -21,6 +23,7 @@ const Account = () => {
 	const [showUploadBtn, setShowUploadBtn] = useState(true);
 	const { userInfo } = useContext(CommonContext);
 	const [form] = useForm();
+	const { options, handleSearch } = useAutoCompleteEmail();
 
 	const onFinish = async (val: FieldType) => {
 		const { profileImg } = val;
@@ -93,6 +96,7 @@ const Account = () => {
 							]
 						: []
 				}}
+				requiredMark={false}
 			>
 				<div className="text-2xl">个人资料</div>
 				<Divider plain></Divider>
@@ -128,7 +132,25 @@ const Account = () => {
 				<Form.Item<FieldType> label="昵称" name="name" style={{ width: 280 }}>
 					<Input />
 				</Form.Item>
-				<Form.Item<FieldType> label="邮箱" name="email" style={{ width: 280 }}>
+				<Form.Item<FieldType>
+					label="邮箱"
+					name="email"
+					style={{ width: 280 }}
+					rules={[{ type: 'email' }]}
+				>
+					<AutoComplete onSearch={handleSearch} options={options} />
+				</Form.Item>
+				<Form.Item<FieldType>
+					label="手机号"
+					name="mobile"
+					style={{ width: 280 }}
+					rules={[
+						{
+							pattern: /^[1][3-9][0-9]{9}$/,
+							message: '请输入有效的手机号'
+						}
+					]}
+				>
 					<Input />
 				</Form.Item>
 				<Form.Item>
