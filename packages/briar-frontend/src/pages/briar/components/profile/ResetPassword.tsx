@@ -1,10 +1,11 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import md5 from 'md5-es';
 import React, { useCallback } from 'react';
 
 import { updatePassword } from '../../api/user';
 import { PASSWORD_CHECK_RULES, PASSWORD_RULES } from '../../constants/validateRules';
+import { errorNotify } from '../../utils/notify';
 
 export type FieldType = {
 	password: string;
@@ -24,13 +25,18 @@ const ResetPassword: React.FC<IResetPassword> = ({ finishReset, checkedEmail, ch
 		async (val: FieldType) => {
 			const { password } = val;
 
-			await updatePassword({
+			updatePassword({
 				email: checkedEmail,
 				verifyCode: checkedCode,
 				password: md5.hash(password)
-			});
-
-			finishReset();
+			})
+				.then(() => {
+					message.success('密码修改成功，请尝试重新登录。');
+					finishReset();
+				})
+				.catch((err) => {
+					errorNotify(err);
+				});
 		},
 		[checkedCode, checkedEmail, finishReset]
 	);
