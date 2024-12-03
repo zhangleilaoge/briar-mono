@@ -36,7 +36,8 @@ export enum MenuKeyEnum {
 	RoleList_3 = 'role-list',
 	UserList_3 = 'user-list',
 	Calculator_3 = 'calculator',
-	JsonFormatter_3 = 'jsonFormatter'
+	JsonFormatter_3 = 'jsonFormatter',
+	compressImg_3 = 'compressImg'
 }
 
 export const MENU_KEY_NAMES = {
@@ -61,7 +62,8 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.RoleList_3]: '角色列表',
 	[MenuKeyEnum.UserList_3]: '用户列表',
 	[MenuKeyEnum.Calculator_3]: '计算器',
-	[MenuKeyEnum.JsonFormatter_3]: 'JSON格式化校验'
+	[MenuKeyEnum.JsonFormatter_3]: 'JSON格式化校验',
+	[MenuKeyEnum.compressImg_3]: '图片压缩'
 };
 
 export const DEFAULT_MENU_KEY = {
@@ -138,6 +140,11 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 						key: MenuKeyEnum.JsonFormatter_3,
 						label: MENU_KEY_NAMES[MenuKeyEnum.JsonFormatter_3],
 						component: lazy(() => import('../pages/tools/pages/json-formatter'))
+					},
+					{
+						key: MenuKeyEnum.compressImg_3,
+						label: MENU_KEY_NAMES[MenuKeyEnum.compressImg_3],
+						component: lazy(() => import('../pages/tools/pages/compress-img'))
 					}
 				]
 			},

@@ -84,3 +84,18 @@ export function leFormatNumber({
 	// 返回最终格式化的字符串，包括整数部分和小数部分
 	return `${integerNum}${decimalNum == 0 ? '' : '.'}${zeroDecimal}`;
 }
+
+export function convertBytes(numBytes: number): string {
+	// 定义单位
+	const units: string[] = ['B', 'KB', 'MB', 'GB', 'TB'];
+	let index = 0;
+
+	// 循环计算并更新索引
+	while (numBytes >= 1024 && index < units.length - 1) {
+		numBytes /= 1024;
+		index++;
+	}
+
+	// 返回格式化的字符串，保留一位小数
+	return `${numBytes.toFixed(1)} ${units[index]}`;
+}

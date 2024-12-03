@@ -137,6 +137,9 @@ importers:
       three:
         specifier: ^0.168.0
         version: 0.168.0
+      tinypng-lib:
+        specifier: ^1.1.24
+        version: 1.1.24
       xlsx-js-style:
         specifier: ^1.2.0
         version: 1.2.0
@@ -201,6 +204,9 @@ importers:
       vite-plugin-mpa:
         specifier: ^1.2.0
         version: 1.2.0
+      vite-plugin-wasm:
+        specifier: ^3.3.0
+        version: 3.3.0(vite@5.3.5)
 
   packages/briar-node:
     dependencies:
@@ -3778,6 +3784,10 @@ packages:
       readable-stream: 3.6.2
     dev: true
 
+  /blueimp-canvas-to-blob@3.29.0:
+    resolution: {integrity: sha512-0pcSSGxC0QxT+yVkivxIqW0Y4VlO2XSDPofBAqoJ1qJxgH9eiUDLv50Rixij2cDuEfx4M6DpD9UGZpRhT5Q8qg==}
+    dev: false
+
   /brace-expansion@1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
     dependencies:
@@ -4190,6 +4200,13 @@ packages:
       array-ify: 1.0.0
       dot-prop: 5.3.0
     dev: true
+
+  /compressorjs@1.2.1:
+    resolution: {integrity: sha512-+geIjeRnPhQ+LLvvA7wxBQE5ddeLU7pJ3FsKFWirDw6veY3s9iLxAQEw7lXGHnhCJvBujEQWuNnGzZcvCvdkLQ==}
+    dependencies:
+      blueimp-canvas-to-blob: 3.29.0
+      is-blob: 2.1.0
+    dev: false
 
   /compute-scroll-into-view@3.1.0:
     resolution: {integrity: sha512-rj8l8pD4bJ1nx+dAkMhV1xB5RuZEyVysfxJqB1pRchh1KVvwOv9b7CGB8ZfjTImVv2oF+sYMUkMZq6Na5Ftmbg==}
@@ -6414,6 +6431,11 @@ packages:
     dependencies:
       binary-extensions: 2.3.0
     dev: true
+
+  /is-blob@2.1.0:
+    resolution: {integrity: sha512-SZ/fTft5eUhQM6oF/ZaASFDEdbFVe89Imltn9uZr03wdKMcWNVYSMjQPFtg05QuNkt5l5c135ElvXEQG0rk4tw==}
+    engines: {node: '>=6'}
+    dev: false
 
   /is-boolean-object@1.1.2:
     resolution: {integrity: sha1-XG3CACRt2TIa5LiFoRS7H3X2Nxk=, tarball: https://registry.npmmirror.com/is-boolean-object/download/is-boolean-object-1.1.2.tgz}
@@ -11228,6 +11250,17 @@ packages:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
     dev: true
 
+  /tinypng-lib-wasm@1.0.55:
+    resolution: {integrity: sha512-XI4aoF92ow9LcBRjLTQLV4LG+ztkJ2jwjHflVy+ZB6E9+myLmh1/tTjCq+7gkYaYEu0BUvziJb+If1Eqxb8KQg==}
+    dev: false
+
+  /tinypng-lib@1.1.24:
+    resolution: {integrity: sha512-6xC/Cc+5dKm/ikDQ6TYFAPN7BCFf56jfDbKANEzl1Qh8ajIkb/v6QEQDYaLye+e7f4krD1MmLx8TuSkQhPi/EQ==}
+    dependencies:
+      compressorjs: 1.2.1
+      tinypng-lib-wasm: 1.0.55
+    dev: false
+
   /tmp@0.0.33:
     resolution: {integrity: sha512-jRCJlojKnZ3addtTOjdIqoRuPEKBvNXcGYqzO6zWZX8KfKEpnGY5jfggJQ3EjKuu8D4bJRr0y+cYJFmYbImXGw==}
     engines: {node: '>=0.6.0'}
@@ -11779,6 +11812,14 @@ packages:
       connect-history-api-fallback: 1.6.0
       shelljs: 0.8.5
       yargs: 16.2.0
+    dev: true
+
+  /vite-plugin-wasm@3.3.0(vite@5.3.5):
+    resolution: {integrity: sha512-tVhz6w+W9MVsOCHzxo6SSMSswCeIw4HTrXEi6qL3IRzATl83jl09JVO1djBqPSwfjgnpVHNLYcaMbaDX5WB/pg==}
+    peerDependencies:
+      vite: ^2 || ^3 || ^4 || ^5
+    dependencies:
+      vite: 5.3.5(sass@1.77.8)(terser@5.31.3)
     dev: true
 
   /vite@5.3.5(sass@1.77.8)(terser@5.31.3):

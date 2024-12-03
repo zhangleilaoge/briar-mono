@@ -4,6 +4,7 @@ import { Image as Img } from 'antd';
 import { IMaterial, IPageInfo, THUMB_URL_SUFFIX } from 'briar-shared';
 import { uniq } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import TinyPNG, { CompressResult } from 'tinypng-lib';
 
 import {
 	createImgMaterial,
@@ -40,9 +41,11 @@ const Images = () => {
 		return selectedList.length > 0 && selectedList.length < imgs.length;
 	}, [imgs.length, selectedList.length]);
 
-	const customRequest: (options: any) => void = ({ onSuccess, file }) => {
+	const customRequest: (options: any) => void = async ({ onSuccess, file }) => {
+		const res = (await TinyPNG.compress(file, {})) as CompressResult;
+
 		const reader = new FileReader();
-		reader.readAsDataURL(file);
+		reader.readAsDataURL(res.file);
 		reader.onload = async function () {
 			const { url } = await uploadBase64({
 				filename: file.name,
@@ -209,7 +212,6 @@ const Images = () => {
 						}}
 						onRemove={(file) => {
 							setUploadList((pre) => pre.filter((item) => item.name.indexOf(file.name) === -1));
-							console.log(file.name);
 						}}
 					>
 						<button style={{ border: 0, background: 'none' }} type="button">

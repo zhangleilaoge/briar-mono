@@ -57,7 +57,6 @@ export async function copyImageToClipboard(imageUrl: string) {
 }
 
 // 根据 URL 扩展名获取 MIME 类型的辅助函数
-
 export const download = (link: string, picName: string) => {
 	const img = new Image();
 	img.setAttribute('crossOrigin', 'Anonymous');
@@ -76,3 +75,12 @@ export const download = (link: string, picName: string) => {
 	};
 	img.src = link + '?v=' + Date.now();
 };
+
+export function downloadByDataUrl(dataUrl: string, fileName: string) {
+	const link = document.createElement('a'); // 创建一个链接元素
+	link.href = dataUrl; // 设置链接的 href 属性为 dataUrl
+	link.download = fileName || 'downloaded_image.png'; // 设置下载的文件名
+	document.body.appendChild(link); // 将链接添加到文档中
+	link.click(); // 触发点击事件进行下载
+	document.body.removeChild(link); // 下载后移除链接
+}

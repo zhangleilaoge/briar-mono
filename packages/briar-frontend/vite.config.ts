@@ -5,6 +5,7 @@ import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 import viteCompression from 'vite-plugin-compression';
 import { ViteEjsPlugin } from 'vite-plugin-ejs';
 import mpa from 'vite-plugin-mpa';
+import wasm from 'vite-plugin-wasm';
 const external = [
 	'typescript',
 	'prettier',
@@ -41,6 +42,7 @@ const config = ({ mode }: { mode: string }) => {
 		},
 		plugins: [
 			react(),
+			wasm(),
 			viteCompression({
 				threshold: 5120
 			}),
