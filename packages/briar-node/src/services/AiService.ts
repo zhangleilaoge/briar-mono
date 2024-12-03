@@ -22,7 +22,7 @@ import { getLimitedMessages } from '@/utils/ai';
 import { ContextService } from './common/ContextService';
 import { ConversationDalService } from './dal/ConversationDalService';
 import { MessageDalService } from './dal/MessageDalService';
-import { LogService } from './LogService';
+import { UserLogService } from './LogService';
 
 export const getRandomGirl = () => {
   const girls = [
@@ -47,7 +47,7 @@ export class AiService {
   constructor(
     private readonly conversationDalService: ConversationDalService,
     private readonly messageDalService: MessageDalService,
-    private readonly logger: LogService,
+    private readonly logger: UserLogService,
     private contextService: ContextService,
   ) {}
 

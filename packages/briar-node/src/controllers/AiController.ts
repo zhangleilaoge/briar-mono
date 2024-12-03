@@ -18,7 +18,7 @@ import { ICreateImgResponse } from 'briar-shared';
 
 import { Public } from '@/decorators/Public';
 import { AbilityGuard } from '@/guards/ability';
-import { LogService } from '@/services/LogService';
+import { UserLogService } from '@/services/LogService';
 
 import { Ability } from '../decorators/Ability';
 import { AiService } from '../services/AiService';
@@ -27,7 +27,7 @@ import { AiService } from '../services/AiService';
 export class AppController {
   constructor(
     private readonly aiService: AiService,
-    private readonly logger: LogService,
+    private readonly logger: UserLogService,
   ) {}
 
   @Public()

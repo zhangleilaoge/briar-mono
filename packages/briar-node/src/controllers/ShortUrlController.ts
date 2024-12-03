@@ -10,14 +10,14 @@ import {
 import { UrlEnum } from 'briar-shared';
 
 import { Public } from '@/decorators/Public';
-import { LogService } from '@/services/LogService';
+import { UserLogService } from '@/services/LogService';
 import { ShortUrlService } from '@/services/ShortUrlService';
 
 @Controller('')
 export class ShortUrlController {
   constructor(
     private readonly shortUrlService: ShortUrlService,
-    private readonly logService: LogService,
+    private readonly userLogService: UserLogService,
   ) {}
 
   @Public()
@@ -33,7 +33,7 @@ export class ShortUrlController {
       };
     }
 
-    this.logService.log('短链跳转：' + longUrl);
+    this.userLogService.log('短链跳转：' + longUrl);
 
     return {
       url: longUrl,

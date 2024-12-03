@@ -6,9 +6,15 @@ export enum LogTypeEnum {
 	Error = 'error'
 }
 
+/** @description 日志来源 */
+export enum LogFromEnum {
+	User = 'user',
+	System = 'system'
+}
+
 export type ILogDTO = IModel<{
-	userId: number;
+	userId?: number;
 	type: LogTypeEnum;
 	content: string;
-	ip: string;
+	ip?: string;
 }>;

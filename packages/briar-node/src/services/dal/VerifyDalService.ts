@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { IVerifyCodeDTO, VerifyScene } from 'briar-shared';
+import { Op } from 'sequelize';
+import sequelize from 'sequelize';
 
 import { VerifyCodeModel } from '@/model/VerifyModel';
 
@@ -62,5 +64,17 @@ export class VerifyDalService {
     }
 
     return false;
+  }
+
+  async clearExpiredVerifyCode() {
+    await this.verifyCodeModel.destroy({
+      where: {
+        [Op.and]: [
+          sequelize.literal(
+            `TIMESTAMPDIFF(SECOND, createdAt, NOW()) > (validDuration / 1000)`,
+          ),
+        ],
+      },
+    });
   }
 }

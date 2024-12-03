@@ -9,8 +9,6 @@ import {
   AbilityUsageRecordModel,
 } from '@/model/UserAbilityModel';
 
-import { ContextService } from '../common/ContextService';
-
 @Injectable()
 export class UserAbilityDalService {
   constructor(
@@ -18,12 +16,12 @@ export class UserAbilityDalService {
     private readonly abilityUsageLimitModel: typeof AbilityUsageLimitModel,
     @InjectModel(AbilityUsageRecordModel)
     private readonly abilityUsageRecordModel: typeof AbilityUsageRecordModel,
-    private contextService: ContextService,
   ) {}
 
-  async create(rules: Partial<Record<AbilityEnum, Array<IAbilityUsageRule>>>) {
-    const userId = this.contextService.get().userId;
-
+  async create(
+    rules: Partial<Record<AbilityEnum, Array<IAbilityUsageRule>>>,
+    userId: number,
+  ) {
     Object.keys(rules).forEach(async (key) => {
       await this.abilityUsageLimitModel.create({
         userId,
@@ -35,8 +33,7 @@ export class UserAbilityDalService {
     return;
   }
 
-  async findRules(ability: AbilityEnum) {
-    const userId = this.contextService.get().userId;
+  async findRules(ability: AbilityEnum, userId: number) {
     const abilityLimit = await this.abilityUsageLimitModel.findOne({
       where: { userId, ability },
     });
@@ -44,26 +41,27 @@ export class UserAbilityDalService {
     return rules;
   }
 
-  async createAbilityRecord(ability: AbilityEnum) {
-    const userId = this.contextService.get().userId;
+  async createAbilityRecord(ability: AbilityEnum, userId: number) {
     await this.abilityUsageRecordModel.create({
       userId,
       ability,
     });
   }
 
-  async findAbilityRecords({
-    ability,
-    relativeDuration,
-    cycleDuration,
-    durationType,
-  }: {
-    ability: AbilityEnum;
-    relativeDuration?: number;
-    cycleDuration?: CycleEnum;
-    durationType?: 'relative' | 'cycle';
-  }) {
-    const userId = this.contextService.get().userId;
+  async findAbilityRecords(
+    {
+      ability,
+      relativeDuration,
+      cycleDuration,
+      durationType,
+    }: {
+      ability: AbilityEnum;
+      relativeDuration?: number;
+      cycleDuration?: CycleEnum;
+      durationType?: 'relative' | 'cycle';
+    },
+    userId: number,
+  ) {
     let records = [];
 
     // 相对时间范围内的能力使用记录

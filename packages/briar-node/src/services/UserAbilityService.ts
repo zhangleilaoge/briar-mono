@@ -3,6 +3,7 @@ import { AbilityEnum, IAbilityUsageRule } from 'briar-shared';
 
 import { getDayCycleRule } from '@/utils/ability';
 
+import { ContextService } from './common/ContextService';
 import { UserAbilityDalService } from './dal/UserAbilityDalService';
 
 const DEFAULT_RULES: Record<AbilityEnum, IAbilityUsageRule[]> = {
@@ -12,10 +13,14 @@ const DEFAULT_RULES: Record<AbilityEnum, IAbilityUsageRule[]> = {
 
 @Injectable()
 export class UserAbilityService {
-  constructor(private userAbilityDalService: UserAbilityDalService) {}
+  constructor(
+    private userAbilityDalService: UserAbilityDalService,
+    private contextService: ContextService,
+  ) {}
 
   async checkAbilityRules(ability: AbilityEnum) {
-    const rules = await this.userAbilityDalService.findRules(ability);
+    const userId = this.contextService.get().userId;
+    const rules = await this.userAbilityDalService.findRules(ability, userId);
 
     if (rules.length) {
       for (let i = 0; i < rules.length; i++) {
@@ -23,12 +28,15 @@ export class UserAbilityService {
           rules[i];
 
         const abilityRecords =
-          await this.userAbilityDalService.findAbilityRecords({
-            ability,
-            relativeDuration,
-            cycleDuration,
-            durationType,
-          });
+          await this.userAbilityDalService.findAbilityRecords(
+            {
+              ability,
+              relativeDuration,
+              cycleDuration,
+              durationType,
+            },
+            userId,
+          );
         if (abilityRecords.length >= points) return false;
       }
       return true;
@@ -37,11 +45,13 @@ export class UserAbilityService {
   }
 
   async createAbilityRecord(ability: AbilityEnum) {
-    await this.userAbilityDalService.createAbilityRecord(ability);
+    const userId = this.contextService.get().userId;
+    await this.userAbilityDalService.createAbilityRecord(ability, userId);
   }
 
   async initUserAbilityLimit() {
-    await this.userAbilityDalService.create(DEFAULT_RULES);
+    const userId = this.contextService.get().userId;
+    await this.userAbilityDalService.create(DEFAULT_RULES, userId);
 
     return;
   }

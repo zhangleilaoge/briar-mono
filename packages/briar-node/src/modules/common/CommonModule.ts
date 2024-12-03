@@ -4,7 +4,7 @@ import { RateLimiterGuard } from '@/guards/rate-limit';
 import { ContextService } from '@/services/common/ContextService';
 import { LogDalService } from '@/services/dal/LogDalService';
 import { RateLimiterGuardService } from '@/services/guard/RateLimiterGuardService';
-import { LogService } from '@/services/LogService';
+import { UserLogService } from '@/services/LogService';
 
 import { DatabaseModule } from './DataBaseModule';
 import { ScheduleTaskModule } from './ScheduleTaskModule';
@@ -14,7 +14,7 @@ import { TemplateModule } from './templateModule';
   imports: [DatabaseModule, ScheduleTaskModule, TemplateModule],
   providers: [
     ContextService,
-    LogService,
+    UserLogService,
     LogDalService,
     RateLimiterGuard,
     RateLimiterGuardService,
@@ -22,7 +22,7 @@ import { TemplateModule } from './templateModule';
   exports: [
     DatabaseModule,
     ContextService,
-    LogService,
+    UserLogService,
     LogDalService,
     RateLimiterGuard,
     RateLimiterGuardService,

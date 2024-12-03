@@ -1,4 +1,4 @@
-import { LogTypeEnum } from 'briar-shared';
+import { LogFromEnum, LogTypeEnum } from 'briar-shared';
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 @Table({ tableName: 'logs' })
@@ -20,4 +20,7 @@ export class LogModel extends Model<LogModel> {
 
   @Column
   ip: string;
+
+  @Column
+  from: LogFromEnum;
 }
