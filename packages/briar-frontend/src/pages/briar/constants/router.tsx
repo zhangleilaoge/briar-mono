@@ -33,10 +33,10 @@ export enum MenuKeyEnum {
 	Shader_3 = 'shader',
 	CommuteCalculator_3 = 'commute-calculator',
 	ShortUrl_3 = 'short-url',
-	ShortUrlList_3 = 'short-url-list',
 	RoleList_3 = 'role-list',
 	UserList_3 = 'user-list',
-	Calculator_3 = 'calculator'
+	Calculator_3 = 'calculator',
+	JsonFormatter_3 = 'jsonFormatter'
 }
 
 export const MENU_KEY_NAMES = {
@@ -57,11 +57,11 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.CompositionStyleIntro_3]: 'composition-api转换介绍',
 	[MenuKeyEnum.Shader_3]: 'shader',
 	[MenuKeyEnum.CommuteCalculator_3]: '通勤计算器',
-	[MenuKeyEnum.ShortUrl_3]: '短链生成',
-	[MenuKeyEnum.ShortUrlList_3]: '短链查询',
+	[MenuKeyEnum.ShortUrl_3]: '短链工具',
 	[MenuKeyEnum.RoleList_3]: '角色列表',
 	[MenuKeyEnum.UserList_3]: '用户列表',
-	[MenuKeyEnum.Calculator_3]: '计算器'
+	[MenuKeyEnum.Calculator_3]: '计算器',
+	[MenuKeyEnum.JsonFormatter_3]: 'JSON格式化校验'
 };
 
 export const DEFAULT_MENU_KEY = {
@@ -135,9 +135,9 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 						component: lazy(() => import('../pages/tools/pages/short-url'))
 					},
 					{
-						key: MenuKeyEnum.ShortUrlList_3,
-						label: MENU_KEY_NAMES[MenuKeyEnum.ShortUrlList_3],
-						component: lazy(() => import('../pages/tools/pages/short-url-list'))
+						key: MenuKeyEnum.JsonFormatter_3,
+						label: MENU_KEY_NAMES[MenuKeyEnum.JsonFormatter_3],
+						component: lazy(() => import('../pages/tools/pages/json-formatter'))
 					}
 				]
 			},

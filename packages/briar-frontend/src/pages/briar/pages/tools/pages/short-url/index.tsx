@@ -1,49 +1,38 @@
-import { Button, Divider, Form, Input, message } from 'antd';
+import { Tabs, TabsProps } from 'antd';
 import { useState } from 'react';
 
-import { createShortUrl } from '@/pages/briar/api/short-url';
-import { errorNotify } from '@/pages/briar/utils/notify';
+import Create from './create';
+import Search from './search';
 
-export type FieldType = {
-	url: string;
-};
+enum TabKeyEnum {
+	Create = 'create',
+	Search = 'search'
+}
+
+const items: TabsProps['items'] = [
+	{
+		key: TabKeyEnum.Create,
+		label: '短链生成',
+		children: <Create />
+	},
+	{
+		key: TabKeyEnum.Search,
+		label: '短链列表',
+		children: <Search />
+	}
+];
 
 const ShortUrl = () => {
-	const [result, setResult] = useState('');
-	const onFinish = async ({ url }: FieldType) => {
-		if (!url) {
-			message.error('请输入url');
-		}
+	const [active, setActive] = useState(TabKeyEnum.Create);
 
-		createShortUrl({ url })
-			.then(({ shortUrl }) => {
-				setResult(shortUrl);
-			})
-			.catch((err) => {
-				errorNotify(err);
-			});
-	};
 	return (
-		<>
-			<Form onFinish={onFinish}>
-				<Form.Item<FieldType> label="url" name="url">
-					<Input placeholder="输入原始链接" />
-				</Form.Item>
-				<Form.Item>
-					<Button htmlType="submit" type="primary">
-						生成
-					</Button>
-				</Form.Item>
-			</Form>
-			{result ? (
-				<>
-					<Divider plain></Divider>
-					<Form.Item<FieldType> label="短链结果" className="w-[280px]">
-						{result}
-					</Form.Item>
-				</>
-			) : null}
-		</>
+		<Tabs
+			defaultActiveKey={active}
+			items={items}
+			onChange={(key) => {
+				setActive(key as TabKeyEnum);
+			}}
+		/>
 	);
 };
 
