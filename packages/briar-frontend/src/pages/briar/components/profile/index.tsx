@@ -25,10 +25,22 @@ export enum OperationEnum {
 	Personal = 'personal'
 }
 
+export const ModelTitle = {
+	[OperationEnum.Login]: '登录',
+	[OperationEnum.Register]: '注册',
+	[OperationEnum.ResetPassword]: '重置密码',
+	[OperationEnum.RetrievePassword]: '找回密码'
+};
+
 const Profile = () => {
 	const { userInfo, logout, availablePage } = useContext(CommonContext);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [modelType, setModelType] = useState(OperationEnum.Login);
+	const [modelType, setModelType] = useState<
+		| OperationEnum.Login
+		| OperationEnum.Register
+		| OperationEnum.ResetPassword
+		| OperationEnum.RetrievePassword
+	>(OperationEnum.Login);
 	const navigate = useNavigate();
 	// 重置密码用
 	const [checkedEmail, setCheckedEmail] = useState<string>('');
@@ -54,7 +66,7 @@ const Profile = () => {
 							navigate('/' + MenuKeyEnum.Personal_1);
 						}}
 					>
-						个人
+						主页
 					</a>
 				)
 			},
@@ -178,6 +190,7 @@ const Profile = () => {
 				onCancel={() => {
 					setIsModalOpen(false);
 				}}
+				title={ModelTitle[modelType]}
 				destroyOnClose
 			>
 				{modelContent}
