@@ -105,7 +105,6 @@ const JsonFormatter = () => {
 
 	return (
 		<>
-			<div className="text-xl mb-[12px]">JSON 格式化校验工具</div>
 			<div className="mb-[12px]">
 				<Button type="primary" onClick={formatJson}>
 					格式化 JSON
