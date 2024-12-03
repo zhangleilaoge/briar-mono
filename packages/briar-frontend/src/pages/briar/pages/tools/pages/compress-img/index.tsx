@@ -67,7 +67,7 @@ const CompressImg = () => {
 
 	return (
 		<div>
-			<div className="text-2xl mb-[20px]">上传区域</div>
+			<div className="text-2xl mb-[20px]">上传</div>
 			<div>
 				<Dragger
 					accept="image/*"
@@ -85,7 +85,7 @@ const CompressImg = () => {
 				</Dragger>
 			</div>
 			{/* <Divider plain /> */}
-			<div className="text-2xl mb-[20px] mt-[64px]">下载区域</div>
+			<div className="text-2xl mb-[20px] mt-[64px]">下载</div>
 			<div className="flex gap-[12px] mb-[12px]">
 				<Tooltip title={compressDisableTip}>
 					<Button disabled={compressDisable} type="primary" onClick={compressAll}>
