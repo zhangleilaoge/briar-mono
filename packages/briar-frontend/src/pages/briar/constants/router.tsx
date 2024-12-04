@@ -36,8 +36,8 @@ export enum MenuKeyEnum {
 	RoleList_3 = 'role-list',
 	UserList_3 = 'user-list',
 	Calculator_3 = 'calculator',
-	JsonFormatter_3 = 'jsonFormatter',
-	compressImg_3 = 'compressImg'
+	JsonFormatter_3 = 'json-formatter',
+	compressImg_3 = 'compress-img'
 }
 
 export const MENU_KEY_NAMES = {
