@@ -37,9 +37,6 @@ const config = ({ mode }: { mode: string }) => {
 	const quick = mode === 'quick';
 
 	return defineConfig({
-		server: {
-			port: 5173 // 设置开发服务器的端口为 3000
-		},
 		plugins: [
 			react(),
 			wasm(),
@@ -62,6 +59,7 @@ const config = ({ mode }: { mode: string }) => {
 			})
 		],
 		build: {
+			target: 'esnext', // 或 'chrome93' / 'firefox90' 等等
 			minify: 'terser',
 			terserOptions: {
 				compress: {
