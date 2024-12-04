@@ -70,7 +70,7 @@ const CompressImg = () => {
 			<div className="text-2xl mb-[20px]">上传</div>
 			<div>
 				<Dragger
-					accept="image/*"
+					accept="image/jpeg,image/png"
 					customRequest={customRequest}
 					multiple
 					onRemove={(file) => {
@@ -81,7 +81,7 @@ const CompressImg = () => {
 						<InboxOutlined />
 					</p>
 					<p className="ant-upload-text">点击或拖动文件到此区域上传</p>
-					<p className="ant-upload-hint">支持单个或批量上传</p>
+					<p className="ant-upload-hint">支持jpg/png文件</p>
 				</Dragger>
 			</div>
 			{/* <Divider plain /> */}

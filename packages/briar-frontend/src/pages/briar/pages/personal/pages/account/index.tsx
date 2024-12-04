@@ -3,13 +3,13 @@ import { AutoComplete, Button, Divider, Form, Input, message } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { IMaterial, THUMB_URL_SUFFIX } from 'briar-shared';
 import { useContext, useEffect, useRef, useState } from 'react';
-import TinyPNG, { CompressResult } from 'tinypng-lib';
 
 import { uploadBase64 } from '@/pages/briar/api/material';
 import { updateSelf } from '@/pages/briar/api/user';
 import CropUpload from '@/pages/briar/components/crop-upload';
 import CommonContext from '@/pages/briar/context/common';
 import useAutoCompleteEmail from '@/pages/briar/hooks/biz/useAutoCompleteEmail';
+import { compressImg } from '@/pages/briar/utils/img';
 interface FieldType {
 	name: string;
 	username: string;
@@ -46,9 +46,8 @@ const Account = () => {
 	};
 
 	const customRequest: (options: any) => void = async ({ onSuccess, file }) => {
-		const res = (await TinyPNG.compress(file, {})) as CompressResult;
 		const reader = new FileReader();
-		reader.readAsDataURL(res.file);
+		reader.readAsDataURL(await compressImg(file as File));
 
 		reader.onload = async function () {
 			const { url } = await uploadBase64({

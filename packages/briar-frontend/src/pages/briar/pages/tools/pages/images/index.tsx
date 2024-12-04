@@ -4,7 +4,6 @@ import { Image as Img } from 'antd';
 import { IMaterial, IPageInfo, THUMB_URL_SUFFIX } from 'briar-shared';
 import { uniq } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import TinyPNG, { CompressResult } from 'tinypng-lib';
 
 import {
 	createImgMaterial,
@@ -14,6 +13,7 @@ import {
 } from '@/pages/briar/api/material';
 import SortList from '@/pages/briar/components/sort-list/SortList';
 import useGlobalClick from '@/pages/briar/hooks/useGlobalClick';
+import { compressImg } from '@/pages/briar/utils/img';
 
 import Image from './components/img';
 import useDisableMouseEvent from './hooks/useDisableMouseEvent';
@@ -42,10 +42,8 @@ const Images = () => {
 	}, [imgs.length, selectedList.length]);
 
 	const customRequest: (options: any) => void = async ({ onSuccess, file }) => {
-		const res = (await TinyPNG.compress(file, {})) as CompressResult;
-
 		const reader = new FileReader();
-		reader.readAsDataURL(res.file);
+		reader.readAsDataURL(await compressImg(file as File));
 		reader.onload = async function () {
 			const { url } = await uploadBase64({
 				filename: file.name,
