@@ -3,8 +3,10 @@
 # 定义源和目标目录
 SSL_SOURCE_DIR="./briar-assets/ssl"
 SSL_TARGET_DIR="./assets/ssl"
-ENV_SOURCE_DIR="./briar-assets/briar-node"
-ENV_TARGET_DIR="./packages/briar-node"
+
+ENV_SOURCE_DIR="./briar-assets/briar"
+ENV_TARGET_DIR1="./packages/briar-node"
+ENV_TARGET_DIR2="./packages/briar-frontend"
 
 copy_files() {
     local SOURCE_DIR="$1"
@@ -36,4 +38,5 @@ copy_files() {
 
 # 进行文件拷贝
 copy_files "$SSL_SOURCE_DIR" "$SSL_TARGET_DIR"
-copy_files "$ENV_SOURCE_DIR" "$ENV_TARGET_DIR"
+copy_files "$ENV_SOURCE_DIR" "$ENV_TARGET_DIR1"
+copy_files "$ENV_SOURCE_DIR" "$ENV_TARGET_DIR2"
