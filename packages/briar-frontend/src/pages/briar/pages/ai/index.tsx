@@ -5,9 +5,9 @@ import { useContext } from 'react';
 
 import Footer from '@/pages/briar/components/Footer';
 import CommonContext from '@/pages/briar/context/common';
+import useSider from '@/pages/briar/hooks/biz/useSider';
 import { connectContainers } from '@/pages/briar/hooks/useContainer';
 import { useContainer } from '@/pages/briar/hooks/useContainer';
-import useSider from '@/pages/briar/hooks/biz/useSider';
 import mainStyle from '@/pages/briar/styles/main.module.scss';
 
 import { ThemeColor } from '../../constants/styles';
@@ -19,17 +19,13 @@ function AiPage() {
 	const {
 		token: { borderRadiusLG }
 	} = theme.useToken();
-	const { fullScreenInfo } = useContext(CommonContext);
+	const { fullRef } = useContext(CommonContext);
 	const { isCollapsed, setIsCollapsed } = useSider();
 	const { menuConfig, currentConversationKey, clickMenuItem } = useContainer(conversationContainer);
 
 	return (
 		<Layout>
-			<Sider
-				width={240}
-				className={`${fullScreenInfo.SiderClass} ${s.ShadowSider}`}
-				collapsed={isCollapsed}
-			>
+			<Sider width={240} className={`${mainStyle.Sider} ${s.ShadowSider}`} collapsed={isCollapsed}>
 				<SiderOperations setIsCollapsed={setIsCollapsed} isCollapsed={isCollapsed} />
 				<Menu
 					mode="inline"
@@ -40,8 +36,9 @@ function AiPage() {
 					onClick={({ key }) => clickMenuItem(+key)}
 				/>
 			</Sider>
-			<div className={fullScreenInfo.LayoutClass}>
+			<div className={mainStyle.ContentLayout}>
 				<Content
+					ref={fullRef}
 					style={{
 						padding: 24,
 						margin: 0,

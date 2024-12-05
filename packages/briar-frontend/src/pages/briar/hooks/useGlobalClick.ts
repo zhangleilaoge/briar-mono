@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 
+/** @description 给全局设置点击事件。类似 ahooks 的 useClickAway */
 const useGlobalClick = (callback: () => void) => {
 	const timerRef = useRef<ReturnType<typeof setTimeout> | null>();
 	const cancelNextRef = useRef(false);

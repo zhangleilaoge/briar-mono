@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { getLevelPath } from '@/pages/briar/utils/router';
 
-import useRouteHistory from './useRouteHistory';
+import useRouteHistory from '../useRouteHistory';
 
 // 根目录进入时的menu初始化
 const useLevelPath = (level = 1) => {

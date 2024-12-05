@@ -3,7 +3,6 @@ export const isDev = import.meta.env.MODE === 'development';
 
 export enum LocalStorageKey {
 	Sider = 'briar-sider',
-	FullScreen = 'briar-full-screen',
 	AccessToken = 'briar-access-token',
 	CalculateResult = 'briar-calculate-result',
 	SendVerifyCode = 'briar-send-verify-code'

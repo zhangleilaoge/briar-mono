@@ -19,7 +19,7 @@ import {
 
 function CodeConverter() {
 	const { isCollapsed, setIsCollapsed } = useSider();
-	const { fullScreenInfo, availablePage } = useContext(CommonContext);
+	const { fullRef, availablePage } = useContext(CommonContext);
 	const {
 		token: { colorBgContainer, borderRadiusLG }
 	} = theme.useToken();
@@ -39,7 +39,7 @@ function CodeConverter() {
 	return (
 		<Layout>
 			<Sider
-				className={fullScreenInfo.SiderClass}
+				className={mainStyle.Sider}
 				width={240}
 				collapsible
 				collapsed={isCollapsed}
@@ -54,8 +54,9 @@ function CodeConverter() {
 					onClick={({ key }) => onLevelPathChange(key)}
 				/>
 			</Sider>
-			<div className={fullScreenInfo.LayoutClass}>
+			<div className={mainStyle.ContentLayout}>
 				<Content
+					ref={fullRef}
 					style={{
 						padding: 24,
 						margin: 0,

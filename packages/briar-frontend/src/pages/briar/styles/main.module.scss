@@ -78,16 +78,6 @@
 	flex-grow: 1;
 }
 
-.FullScreenContentLayout {
-	margin-top: 0;
-	padding: 0;
-	max-height: none;
-
-	:global(.ant-layout-content) {
-		border-radius: 0 !important;
-	}
-}
-
 .SuspenseSpin {
 	width: 100%;
 	height: 400px;

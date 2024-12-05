@@ -11,14 +11,15 @@ import CommonContext from './context/common';
 import useFullScreen from './hooks/biz/useFullScreen';
 import useLevelPath from './hooks/biz/useLevelPath';
 import useLogin from './hooks/biz/useLogin';
-import useRouteHistory from './hooks/biz/useRouteHistory';
+import usePageTitle from './hooks/biz/usePageTitle';
+import useRouteHistory from './hooks/useRouteHistory';
 import s from './styles/main.module.scss';
 import { getRoutes, removeChildren } from './utils/router';
 
 function App() {
 	const { menuKey, onLevelPathChange } = useLevelPath();
-	const { fullScreen, HeaderClass, SiderClass, LayoutClass, inFullScreen, outFullScreen } =
-		useFullScreen();
+	usePageTitle();
+	const { fullRef, enterFullscreen, exitFullscreen, toggleFullscreen } = useFullScreen();
 	const { userInfo, availablePage, logout } = useLogin();
 	const headerRoutes = useMemo(() => {
 		return removeChildren(
@@ -32,20 +33,17 @@ function App() {
 		<ConfigProvider theme={THEME}>
 			<CommonContext.Provider
 				value={{
-					fullScreenInfo: {
-						fullScreen,
-						SiderClass,
-						LayoutClass
-					},
 					availablePage,
 					userInfo,
-					inFullScreen,
-					outFullScreen,
+					fullRef,
+					enterFullscreen,
+					exitFullscreen,
+					toggleFullscreen,
 					logout
 				}}
 			>
 				<FloatBtn />
-				<Header className={HeaderClass}>
+				<Header className={s.Header}>
 					<img
 						src={
 							'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Abigail-Dev_Update_12.gif'
