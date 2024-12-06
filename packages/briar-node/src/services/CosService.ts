@@ -77,7 +77,6 @@ export class CosService {
             if (err) {
               reject(err);
             } else {
-              console.log(data);
               resolve(data);
             }
           },

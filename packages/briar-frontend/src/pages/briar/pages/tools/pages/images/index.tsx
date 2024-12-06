@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Checkbox, CheckboxProps, Divider, List, message, Modal, Spin, Upload } from 'antd';
+import { Button, Checkbox, CheckboxProps, Divider, List, message, Modal, Upload } from 'antd';
 import { Image as Img } from 'antd';
 import { IMaterial, IPageInfo, THUMB_URL_SUFFIX } from 'briar-shared';
 import { uniq } from 'lodash-es';
@@ -242,40 +242,38 @@ const Images = () => {
 					]}
 				/>
 			</div>
-			{loading ? (
-				<Spin className="w-full h-full flex justify-center items-center" />
-			) : (
-				<List
-					grid={{
-						gutter: 32
-					}}
-					dataSource={sortedImg}
-					renderItem={(item) => (
-						<List.Item onClick={cancel}>
-							<Img.PreviewGroup
-								items={currentPageImgs.map((img) => ({
-									src: img.url
-								}))}
-							>
-								<Image
-									data={item}
-									onDelete={onDelete}
-									selected={selectedList.includes(item.id)}
-									onSelect={onSelect}
-								/>
-							</Img.PreviewGroup>
-						</List.Item>
-					)}
-					pagination={{
-						pageSize: frontendPagesize,
-						current: currentPage,
-						onChange: (page) => {
-							setCurrentPage(page);
-							setSelectedList([]);
-						}
-					}}
-				/>
-			)}
+
+			<List
+				grid={{
+					gutter: 32
+				}}
+				loading={loading}
+				dataSource={sortedImg}
+				renderItem={(item) => (
+					<List.Item onClick={cancel} key={item.id}>
+						<Img.PreviewGroup
+							items={currentPageImgs.map((img) => ({
+								src: img.url
+							}))}
+						>
+							<Image
+								data={item}
+								onDelete={onDelete}
+								selected={selectedList.includes(item.id)}
+								onSelect={onSelect}
+							/>
+						</Img.PreviewGroup>
+					</List.Item>
+				)}
+				pagination={{
+					pageSize: frontendPagesize,
+					current: currentPage,
+					onChange: (page) => {
+						setCurrentPage(page);
+						setSelectedList([]);
+					}
+				}}
+			/>
 		</div>
 	);
 };

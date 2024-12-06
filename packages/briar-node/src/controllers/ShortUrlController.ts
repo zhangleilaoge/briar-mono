@@ -7,7 +7,7 @@ import {
   Query,
   Redirect,
 } from '@nestjs/common';
-import { UrlEnum } from 'briar-shared';
+import { getShortUrl, UrlEnum } from 'briar-shared';
 
 import { Public } from '@/decorators/Public';
 import { UserLogService } from '@/services/LogService';
@@ -21,7 +21,7 @@ export class ShortUrlController {
   ) {}
 
   @Public()
-  @Get(':code')
+  @Get('/short/:code')
   @Redirect()
   async shortUrlJump(@Param('code') code) {
     const { url: longUrl } =
@@ -46,7 +46,7 @@ export class ShortUrlController {
     const code = await this.shortUrlService.createShortUrl(url.trim());
 
     return {
-      shortUrl: UrlEnum.Base + code,
+      shortUrl: getShortUrl(code),
     };
   }
 

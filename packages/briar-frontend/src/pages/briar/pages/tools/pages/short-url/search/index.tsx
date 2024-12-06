@@ -1,7 +1,7 @@
 import { useRequest } from 'alova/client';
 import { Button, Divider, Form, Input, Table, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { IPageInfo, IShortUrlDTO, UrlEnum } from 'briar-shared';
+import { getShortUrl, IPageInfo, IShortUrlDTO } from 'briar-shared';
 import { useState } from 'react';
 
 import { getShortUrlList } from '@/pages/briar/api/short-url';
@@ -14,7 +14,7 @@ const columns: ColumnsType<IShortUrlDTO> = [
 		dataIndex: 'code',
 		key: 'code',
 		width: 300,
-		render: (value) => <Text>{UrlEnum.Base + value}</Text>
+		render: (value) => <Text>{getShortUrl(value)}</Text>
 	},
 	{
 		title: '原始链接',

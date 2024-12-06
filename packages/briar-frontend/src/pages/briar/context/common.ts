@@ -7,6 +7,7 @@ const CommonContext = React.createContext({
 	availablePage: [] as string[],
 	logout: () => {},
 
+	/** 全屏 */
 	fullRef: { current: null } as Ref<HTMLDivElement>,
 	enterFullscreen: () => {},
 	exitFullscreen: () => {},
