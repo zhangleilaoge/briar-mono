@@ -57,9 +57,9 @@ const CompositionApiIntro = () => {
 				<h3>三、转换示例</h3>
 				<div className={s.ImgContainer}>
 					<h4>from:</h4>
-					<img src="https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/carbon%20(2).png" />
+					<img src="http://static.stardew.site/carbon%20(2).png" />
 					<h4>to:</h4>
-					<img src="https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/carbon%20(1).png" />
+					<img src="http://static.stardew.site/carbon%20(1).png" />
 				</div>
 			</div>
 		</div>

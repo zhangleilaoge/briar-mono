@@ -4,10 +4,12 @@ import react from '@vitejs/plugin-react-swc';
 import externalGlobals from 'rollup-plugin-external-globals';
 import { defineConfig } from 'vite';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
-import viteCompression from 'vite-plugin-compression';
+// import viteCompression from 'vite-plugin-compression';
 import { ViteEjsPlugin } from 'vite-plugin-ejs';
 import mpa from 'vite-plugin-mpa';
 import wasm from 'vite-plugin-wasm';
+
+const STATIC_PATH = process.env.BRIAR_TX_BUCKET_DOMAIN + '/static';
 
 const external = [
 	'typescript',
@@ -44,9 +46,10 @@ const config = ({ mode }: { mode: string }) => {
 		plugins: [
 			react(),
 			wasm(),
-			viteCompression({
-				threshold: 5120
-			}),
+			// 其实没什么必要打包的时候压缩，因为最终走的是 cdn，用的是cdn的压缩能力
+			// viteCompression({
+			// 	threshold: 5120
+			// }),
 			chunkSplitPlugin({
 				strategy: 'default',
 				customSplitting: {
@@ -83,7 +86,7 @@ const config = ({ mode }: { mode: string }) => {
 			reportCompressedSize: false,
 			sourcemap: false
 		},
-		base: dev ? './' : process.env.BRIAR_TX_BUCKET_DOMAIN,
+		base: dev ? './' : STATIC_PATH,
 		resolve: {
 			alias: {
 				'@': '/src'
