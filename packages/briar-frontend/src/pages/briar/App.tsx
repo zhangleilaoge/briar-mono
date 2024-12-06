@@ -44,7 +44,7 @@ function App() {
 			>
 				<FloatBtn />
 				<Header className={s.Header}>
-					<img src={'http://static.stardew.site/Abigail-Dev_Update_12.gif'} className={s.Briar} />
+					<img src={'https://static.stardew.site/Abigail-Dev_Update_12.gif'} className={s.Briar} />
 					<div className={s.HeaderRight}>
 						<Menu
 							mode="horizontal"
