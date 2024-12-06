@@ -136,7 +136,8 @@ async function main() {
 	const targetDirectory = './dist';
 	const staticArr = listFilesInDirectory(targetDirectory);
 
-	await deleteOldFile();
+	// 没必要删除历史文件
+	// await deleteOldFile();
 
 	for (let i = 0; i < staticArr.length; i++) {
 		uploadFile(staticArr[i]);
