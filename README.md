@@ -38,7 +38,7 @@ pnpm run init
 使用 whistle 进行本地代理开发
 
 ```
-# 1. 前后端一起调试，本地通过 stardew.site 访问页面（client build && node dev）
+# 1. 前后端一起调试，本地通过 stardew.site 访问页面（client build && client cdn && node dev）
 # stardew.site 127.0.0.1:8922
 
 # 2. 前后端一起调试，本地通过 127.0.0.1:5173 访问页面（client dev && node dev）

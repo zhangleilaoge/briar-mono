@@ -1,15 +1,14 @@
-// 该文件暂时无用
+import fs from 'fs';
+import path from 'path';
+import COS from 'cos-nodejs-sdk-v5';
+import 'dotenv/config';
 
-const fs = require('fs');
-const path = require('path');
-const COS = require('cos-nodejs-sdk-v5');
-
-const region = process.env.REGION;
+const region = process.env.BRIAR_TX_BUCKET_REGION;
 const cos = new COS({
-	SecretId: process.env.COS_SECRET_ID,
-	SecretKey: process.env.COS_SECRET_KEY
+	SecretId: process.env.BRIAR_TX_SEC_ID,
+	SecretKey: process.env.BRIAR_TX_SEC_KEY
 });
-const bucket = process.env.COS_BUCKET;
+const bucket = process.env.BRIAR_TX_BUCKET_NAME;
 
 /**
  * 获取目标目录下所有文件的文件路径
@@ -19,7 +18,11 @@ const bucket = process.env.COS_BUCKET;
 function listFilesInDirectory(targetDirectory) {
 	const file_paths = [];
 	const projectRoot = process.cwd().split('briar-mono')[0];
-	const absoluteTargetDirectory = path.join(projectRoot, targetDirectory);
+	const absoluteTargetDirectory = path.join(
+		projectRoot,
+		'briar-mono/packages/briar-frontend',
+		targetDirectory
+	);
 
 	if (!fs.existsSync(absoluteTargetDirectory)) {
 		console.log(`目录 ${absoluteTargetDirectory} 不存在`);
@@ -43,49 +46,59 @@ function listFilesInDirectory(targetDirectory) {
 	return file_paths;
 }
 
-// function deleteOldFile() {
-// 	return new Promise((resolve) => {
-// 		cos.getBucket(
-// 			{
-// 				Bucket: bucket,
-// 				Region: region,
-// 				Prefix: 'static', //要清理的目录
-// 				Marker: 'static', //要清理的目录
-// 				MaxKeys: 1000
-// 			},
-// 			function (listError, listResult) {
-// 				if (listError) return console.log('list error:', listError);
-// 				var objects = listResult.Contents.map(function (item) {
-// 					return { Key: item.Key };
-// 				});
-// 				if (objects.length) {
-// 					cos.deleteMultipleObject(
-// 						{
-// 							Bucket: bucket,
-// 							Region: region,
-// 							Objects: objects
-// 						},
-// 						function (delError, deleteResult) {
-// 							if (delError) {
-// 								console.log(delError);
-// 							}
-// 							if (deleteResult?.statusCode === 200) {
-// 								console.log('清理原static目录成功！');
-// 								resolve();
-// 							}
-// 						}
-// 					);
-// 				} else {
-// 					console.log('目录下无资源，无需删除！');
-// 					resolve();
-// 				}
-// 			}
-// 		);
-// 	});
-// }
+function deleteOldFile() {
+	return new Promise((resolve) => {
+		cos.getBucket(
+			{
+				Bucket: bucket,
+				Region: region,
+				Prefix: 'static', //要清理的目录
+				Marker: 'static', //要清理的目录
+				MaxKeys: 1000
+			},
+			function (listError, listResult) {
+				if (listError) return console.log('list error:', listError);
+				var objects = listResult.Contents.map(function (item) {
+					return { Key: item.Key };
+				});
+				if (objects.length) {
+					cos.deleteMultipleObject(
+						{
+							Bucket: bucket,
+							Region: region,
+							Objects: objects
+						},
+						function (delError, deleteResult) {
+							if (delError) {
+								console.log(delError);
+							}
+							if (deleteResult?.statusCode === 200) {
+								console.log('清理原static目录成功！');
+								resolve();
+							}
+						}
+					);
+				} else {
+					console.log('目录下无资源，无需删除！');
+					resolve();
+				}
+			}
+		);
+	});
+}
 
 const uploadFile = (pathItem, retries = 3) => {
-	const key = `static/${pathItem.split('static\\')[1]}`.replace('\\', '/');
+	const key = `static/${pathItem.split('dist/')[1]}`;
+
+	// 若文件为js文件，且同名的js.gz文件存在,跳过上传
+	// if (pathItem.endsWith('.js')) {
+	// 	const gzPath = pathItem.replace(/\.js$/, '.js.gz'); // 生成同名的 .js.gz 文件路径
+	// 	if (fs.existsSync(gzPath)) {
+	// 		// 检查 .js.gz 文件是否存在
+	// 		console.log(`跳过上传 ${pathItem}，同名的 .js.gz 文件 ${gzPath} 已存在`);
+	// 		return;
+	// 	}
+	// }
 
 	const attemptUpload = (retryCountLeft) => {
 		cos.putObject(
@@ -120,11 +133,10 @@ const uploadFile = (pathItem, retries = 3) => {
 };
 
 async function main() {
-	const targetDirectory = './briar-mono/packages/briar-frontend/dist';
+	const targetDirectory = './dist';
 	const staticArr = listFilesInDirectory(targetDirectory);
 
-	// 不要随意删除历史文件，很危险
-	// await deleteOldFile();
+	await deleteOldFile();
 
 	for (let i = 0; i < staticArr.length; i++) {
 		uploadFile(staticArr[i]);

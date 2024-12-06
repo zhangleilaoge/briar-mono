@@ -8,6 +8,7 @@
 		"build": "tsc -b && npx tailwindcss -i ./src/tailwind-from.css -o ./src/tailwind-to.css && vite build",
 		"build:quick": "tsc -b && npx tailwindcss -i ./src/tailwind-from.css -o ./src/tailwind-to.css && vite build --mode quick",
 		"build:watch": "tsc -b && npx tailwindcss -i ./src/tailwind-from.css -o ./src/tailwind-to.css && vite build --watch",
+		"cdn": "node ./scripts/upload-cdn.js",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 		"preview": "vite preview"
 	},
@@ -47,6 +48,8 @@
 		"@types/three": "^0.168.0",
 		"@vitejs/plugin-react-swc": "^3.5.0",
 		"concurrently": "^9.0.1",
+		"cos-nodejs-sdk-v5": "^2.14.4",
+		"dotenv": "^16.4.5",
 		"openai": "^4.55.4",
 		"rollup": "^4.1.4",
 		"rollup-plugin-external-globals": "^0.11.0",

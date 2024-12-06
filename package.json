@@ -15,7 +15,8 @@
 		"start": "cd ./packages/briar-node && pnpm run start",
 		"postinstall": "husky install",
 		"lint": "eslint",
-		"lint-staged": "lint-staged"
+		"lint-staged": "lint-staged",
+		"cdn": "cd packages/briar-frontend && pnpm run cdn"
 	},
 	"engines": {
 		"node": ">=18.17.0",
@@ -27,7 +28,6 @@
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"concurrently": "^9.0.1",
-		"cos-nodejs-sdk-v5": "^2.14.4",
 		"eslint": "8.42.0",
 		"eslint-plugin-react": "^7.35.0",
 		"eslint-plugin-react-hooks": "^4.6.2",

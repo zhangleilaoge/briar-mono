@@ -1225,10 +1225,6 @@ video {
   height: 40px;
 }
 
-.h-full {
-  height: 100%;
-}
-
 .max-h-\[240px\] {
   max-height: 240px;
 }
@@ -1259,10 +1255,6 @@ video {
 
 .w-\[88px\] {
   width: 88px;
-}
-
-.w-full {
-  width: 100%;
 }
 
 .min-w-\[180px\] {

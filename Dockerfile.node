@@ -5,6 +5,7 @@ COPY . .
 RUN npm install -g pnpm@8.15.9
 RUN pnpm install
 RUN pnpm run build
+RUN pnpm run cdn
 # 删了服务就起不来了，服了
 # RUN find ./ -name "node_modules" -type d -prune -exec rm -rf '{}' +
 EXPOSE 8922

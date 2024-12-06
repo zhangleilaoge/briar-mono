@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import react from '@vitejs/plugin-react-swc';
 import externalGlobals from 'rollup-plugin-external-globals';
 import { defineConfig } from 'vite';
@@ -6,6 +8,7 @@ import viteCompression from 'vite-plugin-compression';
 import { ViteEjsPlugin } from 'vite-plugin-ejs';
 import mpa from 'vite-plugin-mpa';
 import wasm from 'vite-plugin-wasm';
+
 const external = [
 	'typescript',
 	'prettier',
@@ -35,6 +38,7 @@ const externalOutputGlobals = {
 
 const config = ({ mode }: { mode: string }) => {
 	const quick = mode === 'quick';
+	const dev = mode === 'development';
 
 	return defineConfig({
 		plugins: [
@@ -79,6 +83,7 @@ const config = ({ mode }: { mode: string }) => {
 			reportCompressedSize: false,
 			sourcemap: false
 		},
+		base: dev ? './' : process.env.BRIAR_TX_BUCKET_DOMAIN,
 		resolve: {
 			alias: {
 				'@': '/src'
