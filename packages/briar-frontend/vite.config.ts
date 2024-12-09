@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 import react from '@vitejs/plugin-react-swc';
 import externalGlobals from 'rollup-plugin-external-globals';
+// import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
 import { chunkSplitPlugin } from 'vite-plugin-chunk-split';
 // import viteCompression from 'vite-plugin-compression';
@@ -39,7 +40,6 @@ const externalOutputGlobals = {
 };
 
 const config = ({ mode }: { mode: string }) => {
-	const quick = mode === 'quick';
 	const dev = mode === 'development';
 
 	return defineConfig({
@@ -56,9 +56,12 @@ const config = ({ mode }: { mode: string }) => {
 					typescript: ['typescript']
 				}
 			}),
-			ViteEjsPlugin({
-				quick
-			}),
+			// visualizer({
+			// 	open: true, // 注意这里要设置为true，否则无效，如果存在本地服务端口，将在打包后自动展示
+			// 	gzipSize: true,
+			// 	brotliSize: true
+			// }),
+			ViteEjsPlugin({}),
 			// @ts-ignore
 			mpa.default({
 				open: false,
@@ -74,10 +77,10 @@ const config = ({ mode }: { mode: string }) => {
 				}
 			},
 			rollupOptions: {
-				external: quick ? external : [],
-				plugins: quick ? [externalPlugin] : [],
+				external: external,
+				plugins: [externalPlugin],
 				output: {
-					globals: quick ? externalOutputGlobals : {},
+					globals: externalOutputGlobals,
 					chunkFileNames: 'static/js/[name]-[hash].js',
 					entryFileNames: 'static/js/[name]-[hash].js',
 					assetFileNames: 'static/[ext]/[name]-[hash].[ext]'
