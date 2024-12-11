@@ -9,7 +9,6 @@
 		"publish": "lerna publish",
 		"dev": "lerna run dev --parallel",
 		"build": "lerna run build",
-		"build:watch": "lerna run build:watch",
 		"dev:front": "cd packages/briar-frontend && pnpm run dev",
 		"dev:node": "cd packages/briar-node && pnpm run dev",
 		"start": "cd ./packages/briar-node && pnpm run start",

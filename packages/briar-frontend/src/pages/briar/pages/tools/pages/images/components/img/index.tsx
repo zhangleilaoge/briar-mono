@@ -1,5 +1,5 @@
 import { EllipsisOutlined } from '@ant-design/icons';
-import { Dropdown, MenuProps, message } from 'antd';
+import { Dropdown, MenuProps, message, Spin } from 'antd';
 import { Image as Img } from 'antd';
 import { IMaterial } from 'briar-shared';
 import { useRef } from 'react';
@@ -77,7 +77,7 @@ const ImageItem = ({
 						download(data?.url || data?.thumbUrl, data.name);
 					}}
 				>
-					下载图片
+					下载
 				</span>
 			)
 		},
@@ -96,7 +96,7 @@ const ImageItem = ({
 						});
 					}}
 				>
-					删除图片
+					删除
 				</span>
 			)
 		}
@@ -122,6 +122,9 @@ const ImageItem = ({
 				width={60}
 				height={60}
 				className="object-cover"
+				placeholder={
+					<Spin percent="auto" className="h-[60px] w-[60px] flex items-center justify-center" />
+				}
 			/>
 			<LineText className="text-[12px] w-[84px] h-[36px] can-click" line={2} text={data.name} />
 		</div>

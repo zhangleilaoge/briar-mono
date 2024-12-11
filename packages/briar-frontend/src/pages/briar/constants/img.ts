@@ -1,5 +1,7 @@
 import { StardewValleyGirl } from 'briar-shared';
 
+import { Language } from './env';
+
 export const BRIAR_ICON =
 	'https://static.stardew.site/%E8%B4%9D%E8%95%BE%E4%BA%9A%E4%B8%8A%E8%BA%AB64.png';
 
@@ -32,4 +34,10 @@ export const STARDEW_VALLEY_GRIL = {
 	[StardewValleyGirl.Haley]: 'https://static.stardew.site/Haley.png',
 	[StardewValleyGirl.Penny]: 'https://static.stardew.site/Penny.png',
 	[StardewValleyGirl.Robin]: 'https://static.stardew.site/Robin.png'
+};
+
+export const LANGUAGE_ICON = {
+	[Language.Zh]:
+		'https://static.stardew.site/%E4%B8%AD%E8%8B%B1%E6%96%872%20%E4%B8%AD%E6%96%87.svg',
+	[Language.En]: 'https://static.stardew.site/%E4%B8%AD%E8%8B%B1%E6%96%87%20%E8%8B%B1%E6%96%87.svg'
 };

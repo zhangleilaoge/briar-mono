@@ -1,13 +1,21 @@
-import { LoginOutlined, LogoutOutlined, SignatureOutlined, UserOutlined } from '@ant-design/icons';
+import {
+	ControlOutlined,
+	LoginOutlined,
+	LogoutOutlined,
+	SignatureOutlined,
+	UserOutlined
+} from '@ant-design/icons';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Avatar, Dropdown, message, Modal } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
 import { useContext, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { clientId } from '@/pages/briar/constants/user';
 import CommonContext from '@/pages/briar/context/common';
 
+import { TranslationEnum } from '../../constants/locales/common';
 import { MenuKeyEnum } from '../../constants/router';
 import Login from './Login';
 import Register from './Register';
@@ -22,7 +30,8 @@ export enum OperationEnum {
 	Register = 'register',
 	RetrievePassword = 'retrievePassword',
 	ResetPassword = 'resetPassword',
-	Personal = 'personal'
+	Personal = 'personal',
+	Admin = 'admin'
 }
 
 export const ModelTitle = {
@@ -35,6 +44,7 @@ export const ModelTitle = {
 const Profile = () => {
 	const { userInfo, logout, availablePage } = useContext(CommonContext);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const { t } = useTranslation();
 	const [modelType, setModelType] = useState<
 		| OperationEnum.Login
 		| OperationEnum.Register
@@ -48,6 +58,10 @@ const Profile = () => {
 
 	const personalAccess = useMemo(() => {
 		return availablePage.includes(MenuKeyEnum.Personal_1);
+	}, [availablePage]);
+
+	const AdminAccess = useMemo(() => {
+		return availablePage.includes(MenuKeyEnum.Admin_1);
 	}, [availablePage]);
 
 	const dropdownItems = useMemo(() => {
@@ -66,7 +80,20 @@ const Profile = () => {
 							navigate('/' + MenuKeyEnum.Personal_1);
 						}}
 					>
-						主页
+						{t(TranslationEnum.PersonalHomepage)}
+					</a>
+				)
+			},
+			AdminAccess && {
+				key: OperationEnum.Admin,
+				icon: <ControlOutlined />,
+				label: (
+					<a
+						onClick={async () => {
+							navigate('/' + MenuKeyEnum.Admin_1);
+						}}
+					>
+						{t(TranslationEnum.Admin)}
 					</a>
 				)
 			},
@@ -80,7 +107,7 @@ const Profile = () => {
 							setIsModalOpen(true);
 						}}
 					>
-						注册
+						{t(TranslationEnum.SignUp)}
 					</a>
 				)
 			},
@@ -94,7 +121,7 @@ const Profile = () => {
 							setIsModalOpen(true);
 						}}
 					>
-						登录
+						{t(TranslationEnum.SignIn)}
 					</a>
 				)
 			},
@@ -115,12 +142,12 @@ const Profile = () => {
 							});
 						}}
 					>
-						登出
+						{t(TranslationEnum.SignOut)}
 					</a>
 				)
 			}
 		].filter(Boolean) as ItemType[];
-	}, [logout, navigate, personalAccess, userInfo?.isAuthenticated, userInfo?.name]);
+	}, [AdminAccess, logout, navigate, personalAccess, t, userInfo?.isAuthenticated, userInfo?.name]);
 
 	const displayName = useMemo(() => {
 		return (userInfo.name || '')?.slice(0, 5);

@@ -1,6 +1,6 @@
 import { ConfigProvider, Menu, Spin } from 'antd';
 import { Header } from 'antd/es/layout/layout';
-import { Suspense, useMemo } from 'react';
+import { Suspense } from 'react';
 import { Routes } from 'react-router-dom';
 
 import FloatBtn from './components/FloatBtn';
@@ -14,19 +14,13 @@ import useLogin from './hooks/biz/useLogin';
 import usePageTitle from './hooks/biz/usePageTitle';
 import useRouteHistory from './hooks/useRouteHistory';
 import s from './styles/main.module.scss';
-import { getRoutes, removeChildren } from './utils/router';
+import { getRoutes } from './utils/router';
 
 function App() {
 	const { menuKey, onLevelPathChange } = useLevelPath();
 	usePageTitle();
 	const { fullRef, enterFullscreen, exitFullscreen, toggleFullscreen } = useFullScreen();
-	const { userInfo, availablePage, logout } = useLogin();
-	const headerRoutes = useMemo(() => {
-		return removeChildren(
-			ROUTER_CONFIG.filter((item) => availablePage.includes(item.key) && !item.hideInHeader)
-		);
-	}, [availablePage]);
-
+	const { userInfo, headerRoutes, availablePage, logout } = useLogin();
 	useRouteHistory();
 
 	return (

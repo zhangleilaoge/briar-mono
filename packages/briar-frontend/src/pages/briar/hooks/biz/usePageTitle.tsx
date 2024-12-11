@@ -15,7 +15,6 @@ const usePageTitle = () => {
 		(lastPathSegment: keyof typeof MENU_KEY_NAMES) => {
 			const _title = `${DEFAULT_TITLE}${lastPathSegment ? ' - ' + MENU_KEY_NAMES?.[lastPathSegment] : ''}`;
 
-			console.log('更新 title：', _title);
 			setTitle(_title);
 		},
 		{

@@ -1,4 +1,5 @@
 import '../../tailwind-to.css';
+import './base/i18n.ts';
 
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';

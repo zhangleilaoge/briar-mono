@@ -6,10 +6,13 @@ import {
 	ToolOutlined,
 	UserOutlined
 } from '@ant-design/icons';
+import { t } from 'i18next';
 import { lazy, LazyExoticComponent } from 'react';
 
 import CompositionApiIntro from '@/pages/briar/pages/tools/pages/composition-style-intro';
 import { IMenuRouterConfig } from '@/pages/briar/types/router';
+
+import { TranslationEnum } from './locales/common';
 
 /** 菜单路由 key，以层级作为后缀 */
 export enum MenuKeyEnum {
@@ -40,30 +43,31 @@ export enum MenuKeyEnum {
 	compressImg_3 = 'compress-img'
 }
 
+/** @description 菜单名称，value 请勿使用 kebab case */
 export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.Ai_1]: 'AI',
-	[MenuKeyEnum.Tools_1]: '工具',
-	[MenuKeyEnum.Admin_1]: '控制台',
-	[MenuKeyEnum.Personal_1]: '个人中心',
+	[MenuKeyEnum.Tools_1]: t(TranslationEnum.Tools),
+	[MenuKeyEnum.Admin_1]: t(TranslationEnum.Admin),
+	[MenuKeyEnum.Personal_1]: t(TranslationEnum.PersonalHomepage),
 
-	[MenuKeyEnum.CodeConverter_2]: '代码转换',
-	[MenuKeyEnum.Pragmatic_2]: '日常便利',
-	[MenuKeyEnum.Utility_2]: '实用工具',
-	[MenuKeyEnum.Playground_2]: '实验室',
-	[MenuKeyEnum.User_2]: '用户管理',
-	[MenuKeyEnum.Account_2]: '账号管理',
-	[MenuKeyEnum.Images_2]: '图片管理',
+	[MenuKeyEnum.CodeConverter_2]: t(TranslationEnum.CodeConverter),
+	[MenuKeyEnum.Pragmatic_2]: t(TranslationEnum.Pragmatic),
+	[MenuKeyEnum.Utility_2]: t(TranslationEnum.Utility),
+	[MenuKeyEnum.Playground_2]: t(TranslationEnum.Playground),
+	[MenuKeyEnum.User_2]: t(TranslationEnum.User),
+	[MenuKeyEnum.Account_2]: t(TranslationEnum.Account),
+	[MenuKeyEnum.Images_2]: t(TranslationEnum.Images),
 
-	[MenuKeyEnum.CompositionStyleConverter_3]: 'composition-api转换器',
-	[MenuKeyEnum.CompositionStyleIntro_3]: 'composition-api转换介绍',
+	[MenuKeyEnum.CompositionStyleConverter_3]: t(TranslationEnum.CompositionStyleConverter),
+	[MenuKeyEnum.CompositionStyleIntro_3]: t(TranslationEnum.CompositionApiIntro),
 	[MenuKeyEnum.Shader_3]: 'shader',
-	[MenuKeyEnum.CommuteCalculator_3]: '通勤计算器',
-	[MenuKeyEnum.ShortUrl_3]: '短链工具',
-	[MenuKeyEnum.RoleList_3]: '角色列表',
-	[MenuKeyEnum.UserList_3]: '用户列表',
-	[MenuKeyEnum.Calculator_3]: '计算器',
-	[MenuKeyEnum.JsonFormatter_3]: 'JSON格式化校验',
-	[MenuKeyEnum.compressImg_3]: '图片压缩'
+	[MenuKeyEnum.CommuteCalculator_3]: t(TranslationEnum.CommuteCalculator),
+	[MenuKeyEnum.ShortUrl_3]: t(TranslationEnum.ShortUrl),
+	[MenuKeyEnum.RoleList_3]: t(TranslationEnum.RoleList),
+	[MenuKeyEnum.UserList_3]: t(TranslationEnum.UserList),
+	[MenuKeyEnum.Calculator_3]: t(TranslationEnum.Calculator),
+	[MenuKeyEnum.JsonFormatter_3]: t(TranslationEnum.JsonFormatter),
+	[MenuKeyEnum.compressImg_3]: t(TranslationEnum.compressImg)
 };
 
 export const DEFAULT_MENU_KEY = {
@@ -166,6 +170,7 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 		key: MenuKeyEnum.Admin_1,
 		label: MENU_KEY_NAMES[MenuKeyEnum.Admin_1],
 		component: lazy(() => import('../pages/admin')),
+		hideInHeader: true,
 		children: [
 			{
 				key: MenuKeyEnum.User_2,

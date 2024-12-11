@@ -1,13 +1,13 @@
 import { message } from 'antd';
 import { CLIENT_ID, IUserAccess, IUserInfoDTO } from 'briar-shared';
 import { gapi } from 'gapi-script';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { createAnonymousUser as createAnonymousUserApi, getUserInfo } from '@/pages/briar/api/user';
 import { LocalStorageKey } from '@/pages/briar/constants/env';
 
 import { ROUTER_CONFIG } from '../../constants/router';
-import { getAvailablePages } from '../../utils/router';
+import { getAvailablePages, removeChildren } from '../../utils/router';
 
 const DEFAULT_USER_INFO = {
 	id: 0,
@@ -75,9 +75,16 @@ const useLogin = () => {
 		}, 1000);
 	}, []);
 
+	const headerRoutes = useMemo(() => {
+		return removeChildren(
+			ROUTER_CONFIG.filter((item) => availablePage.includes(item.key) && !item.hideInHeader)
+		);
+	}, [availablePage]);
+
 	return {
 		userInfo,
 		availablePage,
+		headerRoutes,
 		setUserInfo,
 		logout
 	};

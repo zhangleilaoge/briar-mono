@@ -7,3 +7,8 @@ export enum LocalStorageKey {
 	CalculateResult = 'briar-calculate-result',
 	SendVerifyCode = 'briar-send-verify-code'
 }
+
+export enum Language {
+	Zh = 'zh-CN',
+	En = 'en-US'
+}
