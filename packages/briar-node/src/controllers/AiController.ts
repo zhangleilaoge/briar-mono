@@ -4,19 +4,21 @@ import {
   ForbiddenException,
   Get,
   Post,
-  Query,
   Sse,
   UseGuards,
 } from '@nestjs/common';
 import {
   AbilityEnum,
+  IChatRequestParams,
   IConversationDTO,
+  IGetMessagesParams,
   ModelEnum,
   RoleEnum,
 } from 'briar-shared';
 import { ICreateImgResponse } from 'briar-shared';
 
 import { Public } from '@/decorators/Public';
+import { QueryToObject } from '@/decorators/Query2Obj';
 import { AbilityGuard } from '@/guards/ability';
 import { UserLogService } from '@/services/LogService';
 
@@ -33,11 +35,9 @@ export class AppController {
   @Public()
   @Get('chatRequestStream')
   @Sse('sse')
-  async chatRequestStream(
-    @Query('query') query: string,
-    @Query('model') model: ModelEnum,
-    @Query('conversationId') conversationId: number,
-  ) {
+  async chatRequestStream(@QueryToObject() params: IChatRequestParams) {
+    const { query, model, conversationId } = params;
+
     const messageArr = (await this.aiService.getMessages(conversationId)).items;
 
     return this.aiService.chatRequestStream({
@@ -79,11 +79,8 @@ export class AppController {
   }
 
   @Get('getMessages')
-  async getMessages(
-    @Query('conversationId') conversationId: number,
-    @Query('pageSize') pageSize = 50,
-    @Query('endTime') endTime = Date.now(),
-  ) {
+  async getMessages(@QueryToObject() params: IGetMessagesParams) {
+    const { conversationId, endTime = Date.now(), pageSize = 50 } = params;
     return this.aiService.getMessages(+conversationId, +endTime, +pageSize);
   }
 

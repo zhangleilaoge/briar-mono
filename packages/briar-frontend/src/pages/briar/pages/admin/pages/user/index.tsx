@@ -86,7 +86,7 @@ const Role = () => {
 				...omitBy(
 					{
 						keyword,
-						roles: roles?.join(',')
+						roles
 					},
 					(v) => !v
 				)

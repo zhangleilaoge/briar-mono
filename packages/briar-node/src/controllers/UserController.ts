@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
-  ISortInfo,
+  IGetUserListParams,
   IUserAccess,
   VerifyScene,
   VerifySceneSubject,
@@ -18,6 +18,7 @@ import {
 import { EmailTemplate } from '@/constants/email';
 import { RoleEnum } from '@/constants/user';
 import { Public } from '@/decorators/Public';
+import { QueryToObject } from '@/decorators/Query2Obj';
 import { Role } from '@/decorators/Role';
 import { RoleGuard } from '@/guards/role';
 import { ContextService } from '@/services/common/ContextService';
@@ -249,14 +250,8 @@ export class UserController {
   }
 
   @Get('getUserList')
-  async getUserList(
-    @Query('keyword') keyword: string = '',
-    @Query('roles') roles: string = '',
-    @Query('page') page: number,
-    @Query('pageSize') pageSize: number,
-    @Query('sortBy') sortBy: string,
-    @Query('sortType') sortType: ISortInfo['sortType'],
-  ) {
+  async getUserList(@QueryToObject() params: IGetUserListParams) {
+    const { keyword, roles, page, pageSize, sortBy, sortType } = params;
     // 只有超管能调用 todo
     const data = await this.userService.getUserList({
       pagination: {
@@ -268,7 +263,7 @@ export class UserController {
         sortType,
       },
       keyword,
-      roles: roles ? roles.split(',').map(Number) : [],
+      roles,
     });
 
     return data;

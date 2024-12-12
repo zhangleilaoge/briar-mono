@@ -7,5 +7,5 @@ interface IInputTip {
 
 export const getInputTip = (params: IInputTip) =>
 	outerAlovaInstance.Get<any>(
-		`https://restapi.amap.com/v3/assistant/inputtips?${getQueryFromObj(params)}`
+		`https://restapi.amap.com/v3/assistant/inputtips?${getQueryFromObj(params, '')}`
 	);

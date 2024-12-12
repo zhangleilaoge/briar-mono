@@ -1,15 +1,8 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Query,
-  Redirect,
-} from '@nestjs/common';
-import { getShortUrl, UrlEnum } from 'briar-shared';
+import { Body, Controller, Get, Param, Post, Redirect } from '@nestjs/common';
+import { getShortUrl, IGetShortUrlListParams, UrlEnum } from 'briar-shared';
 
 import { Public } from '@/decorators/Public';
+import { QueryToObject } from '@/decorators/Query2Obj';
 import { UserLogService } from '@/services/LogService';
 import { ShortUrlService } from '@/services/ShortUrlService';
 
@@ -51,11 +44,8 @@ export class ShortUrlController {
   }
 
   @Get('/api/shortUrl/getShortUrlList')
-  async getShortUrlList(
-    @Query('page') page: number,
-    @Query('pageSize') pageSize: number,
-    @Query('url') url: string = '',
-  ) {
+  async getShortUrlList(@QueryToObject() params: IGetShortUrlListParams) {
+    const { page, pageSize, url } = params;
     const data = await this.shortUrlService.getShortUrlList(
       {
         page,

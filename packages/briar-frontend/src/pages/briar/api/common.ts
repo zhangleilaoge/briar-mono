@@ -77,11 +77,16 @@ export const outerAlovaInstance = createAlova({
 	}
 });
 
-export const getQueryFromObj = (obj: Record<string, any>) => {
-	if (!obj) return '';
-	return Object.keys(obj)
-		.map((key) => `${key}=${encodeURIComponent(obj[key])}`)
-		.join('&');
+export const getQueryFromObj = (obj: Record<string, any>, queryKey = 'query'): string => {
+	if (!obj || typeof obj !== 'object') return '';
+
+	if (!queryKey) {
+		return Object.keys(obj)
+			.map((key) => `${key}=${encodeURIComponent(obj[key])}`)
+			.join('&');
+	}
+
+	return `${queryKey}=${encodeURIComponent(JSON.stringify(obj))}`;
 };
 
 export default alovaInstance;

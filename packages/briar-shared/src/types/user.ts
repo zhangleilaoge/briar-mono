@@ -1,4 +1,4 @@
-import { IPageInfo } from './common';
+import { IPageInfo, ISortInfo } from './common';
 import { IModel } from './model';
 
 export enum AbilityEnum {
@@ -59,10 +59,11 @@ export interface IRolesWithUserCount extends IRoleDTO {
 	userCount: number;
 }
 
-export type IGetUserListParams = IPageInfo & {
-	keyword: string;
-	roles: string[];
-};
+export type IGetUserListParams = ISortInfo &
+	IPageInfo & {
+		keyword: string;
+		roles: number[];
+	};
 
 export interface ICheckUsername {
 	alreadyExists: boolean;
