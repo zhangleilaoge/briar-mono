@@ -183,7 +183,7 @@ export class UserDalService {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;
     const sortBy = sorter.sortBy;
-    const sortType = sorter.sortType || '';
+    const sortType = sorter.sortType;
 
     const orMatch = splitCondition({
       id,
