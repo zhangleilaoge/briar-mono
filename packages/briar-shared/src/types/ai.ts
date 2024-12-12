@@ -27,7 +27,7 @@ export type IMessageDTO = IModel<{
 	content: string;
 	conversationId: number;
 	model: ModelEnum;
-	imgList?: string;
+	imgList?: string[];
 }>;
 
 export type IConversationDTO = IModel<{
@@ -44,6 +44,7 @@ export interface IChatRequestParams {
 	query: string;
 	conversationId?: number;
 	model: ModelEnum;
+	imgList?: string[];
 }
 
 export interface IGetMessagesParams {

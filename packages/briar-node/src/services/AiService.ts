@@ -171,18 +171,21 @@ export class AiService {
     content,
     model,
     conversationId,
-    role = RoleEnum.User,
+    role,
+    imgList,
   }: {
     content: string;
     model: ModelEnum;
     conversationId: number;
-    role?: RoleEnum;
+    role: RoleEnum;
+    imgList: string[];
   }) {
     const message = await this.messageDalService.create({
       content,
       model,
       conversationId,
       role,
+      imgList,
     });
     return message;
   }

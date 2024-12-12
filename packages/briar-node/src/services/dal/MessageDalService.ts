@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { ModelEnum, RoleEnum } from 'briar-shared';
+import { safeJSON } from 'openai/core';
 import { Op } from 'sequelize';
 
 import { MessageModel } from '@/model/MessageModel';
@@ -16,16 +17,29 @@ export class MessageDalService {
     content,
     role,
     conversationId,
-    model = ModelEnum.Gpt4oMini,
+    model,
+    imgList,
   }: {
     content: string;
     role: RoleEnum;
     conversationId: number;
-    model?: ModelEnum;
+    model: ModelEnum;
+    imgList: string[];
   }): Promise<MessageModel> {
-    return (
-      await this.messageModel.create({ content, role, conversationId, model })
+    const result = (
+      await this.messageModel.create({
+        content,
+        role,
+        conversationId,
+        model,
+        imgList: JSON.stringify(imgList),
+      })
     ).dataValues;
+
+    return {
+      ...result,
+      imgList: result.imgList ? safeJSON(result.imgList) : [],
+    } as MessageModel;
   }
 
   async update(data: Partial<MessageModel>) {
@@ -49,7 +63,13 @@ export class MessageDalService {
       ],
     });
 
-    const messageData = messages.reverse().map((msg) => msg.dataValues);
+    const messageData = messages
+      .reverse()
+      .map((msg) => msg.dataValues)
+      .map((msg) => ({
+        ...msg,
+        imgList: msg.imgList ? safeJSON(msg.imgList) : [],
+      }));
 
     return {
       total: totalCount,

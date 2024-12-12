@@ -1,19 +1,15 @@
 import { PlusOutlined } from '@ant-design/icons';
+import { useMount } from 'ahooks';
 import { Button, Checkbox, CheckboxProps, Divider, List, message, Modal, Upload } from 'antd';
 import { Image as Img } from 'antd';
-import { IMaterial, IPageInfo, THUMB_URL_SUFFIX } from 'briar-shared';
+import { IMaterial, IPageInfo } from 'briar-shared';
 import { uniq } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import {
-	createImgMaterial,
-	deleteImgs,
-	getImgMaterials,
-	uploadBase64
-} from '@/pages/briar/api/material';
+import { createImgMaterial, deleteImgs, getImgMaterials } from '@/pages/briar/api/material';
 import SortList from '@/pages/briar/components/sort-list/SortList';
+import useUploadImg from '@/pages/briar/hooks/biz/useUploadImg';
 import useGlobalClick from '@/pages/briar/hooks/useGlobalClick';
-import { compressImg } from '@/pages/briar/utils/img';
 
 import Image from './components/img';
 import useDisableMouseEvent from './hooks/useDisableMouseEvent';
@@ -29,39 +25,17 @@ const frontendPagesize = 100;
 const Images = () => {
 	const [imgs, setImgs] = useState<IMaterial[]>([]);
 	const [sortedImg, setSortedImg] = useState<IMaterial[]>([]);
-	const [uploadList, setUploadList] = useState<Pick<IMaterial, 'name' | 'url' | 'thumbUrl'>[]>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [selectedList, setSelectedList] = useState<number[]>([]);
 	const [loading, seLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const { cancel } = useGlobalClick(() => setSelectedList([]));
+	const { uploadList, customRequest, setUploadList } = useUploadImg();
 	useDisableMouseEvent();
 
 	const indeterminate = useMemo(() => {
 		return selectedList.length > 0 && selectedList.length < imgs.length;
 	}, [imgs.length, selectedList.length]);
-
-	const customRequest: (options: any) => void = async ({ onSuccess, file }) => {
-		const reader = new FileReader();
-		reader.readAsDataURL(await compressImg(file as File));
-		reader.onload = async function () {
-			const { url } = await uploadBase64({
-				filename: file.name,
-				base64: reader.result as string
-			});
-
-			setUploadList((pre) => [
-				...pre,
-				{
-					name: file.name,
-					thumbUrl: url + THUMB_URL_SUFFIX,
-					url
-				}
-			]);
-
-			onSuccess?.('');
-		};
-	};
 
 	const handleUpload = () => {
 		if (uploadList.length === 0) {
@@ -172,11 +146,12 @@ const Images = () => {
 
 	useEffect(() => {
 		!isModalOpen && setUploadList([]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isModalOpen]);
 
-	useEffect(() => {
+	useMount(() => {
 		refresh();
-	}, []);
+	});
 
 	return (
 		<div>

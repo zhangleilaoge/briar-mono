@@ -1,5 +1,4 @@
 import { DownOutlined, FullscreenOutlined, MoreOutlined } from '@ant-design/icons';
-import { useBoolean } from 'ahooks';
 import { FloatButton } from 'antd';
 import { useCallback, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,8 +9,6 @@ import s from '@/pages/briar/styles/main.module.scss';
 import { Language } from '../constants/env';
 import { LANGUAGE_ICON } from '../constants/img';
 const FloatBtn = () => {
-	const [collapsed, { toggle }] = useBoolean(true);
-
 	const { toggleFullscreen } = useContext(CommonContext);
 	const { i18n } = useTranslation();
 	const switchLanguage = useCallback(() => {
@@ -22,8 +19,6 @@ const FloatBtn = () => {
 	return (
 		<FloatButton.Group
 			shape="circle"
-			open={!collapsed}
-			onOpenChange={toggle}
 			trigger="click"
 			icon={<MoreOutlined />}
 			closeIcon={<DownOutlined />}

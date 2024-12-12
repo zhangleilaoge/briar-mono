@@ -36,7 +36,7 @@ export class AppController {
   @Get('chatRequestStream')
   @Sse('sse')
   async chatRequestStream(@QueryToObject() params: IChatRequestParams) {
-    const { query, model, conversationId } = params;
+    const { query, model, conversationId, imgList = [] } = params;
 
     const messageArr = (await this.aiService.getMessages(conversationId)).items;
 
@@ -48,6 +48,7 @@ export class AppController {
           role: RoleEnum.User,
           conversationId,
           model,
+          imgList,
         },
       ],
       conversationId,
@@ -107,15 +108,17 @@ export class AppController {
   @Post('createMessage')
   async createMessage(
     @Body('content') content: string,
-    @Body('model') model: ModelEnum,
+    @Body('model') model: ModelEnum = ModelEnum.Gpt4oMini,
     @Body('conversationId') conversationId: number,
     @Body('role') role = RoleEnum.User,
+    @Body('imgList') imgList: string[] = [],
   ) {
     return this.aiService.createMessage({
       content,
       model,
       conversationId,
       role,
+      imgList,
     });
   }
 

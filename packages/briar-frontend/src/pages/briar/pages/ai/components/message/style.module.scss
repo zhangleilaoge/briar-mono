@@ -90,6 +90,9 @@
 	padding: 16px 20px;
 	background-color: $selectedColor;
 	white-space: pre-wrap;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }
 
 .Assistant {

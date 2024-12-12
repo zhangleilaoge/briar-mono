@@ -169,11 +169,11 @@ const Message: FC<IMessageProps> = ({ content, role, date, imgList }) => {
 						) : (
 							<Markdown rehypePlugins={[rehypeHighlight, remarkGfm]}>{content || ' '}</Markdown>
 						)}
-						{imgList?.map((url) => {
+						{imgList?.map?.((url) => {
 							return <Img url={url} key={url} />;
 						})}
 					</div>
-					{imgList?.length ? (
+					{imgList?.length && !isUser ? (
 						<div className={s.ImgTip}>
 							<Tooltip
 								placement={isUser ? 'left' : 'right'}

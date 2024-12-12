@@ -4,6 +4,7 @@ import { RoleEnum } from 'briar-shared';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { chatRequestStream, createMessage, genImg, updateMessage } from '@/pages/briar/api/ai';
+import useUploadImg from '@/pages/briar/hooks/biz/useUploadImg';
 import { useContainer } from '@/pages/briar/hooks/useContainer';
 import mainStyle from '@/pages/briar/styles/main.module.scss';
 import { errorNotify } from '@/pages/briar/utils/notify';
@@ -48,10 +49,18 @@ const Conversation: FC = () => {
 	const { send: updateMsg, onSuccess: onSuccessUpdateMsg } = useRequest(updateMessage, {
 		immediate: false
 	});
+	const {
+		uploadList,
+		loading: uploading,
+		uploadKey,
+		setUploadList,
+		customRequest,
+		resetUploadKey
+	} = useUploadImg();
+
 	const queryLoading = useMemo(() => {
 		return (readyState as number) !== SSEHookReadyState.CLOSED;
 	}, [readyState]);
-	// 消息询问状态
 	const loading = useMemo(() => {
 		return queryLoading || loadingCreateImg;
 	}, [loadingCreateImg, queryLoading]);
@@ -119,6 +128,8 @@ const Conversation: FC = () => {
 
 		const isNewConversation = !currentConversation;
 		const conversation = currentConversation || (await createConversation(inputValue))!;
+		const imgList = uploadList?.[0]?.url ? [uploadList?.[0]?.url] : [];
+
 		setCurrentConversationKey(conversation.id);
 
 		isNewConversation && refreshConversationList();
@@ -127,14 +138,14 @@ const Conversation: FC = () => {
 			content: inputValue,
 			role: RoleEnum.User,
 			model: selectOption.value,
-			conversationId: conversation.id
+			conversationId: conversation.id,
+			imgList: imgList
 		});
 		const assistantMsg = await createMessage({
 			content: assistantAnswerRef.current,
 			role: RoleEnum.Assistant,
 			model: selectOption.value,
-			conversationId: conversation.id,
-			imgList: createImgMode ? '[""]' : '[]'
+			conversationId: conversation.id
 		});
 
 		setMessageArr([...messageArr, userMsg, assistantMsg]);
@@ -150,14 +161,20 @@ const Conversation: FC = () => {
 			send({
 				query: inputValue,
 				model: selectOption.value,
-				conversationId: conversation?.id
+				conversationId: conversation?.id,
+				imgList
 			});
 		}
+
+		setUploadList([]);
+		resetUploadKey();
 	};
 
 	const loadMore = async () => {
-		loadMoreMessages();
 		setFetching(true);
+		loadMoreMessages().finally(() => {
+			setFetching(false);
+		});
 	};
 
 	const shutDown = async () => {
@@ -204,11 +221,6 @@ const Conversation: FC = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [messageArr?.[0]?.conversationId]);
 
-	// 消息加载完后，还原加载更多按钮
-	useEffect(() => {
-		setFetching(false);
-	}, [messageArr]);
-
 	return (
 		<div className={s.Container}>
 			<div className={s.Head}>
@@ -230,10 +242,15 @@ const Conversation: FC = () => {
 				<Messages loading={loading} />
 			</div>
 			<Input
+				uploadList={uploadList}
 				loading={loading}
 				inputValue={inputValue}
 				setInputValue={setInputValue}
 				submit={submit}
+				uploading={uploading}
+				setUploadList={setUploadList}
+				customRequest={customRequest}
+				uploadKey={uploadKey}
 			/>
 		</div>
 	);

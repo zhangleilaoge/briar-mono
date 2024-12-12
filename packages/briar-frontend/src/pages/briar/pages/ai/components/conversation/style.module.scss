@@ -22,8 +22,7 @@ $messageAreaWidth: 968px;
 	:global {
 		textArea {
 			box-sizing: border-box;
-			padding: 11px 42px;
-			padding-left: 15px;
+			padding: 11px 46px;
 			scrollbar-width: none;
 
 			::-webkit-scrollbar {
@@ -70,5 +69,11 @@ $messageAreaWidth: 968px;
 		button {
 			color: #a2a6a6 !important;
 		}
+	}
+}
+
+.upload {
+	:global(.ant-upload-list-item) {
+		background: rgb(255 255 255 / 46%);
 	}
 }

@@ -1,6 +1,5 @@
 import 'highlight.js/styles/atom-one-dark.css';
 
-import { safeJsonParse } from 'briar-shared';
 import { FC } from 'react';
 
 import { useContainer } from '@/pages/briar/hooks/useContainer';
@@ -18,7 +17,7 @@ const Messages: FC<{
 	return (
 		<>
 			{messageArr.map((message, index) => {
-				const imgList = message.imgList ? safeJsonParse(message.imgList) : [];
+				const imgList = message.imgList || [];
 				if (index === messageArr.length - 1 && loading && !message.content) {
 					return (
 						<Message
