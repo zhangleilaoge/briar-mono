@@ -22,6 +22,7 @@
 		"antd": "^5.19.3",
 		"antd-img-crop": "^4.23.0",
 		"briar-shared": "^0.0.8",
+		"classnames": "^2.5.1",
 		"date-fns": "^3.6.0",
 		"gapi-script": "^1.2.0",
 		"highlight.js": "^11.10.0",

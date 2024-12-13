@@ -1,6 +1,7 @@
 import { Layout, Menu, theme } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
+import cx from 'classnames';
 import { useContext } from 'react';
 
 import Footer from '@/pages/briar/components/Footer';
@@ -25,7 +26,7 @@ function AiPage() {
 
 	return (
 		<Layout>
-			<Sider width={240} className={`${mainStyle.Sider} ${s.ShadowSider}`} collapsed={isCollapsed}>
+			<Sider width={240} className={cx(mainStyle.Sider, s.ShadowSider)} collapsed={isCollapsed}>
 				<SiderOperations setIsCollapsed={setIsCollapsed} isCollapsed={isCollapsed} />
 				<Menu
 					mode="inline"

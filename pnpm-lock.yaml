@@ -92,6 +92,9 @@ importers:
       briar-shared:
         specifier: ^0.0.8
         version: link:../briar-shared
+      classnames:
+        specifier: ^2.5.1
+        version: 2.5.1
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0

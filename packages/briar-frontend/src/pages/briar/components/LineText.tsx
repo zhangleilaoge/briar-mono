@@ -1,4 +1,5 @@
 import { Tooltip } from 'antd';
+import cx from 'classnames';
 import { useEffect, useRef, useState } from 'react';
 
 const LineText = ({
@@ -42,7 +43,10 @@ const LineText = ({
 		<Tooltip title={text} placement={'bottom'}>
 			<span
 				ref={textRef}
-				className={`flex break-all justify-center items-start overflow-hidden text-center ${className}`}
+				className={cx(
+					'flex break-all justify-center items-start overflow-hidden text-center',
+					className
+				)}
 			>
 				{displayedText}
 			</span>

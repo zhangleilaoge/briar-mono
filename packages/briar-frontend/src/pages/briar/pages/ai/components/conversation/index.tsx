@@ -1,6 +1,7 @@
 import { useRequest, useSSE } from 'alova/client';
 import { Button } from 'antd';
 import { RoleEnum } from 'briar-shared';
+import cx from 'classnames';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { chatRequestStream, createMessage, genImg, updateMessage } from '@/pages/briar/api/ai';
@@ -17,7 +18,6 @@ import ConversationOpt from './components/ConversationOpt';
 import Input from './components/Input';
 import useGptModel from './hooks/useGptModel';
 import s from './style.module.scss';
-
 const Conversation: FC = () => {
 	const [inputValue, setInputValue] = useState('');
 
@@ -226,7 +226,7 @@ const Conversation: FC = () => {
 			<div className={s.Head}>
 				<ConversationOpt selectOption={selectOption} onChange={onChange} options={options} />
 			</div>
-			<div className={`${s.Messages} ${loading ? mainStyle.loadingCursor : ''}`}>
+			<div className={cx(s.Messages, { [mainStyle.loadingCursor]: loading })}>
 				{hasMoreMessages ? (
 					<div className={s.loadMore}>
 						<Button

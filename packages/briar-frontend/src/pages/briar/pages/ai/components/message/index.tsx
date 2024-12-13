@@ -1,6 +1,7 @@
 import { CheckCircleFilled, CopyOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Avatar, Button, Input, message, Popconfirm, Skeleton, Tooltip } from 'antd';
 import { RoleEnum, StardewValleyGirl } from 'briar-shared';
+import cx from 'classnames';
 import { format } from 'date-fns';
 import { FC, useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
@@ -14,7 +15,6 @@ import { copyToClipboard } from '@/pages/briar/utils/document';
 
 import { conversationContainer } from '../../container/conversationContainer';
 import s from './style.module.scss';
-
 interface IMessageProps {
 	content: string;
 	role: RoleEnum;
@@ -114,7 +114,7 @@ const Img = ({ url }: { url: string }) => {
 			<img
 				src={url}
 				alt="img"
-				className={`${s.Img} ${loadStatus ? '' : s.HideImg}`}
+				className={cx(s.Img, { [s.HideImg]: !loadStatus })}
 				onLoad={() => {
 					setLoadStatus(true);
 				}}
@@ -158,12 +158,12 @@ const Message: FC<IMessageProps> = ({ content, role, date, imgList }) => {
 	}, [content]);
 
 	return (
-		<div className={`${s.Message} ${isUser ? s.User : s.Assistant}`}>
+		<div className={cx(s.Message, isUser ? s.User : s.Assistant)}>
 			{!isUser && <AssistantProfile />}
 			<div>
 				<div className={s.Date}>{format(date, 'yyyy-MM-dd HH:mm:ss')}</div>
-				<div className={`${s.ContentArea}`}>
-					<div className={`${s.Content}`}>
+				<div className={s.ContentArea}>
+					<div className={s.Content}>
 						{isUser ? (
 							content || ''
 						) : (

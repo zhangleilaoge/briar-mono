@@ -3,6 +3,7 @@ import 'prismjs/themes/prism-tomorrow.css';
 import { InputType } from '@zhangleilaoge/vue-code-converter';
 import { Alert, Button, Drawer, Form, message, Radio, RadioChangeEvent, Slider } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
+import cx from 'classnames';
 import Prism from 'prismjs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -156,7 +157,7 @@ const CompositionStyleConvert = () => {
 							</Button>
 						</div>
 					</div>
-					<pre className={`lang-javascript ${s.OutputCode}`} ref={outputRef}>
+					<pre className={cx(s.OutputCode, 'lang-javascript')} ref={outputRef}>
 						<code className="code-output-content">{output}</code>
 					</pre>
 				</div>

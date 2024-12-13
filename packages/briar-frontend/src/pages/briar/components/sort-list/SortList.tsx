@@ -1,7 +1,7 @@
+import cx from 'classnames';
 import { useCallback, useEffect, useState } from 'react';
 
 import { ThemeColor } from '../../constants/styles';
-
 interface SortListProps<T> {
 	className?: string;
 	list?: T[];
@@ -21,7 +21,7 @@ const SortIndicator: React.FC<SortIndicatorProps> = ({ sortType }) => {
 		<div>
 			<div className="ml-[4px] flex cursor-pointer justify-between flex-col h-[22px] translate-y-[-1px]">
 				<span
-					className={`text-[8px] translate-y-[2px] scale-x-150`}
+					className="text-[8px] translate-y-[2px] scale-x-150"
 					style={{
 						color: sortType === 'asc' ? ThemeColor.selectedColor : 'lightgrey'
 					}}
@@ -29,7 +29,7 @@ const SortIndicator: React.FC<SortIndicatorProps> = ({ sortType }) => {
 					▲
 				</span>
 				<span
-					className={`text-[8px] translate-y-[-2px] scale-x-150`}
+					className="text-[8px] translate-y-[-2px] scale-x-150"
 					style={{
 						color: sortType === 'desc' ? ThemeColor.selectedColor : 'lightgrey'
 					}}
@@ -93,7 +93,7 @@ function SortList<T>({
 	}, [list, setSortedList]);
 
 	return (
-		<div className={`cursor-pointer flex gap-[12px] ${className}`}>
+		<div className={cx('cursor-pointer flex gap-[12px] ', className)}>
 			{sortByMap.map(({ key, label }) => (
 				<div key={String(key)}>
 					<span

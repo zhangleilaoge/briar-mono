@@ -1257,10 +1257,6 @@ video {
   max-height: 240px;
 }
 
-.max-h-\[120px\] {
-  max-height: 120px;
-}
-
 .\!w-\[24px\] {
   width: 24px !important;
 }

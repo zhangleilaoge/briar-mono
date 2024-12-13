@@ -2,6 +2,7 @@ import { EllipsisOutlined } from '@ant-design/icons';
 import { Dropdown, MenuProps, message, Spin } from 'antd';
 import { Image as Img } from 'antd';
 import { IMaterial } from 'briar-shared';
+import cx from 'classnames';
 import { useRef } from 'react';
 
 import LineText from '@/pages/briar/components/LineText';
@@ -9,7 +10,6 @@ import { copyImageToClipboard, copyToClipboard, download } from '@/pages/briar/u
 import { errorNotify } from '@/pages/briar/utils/notify';
 
 import s from './style.module.scss';
-``;
 
 const ImageItem = ({
 	data,
@@ -105,7 +105,12 @@ const ImageItem = ({
 	return (
 		<div
 			ref={containerRef}
-			className={`w-[120px] h-[120px] flex flex-col gap-[4px] pt-[16px] justify-center items-center hover:bg-gray-100 relative group ${selected ? s['img-selected'] : ''}`}
+			className={cx(
+				'w-[120px] h-[120px] flex flex-col gap-[4px] pt-[16px] justify-center items-center hover:bg-gray-100 relative group',
+				{
+					[s['img-selected']]: selected
+				}
+			)}
 			onClick={onClick}
 		>
 			<div className="absolute right-[8px] top-[4px] opacity-0 group-hover:opacity-100">

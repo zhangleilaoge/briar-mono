@@ -1,6 +1,7 @@
 import { ArrowUpOutlined, PaperClipOutlined, XFilled } from '@ant-design/icons';
 import { Button, Upload } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
+import cx from 'classnames';
 import { useMemo } from 'react';
 import React from 'react';
 
@@ -10,7 +11,6 @@ import { useContainer } from '@/pages/briar/hooks/useContainer';
 import { conversationContainer } from '../../../container/conversationContainer';
 import useCompositionInput from '../hooks/useCompositionInput';
 import s from '../style.module.scss';
-
 interface IInputProps {
 	loading: boolean;
 	inputValue: string;
@@ -88,7 +88,7 @@ const Input = ({
 				}}
 				maxCount={1}
 				listType="picture"
-				className={`${s.upload} absolute left-[0] bottom-[8px] flex flex-col-reverse gap-[18px]`}
+				className={cx(s.upload, 'absolute left-[0] bottom-[8px] flex flex-col-reverse gap-[18px]')}
 				onRemove={(file) => {
 					setUploadList((pre) => pre.filter((item) => item.name.indexOf(file.name) === -1));
 				}}
@@ -105,7 +105,7 @@ const Input = ({
 			<Button
 				icon={loading ? <XFilled /> : <ArrowUpOutlined />}
 				onClick={submit}
-				className={s.SubmitBtn}
+				className={cx(s.SubmitBtn, 'z-20')}
 				shape="circle"
 				danger={loading}
 			></Button>
