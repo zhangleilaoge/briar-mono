@@ -8,6 +8,7 @@ export const getLimitedMessages = (
   let result = [];
   let currentToken = 0;
 
+  // 当上下文过多，优先清除时间较早的消息
   for (let i = msgs.length - 1; i >= 0; i--) {
     const msgContent = msgs[i].content;
 
@@ -18,9 +19,11 @@ export const getLimitedMessages = (
     result.unshift(msgs[i]);
   }
 
-  result = result.map((msg) => {
+  result = result.map((msg, index) => {
+    const keepImage = index === result.length - 1;
     let content = msg.content;
-    if (msg.imgList?.[0] && msg.role === RoleEnum.User) {
+    // 历史会话不需要保留图片，不然会占用太多token
+    if (msg.imgList?.[0] && msg.role === RoleEnum.User && keepImage) {
       content = [
         {
           type: 'text',
