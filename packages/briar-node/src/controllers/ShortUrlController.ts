@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post, Redirect } from '@nestjs/common';
-import { getShortUrl, IGetShortUrlListParams, UrlEnum } from 'briar-shared';
+import {
+  getShortUrl,
+  IGetShortUrlListParams,
+  LogModuleEnum,
+  UrlEnum,
+} from 'briar-shared';
 
 import { Public } from '@/decorators/Public';
 import { QueryToObject } from '@/decorators/Query2Obj';
@@ -26,7 +31,10 @@ export class ShortUrlController {
       };
     }
 
-    this.userLogService.log('短链跳转：' + longUrl);
+    this.userLogService.log({
+      content: '短链跳转：' + longUrl,
+      module: LogModuleEnum.ShortUrl,
+    });
 
     return {
       url: longUrl,

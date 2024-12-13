@@ -1,5 +1,6 @@
 import { Injectable, LoggerService } from '@nestjs/common';
-import { LogFromEnum, LogTypeEnum } from 'briar-shared';
+import { ILogParams, LogFromEnum, LogTypeEnum } from 'briar-shared';
+import { format } from 'date-fns/format';
 
 import { ContextService } from './common/ContextService';
 import { LogDalService } from './dal/LogDalService';
@@ -12,41 +13,31 @@ export class UserLogService implements LoggerService {
     private contextService: ContextService,
   ) {}
 
-  async log(content = '') {
+  async log({ content, module, type = LogTypeEnum.Info }: ILogParams) {
     const { userId, ip } = this.contextService.get();
-    const type = LogTypeEnum.Info;
+    const textContent = `【${module}${type}】${format(new Date(), '(yyyy-MM-dd HH:mm:ss)')} ${content}`;
 
-    console.log(`${type}(userId=${userId}): ${content}`);
+    console.log(textContent);
 
     await this.logDalService.create(
-      { content, type, userId, ip },
+      { content: textContent, type, userId, ip },
       LogFromEnum.User,
     );
   }
 
-  async error(error, content = '') {
-    const { userId, ip } = this.contextService.get();
-    const type = LogTypeEnum.Error;
-
-    console.log(
-      `${type}(userId=${userId}): ${content} ${(error as any)?.message || JSON.stringify(error)}`,
-    );
-    await this.logDalService.create(
-      { content, type, userId, ip },
-      LogFromEnum.User,
-    );
+  async error(
+    error,
+    { content, module, type = LogTypeEnum.Error }: ILogParams,
+  ) {
+    return this.log({
+      content: `${content} ${(error as any)?.message || JSON.stringify(error)}`,
+      module,
+      type,
+    });
   }
 
-  async warn(content = '') {
-    const type = LogTypeEnum.Warning;
-    const { userId, ip } = this.contextService.get();
-
-    console.log(`${type}(userId=${userId}): ${content}`);
-
-    await this.logDalService.create(
-      { content, type, userId, ip },
-      LogFromEnum.User,
-    );
+  async warn({ content, module, type = LogTypeEnum.Warning }: ILogParams) {
+    return this.log({ content, module, type });
   }
 }
 
@@ -55,28 +46,29 @@ export class UserLogService implements LoggerService {
 export class SystemLogService implements LoggerService {
   constructor(private readonly logDalService: LogDalService) {}
 
-  async log(content = '') {
-    const type = LogTypeEnum.Info;
+  async log({ content, module, type = LogTypeEnum.Info }: ILogParams) {
+    const textContent = `【${module}${type}】${format(new Date(), '(yyyy-MM-dd HH:mm:ss)')} ${content}`;
 
-    console.log(`${type}: ${content}`);
+    console.log(textContent);
 
-    await this.logDalService.create({ content, type }, LogFromEnum.System);
-  }
-
-  async error(error, content = '') {
-    const type = LogTypeEnum.Error;
-
-    console.log(
-      `${type}: ${content} ${(error as any)?.message || JSON.stringify(error)}`,
+    await this.logDalService.create(
+      { content: textContent, type },
+      LogFromEnum.System,
     );
-    await this.logDalService.create({ content, type }, LogFromEnum.System);
   }
 
-  async warn(content = '') {
-    const type = LogTypeEnum.Warning;
+  async error(
+    error,
+    { content, module, type = LogTypeEnum.Error }: ILogParams,
+  ) {
+    return this.log({
+      content: `${content} ${(error as any)?.message || JSON.stringify(error)}`,
+      module,
+      type,
+    });
+  }
 
-    console.log(`${type}: ${content}`);
-
-    await this.logDalService.create({ content, type }, LogFromEnum.System);
+  async warn({ content, module, type = LogTypeEnum.Warning }: ILogParams) {
+    return this.log({ content, module, type });
   }
 }

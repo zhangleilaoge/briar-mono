@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { LogModuleEnum } from 'briar-shared';
 
 import { ShortUrlDalService } from '../dal/ShortUrlDalService';
 import { VerifyDalService } from '../dal/VerifyDalService';
@@ -23,7 +24,10 @@ export class ScheduleService {
   /** @description 定时清除过期验证码 */
   @Cron(CronExpression.EVERY_WEEK)
   async clearExpiredVerifyCode() {
-    this.systemLogService.log('开始清除过期验证码');
+    this.systemLogService.log({
+      content: '清除过期验证码',
+      module: LogModuleEnum.ScheduleTask,
+    });
     await this.verifyDalService.clearExpiredVerifyCode();
   }
 }

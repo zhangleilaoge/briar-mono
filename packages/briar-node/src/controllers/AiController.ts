@@ -12,6 +12,7 @@ import {
   IChatRequestParams,
   IConversationDTO,
   IGetMessagesParams,
+  LogModuleEnum,
   ModelEnum,
   RoleEnum,
 } from 'briar-shared';
@@ -29,7 +30,7 @@ import { AiService } from '../services/AiService';
 export class AppController {
   constructor(
     private readonly aiService: AiService,
-    private readonly logger: UserLogService,
+    private readonly userLogService: UserLogService,
   ) {}
 
   @Public()
@@ -63,7 +64,10 @@ export class AppController {
     try {
       imgUrl = await this.aiService.createImg(content, ModelEnum.DallE2);
     } catch (error) {
-      this.logger.error(error, '图片生成失败：');
+      this.userLogService.error(error, {
+        content: '图片生成失败：',
+        module: LogModuleEnum.GenerateImg,
+      });
 
       throw new ForbiddenException(error);
     }

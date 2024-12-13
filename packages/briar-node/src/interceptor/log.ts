@@ -5,17 +5,21 @@ import {
   NestInterceptor,
   Scope,
 } from '@nestjs/common';
-import { format } from 'date-fns';
+import { LogModuleEnum } from 'briar-shared';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ContextService } from '@/services/common/ContextService';
+import { UserLogService } from '@/services/LogService';
 
 const ssePaths = ['/api/ai/chatRequestStream'];
 
 @Injectable({ scope: Scope.REQUEST })
 export class LogInterceptor implements NestInterceptor {
-  constructor(private readonly contextService: ContextService) {}
+  constructor(
+    private readonly contextService: ContextService,
+    private readonly userLogService: UserLogService,
+  ) {}
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
@@ -24,7 +28,30 @@ export class LogInterceptor implements NestInterceptor {
     const method = request.method;
     const originalUrl = request.originalUrl;
     const isSSERequest = ssePaths.some((path) => originalUrl.includes(path));
+    const logObj: any = {
+      method,
+      url: originalUrl,
+      statusCode: response.statusCode,
+      userId: this.contextService.get().userId,
+    };
     let sseFirst = true;
+
+    if (method === 'GET' && Object.keys(request.query).length > 0) {
+      logObj.query = request.query;
+    } else if (method === 'POST') {
+      let body = JSON.stringify(request.body);
+      if (body.length > 500) {
+        body = body.slice(0, 500) + `...(省略超出的 ${body.length - 500} 字符)`;
+      }
+      logObj.body = body;
+    }
+
+    // const logMessage = '请求开始: ' + JSON.stringify(logObj);
+
+    // this.userLogService.log({
+    //   content: logMessage,
+    //   module: LogModuleEnum.RequestMiddleware,
+    // });
 
     return next.handle().pipe(
       map((data) => {
@@ -34,21 +61,20 @@ export class LogInterceptor implements NestInterceptor {
         if (!isSSERequest || sseFirst) {
           sseFirst = false;
 
-          let logMessage = `${format(new Date(), 'yyyy-MM-dd HH:mm:ss')} 【method: ${method}】【url: ${originalUrl}】【statusCode: ${response.statusCode}】【duration: ${duration}ms】【userId: ${this.contextService.get().userId}】`;
+          logObj.duration = duration;
+          // logObj.response = JSON.stringify(data);
+          // if (logObj.response.length > 500) {
+          //   logObj.response =
+          //     logObj.response.slice(0, 500) +
+          //     `...(省略超出的 ${logObj.response.length - 500} 字符)`;
+          // }
 
-          if (method === 'GET' && Object.keys(request.query).length > 0) {
-            logMessage += `【query: ${JSON.stringify(request.query)}】`;
-          } else if (method === 'POST') {
-            let body = JSON.stringify(request.body);
-            if (body.length > 500) {
-              body =
-                body.slice(0, 500) +
-                `...(省略超出的 ${body.length - 500} 字符)`;
-            }
-            logMessage += `【body: ${body}】`;
-          }
+          const logMessage = '请求结束: ' + JSON.stringify(logObj);
 
-          console.log(logMessage);
+          this.userLogService.log({
+            content: logMessage,
+            module: LogModuleEnum.RequestMiddleware,
+          });
         }
 
         return data;

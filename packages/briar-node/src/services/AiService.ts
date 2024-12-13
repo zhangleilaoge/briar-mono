@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import {
   IConversationDTO,
   IMessageDTO,
+  LogModuleEnum,
   ModelEnum,
   RoleEnum,
   STARDEW_VALLEY_GIRL_DESC,
@@ -47,7 +48,7 @@ export class AiService {
   constructor(
     private readonly conversationDalService: ConversationDalService,
     private readonly messageDalService: MessageDalService,
-    private readonly logger: UserLogService,
+    private readonly userLogService: UserLogService,
     private contextService: ContextService,
   ) {}
 
@@ -98,7 +99,10 @@ export class AiService {
           }
           subject.complete();
         } catch (err) {
-          this.logger.error(err);
+          this.userLogService.error(err, {
+            content: 'chatRequestStream error：',
+            module: LogModuleEnum.AiChat,
+          });
 
           subject.error(err);
         }
@@ -111,16 +115,24 @@ export class AiService {
   }
 
   async createImg(query: string, model: ModelEnum) {
-    this.logger.log('图片生成开始');
-
-    const response = await this.openai.images.generate({
+    const params = {
       model,
       prompt: query,
       n: 1,
       size: '1024x1024',
+    };
+    this.userLogService.log({
+      content: `图片生成开始：${JSON.stringify(params)}`,
+      module: LogModuleEnum.GenerateImg,
     });
 
-    this.logger.log(`图片生成完成: ${JSON.stringify(response.data)}`);
+    // @ts-ignore
+    const response = await this.openai.images.generate(params);
+
+    this.userLogService.log({
+      content: `【图片生成】图片生成完成: ${JSON.stringify(response.data)}`,
+      module: LogModuleEnum.GenerateImg,
+    });
 
     return response.data[0].url;
   }
