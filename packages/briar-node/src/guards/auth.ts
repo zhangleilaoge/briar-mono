@@ -39,6 +39,7 @@ export class AuthGuard implements CanActivate {
     }
 
     const token = this.extractTokenFromHeader(request);
+    const traceId = request.headers['x-trace-id'];
     if (!token) {
       throw new UnauthorizedException();
     }
@@ -49,6 +50,9 @@ export class AuthGuard implements CanActivate {
 
       // 设置 userId
       this.contextService.setValue('userId', payload.sub);
+
+      // 设置 traceId
+      this.contextService.setValue('traceId', traceId);
     } catch (e) {
       console.log(e);
       throw new UnauthorizedException();

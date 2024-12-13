@@ -1,6 +1,7 @@
 import { createAlova } from 'alova';
 import fetchAdapter from 'alova/fetch';
 import reactHook from 'alova/react';
+import md5 from 'md5-es';
 import qs from 'qs';
 
 import { isDev, LocalStorageKey } from '@/pages/briar/constants/env';
@@ -35,6 +36,9 @@ const alovaInstance = createAlova({
 	beforeRequest(method) {
 		method.config.credentials = 'include';
 		method.config.headers.Authorization = `Bearer ${localStorage.getItem(LocalStorageKey.AccessToken)}`;
+		method.config.headers['x-trace-id'] = md5.hash(
+			Date.now().toString() + Math.random().toString()
+		);
 		if (method.config.params) {
 			const queryParamsStr = qs.stringify(method.config.params, { arrayFormat: 'brackets' });
 			if (queryParamsStr === '') return;

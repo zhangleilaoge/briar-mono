@@ -3,6 +3,7 @@ import { Injectable, Scope } from '@nestjs/common';
 interface IContext {
   userId?: number;
   ip?: string;
+  traceId?: string;
 }
 
 /** 请求级别的上下文，类似 express 中的 context */

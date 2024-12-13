@@ -31,4 +31,6 @@ export type ILogDTO = IModel<{
 	type: LogTypeEnum;
 	content: string;
 	ip?: string;
+	traceId?: string;
+	location?: string;
 }>;

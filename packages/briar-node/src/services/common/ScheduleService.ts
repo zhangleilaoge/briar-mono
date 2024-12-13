@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { LogModuleEnum } from 'briar-shared';
 
+import { LogDalService } from '@/services/dal/LogDalService';
+
 import { ShortUrlDalService } from '../dal/ShortUrlDalService';
 import { VerifyDalService } from '../dal/VerifyDalService';
 import { SystemLogService } from '../LogService';
@@ -12,6 +14,7 @@ export class ScheduleService {
   constructor(
     private readonly shortUrlDalService: ShortUrlDalService,
     private readonly verifyDalService: VerifyDalService,
+    private readonly logDalService: LogDalService,
     private systemLogService: SystemLogService,
   ) {}
 
@@ -29,5 +32,16 @@ export class ScheduleService {
       module: LogModuleEnum.ScheduleTask,
     });
     await this.verifyDalService.clearExpiredVerifyCode();
+  }
+
+  /** @description 定时清除历史日志 */
+  @Cron(CronExpression.EVERY_WEEK)
+  async clearLog() {
+    this.systemLogService.log({
+      content: '清除历史日志',
+      module: LogModuleEnum.ScheduleTask,
+    });
+
+    await this.logDalService.clear();
   }
 }

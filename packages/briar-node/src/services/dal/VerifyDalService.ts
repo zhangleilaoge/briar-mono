@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { IVerifyCodeDTO, VerifyScene } from 'briar-shared';
-import { Op } from 'sequelize';
-import sequelize from 'sequelize';
+import sequelize, { Op } from 'sequelize';
 
 import { VerifyCodeModel } from '@/model/VerifyModel';
 

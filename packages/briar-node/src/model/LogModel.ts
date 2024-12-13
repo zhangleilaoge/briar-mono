@@ -23,4 +23,10 @@ export class LogModel extends Model<LogModel> {
 
   @Column
   from: LogFromEnum;
+
+  @Column
+  traceId: string;
+
+  @Column
+  location: string;
 }
