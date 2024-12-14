@@ -22,6 +22,7 @@ export enum MenuKeyEnum {
 	Ai_1 = 'ai',
 	Admin_1 = 'admin',
 	Personal_1 = 'personal',
+	Blog_1 = 'blog',
 
 	CodeConverter_2 = 'code-converter',
 	Pragmatic_2 = 'pragmatic',
@@ -30,6 +31,9 @@ export enum MenuKeyEnum {
 	User_2 = 'user',
 	Account_2 = 'account',
 	Images_2 = 'images',
+	RecommendBlogPost_2 = 'recommend-blog-post',
+	MyBlogPost_2 = 'my-blog-post',
+	PostBlog_2 = 'post-blog',
 
 	CompositionStyleConverter_3 = 'composition-style-converter',
 	CompositionStyleIntro_3 = 'composition-style-intro',
@@ -49,6 +53,7 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.Tools_1]: t(TranslationEnum.Tools),
 	[MenuKeyEnum.Admin_1]: t(TranslationEnum.Admin),
 	[MenuKeyEnum.Personal_1]: t(TranslationEnum.PersonalHomepage),
+	[MenuKeyEnum.Blog_1]: t(TranslationEnum.Blog),
 
 	[MenuKeyEnum.CodeConverter_2]: t(TranslationEnum.CodeConverter),
 	[MenuKeyEnum.Pragmatic_2]: t(TranslationEnum.Pragmatic),
@@ -57,6 +62,9 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.User_2]: t(TranslationEnum.User),
 	[MenuKeyEnum.Account_2]: t(TranslationEnum.Account),
 	[MenuKeyEnum.Images_2]: t(TranslationEnum.Images),
+	[MenuKeyEnum.RecommendBlogPost_2]: t(TranslationEnum.RecommendBlogPost),
+	[MenuKeyEnum.MyBlogPost_2]: t(TranslationEnum.MyBlogPost),
+	[MenuKeyEnum.PostBlog_2]: t(TranslationEnum.PostBlog),
 
 	[MenuKeyEnum.CompositionStyleConverter_3]: t(TranslationEnum.CompositionStyleConverter),
 	[MenuKeyEnum.CompositionStyleIntro_3]: t(TranslationEnum.CompositionApiIntro),
@@ -75,11 +83,17 @@ export const DEFAULT_MENU_KEY = {
 	[MenuKeyEnum.Tools_1]: MenuKeyEnum.CodeConverter_2,
 	[MenuKeyEnum.Admin_1]: MenuKeyEnum.User_2,
 	[MenuKeyEnum.Personal_1]: MenuKeyEnum.Account_2,
+	[MenuKeyEnum.Blog_1]: MenuKeyEnum.RecommendBlogPost_2,
 	[MenuKeyEnum.User_2]: MenuKeyEnum.RoleList_3,
 	[MenuKeyEnum.CodeConverter_2]: MenuKeyEnum.CompositionStyleConverter_3
 };
 
 export const ROUTER_CONFIG: IMenuRouterConfig[] = [
+	{
+		key: MenuKeyEnum.Blog_1,
+		label: MENU_KEY_NAMES[MenuKeyEnum.Blog_1],
+		component: lazy(() => import('../pages/blog')) as LazyExoticComponent<() => JSX.Element>
+	},
 	{
 		key: MenuKeyEnum.Ai_1,
 		label: MENU_KEY_NAMES[MenuKeyEnum.Ai_1],

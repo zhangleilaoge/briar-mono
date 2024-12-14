@@ -20,5 +20,9 @@ export enum TranslationEnum {
 	UserList = 'UserList',
 	Calculator = 'Calculator',
 	JsonFormatter = 'JsonFormatter',
-	compressImg = 'compressImg'
+	compressImg = 'compressImg',
+	Blog = 'Blog',
+	RecommendBlogPost = 'RecommendBlogPost',
+	MyBlogPost = 'MyBlogPost',
+	PostBlog = 'PostBlog'
 }

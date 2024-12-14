@@ -22,7 +22,11 @@ const translation: Record<TranslationEnum, string> = {
 	UserList: '用户列表',
 	Calculator: '计算器',
 	JsonFormatter: 'JSON格式化校验',
-	compressImg: '图片压缩'
+	compressImg: '图片压缩',
+	Blog: '博客',
+	RecommendBlogPost: '推荐',
+	MyBlogPost: '我的博客',
+	PostBlog: '创作'
 };
 
 export default translation;

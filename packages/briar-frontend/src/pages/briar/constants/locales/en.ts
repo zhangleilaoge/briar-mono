@@ -22,7 +22,11 @@ const translation: Record<TranslationEnum, string> = {
 	UserList: 'Users',
 	Calculator: 'Calculator',
 	JsonFormatter: 'Json formatter',
-	compressImg: 'compressImg'
+	compressImg: 'compressImg',
+	Blog: 'Blog',
+	RecommendBlogPost: 'Recommend',
+	MyBlogPost: 'My Blog post',
+	PostBlog: 'Create'
 };
 
 export default translation;
