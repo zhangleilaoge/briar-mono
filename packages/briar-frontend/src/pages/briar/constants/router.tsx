@@ -1,7 +1,10 @@
 import {
+	BulbOutlined,
 	CarOutlined,
+	CoffeeOutlined,
 	ExperimentOutlined,
 	FileImageOutlined,
+	FireOutlined,
 	InteractionOutlined,
 	ToolOutlined,
 	UserOutlined
@@ -92,7 +95,27 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 	{
 		key: MenuKeyEnum.Blog_1,
 		label: MENU_KEY_NAMES[MenuKeyEnum.Blog_1],
-		component: lazy(() => import('../pages/blog')) as LazyExoticComponent<() => JSX.Element>
+		component: lazy(() => import('../pages/blog')) as LazyExoticComponent<() => JSX.Element>,
+		children: [
+			{
+				icon: <FireOutlined />,
+				key: MenuKeyEnum.RecommendBlogPost_2,
+				label: MENU_KEY_NAMES[MenuKeyEnum.RecommendBlogPost_2],
+				component: lazy(() => import('../pages/blog/pages/recommend-blog-post'))
+			},
+			{
+				icon: <BulbOutlined />,
+				key: MenuKeyEnum.MyBlogPost_2,
+				label: MENU_KEY_NAMES[MenuKeyEnum.MyBlogPost_2],
+				component: lazy(() => import('../pages/blog/pages/my-blog-post'))
+			},
+			{
+				icon: <CoffeeOutlined />,
+				key: MenuKeyEnum.PostBlog_2,
+				label: MENU_KEY_NAMES[MenuKeyEnum.PostBlog_2],
+				component: lazy(() => import('../pages/blog/pages/post-blog'))
+			}
+		]
 	},
 	{
 		key: MenuKeyEnum.Ai_1,
