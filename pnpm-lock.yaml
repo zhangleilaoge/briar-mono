@@ -75,8 +75,8 @@ importers:
         specifier: ^6.9.17
         version: 6.9.17
       '@zhangleilaoge/vue-code-converter':
-        specifier: ^0.0.9
-        version: link:../vue-code-converter
+        specifier: ^0.0.10
+        version: 0.0.10
       ahooks:
         specifier: ^3.8.1
         version: 3.8.1(react@18.3.1)
@@ -361,49 +361,6 @@ importers:
       tslib:
         specifier: ^2.6.3
         version: 2.6.3
-
-  packages/vue-code-converter:
-    dependencies:
-      '@vue/compiler-core':
-        specifier: ^3.4.31
-        version: 3.4.31
-      '@vue/compiler-sfc':
-        specifier: ^3.4.31
-        version: 3.4.31
-      chalk:
-        specifier: ^4.1.2
-        version: 4.1.2
-      commander:
-        specifier: ^11.1.0
-        version: 11.1.0
-      lodash-es:
-        specifier: ^4.17.21
-        version: 4.17.21
-      prettier:
-        specifier: ^2.6.2
-        version: 2.8.8
-      tslib:
-        specifier: ^2.6.2
-        version: 2.6.3
-      typescript:
-        specifier: ~4.5.2
-        version: 4.5.5
-      vue-template-compiler:
-        specifier: ^2.7.16
-        version: 2.7.16
-    devDependencies:
-      '@types/lodash':
-        specifier: 4.14.74
-        version: 4.14.74
-      '@types/lodash-es':
-        specifier: ^4.17.12
-        version: 4.17.12
-      '@types/node':
-        specifier: ^20.14.11
-        version: 20.14.11
-      '@types/prettier':
-        specifier: 2.6.2
-        version: 2.6.2
 
 packages:
 
@@ -2707,10 +2664,6 @@ packages:
     resolution: {integrity: sha1-WVDlCWB5MFWEXpVsQn/CsNcMUjk=, tarball: https://registry.npmmirror.com/@types/parse-json/download/@types/parse-json-4.0.2.tgz}
     dev: true
 
-  /@types/prettier@2.6.2:
-    resolution: {integrity: sha1-tt9PBPXaub7+LLdO0UYaAjHiPLc=, tarball: https://registry.npmmirror.com/@types/prettier/download/@types/prettier-2.6.2.tgz}
-    dev: true
-
   /@types/prop-types@15.7.12:
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
 
@@ -3045,7 +2998,7 @@ packages:
     dev: true
 
   /@vue/compiler-core@3.4.31:
-    resolution: {integrity: sha1-tRp28bMOm166BVMmTf8PFxrtt8Y=, tarball: https://registry.npmmirror.com/@vue/compiler-core/download/@vue/compiler-core-3.4.31.tgz}
+    resolution: {integrity: sha512-skOiodXWTV3DxfDhB4rOf3OGalpITLlgCeOwb+Y9GJpfQ8ErigdBUHomBzvG78JoVE8MJoQsb+qhZiHfKeNeEg==}
     dependencies:
       '@babel/parser': 7.24.7
       '@vue/shared': 3.4.31
@@ -3055,14 +3008,14 @@ packages:
     dev: false
 
   /@vue/compiler-dom@3.4.31:
-    resolution: {integrity: sha1-MJYcqEf11q0Y/6JiNsIZ9hsZX2s=, tarball: https://registry.npmmirror.com/@vue/compiler-dom/download/@vue/compiler-dom-3.4.31.tgz}
+    resolution: {integrity: sha512-wK424WMXsG1IGMyDGyLqB+TbmEBFM78hIsOJ9QwUVLGrcSk0ak6zYty7Pj8ftm7nEtdU/DGQxAXp0/lM/2cEpQ==}
     dependencies:
       '@vue/compiler-core': 3.4.31
       '@vue/shared': 3.4.31
     dev: false
 
   /@vue/compiler-sfc@3.4.31:
-    resolution: {integrity: sha1-zGv8zaF9+CaMxUQIQid/YWI8WR8=, tarball: https://registry.npmmirror.com/@vue/compiler-sfc/download/@vue/compiler-sfc-3.4.31.tgz}
+    resolution: {integrity: sha512-einJxqEw8IIJxzmnxmJBuK2usI+lJonl53foq+9etB2HAzlPjAS/wa7r0uUpXw5ByX3/0uswVSrjNb17vJm1kQ==}
     dependencies:
       '@babel/parser': 7.24.7
       '@vue/compiler-core': 3.4.31
@@ -3071,19 +3024,19 @@ packages:
       '@vue/shared': 3.4.31
       estree-walker: 2.0.2
       magic-string: 0.30.10
-      postcss: 8.4.39
+      postcss: 8.4.41
       source-map-js: 1.2.0
     dev: false
 
   /@vue/compiler-ssr@3.4.31:
-    resolution: {integrity: sha1-9i/+zfFbrLiD0AmXgM+aHjZUv8Q=, tarball: https://registry.npmmirror.com/@vue/compiler-ssr/download/@vue/compiler-ssr-3.4.31.tgz}
+    resolution: {integrity: sha512-RtefmITAje3fJ8FSg1gwgDhdKhZVntIVbwupdyZDSifZTRMiWxWehAOTCc8/KZDnBOcYQ4/9VWxsTbd3wT0hAA==}
     dependencies:
       '@vue/compiler-dom': 3.4.31
       '@vue/shared': 3.4.31
     dev: false
 
   /@vue/shared@3.4.31:
-    resolution: {integrity: sha1-r5mB9X3vLD8IDBS/IZMU/A3ICKA=, tarball: https://registry.npmmirror.com/@vue/shared/download/@vue/shared-3.4.31.tgz}
+    resolution: {integrity: sha512-Yp3wtJk//8cO4NItOPpi3QkLExAr/aLBGZMmTtW9WpdwBCJpRM6zj9WgWktXAl8IDIozwNMByT45JP3tO3ACWA==}
     dev: false
 
   /@webassemblyjs/ast@1.12.1:
@@ -3203,6 +3156,21 @@ packages:
   /@xtuc/long@4.2.2:
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
     dev: true
+
+  /@zhangleilaoge/vue-code-converter@0.0.10:
+    resolution: {integrity: sha512-vCX3MWBBkkj4H/vjacMuzZepUEqEkZVuocA0GiddkiJ7u6oh94o2pGFcrezaDx50Q/DAYww2RV0/G4xjpitkNQ==}
+    hasBin: true
+    dependencies:
+      '@vue/compiler-core': 3.4.31
+      '@vue/compiler-sfc': 3.4.31
+      chalk: 4.1.2
+      commander: 11.1.0
+      lodash-es: 4.17.21
+      prettier: 2.8.8
+      tslib: 2.6.3
+      typescript: 4.5.5
+      vue-template-compiler: 2.7.16
+    dev: false
 
   /JSONStream@1.3.5:
     resolution: {integrity: sha1-MgjB8I06TZkmGrZPkjArwV4RHKA=, tarball: https://registry.npmmirror.com/JSONStream/download/JSONStream-1.3.5.tgz}
@@ -4194,7 +4162,7 @@ packages:
     dev: false
 
   /commander@11.1.0:
-    resolution: {integrity: sha1-Yv3OdgBqaOXBqzMU3JLoAOuD2QY=, tarball: https://registry.npmmirror.com/commander/download/commander-11.1.0.tgz}
+    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
     engines: {node: '>=16'}
     dev: false
 
@@ -4591,7 +4559,7 @@ packages:
     dev: false
 
   /de-indent@1.0.2:
-    resolution: {integrity: sha1-sgOOhG3DO6pXlhKNCAS0VbjB4h0=, tarball: https://registry.npmmirror.com/de-indent/download/de-indent-1.0.2.tgz}
+    resolution: {integrity: sha512-e/1zu3xH5MQryN2zdVaF0OrdNLUbvWxzMbi+iNA6Bky7l1RoP8a2fIbRocyHclXt/arDrrR6lL3TqFD9pMQTsg==}
     dev: false
 
   /debounce-fn@4.0.0:
@@ -4896,7 +4864,7 @@ packages:
     dev: true
 
   /entities@4.5.0:
-    resolution: {integrity: sha1-XSaOpecRPsdMTQM7eepaNaSI+0g=, tarball: https://registry.npmmirror.com/entities/download/entities-4.5.0.tgz}
+    resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
     dev: false
 
@@ -6216,7 +6184,7 @@ packages:
     dev: false
 
   /he@1.2.0:
-    resolution: {integrity: sha1-hK5l+n6vsWX922FWauFLrwVmTw8=, tarball: https://registry.npmmirror.com/he/download/he-1.2.0.tgz}
+    resolution: {integrity: sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==}
     hasBin: true
     dev: false
 
@@ -9233,6 +9201,7 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.1
       source-map-js: 1.2.0
+    dev: true
 
   /postcss@8.4.41:
     resolution: {integrity: sha512-TesUflQ0WKZqAvg52PWL6kHgLKP6xB6heTOdoYM0Wt2UHyxNa4K25EZZMgKns3BH1RLVbZCREPpLY0rhnNoHVQ==}
@@ -9241,7 +9210,6 @@ packages:
       nanoid: 3.3.7
       picocolors: 1.0.1
       source-map-js: 1.2.0
-    dev: true
 
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -9249,7 +9217,7 @@ packages:
     dev: true
 
   /prettier@2.8.8:
-    resolution: {integrity: sha1-6MXX6YpDBf/j3i4fxKyhpxwosdo=, tarball: https://registry.npmmirror.com/prettier/download/prettier-2.8.8.tgz}
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: false
@@ -11851,7 +11819,7 @@ packages:
     dev: true
 
   /typescript@4.5.5:
-    resolution: {integrity: sha1-2MlTgy0okkqePTfHPXKchGxYlvM=, tarball: https://registry.npmmirror.com/typescript/download/typescript-4.5.5.tgz}
+    resolution: {integrity: sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: false
@@ -12181,7 +12149,7 @@ packages:
     dev: false
 
   /vue-template-compiler@2.7.16:
-    resolution: {integrity: sha1-yBstR3UyZMd6wDuZZqRmN0grsDs=, tarball: https://registry.npmmirror.com/vue-template-compiler/download/vue-template-compiler-2.7.16.tgz}
+    resolution: {integrity: sha512-AYbUWAJHLGGQM7+cNTELw+KsOG9nl2CnSv467WobS5Cv9uk3wFcnr1Etsz2sEIHEZvw1U+o9mRlEO6QbZvUPGQ==}
     dependencies:
       de-indent: 1.0.2
       he: 1.2.0
