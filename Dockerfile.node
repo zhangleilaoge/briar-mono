@@ -2,7 +2,7 @@ FROM node:16.14.0-alpine AS nodeimg
 WORKDIR /briar-mono
 COPY . .
 RUN npm install -g pnpm@8.15.9
-RUN pnpm install --production  
+RUN SKIP_HUSKY=true pnpm install --production  
 RUN pnpm run build
 RUN pnpm run cdn
 
