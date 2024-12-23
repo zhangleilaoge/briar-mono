@@ -1,4 +1,5 @@
 export * from './ai';
+export * from './blog';
 export * from './common';
 export * from './log';
 export * from './material';

@@ -80,6 +80,19 @@ export class UserDalService {
     )?.dataValues;
   }
 
+  @SafeReturn(SENSITIVE_FIELDS)
+  async getUsers(ids: number[]) {
+    return (
+      await this.userModel.findAll({
+        where: {
+          id: {
+            [Op.in]: ids,
+          },
+        },
+      })
+    ).map((user) => user.dataValues);
+  }
+
   async update(data: Partial<UserModel>) {
     const { email, mobile, username, id } = data;
 

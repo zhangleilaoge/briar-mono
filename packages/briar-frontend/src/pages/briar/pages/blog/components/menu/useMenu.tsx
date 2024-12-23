@@ -7,8 +7,8 @@ import { getRouterConfigByKey } from '@/pages/briar/utils/router';
 const useMenu = () => {
 	const { availablePage } = useContext(CommonContext);
 	const menus =
-		getRouterConfigByKey(MenuKeyEnum.Blog_1, ROUTER_CONFIG)?.children?.filter((item) =>
-			availablePage.includes(item.key)
+		getRouterConfigByKey(MenuKeyEnum.Blog_1, ROUTER_CONFIG)?.children?.filter(
+			(item) => availablePage.includes(item.key) && !item.hideInNav
 		) || [];
 
 	return {

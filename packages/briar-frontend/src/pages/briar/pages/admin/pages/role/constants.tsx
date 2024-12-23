@@ -1,9 +1,9 @@
 import { Button, TreeDataNode } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { IRoleDTO } from 'briar-shared';
-import { NavigateFunction } from 'react-router-dom';
 
 import { MenuKeyEnum, ROUTER_CONFIG } from '@/pages/briar/constants/router';
+import useNavigateTo from '@/pages/briar/hooks/biz/useNavigateTo';
 
 import { FieldType, ModelType } from './type';
 import { convertLabelsToText } from './utils';
@@ -18,7 +18,10 @@ export const MODEL_OPT_NAME = {
 	[ModelType.Create]: '创建'
 };
 
-export const getCols = (navigate: NavigateFunction, onStartEdit: (role: IRoleDTO) => void) => {
+export const getCols = (
+	navigate: ReturnType<typeof useNavigateTo>,
+	onStartEdit: (role: IRoleDTO) => void
+) => {
 	const cols: ColumnsType<IRoleDTO> = [
 		{
 			title: 'id',
@@ -46,9 +49,10 @@ export const getCols = (navigate: NavigateFunction, onStartEdit: (role: IRoleDTO
 						type="link"
 						className="p-0"
 						onClick={() => {
-							navigate(`/${MenuKeyEnum.Admin_1}/${MenuKeyEnum.UserList_3}`, {
-								state: {
-									roleId: data.id
+							navigate({
+								target: MenuKeyEnum.UserList_3,
+								query: {
+									roleId: String(data.id)
 								}
 							});
 						}}

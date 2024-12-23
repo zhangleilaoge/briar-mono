@@ -11,6 +11,8 @@ export class BlogModel extends Model<BlogModel> {
   @Column
   content: string;
 
-  @Column
+  @Column({
+    defaultValue: 0,
+  })
   views: number;
 }

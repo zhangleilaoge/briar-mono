@@ -5,9 +5,9 @@ import { SorterResult, TablePaginationConfig } from 'antd/es/table/interface';
 import { IPageInfo, IRoleDTO, ISortInfo, IUserInfoDTO } from 'briar-shared';
 import { omitBy } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import { getRoleList, getUserList, updateUser } from '@/pages/briar/api/user';
+import useQuery from '@/pages/briar/hooks/useQuery';
 import { convertAntdPaginator, convertAntdSortInfo } from '@/pages/briar/utils/antd';
 
 import Edit from './components/edit';
@@ -30,7 +30,6 @@ const Role = () => {
 	const [roleList, setRoleList] = useState<IRoleDTO[]>([]);
 	const [searchForm] = useForm();
 	const [editForm] = useForm();
-	const { state } = useLocation();
 	const [sortInfo, setSortInfo] = useState<ISortInfo>({
 		sortBy: '',
 		sortType: null
@@ -38,6 +37,7 @@ const Role = () => {
 	const { onSuccess, loading, send } = useRequest(getUserList, {
 		immediate: false
 	});
+	const query = useQuery();
 
 	onSuccess(({ data }) => {
 		const { items, paginator } = data;
@@ -63,10 +63,11 @@ const Role = () => {
 	}, [onStartEdit, roleList, sortInfo.sortBy, sortInfo.sortType]);
 
 	const defaultSearchFormValue = useMemo(() => {
+		const { roleId } = query;
 		return {
-			roles: state?.roleId ? [state.roleId] : []
+			roles: roleId ? [+roleId] : []
 		};
-	}, [state]);
+	}, [query]);
 
 	const search = useCallback(
 		(paginator?: IPageInfo) => {

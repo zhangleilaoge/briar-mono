@@ -1,16 +1,18 @@
 import { GithubOutlined, RightOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { useNavigate } from 'react-router-dom';
 
 import { MenuKeyEnum } from '@/pages/briar/constants/router';
+import useNavigateTo from '@/pages/briar/hooks/biz/useNavigateTo';
 
 import { VUE_CODE_CONVERTER_GITHUB_URL } from '../../constants';
 import s from './style.module.scss';
 
 const CompositionApiIntro = () => {
-	const navigate = useNavigate();
+	const navigate = useNavigateTo();
 	const start = () => {
-		navigate(`/${MenuKeyEnum.Tools_1}/${MenuKeyEnum.CompositionStyleConverter_3}`);
+		navigate({
+			target: MenuKeyEnum.CompositionStyleConverter_3
+		});
 	};
 
 	return (

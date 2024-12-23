@@ -5,7 +5,7 @@ import {
 	StarFilled,
 	StarOutlined
 } from '@ant-design/icons';
-import { Button, Checkbox, Dropdown, Input, InputRef, MenuProps, theme } from 'antd';
+import { Button, Checkbox, Dropdown, Input, InputRef, MenuProps, theme, Typography } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { IConversationDTO } from 'briar-shared';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -188,7 +188,16 @@ export const MenuItem = ({
 						/>
 					</ClickOutside>
 				) : (
-					<div className={s.ConversationTitle}>{conversationTitle}</div>
+					<div className={s.ConversationTitle}>
+						<Typography.Paragraph
+							ellipsis={{
+								rows: 1
+							}}
+							className="!mb-0"
+						>
+							{conversationTitle}
+						</Typography.Paragraph>
+					</div>
 				)}
 			</div>
 			<Dropdown

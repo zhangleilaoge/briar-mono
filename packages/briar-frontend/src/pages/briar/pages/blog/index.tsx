@@ -25,7 +25,7 @@ const Blog = () => {
 		<Layout>
 			<Layout className="mx-[120px] mt-[24px] flex flex-row gap-[24px]">
 				<Menu menus={menus} />
-				<Content className={cx('shrink-1 p-[24px]  bg-white rounded-[8px]')} ref={fullRef}>
+				<Content className={cx('shrink-1 bg-white rounded-[8px]')} ref={fullRef}>
 					<Suspense
 						fallback={
 							<div className={mainStyle.SuspenseSpin}>

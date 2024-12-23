@@ -1157,9 +1157,23 @@ video {
   z-index: 20;
 }
 
+.m-\[24px\] {
+  margin: 24px;
+}
+
 .mx-\[120px\] {
   margin-left: 120px;
   margin-right: 120px;
+}
+
+.mx-\[12px\] {
+  margin-left: 12px;
+  margin-right: 12px;
+}
+
+.mx-\[24px\] {
+  margin-left: 24px;
+  margin-right: 24px;
 }
 
 .mx-\[8px\] {
@@ -1167,14 +1181,23 @@ video {
   margin-right: 8px;
 }
 
+.my-\[24px\] {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
 .my-\[4px\] {
   margin-top: 4px;
   margin-bottom: 4px;
 }
 
-.my-\[12px\] {
-  margin-top: 12px;
-  margin-bottom: 12px;
+.my-\[8px\] {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.\!mb-0 {
+  margin-bottom: 0px !important;
 }
 
 .mb-0 {
@@ -1191,6 +1214,10 @@ video {
 
 .mb-\[20px\] {
   margin-bottom: 20px;
+}
+
+.mb-\[24px\] {
+  margin-bottom: 24px;
 }
 
 .mb-\[32px\] {
@@ -1229,8 +1256,8 @@ video {
   margin-top: 64px;
 }
 
-.mb-\[24px\] {
-  margin-bottom: 24px;
+.box-border {
+  box-sizing: border-box;
 }
 
 .block {
@@ -1437,6 +1464,10 @@ video {
   gap: 18px;
 }
 
+.gap-\[20px\] {
+  gap: 20px;
+}
+
 .gap-\[24px\] {
   gap: 24px;
 }
@@ -1504,10 +1535,6 @@ video {
   padding: 0px;
 }
 
-.p-\[24px\] {
-  padding: 24px;
-}
-
 .\!px-\[16px\] {
   padding-left: 16px !important;
   padding-right: 16px !important;
@@ -1516,16 +1543,6 @@ video {
 .\!py-\[8px\] {
   padding-top: 8px !important;
   padding-bottom: 8px !important;
-}
-
-.px-\[24px\] {
-  padding-left: 24px;
-  padding-right: 24px;
-}
-
-.py-\[12px\] {
-  padding-top: 12px;
-  padding-bottom: 12px;
 }
 
 .py-\[4px\] {
@@ -1544,6 +1561,11 @@ video {
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .text-\[12px\] {
@@ -1568,6 +1590,15 @@ video {
   color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
+.text-inherit {
+  color: inherit;
+}
+
+.text-neutral-500 {
+  --tw-text-opacity: 1;
+  color: rgb(115 115 115 / var(--tw-text-opacity));
+}
+
 .text-slate-400 {
   --tw-text-opacity: 1;
   color: rgb(148 163 184 / var(--tw-text-opacity));
@@ -1589,6 +1620,11 @@ video {
 .hover\:bg-gray-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+
+.hover\:text-selected-color:hover {
+  --tw-text-opacity: 1;
+  color: rgb(132 168 214 / var(--tw-text-opacity));
 }
 
 .group:hover .group-hover\:opacity-100 {

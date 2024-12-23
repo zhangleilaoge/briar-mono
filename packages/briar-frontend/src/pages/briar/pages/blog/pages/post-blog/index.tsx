@@ -1,11 +1,9 @@
-// import './styles.scss';
-
 import Editor from './components/Editor';
 const PostBlog = () => {
 	return (
-		// <div>
-		<Editor />
-		// </div>
+		<div className="mx-[12px] my-[24px]">
+			<Editor />
+		</div>
 	);
 };
 

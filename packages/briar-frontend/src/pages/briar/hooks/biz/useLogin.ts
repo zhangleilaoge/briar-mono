@@ -77,7 +77,7 @@ const useLogin = () => {
 
 	const headerRoutes = useMemo(() => {
 		return removeChildren(
-			ROUTER_CONFIG.filter((item) => availablePage.includes(item.key) && !item.hideInHeader)
+			ROUTER_CONFIG.filter((item) => availablePage.includes(item.key) && !item.hideInNav)
 		);
 	}, [availablePage]);
 

@@ -3,10 +3,10 @@ import { Button, Divider, Form, Input, message, Modal, Table, Tree } from 'antd'
 import { useForm } from 'antd/es/form/Form';
 import { IRoleDTO, IRolesWithUserCount } from 'briar-shared';
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { addRole, getRoleList, updateRole } from '@/pages/briar/api/user';
 import { ROUTER_CONFIG } from '@/pages/briar/constants/router';
+import useNavigateTo from '@/pages/briar/hooks/biz/useNavigateTo';
 import { errorNotify } from '@/pages/briar/utils/notify';
 import { getRouterConfigByKey } from '@/pages/briar/utils/router';
 
@@ -21,7 +21,7 @@ const Role = () => {
 	const { send, onSuccess, loading } = useRequest(getRoleList, {
 		immediate: true
 	});
-	const navigate = useNavigate();
+	const navigate = useNavigateTo();
 
 	onSuccess(({ data }) => {
 		setTableData(data);

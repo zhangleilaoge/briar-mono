@@ -26,7 +26,8 @@ const translation: Record<TranslationEnum, string> = {
 	Blog: '博客',
 	RecommendBlogPost: '推荐',
 	MyBlogPost: '我的博客',
-	PostBlog: '创作'
+	PostBlog: '创作',
+	BlogDetail: '博客详情'
 };
 
 export default translation;

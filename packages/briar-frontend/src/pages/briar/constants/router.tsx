@@ -37,6 +37,7 @@ export enum MenuKeyEnum {
 	RecommendBlogPost_2 = 'recommend-blog-post',
 	MyBlogPost_2 = 'my-blog-post',
 	PostBlog_2 = 'post-blog',
+	BlogDetail_2 = 'blog-detail',
 
 	CompositionStyleConverter_3 = 'composition-style-converter',
 	CompositionStyleIntro_3 = 'composition-style-intro',
@@ -68,6 +69,7 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.RecommendBlogPost_2]: t(TranslationEnum.RecommendBlogPost),
 	[MenuKeyEnum.MyBlogPost_2]: t(TranslationEnum.MyBlogPost),
 	[MenuKeyEnum.PostBlog_2]: t(TranslationEnum.PostBlog),
+	[MenuKeyEnum.BlogDetail_2]: t(TranslationEnum.BlogDetail),
 
 	[MenuKeyEnum.CompositionStyleConverter_3]: t(TranslationEnum.CompositionStyleConverter),
 	[MenuKeyEnum.CompositionStyleIntro_3]: t(TranslationEnum.CompositionApiIntro),
@@ -114,6 +116,12 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 				key: MenuKeyEnum.PostBlog_2,
 				label: MENU_KEY_NAMES[MenuKeyEnum.PostBlog_2],
 				component: lazy(() => import('../pages/blog/pages/post-blog'))
+			},
+			{
+				key: MenuKeyEnum.BlogDetail_2,
+				hideInNav: true,
+				label: MENU_KEY_NAMES[MenuKeyEnum.BlogDetail_2],
+				component: lazy(() => import('../pages/blog/pages/blog-detail'))
 			}
 		]
 	},
@@ -207,7 +215,7 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 		key: MenuKeyEnum.Admin_1,
 		label: MENU_KEY_NAMES[MenuKeyEnum.Admin_1],
 		component: lazy(() => import('../pages/admin')),
-		hideInHeader: true,
+		hideInNav: true,
 		children: [
 			{
 				key: MenuKeyEnum.User_2,
@@ -232,7 +240,7 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 		key: MenuKeyEnum.Personal_1,
 		label: MENU_KEY_NAMES[MenuKeyEnum.Personal_1],
 		component: lazy(() => import('../pages/personal')),
-		hideInHeader: true,
+		hideInNav: true,
 		children: [
 			{
 				key: MenuKeyEnum.Account_2,

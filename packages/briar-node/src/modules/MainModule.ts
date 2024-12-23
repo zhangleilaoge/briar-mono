@@ -9,6 +9,7 @@ import { AuthGuard } from '@/guards/auth';
 
 import { LogInterceptor } from '../interceptor/log';
 import { AiModule } from './AiModule';
+import { BlogModule } from './BlogModule';
 import { CommonModule } from './common/CommonModule';
 import { MaterialModule } from './MaterialModule';
 import { ShortUrlModule } from './ShortUrlModule';
@@ -27,6 +28,7 @@ import { VerifyModule } from './VerifyModule';
     UserModule,
     MaterialModule,
     VerifyModule,
+    BlogModule,
     /** 不要改变 ShortUrlModule 最末位的顺序 */
     ShortUrlModule,
   ],

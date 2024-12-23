@@ -5,6 +5,7 @@ import { IMenuRouterConfig } from '@/pages/briar/types/router';
 
 import NoAccess from '../components/NoAccess';
 import NotFoundRedirect from '../components/NotFound';
+import { MenuKeyEnum } from '../constants/router';
 
 export function getLevelPath(level: number) {
 	if (level < 1) return '';
@@ -50,7 +51,10 @@ export const findSuperiorRouterConfig = (
 	currentRouterKey: string,
 	routerConfig: IMenuRouterConfig[]
 ) => {
-	const findKey = (config: IMenuRouterConfig[], superiorKey?: string): string | undefined => {
+	const findKey = (
+		config: IMenuRouterConfig[],
+		superiorKey?: MenuKeyEnum
+	): MenuKeyEnum | undefined => {
 		for (let i = 0; i < config.length; i++) {
 			const conf = config[i];
 			if (conf.key === currentRouterKey) return superiorKey;

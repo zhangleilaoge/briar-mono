@@ -6,17 +6,18 @@ import {
 	UserOutlined
 } from '@ant-design/icons';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { Avatar, Dropdown, message, Modal } from 'antd';
+import { Dropdown, message, Modal } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
 import { useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 
 import { clientId } from '@/pages/briar/constants/user';
 import CommonContext from '@/pages/briar/context/common';
 
 import { TranslationEnum } from '../../constants/locales/common';
 import { MenuKeyEnum } from '../../constants/router';
+import useNavigateTo from '../../hooks/biz/useNavigateTo';
+import Avatar from '../avatar';
 import Login from './Login';
 import Register from './Register';
 import ResetPassword from './ResetPassword';
@@ -51,7 +52,7 @@ const Profile = () => {
 		| OperationEnum.ResetPassword
 		| OperationEnum.RetrievePassword
 	>(OperationEnum.Login);
-	const navigate = useNavigate();
+	const navigate = useNavigateTo();
 	// 重置密码用
 	const [checkedEmail, setCheckedEmail] = useState<string>('');
 	const [checkedCode, setCheckedCode] = useState<string>('');
@@ -77,7 +78,9 @@ const Profile = () => {
 				label: (
 					<a
 						onClick={async () => {
-							navigate('/' + MenuKeyEnum.Personal_1);
+							navigate({
+								target: MenuKeyEnum.Personal_1
+							});
 						}}
 					>
 						{t(TranslationEnum.PersonalHomepage)}
@@ -90,7 +93,9 @@ const Profile = () => {
 				label: (
 					<a
 						onClick={async () => {
-							navigate('/' + MenuKeyEnum.Admin_1);
+							navigate({
+								target: MenuKeyEnum.Admin_1
+							});
 						}}
 					>
 						{t(TranslationEnum.Admin)}
@@ -149,10 +154,6 @@ const Profile = () => {
 		].filter(Boolean) as ItemType[];
 	}, [AdminAccess, logout, navigate, personalAccess, t, userInfo?.isAuthenticated, userInfo?.name]);
 
-	const displayName = useMemo(() => {
-		return (userInfo.name || '')?.slice(0, 5);
-	}, [userInfo.name]);
-
 	const modelContent = useMemo(() => {
 		switch (modelType) {
 			case OperationEnum.Login:
@@ -202,13 +203,9 @@ const Profile = () => {
 	return (
 		<>
 			<Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
-				<Avatar
-					size={40}
-					src={userInfo.profileImg || ''}
-					icon={displayName || userInfo.profileImg ? null : <UserOutlined />}
-				>
-					{displayName}
-				</Avatar>
+				<div>
+					<Avatar user={userInfo}></Avatar>
+				</div>
 			</Dropdown>
 			<Modal
 				open={isModalOpen}

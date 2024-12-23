@@ -114,7 +114,7 @@ const useConversationList = () => {
 		});
 	}, [conversationList, currentConversationKey]);
 
-	const menuConfig = useMemo((): IMenuRouterConfig[] => {
+	const menuConfig = useMemo((): IMenuRouterConfig<ConversationEnum>[] => {
 		const normalizeConversationList = (during: [number, number]) => {
 			const [minAgo, maxAgo] = during;
 			const start = subDays(initTime, maxAgo).getTime();
@@ -170,7 +170,7 @@ const useConversationList = () => {
 				type: 'group',
 				children: duringPastMonthConversations
 			}
-		].filter((item) => item.children.length > 0);
+		].filter((item) => item.children.length > 0) as IMenuRouterConfig<ConversationEnum>[];
 	}, [conversationList, deleteConversation, updateConversation]);
 
 	useEffect(() => {

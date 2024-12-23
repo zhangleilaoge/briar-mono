@@ -84,3 +84,9 @@ export function downloadByDataUrl(dataUrl: string, fileName: string) {
 	link.click(); // 触发点击事件进行下载
 	document.body.removeChild(link); // 下载后移除链接
 }
+
+export function removeHtmlTags(html: string): string {
+	// 使用正则表达式匹配闭合的HTML标签
+	const cleanHtml = html.replace(/<\/?\w+[^>]*>/g, '');
+	return cleanHtml;
+}

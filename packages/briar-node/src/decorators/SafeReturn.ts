@@ -7,6 +7,16 @@ export function SafeReturn(sensitiveFields = []) {
       const result = await originalMethod.apply(this, args);
 
       // 处理返回结果，移除敏感属性
+      if (Array.isArray(result)) {
+        return result.map((item) => {
+          const sanitizedItem = { ...item };
+          sensitiveFields.forEach((field) => {
+            delete sanitizedItem[field];
+          });
+          return sanitizedItem;
+        });
+      }
+
       const sanitizedResult = { ...result };
       sensitiveFields.forEach((field) => {
         delete sanitizedResult[field];
