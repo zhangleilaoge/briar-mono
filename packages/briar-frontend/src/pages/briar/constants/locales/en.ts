@@ -27,7 +27,8 @@ const translation: Record<TranslationEnum, string> = {
 	RecommendBlogPost: 'Recommend',
 	MyBlogPost: 'My Blog post',
 	PostBlog: 'Create',
-	BlogDetail: 'Blog detail'
+	BlogDetail: 'Blog detail',
+	DecodeEncode: 'Decode/encode'
 };
 
 export default translation;

@@ -16,11 +16,20 @@ export class BlogDalService {
     return await this.blogModel.create(blog);
   }
 
-  async getBlog(blogId: number) {
-    return (await this.blogModel.findByPk(blogId)).dataValues;
+  async editBlog(blog: Pick<IBlogDTO, 'title' | 'content'>, id: number) {
+    return await this.blogModel.update(blog, { where: { id } });
   }
 
-  async getBlogs(pagination: IPageInfo, userId: number, id?: number) {
+  async getBlog(blogId: number) {
+    return (await this.blogModel.findOne({ where: { id: blogId } })).dataValues;
+  }
+
+  async getBlogs(
+    pagination: IPageInfo = {
+      page: 1,
+      pageSize: 1,
+    },
+  ) {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;
 
@@ -29,10 +38,7 @@ export class BlogDalService {
       offset: (page - 1) * pageSize,
       order: [['createdAt', 'DESC']], // 以创建时间降序排列
       where: {
-        [Op.and]: splitCondition({
-          id,
-          userId,
-        }),
+        [Op.and]: splitCondition({}),
       },
     });
 
@@ -44,5 +50,9 @@ export class BlogDalService {
         pageSize,
       },
     };
+  }
+
+  async deleteBlog(id: number) {
+    return await this.blogModel.destroy({ where: { id } });
   }
 }

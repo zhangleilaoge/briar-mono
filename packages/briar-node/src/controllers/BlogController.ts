@@ -16,14 +16,34 @@ export class BlogController {
     };
   }
 
+  @Post('/editBlog')
+  async editBlog(
+    @Body('blog') blog: Pick<IBlogDTO, 'title' | 'content'>,
+    @Body('id') id: number,
+  ) {
+    await this.blogService.checkBlogPermission(id);
+    await this.blogService.editBlog(blog, id);
+    return {
+      success: true,
+    };
+  }
+
   @Get('/getBlogs')
   async getBlogs(@QueryToObject() query: IGetBlogs) {
-    return await this.blogService.getBlogs(
-      query.pageInfo || {
-        page: 1,
-        pageSize: 1,
-      },
-      query.id,
-    );
+    return await this.blogService.getBlogs(query.pageInfo);
+  }
+
+  @Get('/getBlog')
+  async getBlog(@QueryToObject() query: { id: number }) {
+    return await this.blogService.getBlog(query.id);
+  }
+
+  @Post('/deleteBlog')
+  async deleteBlog(@Body('id') id: number) {
+    await this.blogService.checkBlogPermission(id);
+    await this.blogService.deleteBlog(id);
+    return {
+      success: true,
+    };
   }
 }

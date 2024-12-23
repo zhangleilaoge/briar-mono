@@ -2,42 +2,67 @@ import 'react-quill/dist/quill.snow.css';
 
 import { Button, Form, Input, message } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import ReactQuill from 'react-quill';
 
-import { createBlog } from '@/pages/briar/api/blog';
+import { createBlog, editBlog, getBlog } from '@/pages/briar/api/blog';
 import { MenuKeyEnum } from '@/pages/briar/constants/router';
 import useNavigateTo from '@/pages/briar/hooks/biz/useNavigateTo';
+import useQuery from '@/pages/briar/hooks/useQuery';
+import { errorNotify } from '@/pages/briar/utils/notify';
 
 export type FieldType = {
 	title: string;
 	content: string;
 };
 
-enum Scene {
-	create = 'create',
-	update = 'update'
-}
-
 function Editor() {
 	const [form] = useForm();
-	const scene = Scene.create;
-	const submitTitle = scene === Scene.create ? '创建' : '更新';
+	const query = useQuery();
+
 	const navigate = useNavigateTo();
+
+	const submitTitle = useMemo(() => {
+		return query?.id ? '更新' : '创建';
+	}, [query?.id]);
 
 	const submit = useCallback(
 		(v: FieldType) => {
-			createBlog({
-				blog: v
-			}).then(() => {
-				message.success('创建成功');
-				navigate({
-					target: MenuKeyEnum.Blog_1
+			if (query?.id) {
+				editBlog({
+					blog: v,
+					id: +query?.id
+				})
+					.then(() => {
+						message.success('编辑成功');
+						navigate({
+							target: MenuKeyEnum.Blog_1
+						});
+					})
+					.catch((e) => {
+						errorNotify(e);
+					});
+			} else {
+				createBlog({
+					blog: v
+				}).then(() => {
+					message.success('创建成功');
+					navigate({
+						target: MenuKeyEnum.Blog_1
+					});
 				});
-			});
+			}
 		},
-		[navigate]
+		[navigate, query?.id]
 	);
+
+	useEffect(() => {
+		if (!query?.id) return;
+		getBlog({ id: +query?.id }).then((res) => {
+			form.setFieldValue('title', res.title);
+			form.setFieldValue('content', res.content);
+		});
+	}, [form, query?.id]);
 
 	const initValues = useMemo(() => {
 		return {

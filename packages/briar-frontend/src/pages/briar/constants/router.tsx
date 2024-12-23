@@ -1,5 +1,5 @@
 import {
-	BulbOutlined,
+	// BulbOutlined,
 	CarOutlined,
 	CoffeeOutlined,
 	ExperimentOutlined,
@@ -48,7 +48,8 @@ export enum MenuKeyEnum {
 	UserList_3 = 'user-list',
 	Calculator_3 = 'calculator',
 	JsonFormatter_3 = 'json-formatter',
-	compressImg_3 = 'compress-img'
+	compressImg_3 = 'compress-img',
+	DecodeEncode_3 = 'decode-encode'
 }
 
 /** @description 菜单名称，value 请勿使用 kebab case */
@@ -80,7 +81,8 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.UserList_3]: t(TranslationEnum.UserList),
 	[MenuKeyEnum.Calculator_3]: t(TranslationEnum.Calculator),
 	[MenuKeyEnum.JsonFormatter_3]: t(TranslationEnum.JsonFormatter),
-	[MenuKeyEnum.compressImg_3]: t(TranslationEnum.compressImg)
+	[MenuKeyEnum.compressImg_3]: t(TranslationEnum.compressImg),
+	[MenuKeyEnum.DecodeEncode_3]: t(TranslationEnum.DecodeEncode)
 };
 
 export const DEFAULT_MENU_KEY = {
@@ -105,12 +107,13 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 				label: MENU_KEY_NAMES[MenuKeyEnum.RecommendBlogPost_2],
 				component: lazy(() => import('../pages/blog/pages/recommend-blog-post'))
 			},
-			{
-				icon: <BulbOutlined />,
-				key: MenuKeyEnum.MyBlogPost_2,
-				label: MENU_KEY_NAMES[MenuKeyEnum.MyBlogPost_2],
-				component: lazy(() => import('../pages/blog/pages/my-blog-post'))
-			},
+			// 没做完暂时给隐藏了
+			// {
+			// 	icon: <BulbOutlined />,
+			// 	key: MenuKeyEnum.MyBlogPost_2,
+			// 	label: MENU_KEY_NAMES[MenuKeyEnum.MyBlogPost_2],
+			// 	component: lazy(() => import('../pages/blog/pages/my-blog-post'))
+			// },
 			{
 				icon: <CoffeeOutlined />,
 				key: MenuKeyEnum.PostBlog_2,
@@ -194,6 +197,11 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 						key: MenuKeyEnum.compressImg_3,
 						label: MENU_KEY_NAMES[MenuKeyEnum.compressImg_3],
 						component: lazy(() => import('../pages/tools/pages/compress-img'))
+					},
+					{
+						key: MenuKeyEnum.DecodeEncode_3,
+						label: MENU_KEY_NAMES[MenuKeyEnum.DecodeEncode_3],
+						component: lazy(() => import('../pages/tools/pages/decode-encode'))
 					}
 				]
 			},

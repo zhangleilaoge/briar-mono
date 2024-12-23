@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { IBlogDTO, IPageInfo } from 'briar-shared';
 
 import { ContextService } from './common/ContextService';
@@ -22,16 +22,35 @@ export class BlogService {
     });
   }
 
-  async getBlog(blogId: number) {
-    return this.blogDalService.getBlog(blogId);
+  async editBlog(blog: Pick<IBlogDTO, 'title' | 'content'>, id: number) {
+    return this.blogDalService.editBlog(blog, id);
   }
 
-  async getBlogs(pagination: IPageInfo, id?: number) {
-    const data = await this.blogDalService.getBlogs(
-      pagination,
-      this.contextService.get().userId,
-      id,
-    );
+  async checkBlogPermission(blogId: number) {
+    const blog = await this.blogDalService.getBlog(blogId);
+
+    if (blog.userId !== this.contextService.get().userId) {
+      throw new ForbiddenException('你没有权限编辑该博文');
+    }
+
+    return true;
+  }
+
+  async getBlog(blogId: number) {
+    const data = await this.blogDalService.getBlog(blogId);
+
+    const authorId = data.userId;
+
+    const author = await this.userDalService.getUser({ userId: authorId });
+
+    return {
+      ...data,
+      author,
+    };
+  }
+
+  async getBlogs(pagination: IPageInfo) {
+    const data = await this.blogDalService.getBlogs(pagination);
 
     const AuthorIds = data.items.map((item) => item.userId);
 
@@ -48,5 +67,9 @@ export class BlogService {
       ...data,
       items: blogs,
     };
+  }
+
+  async deleteBlog(blogId: number) {
+    return this.blogDalService.deleteBlog(blogId);
   }
 }
