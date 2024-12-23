@@ -1,16 +1,19 @@
-FROM node:16-alpine AS build
+FROM node:16.14.0-alpine AS nodeimg
 WORKDIR /briar-mono
 COPY . .
-
 RUN npm install -g pnpm@8.15.9
-RUN pnpm install
+RUN pnpm install --production  
 RUN pnpm run build
 RUN pnpm run cdn
-# 清理 pnpm 缓存
-RUN pnpm store prune
 
-FROM node:16-alpine
+FROM node:16.14.0-alpine
 WORKDIR /briar-mono
-COPY --from=build /briar-mono/packages/briar-frontend/dist /briar-mono/packages/briar-frontend/dist
+COPY --from=nodeimg /briar-mono/packages/briar-node /briar-mono/packages/briar-node
+COPY --from=nodeimg /briar-mono/node_modules /briar-mono/node_modules
 EXPOSE 8922
 CMD ["pnpm", "run", "start"]
+
+
+
+
+
