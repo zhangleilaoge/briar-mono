@@ -16,7 +16,6 @@ briar-mono
 │ ├── briar-frontend // briar 前端仓库
 │ ├── briar-node // briar 服务端仓库
 │ ├── briar-shared // briar 公用类型、方法
-│ └── vue-code-converter // vue2 代码转换工具
 ├── scripts
 ```
 
