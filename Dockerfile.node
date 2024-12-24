@@ -9,9 +9,8 @@ RUN find ./ -name "node_modules" -type d -prune -exec rm -rf '{}' +
 
 FROM node:16.14.0-alpine
 WORKDIR /briar-mono/packages/briar-node
-RUN npm install -g pnpm@8.15.9
 COPY --from=nodeimg /briar-mono/packages/briar-node /briar-mono/packages/briar-node
-RUN SKIP_HUSKY=true pnpm install --production 
+RUN SKIP_HUSKY=true npm install --production 
 EXPOSE 8922
 CMD ["pnpm", "run", "start"]
 
