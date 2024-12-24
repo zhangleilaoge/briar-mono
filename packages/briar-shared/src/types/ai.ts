@@ -9,7 +9,7 @@ export enum StardewValleyGirl {
 	Robin = 'Robin'
 }
 
-export enum RoleEnum {
+export enum ChatRoleEnum {
 	System = 'system',
 	User = 'user',
 	Assistant = 'assistant'
@@ -23,7 +23,7 @@ export enum ModelEnum {
 }
 
 export type IMessageDTO = IModel<{
-	role: RoleEnum;
+	role: ChatRoleEnum;
 	content: string;
 	conversationId: number;
 	model: ModelEnum;

@@ -1,4 +1,4 @@
-import { ModelEnum, RoleEnum } from 'briar-shared';
+import { ChatRoleEnum, ModelEnum } from 'briar-shared';
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
 @Table({ tableName: 'messages' })
@@ -7,7 +7,7 @@ export class MessageModel extends Model<MessageModel> {
     type: DataType.STRING,
     allowNull: false,
   })
-  role: RoleEnum;
+  role: ChatRoleEnum;
 
   @Column({
     type: DataType.STRING,

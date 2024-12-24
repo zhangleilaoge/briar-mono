@@ -90,3 +90,9 @@ export function removeHtmlTags(html: string): string {
 	const cleanHtml = html.replace(/<\/?\w+[^>]*>/g, '');
 	return cleanHtml;
 }
+
+export const setGlobal = (key: string, value: any) => {
+	window._global = window._global || {};
+
+	window._global[key] = value;
+};

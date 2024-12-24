@@ -5,6 +5,7 @@ declare module '*.module.scss' {
 
 declare interface Window {
 	_AMapSecurityConfig: any;
+	_global: Record<string, any>;
 }
 
 declare module 'prismjs';

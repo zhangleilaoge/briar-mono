@@ -1,7 +1,8 @@
 import 'dotenv/config';
 
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { IBlogDTO, IPageInfo } from 'briar-shared';
+import { IBlogDTO, IPageInfo, RoleEnum } from 'briar-shared';
+import { intersection } from 'lodash';
 
 import { ContextService } from './common/ContextService';
 import { BlogDalService } from './dal/BlogDalService';
@@ -29,7 +30,11 @@ export class BlogService {
   async checkBlogPermission(blogId: number) {
     const blog = await this.blogDalService.getBlog(blogId);
 
-    if (blog.userId !== this.contextService.get().userId) {
+    if (
+      blog.userId !== this.contextService.get().userId &&
+      intersection(this.contextService.get().roles, [RoleEnum.Admin]).length ===
+        0
+    ) {
       throw new ForbiddenException('你没有权限编辑该博文');
     }
 

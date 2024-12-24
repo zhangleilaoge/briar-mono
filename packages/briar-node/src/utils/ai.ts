@@ -1,4 +1,4 @@
-import { IMessageDTO, RoleEnum } from 'briar-shared';
+import { ChatRoleEnum, IMessageDTO } from 'briar-shared';
 import { encode } from 'gpt-tokenizer';
 
 export const getLimitedMessages = (
@@ -23,7 +23,7 @@ export const getLimitedMessages = (
     const keepImage = index === result.length - 1;
     let content = msg.content;
     // 历史会话不需要保留图片，不然会占用太多token
-    if (msg.imgList?.[0] && msg.role === RoleEnum.User && keepImage) {
+    if (msg.imgList?.[0] && msg.role === ChatRoleEnum.User && keepImage) {
       content = [
         {
           type: 'text',

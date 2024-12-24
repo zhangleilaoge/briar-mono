@@ -6,6 +6,13 @@ export enum AbilityEnum {
 	CreateImg = 2
 }
 
+export enum RoleEnum {
+	Admin = 1,
+	Manager = 2,
+	Traveler = 3,
+	Registered = 4
+}
+
 export enum CycleEnum {
 	day = 1,
 	week = 7,

@@ -1,11 +1,10 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { IPageInfo, IRoleDTO, ISortInfo } from 'briar-shared';
+import { IPageInfo, IRoleDTO, ISortInfo, RoleEnum } from 'briar-shared';
 import { omit } from 'lodash';
 import { Op, Order, QueryTypes } from 'sequelize';
 import { Sequelize } from 'sequelize-typescript';
 
-import { RoleEnum } from '@/constants/user';
 import { SafeReturn } from '@/decorators/SafeReturn';
 import { RolesModel, UserModel } from '@/model/UserModel';
 import { getOrderList } from '@/utils/common';

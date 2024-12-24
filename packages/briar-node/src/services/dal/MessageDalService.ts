@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { ModelEnum, RoleEnum } from 'briar-shared';
+import { ChatRoleEnum, ModelEnum } from 'briar-shared';
 import { safeJSON } from 'openai/core';
 import { Op } from 'sequelize';
 
@@ -21,7 +21,7 @@ export class MessageDalService {
     imgList,
   }: {
     content: string;
-    role: RoleEnum;
+    role: ChatRoleEnum;
     conversationId: number;
     model: ModelEnum;
     imgList: string[];

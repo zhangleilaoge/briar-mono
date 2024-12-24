@@ -9,12 +9,12 @@ import {
 } from '@nestjs/common';
 import {
   AbilityEnum,
+  ChatRoleEnum,
   IChatRequestParams,
   IConversationDTO,
   IGetMessagesParams,
   LogModuleEnum,
   ModelEnum,
-  RoleEnum,
 } from 'briar-shared';
 import { ICreateImgResponse } from 'briar-shared';
 
@@ -46,7 +46,7 @@ export class AppController {
         ...messageArr,
         {
           content: query,
-          role: RoleEnum.User,
+          role: ChatRoleEnum.User,
           conversationId,
           model,
           imgList,
@@ -114,7 +114,7 @@ export class AppController {
     @Body('content') content: string,
     @Body('model') model: ModelEnum = ModelEnum.Gpt4oMini,
     @Body('conversationId') conversationId: number,
-    @Body('role') role = RoleEnum.User,
+    @Body('role') role = ChatRoleEnum.User,
     @Body('imgList') imgList: string[] = [],
   ) {
     return this.aiService.createMessage({

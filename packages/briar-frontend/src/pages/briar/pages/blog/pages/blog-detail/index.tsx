@@ -1,5 +1,5 @@
 import { Button } from 'antd';
-import { IGetBlogsResponse } from 'briar-shared';
+import { IGetBlogsResponse, RoleEnum } from 'briar-shared';
 import cx from 'classnames';
 import { format } from 'date-fns';
 import { useContext, useEffect, useMemo, useState } from 'react';
@@ -30,8 +30,8 @@ const MyBlogPost = () => {
 	}, [id]);
 
 	const showEdit = useMemo(() => {
-		return userInfo?.id === detail?.userId;
-	}, [detail?.userId, userInfo?.id]);
+		return userInfo?.id === detail?.userId || userInfo?.roles?.includes(RoleEnum.Admin);
+	}, [detail, userInfo]);
 
 	if (!detail) {
 		return null;

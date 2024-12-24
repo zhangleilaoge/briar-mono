@@ -1,6 +1,6 @@
 import { useRequest, useSSE } from 'alova/client';
 import { Button } from 'antd';
-import { RoleEnum } from 'briar-shared';
+import { ChatRoleEnum } from 'briar-shared';
 import cx from 'classnames';
 import { FC, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -76,7 +76,7 @@ const Conversation: FC = () => {
 		if (!currentConversation) return;
 
 		assistantAnswerRef.current = `${assistantAnswerRef.current}${data}`;
-		const isAssistantEnd = messageArr[messageArr.length - 1].role === RoleEnum.Assistant;
+		const isAssistantEnd = messageArr[messageArr.length - 1].role === ChatRoleEnum.Assistant;
 		if (isAssistantEnd) {
 			setMessageArr(
 				messageArr.map((message, index) => {
@@ -136,14 +136,14 @@ const Conversation: FC = () => {
 
 		const userMsg = await createMessage({
 			content: inputValue,
-			role: RoleEnum.User,
+			role: ChatRoleEnum.User,
 			model: selectOption.value,
 			conversationId: conversation.id,
 			imgList: imgList
 		});
 		const assistantMsg = await createMessage({
 			content: assistantAnswerRef.current,
-			role: RoleEnum.Assistant,
+			role: ChatRoleEnum.Assistant,
 			model: selectOption.value,
 			conversationId: conversation.id
 		});
@@ -188,7 +188,7 @@ const Conversation: FC = () => {
 			const content = assistantAnswerRef.current;
 			assistantAnswerRef.current = '';
 
-			if (messageArr.length && messageArr[messageArr.length - 1].role === RoleEnum.Assistant) {
+			if (messageArr.length && messageArr[messageArr.length - 1].role === ChatRoleEnum.Assistant) {
 				updateMsg({
 					content,
 					id: messageArr[messageArr.length - 1].id

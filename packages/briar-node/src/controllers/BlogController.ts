@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { IBlogDTO, IGetBlogs } from 'briar-shared';
 
 import { QueryToObject } from '@/decorators/Query2Obj';
+import { RoleGuard } from '@/guards/role';
 import { BlogService } from '@/services/BlogService';
 
 @Controller('api/blog')
@@ -17,6 +18,7 @@ export class BlogController {
   }
 
   @Post('/editBlog')
+  @UseGuards(RoleGuard)
   async editBlog(
     @Body('blog') blog: Pick<IBlogDTO, 'title' | 'content'>,
     @Body('id') id: number,
@@ -39,6 +41,7 @@ export class BlogController {
   }
 
   @Post('/deleteBlog')
+  @UseGuards(RoleGuard)
   async deleteBlog(@Body('id') id: number) {
     await this.blogService.checkBlogPermission(id);
     await this.blogService.deleteBlog(id);

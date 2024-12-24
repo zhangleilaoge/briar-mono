@@ -50,6 +50,7 @@ const useLogin = () => {
 		const accessPages = getAvailablePages(ROUTER_CONFIG, availablePages);
 		setAvailablePage(accessPages);
 		setUserInfo(userInfo);
+
 		hideLoading();
 	};
 

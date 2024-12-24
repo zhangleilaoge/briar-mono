@@ -1,6 +1,6 @@
 import { CheckCircleFilled, CopyOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Avatar, Button, Input, message, Popconfirm, Skeleton, Tooltip } from 'antd';
-import { RoleEnum, StardewValleyGirl } from 'briar-shared';
+import { ChatRoleEnum, StardewValleyGirl } from 'briar-shared';
 import cx from 'classnames';
 import { format } from 'date-fns';
 import { FC, useEffect, useMemo, useState } from 'react';
@@ -17,7 +17,7 @@ import { conversationContainer } from '../../container/conversationContainer';
 import s from './style.module.scss';
 interface IMessageProps {
 	content: string;
-	role: RoleEnum;
+	role: ChatRoleEnum;
 	date: number;
 	imgList?: string[];
 	editPrompt?: string;
@@ -127,7 +127,7 @@ const Img = ({ url }: { url: string }) => {
 };
 
 const Message: FC<IMessageProps> = ({ content, role, date, imgList }) => {
-	const isUser = role === RoleEnum.User;
+	const isUser = role === ChatRoleEnum.User;
 
 	// 复制代码功能
 	useEffect(() => {

@@ -2,11 +2,11 @@ import 'dotenv/config';
 
 import { Injectable } from '@nestjs/common';
 import {
+  ChatRoleEnum,
   IConversationDTO,
   IMessageDTO,
   LogModuleEnum,
   ModelEnum,
-  RoleEnum,
   STARDEW_VALLEY_GIRL_DESC,
   StardewValleyGirl,
 } from 'briar-shared';
@@ -78,7 +78,7 @@ export class AiService {
         {
           messages: [
             {
-              role: RoleEnum.System,
+              role: ChatRoleEnum.System,
               content: conversation.prompt || 'You are a helpful assistant.',
             },
             ...getLimitedMessages(params.messages),
@@ -189,7 +189,7 @@ export class AiService {
     content: string;
     model: ModelEnum;
     conversationId: number;
-    role: RoleEnum;
+    role: ChatRoleEnum;
     imgList: string[];
   }) {
     const message = await this.messageDalService.create({

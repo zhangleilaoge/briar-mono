@@ -11,12 +11,12 @@ import {
 import {
   IGetUserListParams,
   IUserAccess,
+  RoleEnum,
   VerifyScene,
   VerifySceneSubject,
 } from 'briar-shared';
 
 import { EmailTemplate } from '@/constants/email';
-import { RoleEnum } from '@/constants/user';
 import { Public } from '@/decorators/Public';
 import { QueryToObject } from '@/decorators/Query2Obj';
 import { Role } from '@/decorators/Role';
@@ -170,7 +170,6 @@ export class UserController {
     @Body('desc') desc: string,
     @Body('menuKeys') menuKeys: string[],
   ) {
-    // 只有超管能调用 todo
     const result = await this.userService.createRole({ name, desc, menuKeys });
 
     return {
@@ -243,7 +242,6 @@ export class UserController {
 
   @Get('getRoleList')
   async getRoleList() {
-    // 只有超管能调用 todo
     const data = await this.userService.getRoleList();
 
     return data;
@@ -252,7 +250,6 @@ export class UserController {
   @Get('getUserList')
   async getUserList(@QueryToObject() params: IGetUserListParams) {
     const { keyword, roles, page, pageSize, sortBy, sortType } = params;
-    // 只有超管能调用 todo
     const data = await this.userService.getUserList({
       pagination: {
         page,

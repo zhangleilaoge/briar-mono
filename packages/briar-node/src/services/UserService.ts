@@ -8,10 +8,9 @@ import {
   ISortInfo,
   IUserInfoDTO,
   MOBILE_REG,
+  RoleEnum,
 } from 'briar-shared';
 import { Op } from 'sequelize';
-
-import { RoleEnum } from '@/constants/user';
 
 import { ContextService } from './common/ContextService';
 import { UserDalService } from './dal/UserDalService';

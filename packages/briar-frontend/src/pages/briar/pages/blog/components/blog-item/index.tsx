@@ -1,6 +1,6 @@
 import { DeleteFilled, EditFilled, EllipsisOutlined } from '@ant-design/icons';
 import { Button, Divider, Dropdown, List, message, Typography } from 'antd';
-import { IGetBlogsResponse } from 'briar-shared';
+import { IGetBlogsResponse, RoleEnum } from 'briar-shared';
 import { format } from 'date-fns';
 import { useCallback, useContext, useMemo, useState } from 'react';
 
@@ -9,6 +9,7 @@ import { MenuKeyEnum } from '@/pages/briar/constants/router';
 import CommonContext from '@/pages/briar/context/common';
 import useNavigateTo from '@/pages/briar/hooks/biz/useNavigateTo';
 import { removeHtmlTags } from '@/pages/briar/utils/document';
+import { errorNotify } from '@/pages/briar/utils/notify';
 
 import User from '../user';
 
@@ -41,7 +42,7 @@ const BlogItem = (props: IBlogItem) => {
 	}, [navigate, props?.data?.id]);
 
 	const operation = useMemo(() => {
-		const showOperation = userInfo?.id === userId;
+		const showOperation = userInfo?.id === userId || userInfo?.roles?.includes(RoleEnum.Admin);
 		if (!showOperation) return null;
 
 		const items = [
@@ -72,10 +73,14 @@ const BlogItem = (props: IBlogItem) => {
 						onClick={(e) => {
 							e.stopPropagation();
 							setDropdownOpen(false);
-							deleteBlog({ id: props?.data?.id }).then(() => {
-								message.success('删除成功');
-								refresh();
-							});
+							deleteBlog({ id: props?.data?.id })
+								.then(() => {
+									message.success('删除成功');
+									refresh();
+								})
+								.catch((e) => {
+									errorNotify(e);
+								});
 						}}
 						className="text-red-500"
 					>
