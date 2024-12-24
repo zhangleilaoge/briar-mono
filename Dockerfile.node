@@ -2,14 +2,14 @@ FROM node:16.14.0-alpine AS nodeimg
 WORKDIR /briar-mono
 COPY . .
 RUN npm install -g pnpm@8.15.9
-RUN SKIP_HUSKY=true pnpm install --production  
+RUN pnpm install
 RUN pnpm run build
 RUN pnpm run cdn
 
 FROM node:16.14.0-alpine
-WORKDIR /briar-mono
+WORKDIR /briar-mono/packages/briar-node
 COPY --from=nodeimg /briar-mono/packages/briar-node /briar-mono/packages/briar-node
-COPY --from=nodeimg /briar-mono/node_modules /briar-mono/node_modules
+RUN SKIP_HUSKY=true pnpm install --production 
 EXPOSE 8922
 CMD ["pnpm", "run", "start"]
 
