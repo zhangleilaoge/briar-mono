@@ -37,7 +37,8 @@ const BlogItem = (props: IBlogItem) => {
 			target: MenuKeyEnum.BlogDetail_2,
 			query: {
 				id: String(props?.data?.id)
-			}
+			},
+			newPage: true
 		});
 	}, [navigate, props?.data?.id]);
 

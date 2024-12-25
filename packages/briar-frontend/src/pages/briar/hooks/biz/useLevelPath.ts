@@ -1,3 +1,4 @@
+import { BRIAR_BASENAME } from 'briar-shared';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -23,7 +24,7 @@ const useLevelPath = (level = 1) => {
 			.find((history) => history.indexOf(`/${key}/`) !== -1);
 
 		if (historyHref) {
-			navigate(historyHref.split('/briar')[1]);
+			navigate(historyHref.split(BRIAR_BASENAME)[1]);
 			return;
 		}
 

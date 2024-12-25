@@ -1,3 +1,4 @@
+import { BRIAR_BASENAME } from 'briar-shared';
 import { NavigateOptions, useNavigate as useReactNavigate } from 'react-router-dom';
 
 import { MenuKeyEnum, ROUTER_CONFIG } from '../../constants/router';
@@ -9,11 +10,13 @@ const useNavigateTo = () => {
 	const navigateTo = ({
 		target,
 		options,
-		query
+		query,
+		newPage
 	}: {
 		target?: MenuKeyEnum;
 		options?: NavigateOptions;
 		query?: Record<string, string>;
+		newPage?: boolean;
 	}) => {
 		if (!target) {
 			navigate(`/`, options);
@@ -38,10 +41,14 @@ const useNavigateTo = () => {
 				break;
 			}
 		}
-		navigate(
-			`/${paths.join('/')}${query ? `?${new URLSearchParams(query).toString()}` : ''}`,
-			options
-		);
+
+		const url = `/${paths.join('/')}${query ? `?${new URLSearchParams(query).toString()}` : ''}`;
+
+		if (newPage) {
+			window.open(BRIAR_BASENAME + url, '_blank');
+		} else {
+			navigate(url, options);
+		}
 	};
 
 	return navigateTo;

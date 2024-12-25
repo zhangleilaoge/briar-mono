@@ -22,6 +22,7 @@ export class StaticProxyMiddleware implements NestMiddleware {
 
       try {
         // 使用 axios 获取远程 HTML 文件内容
+        // ps 不要再尝试去做 sessionId 方案了，就用纯 jwt 方案
         const response = await axios.get(filePath);
         const htmlContent = response.data;
 

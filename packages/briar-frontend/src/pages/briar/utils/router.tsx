@@ -1,4 +1,4 @@
-import { UrlEnum } from 'briar-shared';
+import { BRIAR_BASENAME, UrlEnum } from 'briar-shared';
 import { Navigate, Route } from 'react-router-dom';
 
 import { IMenuRouterConfig } from '@/pages/briar/types/router';
@@ -10,7 +10,7 @@ import { MenuKeyEnum } from '../constants/router';
 export function getLevelPath(level: number) {
 	if (level < 1) return '';
 
-	const path = window.location.pathname.replace('/briar', ''); // 获取路径部分
+	const path = window.location.pathname.replace(BRIAR_BASENAME, ''); // 获取路径部分
 	const pathParts = path.split('/').filter((part) => part !== ''); // 分割路径并过滤掉空字符串
 
 	return pathParts.length >= level - 1 ? `${pathParts[level - 1]}` : ''; // 返回一级路径或根路径

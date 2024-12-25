@@ -1,6 +1,7 @@
 import 'dotenv/config';
 
 import react from '@vitejs/plugin-react-swc';
+import { BRIAR_BASENAME } from 'briar-shared';
 import externalGlobals from 'rollup-plugin-external-globals';
 // import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
@@ -65,7 +66,7 @@ const config = ({ mode }: { mode: string }) => {
 			// @ts-ignore
 			mpa.default({
 				open: false,
-				defaultEntries: './src/pages/briar/index.html'
+				defaultEntries: `./src/pages${BRIAR_BASENAME}/index.html`
 			})
 		],
 		build: {

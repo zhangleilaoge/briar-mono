@@ -64,7 +64,7 @@ const MyBlogPost = () => {
 			</div>
 			<div
 				dangerouslySetInnerHTML={{ __html: detail.content }}
-				className={cx('prose', s['blog-detail'])}
+				className={cx('prose', s['blog-detail'], 'max-w-none')}
 			></div>
 		</div>
 	);
