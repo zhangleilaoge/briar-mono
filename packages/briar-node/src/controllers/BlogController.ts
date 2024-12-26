@@ -32,11 +32,14 @@ export class BlogController {
 
   @Get('/getBlogs')
   async getBlogs(@QueryToObject() query: IGetBlogs) {
-    return await this.blogService.getBlogs(query.pageInfo);
+    return await this.blogService.getBlogs(query.pageInfo, query.favorite);
   }
 
   @Get('/getBlog')
-  async getBlog(@QueryToObject() query: { id: number }) {
+  async getBlog(@QueryToObject() query: { id: number; view?: boolean }) {
+    if (query.view) {
+      return await this.blogService.incrementViews(query.id);
+    }
     return await this.blogService.getBlog(query.id);
   }
 
@@ -45,6 +48,14 @@ export class BlogController {
   async deleteBlog(@Body('id') id: number) {
     await this.blogService.checkBlogPermission(id);
     await this.blogService.deleteBlog(id);
+    return {
+      success: true,
+    };
+  }
+
+  @Post('/favorite')
+  async favorite(@Body('id') id: number, @Body('favorite') favorite: boolean) {
+    await this.blogService.favorite(id, favorite);
     return {
       success: true,
     };

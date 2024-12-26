@@ -13,6 +13,7 @@ export interface IBlogDTO {
 export interface IGetBlogs {
 	pageInfo?: IPageInfo;
 	id?: number;
+	favorite?: boolean;
 }
 
 // ====================== response below ========================

@@ -26,5 +26,6 @@ export enum TranslationEnum {
 	MyBlogPost = 'MyBlogPost',
 	PostBlog = 'PostBlog',
 	BlogDetail = 'BlogDetail',
-	DecodeEncode = 'DecodeEncode'
+	DecodeEncode = 'DecodeEncode',
+	FavoriteBlog = 'FavoriteBlog'
 }

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import * as dotenv from 'dotenv';
 
-import { BlogModel } from '@/model/BlogModel';
+import { BlogFavoriteModel, BlogModel } from '@/model/BlogModel';
 import { ConversationModel } from '@/model/ConversationModel';
 import { LogModel } from '@/model/LogModel';
 import { MaterialModel } from '@/model/MaterialModel';
@@ -44,6 +44,7 @@ dotenv.config({ path: '../../.env' });
       MaterialModel,
       VerifyCodeModel,
       BlogModel,
+      BlogFavoriteModel,
     ]), // 注册特定模型以用于DI
   ],
   exports: [SequelizeModule],

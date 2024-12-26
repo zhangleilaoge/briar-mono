@@ -1,10 +1,16 @@
-import { DeleteFilled, EditFilled, EllipsisOutlined } from '@ant-design/icons';
+import {
+	DeleteFilled,
+	EditFilled,
+	EllipsisOutlined,
+	StarFilled,
+	StarOutlined
+} from '@ant-design/icons';
 import { Button, Divider, Dropdown, List, message, Typography } from 'antd';
-import { IGetBlogsResponse, RoleEnum } from 'briar-shared';
+import { IGetBlogsResponse, ItemTypeOfArray, RoleEnum } from 'briar-shared';
 import { format } from 'date-fns';
 import { useCallback, useContext, useMemo, useState } from 'react';
 
-import { deleteBlog } from '@/pages/briar/api/blog';
+import { deleteBlog, favorite } from '@/pages/briar/api/blog';
 import { MenuKeyEnum } from '@/pages/briar/constants/router';
 import CommonContext from '@/pages/briar/context/common';
 import useNavigateTo from '@/pages/briar/hooks/biz/useNavigateTo';
@@ -13,20 +19,22 @@ import { errorNotify } from '@/pages/briar/utils/notify';
 
 import User from '../user';
 
-type IBlog = IGetBlogsResponse['items'][number];
+type IBlog = ItemTypeOfArray<IGetBlogsResponse['items']>;
 
 interface IBlogItem {
 	data: IBlog;
 	refresh: () => void;
+	update: (item: IBlog) => void;
 }
 
 enum OperationEnum {
 	Edit = 'edit',
-	Delete = 'delete'
+	Delete = 'delete',
+	Favorite = 'favorite'
 }
 
 const BlogItem = (props: IBlogItem) => {
-	const { data, refresh } = props;
+	const { data, refresh, update } = props;
 	const { title = '', content = '', createdAt, userId } = data;
 	const { userInfo } = useContext(CommonContext);
 	const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -64,6 +72,40 @@ const BlogItem = (props: IBlogItem) => {
 					>
 						<EditFilled className="mr-[8px]" />
 						编辑
+					</div>
+				)
+			},
+			{
+				key: OperationEnum.Favorite,
+				label: (
+					<div
+						onClick={(e) => {
+							e.stopPropagation();
+							setDropdownOpen(false);
+							favorite({ id: props?.data?.id, favorite: !props?.data?.favorite })
+								.then(() => {
+									message.success('收藏成功');
+									update({
+										...props?.data,
+										favorite: !props?.data?.favorite
+									});
+								})
+								.catch((e) => {
+									errorNotify(e);
+								});
+						}}
+					>
+						{props?.data?.favorite ? (
+							<>
+								<StarFilled className="mr-[8px] text-star-yellow" />
+								取消收藏
+							</>
+						) : (
+							<>
+								<StarOutlined className="mr-[8px]" />
+								收藏
+							</>
+						)}
 					</div>
 				)
 			},
@@ -111,7 +153,7 @@ const BlogItem = (props: IBlogItem) => {
 				</Dropdown>
 			</>
 		);
-	}, [dropdownOpen, navigate, props?.data?.id, refresh, userId, userInfo?.id]);
+	}, [dropdownOpen, navigate, props?.data, refresh, update, userId, userInfo?.id, userInfo?.roles]);
 
 	return (
 		<List.Item className="box-border hover:bg-gray-100" onClick={goBlogDetail}>

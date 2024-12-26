@@ -6,6 +6,7 @@ import {
 	FileImageOutlined,
 	FireOutlined,
 	InteractionOutlined,
+	StarOutlined,
 	ToolOutlined,
 	UserOutlined
 } from '@ant-design/icons';
@@ -38,6 +39,7 @@ export enum MenuKeyEnum {
 	MyBlogPost_2 = 'my-blog-post',
 	PostBlog_2 = 'post-blog',
 	BlogDetail_2 = 'blog-detail',
+	FavoriteBlog_2 = 'favorite-blog',
 
 	CompositionStyleConverter_3 = 'composition-style-converter',
 	CompositionStyleIntro_3 = 'composition-style-intro',
@@ -71,6 +73,7 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.MyBlogPost_2]: t(TranslationEnum.MyBlogPost),
 	[MenuKeyEnum.PostBlog_2]: t(TranslationEnum.PostBlog),
 	[MenuKeyEnum.BlogDetail_2]: t(TranslationEnum.BlogDetail),
+	[MenuKeyEnum.FavoriteBlog_2]: t(TranslationEnum.FavoriteBlog),
 
 	[MenuKeyEnum.CompositionStyleConverter_3]: t(TranslationEnum.CompositionStyleConverter),
 	[MenuKeyEnum.CompositionStyleIntro_3]: t(TranslationEnum.CompositionApiIntro),
@@ -119,6 +122,12 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 				key: MenuKeyEnum.PostBlog_2,
 				label: MENU_KEY_NAMES[MenuKeyEnum.PostBlog_2],
 				component: lazy(() => import('../pages/blog/pages/post-blog'))
+			},
+			{
+				icon: <StarOutlined />,
+				key: MenuKeyEnum.FavoriteBlog_2,
+				label: MENU_KEY_NAMES[MenuKeyEnum.FavoriteBlog_2],
+				component: lazy(() => import('../pages/blog/pages/favorite-blog'))
 			},
 			{
 				key: MenuKeyEnum.BlogDetail_2,

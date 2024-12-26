@@ -6,4 +6,5 @@ export * from './material';
 export * from './model';
 export * from './short-url';
 export * from './user';
+export * from './utils';
 export * from './verify';

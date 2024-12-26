@@ -27,6 +27,10 @@ export class BlogService {
     return this.blogDalService.editBlog(blog, id);
   }
 
+  async incrementViews(id: number) {
+    return this.blogDalService.incrementViews(id);
+  }
+
   async checkBlogPermission(blogId: number) {
     const blog = await this.blogDalService.getBlog(blogId);
 
@@ -54,8 +58,20 @@ export class BlogService {
     };
   }
 
-  async getBlogs(pagination: IPageInfo) {
-    const data = await this.blogDalService.getBlogs(pagination);
+  async favorite(blogId: number, favorite: boolean) {
+    return this.blogDalService.favorite(
+      this.contextService.get().userId,
+      blogId,
+      favorite,
+    );
+  }
+
+  async getBlogs(pagination: IPageInfo, favorite: boolean) {
+    const data = await this.blogDalService.getBlogs(
+      pagination,
+      this.contextService.get().userId,
+      favorite,
+    );
 
     const AuthorIds = data.items.map((item) => item.userId);
 
