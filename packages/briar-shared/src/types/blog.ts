@@ -21,5 +21,6 @@ export interface IGetBlogs {
 export type IGetBlogsResponse = IPageResult<
 	IBlogDTO & {
 		author: IUserInfoDTO;
+		favorite: boolean;
 	}
 >;
