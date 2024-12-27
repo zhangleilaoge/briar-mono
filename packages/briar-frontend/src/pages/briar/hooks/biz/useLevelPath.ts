@@ -11,7 +11,7 @@ const useLevelPath = (level = 1) => {
 	const [menuKey, setMenuKey] = useState(getLevelPath(level));
 	const navigate = useNavigate();
 	const { pathname } = useLocation();
-	const { hrefHistory } = useRouteHistory();
+	const { hrefHistory, goBack } = useRouteHistory();
 
 	const onLevelPathChange = (key: string) => {
 		if (key === menuKey) return;
@@ -37,7 +37,8 @@ const useLevelPath = (level = 1) => {
 
 	return {
 		menuKey,
-		onLevelPathChange
+		onLevelPathChange,
+		goBack
 	};
 };
 

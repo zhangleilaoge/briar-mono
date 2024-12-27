@@ -90,7 +90,7 @@ export const MENU_KEY_NAMES = {
 
 export const DEFAULT_MENU_KEY = {
 	[MenuKeyEnum.Briar_0]: MenuKeyEnum.Ai_1,
-	[MenuKeyEnum.Tools_1]: MenuKeyEnum.CodeConverter_2,
+	[MenuKeyEnum.Tools_1]: MenuKeyEnum.Images_2,
 	[MenuKeyEnum.Admin_1]: MenuKeyEnum.User_2,
 	[MenuKeyEnum.Personal_1]: MenuKeyEnum.Account_2,
 	[MenuKeyEnum.Blog_1]: MenuKeyEnum.RecommendBlogPost_2,
@@ -118,16 +118,16 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 			// 	component: lazy(() => import('../pages/blog/pages/my-blog-post'))
 			// },
 			{
-				icon: <CoffeeOutlined />,
-				key: MenuKeyEnum.PostBlog_2,
-				label: MENU_KEY_NAMES[MenuKeyEnum.PostBlog_2],
-				component: lazy(() => import('../pages/blog/pages/post-blog'))
-			},
-			{
 				icon: <StarOutlined />,
 				key: MenuKeyEnum.FavoriteBlog_2,
 				label: MENU_KEY_NAMES[MenuKeyEnum.FavoriteBlog_2],
 				component: lazy(() => import('../pages/blog/pages/favorite-blog'))
+			},
+			{
+				icon: <CoffeeOutlined />,
+				key: MenuKeyEnum.PostBlog_2,
+				label: MENU_KEY_NAMES[MenuKeyEnum.PostBlog_2],
+				component: lazy(() => import('../pages/blog/pages/post-blog'))
 			},
 			{
 				key: MenuKeyEnum.BlogDetail_2,
@@ -148,6 +148,12 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 		component: lazy(() => import('../pages/tools')),
 		children: [
 			{
+				key: MenuKeyEnum.Images_2,
+				label: MENU_KEY_NAMES[MenuKeyEnum.Images_2],
+				icon: <FileImageOutlined />,
+				component: lazy(() => import('../pages/tools/pages/images'))
+			},
+			{
 				key: MenuKeyEnum.CodeConverter_2,
 				label: MENU_KEY_NAMES[MenuKeyEnum.CodeConverter_2],
 				icon: <InteractionOutlined />,
@@ -164,12 +170,7 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 					}
 				]
 			},
-			{
-				key: MenuKeyEnum.Images_2,
-				label: MENU_KEY_NAMES[MenuKeyEnum.Images_2],
-				icon: <FileImageOutlined />,
-				component: lazy(() => import('../pages/tools/pages/images'))
-			},
+
 			{
 				key: MenuKeyEnum.Pragmatic_2,
 				label: MENU_KEY_NAMES[MenuKeyEnum.Pragmatic_2],

@@ -73,7 +73,7 @@ function CodeConverter() {
 						}
 					>
 						<Routes>
-							{getRoutes(routers, availablePage, DEFAULT_MENU_KEY[MenuKeyEnum.CodeConverter_2])}
+							{getRoutes(routers, availablePage, DEFAULT_MENU_KEY[MenuKeyEnum.Tools_1])}
 						</Routes>
 					</Suspense>
 				</Content>

@@ -15,3 +15,11 @@
 		margin: 0;
 	}
 }
+
+.blog-opt {
+	:global {
+		svg {
+			transform: scale(1.5);
+		}
+	}
+}

@@ -14,6 +14,7 @@ export interface IGetBlogs {
 	pageInfo?: IPageInfo;
 	id?: number;
 	favorite?: boolean;
+	keyword: string;
 }
 
 // ====================== response below ========================
@@ -22,5 +23,6 @@ export type IGetBlogsResponse = IPageResult<
 	IBlogDTO & {
 		author: IUserInfoDTO;
 		favorite: boolean;
+		favoriteCount: number;
 	}
 >;

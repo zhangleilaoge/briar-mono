@@ -12,16 +12,14 @@ import useFullScreen from './hooks/biz/useFullScreen';
 import useLevelPath from './hooks/biz/useLevelPath';
 import useLogin from './hooks/biz/useLogin';
 import usePageTitle from './hooks/biz/usePageTitle';
-import useRouteHistory from './hooks/useRouteHistory';
 import s from './styles/main.module.scss';
 import { getRoutes } from './utils/router';
 
 function App() {
-	const { menuKey, onLevelPathChange } = useLevelPath();
+	const { menuKey, onLevelPathChange, goBack } = useLevelPath();
 	usePageTitle();
-	const { fullRef, enterFullscreen, exitFullscreen, toggleFullscreen } = useFullScreen();
+	const { fullRef, toggleFullscreen } = useFullScreen();
 	const { userInfo, headerRoutes, availablePage, logout } = useLogin();
-	useRouteHistory();
 
 	return (
 		<ConfigProvider theme={THEME}>
@@ -30,10 +28,9 @@ function App() {
 					availablePage,
 					userInfo,
 					fullRef,
-					enterFullscreen,
-					exitFullscreen,
 					toggleFullscreen,
-					logout
+					logout,
+					goBack
 				}}
 			>
 				<FloatBtn />

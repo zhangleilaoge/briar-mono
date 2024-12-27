@@ -1,7 +1,7 @@
 import 'dotenv/config';
 
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { IBlogDTO, IPageInfo, RoleEnum } from 'briar-shared';
+import { IBlogDTO, IGetBlogs, RoleEnum } from 'briar-shared';
 import { intersection } from 'lodash';
 
 import { ContextService } from './common/ContextService';
@@ -32,7 +32,10 @@ export class BlogService {
   }
 
   async checkBlogPermission(blogId: number) {
-    const blog = await this.blogDalService.getBlog(blogId);
+    const blog = await this.blogDalService.getBlog(
+      blogId,
+      this.contextService.get().userId,
+    );
 
     if (
       blog.userId !== this.contextService.get().userId &&
@@ -46,7 +49,10 @@ export class BlogService {
   }
 
   async getBlog(blogId: number) {
-    const data = await this.blogDalService.getBlog(blogId);
+    const data = await this.blogDalService.getBlog(
+      blogId,
+      this.contextService.get().userId,
+    );
 
     const authorId = data.userId;
 
@@ -66,12 +72,13 @@ export class BlogService {
     );
   }
 
-  async getBlogs(pagination: IPageInfo, favorite: boolean) {
-    const data = await this.blogDalService.getBlogs(
+  async getBlogs({ pageInfo: pagination, favorite, keyword }: IGetBlogs) {
+    const data = await this.blogDalService.getBlogs({
       pagination,
-      this.contextService.get().userId,
+      userId: this.contextService.get().userId,
       favorite,
-    );
+      keyword,
+    });
 
     const AuthorIds = data.items.map((item) => item.userId);
 

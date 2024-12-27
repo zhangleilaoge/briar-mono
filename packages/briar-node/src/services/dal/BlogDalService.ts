@@ -4,7 +4,6 @@ import { IBlogDTO, IPageInfo } from 'briar-shared';
 import { Op } from 'sequelize';
 
 import { BlogFavoriteModel, BlogModel } from '@/model/BlogModel';
-import { splitCondition } from '@/utils/dal';
 
 // import { favorite } from './../../../../briar-frontend/src/pages/briar/api/blog';
 @Injectable()
@@ -28,20 +27,64 @@ export class BlogDalService {
     return await this.blogModel.increment('views', { where: { id } });
   }
 
-  async getBlog(blogId: number) {
-    return (await this.blogModel.findOne({ where: { id: blogId } })).dataValues;
+  async getBlog(blogId: number, userId: number) {
+    const data = (
+      await this.blogModel.findOne({
+        where: { id: blogId },
+
+        include: [
+          {
+            model: BlogFavoriteModel,
+            required: false,
+            where: {
+              userId,
+            },
+          },
+        ],
+      })
+    ).dataValues as BlogModel & { blogFavorites: BlogFavoriteModel[] };
+
+    const favoriteCount = await BlogFavoriteModel.count({
+      where: { blogId },
+    });
+
+    return {
+      ...data,
+      favorite: data.blogFavorites.length > 0,
+      favoriteCount,
+    };
   }
 
-  async getBlogs(
-    pagination: IPageInfo = {
-      page: 1,
-      pageSize: 1,
-    },
-    currentUserId: number, // 当前用户的 ID
-    favorite: boolean = false,
-  ) {
+  async getBlogs({
+    pagination,
+    userId: currentUserId,
+    favorite,
+    keyword,
+  }: {
+    pagination: IPageInfo;
+    userId: number;
+    favorite: boolean;
+    keyword: string;
+  }) {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;
+
+    const keywordConditions = {};
+
+    if (keyword) {
+      keywordConditions[Op.or] = [
+        {
+          title: {
+            [Op.like]: `%${keyword.toLowerCase()}%`,
+          },
+        },
+        {
+          content: {
+            [Op.like]: `%${keyword.toLowerCase()}%`,
+          },
+        },
+      ];
+    }
 
     // Step 1: 查询博客以及与当前用户的收藏信息
     const { count, rows } = await this.blogModel.findAndCountAll({
@@ -49,7 +92,7 @@ export class BlogDalService {
       offset: (page - 1) * pageSize,
       order: [['createdAt', 'DESC']], // 以创建时间降序排列
       where: {
-        [Op.and]: splitCondition({}),
+        [Op.and]: [keywordConditions],
       },
       include: [
         {

@@ -32,7 +32,7 @@ export class BlogController {
 
   @Get('/getBlogs')
   async getBlogs(@QueryToObject() query: IGetBlogs) {
-    return await this.blogService.getBlogs(query.pageInfo, query.favorite);
+    return await this.blogService.getBlogs(query);
   }
 
   @Get('/getBlog')

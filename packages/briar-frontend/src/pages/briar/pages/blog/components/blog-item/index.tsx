@@ -45,8 +45,8 @@ const BlogItem = (props: IBlogItem) => {
 			target: MenuKeyEnum.BlogDetail_2,
 			query: {
 				id: String(props?.data?.id)
-			},
-			newPage: true
+			}
+			// newPage: true
 		});
 	}, [navigate, props?.data?.id]);
 
@@ -84,7 +84,7 @@ const BlogItem = (props: IBlogItem) => {
 							setDropdownOpen(false);
 							favorite({ id: props?.data?.id, favorite: !props?.data?.favorite })
 								.then(() => {
-									message.success('收藏成功');
+									message.success(props?.data?.favorite ? '取消收藏成功' : '收藏成功');
 									update({
 										...props?.data,
 										favorite: !props?.data?.favorite
@@ -156,9 +156,9 @@ const BlogItem = (props: IBlogItem) => {
 	}, [dropdownOpen, navigate, props?.data, refresh, update, userId, userInfo?.id, userInfo?.roles]);
 
 	return (
-		<List.Item className="box-border hover:bg-gray-100" onClick={goBlogDetail}>
+		<List.Item className="box-border " onClick={goBlogDetail}>
 			<List.Item.Meta
-				className="my-[8px] mx-[24px] cursor-pointer"
+				className="my-[4px] mx-[16px] py-[8px] px-[8px] cursor-pointer hover:bg-gray-100 rounded-lg"
 				title={title}
 				description={
 					<div className="flex flex-col gap-[4px] ">

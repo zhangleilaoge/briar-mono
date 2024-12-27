@@ -9,9 +9,8 @@ const CommonContext = React.createContext({
 
 	/** 全屏 */
 	fullRef: { current: null } as Ref<HTMLDivElement>,
-	enterFullscreen: () => {},
-	exitFullscreen: () => {},
-	toggleFullscreen: () => {}
+	toggleFullscreen: () => {},
+	goBack: () => {}
 });
 
 export default CommonContext;

@@ -22,10 +22,6 @@ function Editor() {
 
 	const navigate = useNavigateTo();
 
-	const submitTitle = useMemo(() => {
-		return query?.id ? '更新' : '创建';
-	}, [query?.id]);
-
 	const submit = useCallback(
 		(v: FieldType) => {
 			if (query?.id) {
@@ -79,12 +75,21 @@ function Editor() {
 			initialValues={initValues}
 			className="mt-[12px]"
 		>
-			<Button type="primary" htmlType="submit" className="mb-[24px]">
-				{submitTitle}
-			</Button>
-			<Form.Item name="title" label="标题" rules={[{ required: true }]} validateTrigger="onBlur">
-				<Input placeholder="输入标题" />
-			</Form.Item>
+			<div className="flex justify-between">
+				<Form.Item
+					name="title"
+					label="标题"
+					rules={[{ required: true }]}
+					validateTrigger="onBlur"
+					className="w-[480px]"
+				>
+					<Input placeholder="输入标题" maxLength={30} showCount />
+				</Form.Item>
+				<Button type="primary" htmlType="submit" className="mb-[24px]">
+					提交
+				</Button>
+			</div>
+
 			<Form.Item name="content" rules={[{ required: true }]} validateTrigger="onBlur">
 				<ReactQuill theme="snow" />
 			</Form.Item>

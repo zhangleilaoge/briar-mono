@@ -9,7 +9,7 @@ const translation: Record<TranslationEnum, string> = {
 	Tools: '工具',
 	CodeConverter: '代码转换',
 	Pragmatic: '日常便利',
-	Utility: '实用工具',
+	Utility: '码农工具',
 	Playground: '实验室',
 	User: '用户管理',
 	Account: '账号管理',
