@@ -22,6 +22,31 @@ function Editor() {
 
 	const navigate = useNavigateTo();
 
+	const modules = useMemo(() => {
+		return {
+			toolbar: [
+				[
+					{ header: [1, 2, 3, 4, 5, false] },
+					'bold',
+					'italic',
+					'underline',
+					'strike',
+					'blockquote',
+					{ list: 'ordered' },
+					{ list: 'bullet' },
+					{ indent: '-1' },
+					{ indent: '+1' },
+					'link',
+					'image',
+					{ color: [] },
+					{ background: [] },
+					'formula',
+					'clean'
+				]
+			]
+		};
+	}, []);
+
 	const submit = useCallback(
 		(v: FieldType) => {
 			if (query?.id) {
@@ -91,7 +116,7 @@ function Editor() {
 			</div>
 
 			<Form.Item name="content" rules={[{ required: true }]} validateTrigger="onBlur">
-				<ReactQuill theme="snow" />
+				<ReactQuill theme="snow" modules={modules} className="ql-editor" />
 			</Form.Item>
 		</Form>
 	);

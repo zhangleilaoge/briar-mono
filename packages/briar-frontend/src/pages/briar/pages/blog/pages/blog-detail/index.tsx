@@ -1,3 +1,5 @@
+import 'react-quill/dist/quill.snow.css';
+
 import { RollbackOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
 import { Button, message } from 'antd';
 import { IGetBlogsResponse, RoleEnum } from 'briar-shared';
@@ -86,7 +88,7 @@ const MyBlogPost = () => {
 			</div>
 			<div
 				dangerouslySetInnerHTML={{ __html: detail.content }}
-				className={cx('prose', s['blog-detail'], 'max-w-none')}
+				className={cx('prose', s['blog-detail'], 'max-w-none', 'ql-editor')}
 			></div>
 			<div className="flex justify-center flex-col items-center mt-[12px]">
 				<Button
