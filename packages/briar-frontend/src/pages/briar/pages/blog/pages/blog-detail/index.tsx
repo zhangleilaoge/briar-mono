@@ -1,8 +1,8 @@
 import 'react-quill/dist/quill.snow.css';
 
-import { RollbackOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
-import { Button, message } from 'antd';
-import { IGetBlogsResponse, RoleEnum } from 'briar-shared';
+import { LockOutlined, RollbackOutlined, StarFilled, StarOutlined } from '@ant-design/icons';
+import { Button, message, Tooltip } from 'antd';
+import { IGetBlogsResponse, RoleEnum, ShowRangeEnum } from 'briar-shared';
 import cx from 'classnames';
 import { format } from 'date-fns';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -62,7 +62,14 @@ const MyBlogPost = () => {
 	return (
 		<div className="m-[24px] flex flex-col gap-[20px]">
 			<div className="text-4xl flex justify-between items-center">
-				{detail?.title}
+				<div>
+					{detail?.showRange === ShowRangeEnum.Private ? (
+						<Tooltip title="仅我可见">
+							<LockOutlined className="text-neutral-500 mr-[16px]" />
+						</Tooltip>
+					) : null}
+					{detail?.title}
+				</div>
 				<Button onClick={goBack} icon={<RollbackOutlined />}>
 					返回
 				</Button>

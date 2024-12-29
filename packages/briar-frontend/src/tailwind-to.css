@@ -1256,6 +1256,14 @@ video {
   margin-top: 64px;
 }
 
+.ml-\[8px\] {
+  margin-left: 8px;
+}
+
+.mr-\[16px\] {
+  margin-right: 16px;
+}
+
 .box-border {
   box-sizing: border-box;
 }

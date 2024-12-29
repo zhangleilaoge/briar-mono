@@ -2,11 +2,12 @@ import {
 	DeleteFilled,
 	EditFilled,
 	EllipsisOutlined,
+	LockOutlined,
 	StarFilled,
 	StarOutlined
 } from '@ant-design/icons';
-import { Button, Divider, Dropdown, List, message, Typography } from 'antd';
-import { IGetBlogsResponse, ItemTypeOfArray, RoleEnum } from 'briar-shared';
+import { Button, Divider, Dropdown, List, message, Tooltip, Typography } from 'antd';
+import { IGetBlogsResponse, ItemTypeOfArray, RoleEnum, ShowRangeEnum } from 'briar-shared';
 import { format } from 'date-fns';
 import { useCallback, useContext, useMemo, useState } from 'react';
 
@@ -159,7 +160,16 @@ const BlogItem = (props: IBlogItem) => {
 		<List.Item className="box-border " onClick={goBlogDetail}>
 			<List.Item.Meta
 				className="my-[4px] mx-[16px] py-[8px] px-[8px] cursor-pointer hover:bg-gray-100 rounded-lg"
-				title={title}
+				title={
+					<div>
+						{data?.showRange === ShowRangeEnum.Private ? (
+							<Tooltip title="仅我可见">
+								<LockOutlined className="text-neutral-500 mr-[8px]" />
+							</Tooltip>
+						) : null}
+						{title}
+					</div>
+				}
 				description={
 					<div className="flex flex-col gap-[4px] ">
 						<Typography.Paragraph
