@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { favorite, getBlog } from '@/pages/briar/api/blog';
+import NoAccess from '@/pages/briar/components/NoAccess';
 import { MenuKeyEnum } from '@/pages/briar/constants/router';
 import CommonContext from '@/pages/briar/context/common';
 import useNavigateTo from '@/pages/briar/hooks/biz/useNavigateTo';
@@ -54,6 +55,8 @@ const MyBlogPost = () => {
 
 	if (!detail) {
 		return null;
+	} else if (!detail?.content) {
+		return <NoAccess />;
 	}
 
 	return (

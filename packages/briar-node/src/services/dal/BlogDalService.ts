@@ -58,7 +58,7 @@ export class BlogDalService {
           },
         ],
       })
-    ).dataValues as BlogModel & { blogFavorites: BlogFavoriteModel[] };
+    )?.dataValues as BlogModel & { blogFavorites: BlogFavoriteModel[] };
 
     const favoriteCount = await BlogFavoriteModel.count({
       where: { blogId },
@@ -66,7 +66,7 @@ export class BlogDalService {
 
     return {
       ...data,
-      favorite: data.blogFavorites.length > 0,
+      favorite: data?.blogFavorites?.length > 0,
       favoriteCount,
     };
   }
