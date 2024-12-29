@@ -19,10 +19,11 @@ const DEFAULT_PAGE_INFO: IPageInfo = {
 
 interface IBlogListProps {
 	favorite?: boolean;
+	mine?: boolean;
 }
 
 const BlogList = (props: IBlogListProps) => {
-	const { favorite = false } = props;
+	const { favorite = false, mine = false } = props;
 	const [data, setData] = useState<IGetBlogsResponse['items']>([]);
 	const [pageInfo, setPageInfo] = useState<IPageInfo>(DEFAULT_PAGE_INFO);
 
@@ -44,7 +45,8 @@ const BlogList = (props: IBlogListProps) => {
 		send({
 			pageInfo: paginator || pageInfo,
 			favorite,
-			keyword
+			keyword,
+			mine
 		});
 	};
 

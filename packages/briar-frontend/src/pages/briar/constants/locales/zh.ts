@@ -25,7 +25,7 @@ const translation: Record<TranslationEnum, string> = {
 	compressImg: '图片压缩',
 	Blog: '博客',
 	RecommendBlogPost: '推荐',
-	MyBlogPost: '我的博客',
+	MyBlogPost: '我的',
 	PostBlog: '创作',
 	BlogDetail: '博客详情',
 	DecodeEncode: '解码/编码',

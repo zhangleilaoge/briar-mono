@@ -1,8 +1,12 @@
+import BlogList from '../../components/blog-list';
+import PageTitle from '../../components/page-title';
+
 const MyBlogPost = () => {
 	return (
-		<div className="mx-[12px] my-[24px]">
-			<h2>页面开发中</h2>
-		</div>
+		<>
+			<PageTitle content={'我的博客'} />
+			<BlogList mine={true} />
+		</>
 	);
 };
 

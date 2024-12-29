@@ -1,4 +1,5 @@
 import {
+	BulbOutlined,
 	// BulbOutlined,
 	CarOutlined,
 	CoffeeOutlined,
@@ -110,18 +111,17 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 				label: MENU_KEY_NAMES[MenuKeyEnum.RecommendBlogPost_2],
 				component: lazy(() => import('../pages/blog/pages/recommend-blog-post'))
 			},
-			// 没做完暂时给隐藏了
-			// {
-			// 	icon: <BulbOutlined />,
-			// 	key: MenuKeyEnum.MyBlogPost_2,
-			// 	label: MENU_KEY_NAMES[MenuKeyEnum.MyBlogPost_2],
-			// 	component: lazy(() => import('../pages/blog/pages/my-blog-post'))
-			// },
 			{
 				icon: <StarOutlined />,
 				key: MenuKeyEnum.FavoriteBlog_2,
 				label: MENU_KEY_NAMES[MenuKeyEnum.FavoriteBlog_2],
 				component: lazy(() => import('../pages/blog/pages/favorite-blog'))
+			},
+			{
+				icon: <BulbOutlined />,
+				key: MenuKeyEnum.MyBlogPost_2,
+				label: MENU_KEY_NAMES[MenuKeyEnum.MyBlogPost_2],
+				component: lazy(() => import('../pages/blog/pages/my-blog-post'))
 			},
 			{
 				icon: <CoffeeOutlined />,

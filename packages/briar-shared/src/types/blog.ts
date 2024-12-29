@@ -15,6 +15,7 @@ export interface IGetBlogs {
 	id?: number;
 	favorite?: boolean;
 	keyword: string;
+	mine?: boolean;
 }
 
 // ====================== response below ========================

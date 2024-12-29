@@ -72,12 +72,13 @@ export class BlogService {
     );
   }
 
-  async getBlogs({ pageInfo: pagination, favorite, keyword }: IGetBlogs) {
+  async getBlogs({ pageInfo: pagination, favorite, keyword, mine }: IGetBlogs) {
     const data = await this.blogDalService.getBlogs({
       pagination,
       userId: this.contextService.get().userId,
       favorite,
       keyword,
+      mine,
     });
 
     const AuthorIds = data.items.map((item) => item.userId);

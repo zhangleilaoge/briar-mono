@@ -4,6 +4,7 @@ import useQuery from '@/pages/briar/hooks/useQuery';
 
 import PageTitle from '../../components/page-title';
 import Editor from './components/Editor';
+
 const PostBlog = () => {
 	const query = useQuery();
 	const title = useMemo(() => {

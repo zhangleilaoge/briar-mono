@@ -60,31 +60,34 @@ export class BlogDalService {
     userId: currentUserId,
     favorite,
     keyword,
+    mine,
   }: {
     pagination: IPageInfo;
     userId: number;
     favorite: boolean;
     keyword: string;
+    mine: boolean;
   }) {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;
 
-    const keywordConditions = {};
-
-    if (keyword) {
-      keywordConditions[Op.or] = [
-        {
-          title: {
-            [Op.like]: `%${keyword.toLowerCase()}%`,
-          },
-        },
-        {
-          content: {
-            [Op.like]: `%${keyword.toLowerCase()}%`,
-          },
-        },
-      ];
-    }
+    const keywordConditions = keyword
+      ? {
+          [Op.or]: [
+            {
+              title: {
+                [Op.like]: `%${keyword.toLowerCase()}%`,
+              },
+            },
+            {
+              content: {
+                [Op.like]: `%${keyword.toLowerCase()}%`,
+              },
+            },
+          ],
+        }
+      : {};
+    const authorConditions = mine ? { userId: currentUserId } : {};
 
     // Step 1: 查询博客以及与当前用户的收藏信息
     const { count, rows } = await this.blogModel.findAndCountAll({
@@ -92,7 +95,7 @@ export class BlogDalService {
       offset: (page - 1) * pageSize,
       order: [['createdAt', 'DESC']], // 以创建时间降序排列
       where: {
-        [Op.and]: [keywordConditions],
+        [Op.and]: [keywordConditions, authorConditions],
       },
       include: [
         {
