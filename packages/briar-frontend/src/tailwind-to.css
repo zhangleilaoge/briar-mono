@@ -1378,6 +1378,10 @@ video {
   flex-shrink: 0;
 }
 
+.grow-0 {
+  flex-grow: 0;
+}
+
 .basis-\[180px\] {
   flex-basis: 180px;
 }
@@ -1422,6 +1426,10 @@ video {
 
 .flex-row {
   flex-direction: row;
+}
+
+.flex-row-reverse {
+  flex-direction: row-reverse;
 }
 
 .flex-col {
@@ -1584,6 +1592,18 @@ video {
 
 .pt-\[16px\] {
   padding-top: 16px;
+}
+
+.pl-0 {
+  padding-left: 0px;
+}
+
+.\!pl-0 {
+  padding-left: 0px !important;
+}
+
+.\!pt-0 {
+  padding-top: 0px !important;
 }
 
 .text-center {

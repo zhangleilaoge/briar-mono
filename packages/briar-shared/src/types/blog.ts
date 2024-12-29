@@ -7,6 +7,12 @@ export interface IBlogDTO {
 	content: string;
 	userId: number;
 	createdAt: string;
+	showRange: ShowRangeEnum;
+}
+
+export enum ShowRangeEnum {
+	Private = 'private',
+	Public = 'public'
 }
 
 // ====================== request below ========================

@@ -22,6 +22,9 @@ export class BlogModel extends Model<BlogModel> {
   })
   views: number;
 
+  @Column
+  showRange: string;
+
   @HasMany(() => BlogFavoriteModel, { foreignKey: 'blogId' })
   blogFavorites: BlogFavoriteModel[];
 }

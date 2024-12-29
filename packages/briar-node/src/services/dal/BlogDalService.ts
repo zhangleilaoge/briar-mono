@@ -30,8 +30,24 @@ export class BlogDalService {
   async getBlog(blogId: number, userId: number) {
     const data = (
       await this.blogModel.findOne({
-        where: { id: blogId },
-
+        where: {
+          [Op.and]: [
+            {
+              id: blogId,
+            },
+            {
+              [Op.or]: [
+                { showRange: 'public' }, // Allow public blogs
+                {
+                  [Op.and]: [
+                    { showRange: 'private' }, // Exclude private blogs
+                    { userId }, // Only allow private blogs if user is author
+                  ],
+                },
+              ],
+            },
+          ],
+        },
         include: [
           {
             model: BlogFavoriteModel,
@@ -95,7 +111,21 @@ export class BlogDalService {
       offset: (page - 1) * pageSize,
       order: [['createdAt', 'DESC']], // 以创建时间降序排列
       where: {
-        [Op.and]: [keywordConditions, authorConditions],
+        [Op.and]: [
+          keywordConditions,
+          authorConditions,
+          {
+            [Op.or]: [
+              { showRange: 'public' }, // Allow public blogs
+              {
+                [Op.and]: [
+                  { showRange: 'private' }, // Exclude private blogs
+                  { userId: currentUserId }, // Only allow private blogs if user is author
+                ],
+              },
+            ],
+          },
+        ],
       },
       include: [
         {
