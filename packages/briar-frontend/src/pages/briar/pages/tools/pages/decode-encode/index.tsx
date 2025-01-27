@@ -1,8 +1,23 @@
 import { Button, Form, Input, message } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import { LocalStorageKey } from '@/pages/briar/constants/env';
 
 const DecodeEncode = () => {
 	const [input, setInput] = useState('');
+
+	// Load cached input from localStorage when the component mounts
+	useEffect(() => {
+		const cachedInput = localStorage.getItem(LocalStorageKey.DecodeContent);
+		if (cachedInput) {
+			setInput(cachedInput);
+		}
+	}, []);
+
+	// Save input to localStorage whenever it changes
+	useEffect(() => {
+		localStorage.setItem(LocalStorageKey.DecodeContent, input);
+	}, [input]);
 
 	const decode = () => {
 		setInput(decodeURIComponent(input));
