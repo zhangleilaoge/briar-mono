@@ -49,9 +49,10 @@ const ConversationOpt: FC<IConversationProps> = ({ selectOption, options, onChan
 			</div>
 			<Select
 				value={selectOption.value}
-				style={{ width: 120 }}
+				style={{ width: 200 }}
 				onChange={onChange}
 				options={options}
+				showSearch
 			/>
 		</>
 	);

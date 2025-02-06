@@ -1,25 +1,25 @@
-import { ModelEnum } from 'briar-shared';
 import { safeJSON } from 'openai/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { getConversationModels } from '@/pages/briar/api/ai';
 import { LocalStorageKey } from '@/pages/briar/constants/env';
 
 const useGptModel = () => {
-	const options = [
-		{ value: ModelEnum.Gpt4oMini, label: ModelEnum.Gpt4oMini },
-		{
-			value: ModelEnum.Gpt4o,
-			label: ModelEnum.Gpt4o
-		}
-	];
+	const [options, setOptions] = useState([{ value: 'gpt-4o', label: 'gpt-4o' }]);
 	const [selectOption, setSelectOption] = useState(
 		safeJSON(localStorage.getItem(LocalStorageKey.GptModel) || '') || options[0]
 	);
-	const onChange = (value: ModelEnum) => {
+	const onChange = (value: string) => {
 		const opt = options.find((option) => option.value === value) || options[0];
 		setSelectOption(opt);
 		localStorage.setItem(LocalStorageKey.GptModel, JSON.stringify(opt));
 	};
+
+	useEffect(() => {
+		getConversationModels().then((models) => {
+			setOptions(models.map((model) => ({ value: model.id, label: model.id })));
+		});
+	}, []);
 
 	return { selectOption, options, onChange };
 };

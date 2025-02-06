@@ -1,6 +1,7 @@
 import {
 	IChatRequestParams,
 	IConversationDTO,
+	IConversationModels,
 	ICreateImgResponse,
 	IGetMessagesParams,
 	IMessageDTO,
@@ -13,6 +14,9 @@ import alovaInstance, { getQueryFromObj } from './common';
 
 export const chatRequestStream = (params: IChatRequestParams) =>
 	alovaInstance.Get(`/ai/chatRequestStream?${getQueryFromObj(params)}`);
+
+export const getConversationModels = () =>
+	alovaInstance.Get<IConversationModels[]>(`/ai/getConversationModels`);
 
 export const getConversationList = () =>
 	alovaInstance.Get<IConversationDTO[]>(`/ai/getConversationList`);

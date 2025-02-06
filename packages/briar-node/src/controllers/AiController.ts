@@ -14,7 +14,6 @@ import {
   IConversationDTO,
   IGetMessagesParams,
   LogModuleEnum,
-  ModelEnum,
 } from 'briar-shared';
 import { ICreateImgResponse } from 'briar-shared';
 
@@ -62,7 +61,7 @@ export class AppController {
   async genImg(@Body('content') content: string): Promise<ICreateImgResponse> {
     let imgUrl = '';
     try {
-      imgUrl = await this.aiService.createImg(content, ModelEnum.DallE2);
+      imgUrl = await this.aiService.createImg(content, 'dall-e-3');
     } catch (error) {
       this.userLogService.error(error, {
         content: '图片生成失败：',
@@ -81,6 +80,12 @@ export class AppController {
   @Get('getConversationList')
   async getConversationList() {
     return this.aiService.getConversationList();
+  }
+
+  @Get('getConversationModels')
+  async getConversationModels() {
+    const models = await this.aiService.getModels();
+    return models;
   }
 
   @Get('getMessages')
@@ -112,7 +117,7 @@ export class AppController {
   @Post('createMessage')
   async createMessage(
     @Body('content') content: string,
-    @Body('model') model: ModelEnum = ModelEnum.Gpt4oMini,
+    @Body('model') model: string,
     @Body('conversationId') conversationId: number,
     @Body('role') role = ChatRoleEnum.User,
     @Body('imgList') imgList: string[] = [],

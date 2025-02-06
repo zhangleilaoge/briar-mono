@@ -1,12 +1,12 @@
 import 'dotenv/config';
 
 import { Injectable } from '@nestjs/common';
+import axios from 'axios';
 import {
   ChatRoleEnum,
   IConversationDTO,
   IMessageDTO,
   LogModuleEnum,
-  ModelEnum,
   STARDEW_VALLEY_GIRL_DESC,
   StardewValleyGirl,
 } from 'briar-shared';
@@ -114,7 +114,7 @@ export class AiService {
     return subject.pipe(map((data: string) => data));
   }
 
-  async createImg(query: string, model: ModelEnum) {
+  async createImg(query: string, model: string) {
     const params = {
       model,
       prompt: query,
@@ -143,6 +143,17 @@ export class AiService {
         this.contextService.get().userId,
       );
     return conversationList;
+  }
+
+  async getModels() {
+    const models = await axios({
+      method: 'get',
+      url: 'https://api.chatanywhere.tech/v1/models',
+      headers: {
+        Authorization: `Bearer ${process.env.BRIAR_API_KEY}`,
+      },
+    });
+    return models.data.data;
   }
 
   async getMessages(
@@ -187,7 +198,7 @@ export class AiService {
     imgList,
   }: {
     content: string;
-    model: ModelEnum;
+    model: string;
     conversationId: number;
     role: ChatRoleEnum;
     imgList: string[];

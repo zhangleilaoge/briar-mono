@@ -15,23 +15,16 @@ export enum ChatRoleEnum {
 	Assistant = 'assistant'
 }
 
-export enum ModelEnum {
-	Gpt4oMini = 'gpt-4o-mini',
-	Gpt4o = 'gpt-4o',
-	DallE3 = 'dall-e-3',
-	DallE2 = 'dall-e-2'
-}
-
 export type IMessageDTO = IModel<{
 	role: ChatRoleEnum;
 	content: string;
 	conversationId: number;
-	model: ModelEnum;
+	model: string;
 	imgList?: string[];
 }>;
 
 export type IConversationDTO = IModel<{
-	model: ModelEnum;
+	model: string;
 	title?: string;
 	userId: number;
 	profile?: StardewValleyGirl;
@@ -43,7 +36,7 @@ export type IConversationDTO = IModel<{
 export interface IChatRequestParams {
 	query: string;
 	conversationId?: number;
-	model: ModelEnum;
+	model: string;
 	imgList?: string[];
 }
 
@@ -62,4 +55,8 @@ export interface ICreateImgResponse {
 export interface IMessagesResult<T> {
 	total: number;
 	items: T[];
+}
+
+export interface IConversationModels {
+	id: string;
 }
