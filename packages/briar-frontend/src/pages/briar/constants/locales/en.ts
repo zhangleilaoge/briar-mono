@@ -29,7 +29,8 @@ const translation: Record<TranslationEnum, string> = {
 	PostBlog: 'Create',
 	BlogDetail: 'Blog detail',
 	DecodeEncode: 'Decode/encode',
-	FavoriteBlog: 'Favorite'
+	FavoriteBlog: 'Favorite',
+	TailWind: 'TailWind'
 };
 
 export default translation;

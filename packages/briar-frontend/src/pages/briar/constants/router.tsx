@@ -1,6 +1,5 @@
 import {
 	BulbOutlined,
-	// BulbOutlined,
 	CarOutlined,
 	CoffeeOutlined,
 	ExperimentOutlined,
@@ -52,7 +51,8 @@ export enum MenuKeyEnum {
 	Calculator_3 = 'calculator',
 	JsonFormatter_3 = 'json-formatter',
 	compressImg_3 = 'compress-img',
-	DecodeEncode_3 = 'decode-encode'
+	DecodeEncode_3 = 'decode-encode',
+	TailWind_3 = 'tailwind'
 }
 
 /** @description 菜单名称，value 请勿使用 kebab case */
@@ -86,7 +86,8 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.Calculator_3]: t(TranslationEnum.Calculator),
 	[MenuKeyEnum.JsonFormatter_3]: t(TranslationEnum.JsonFormatter),
 	[MenuKeyEnum.compressImg_3]: t(TranslationEnum.compressImg),
-	[MenuKeyEnum.DecodeEncode_3]: t(TranslationEnum.DecodeEncode)
+	[MenuKeyEnum.DecodeEncode_3]: t(TranslationEnum.DecodeEncode),
+	[MenuKeyEnum.TailWind_3]: t(TranslationEnum.TailWind)
 };
 
 export const DEFAULT_MENU_KEY = {
@@ -224,6 +225,11 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 						key: MenuKeyEnum.Shader_3,
 						label: MENU_KEY_NAMES[MenuKeyEnum.Shader_3],
 						component: lazy(() => import('../pages/tools/pages/shader'))
+					},
+					{
+						key: MenuKeyEnum.TailWind_3,
+						label: MENU_KEY_NAMES[MenuKeyEnum.TailWind_3],
+						component: lazy(() => import('../pages/tools/pages/tail-wind'))
 					}
 				]
 			}

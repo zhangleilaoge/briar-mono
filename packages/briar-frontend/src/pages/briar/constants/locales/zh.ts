@@ -29,7 +29,8 @@ const translation: Record<TranslationEnum, string> = {
 	PostBlog: '创作',
 	BlogDetail: '博客详情',
 	DecodeEncode: '解码/编码',
-	FavoriteBlog: '收藏'
+	FavoriteBlog: '收藏',
+	TailWind: 'TailWind'
 };
 
 export default translation;
