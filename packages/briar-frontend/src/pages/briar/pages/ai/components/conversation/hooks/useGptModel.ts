@@ -17,7 +17,11 @@ const useGptModel = () => {
 
 	useEffect(() => {
 		getConversationModels().then((models) => {
-			setOptions(models.map((model) => ({ value: model.id, label: model.id })));
+			setOptions(
+				Array.from(new Set(models.map((model) => model.id)))
+					.sort()
+					.map((id) => ({ value: id, label: id }))
+			);
 		});
 	}, []);
 
