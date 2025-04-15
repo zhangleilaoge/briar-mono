@@ -7,3 +7,4 @@ es/
 *.log
 ssl/
 .env
+test-results/

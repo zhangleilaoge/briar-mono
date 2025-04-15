@@ -7,7 +7,8 @@ export enum LocalStorageKey {
 	CalculateResult = 'briar-calculate-result',
 	SendVerifyCode = 'briar-send-verify-code',
 	GptModel = 'briar-gpt-model',
-	DecodeContent = 'briar-decode-content'
+	DecodeContent = 'briar-decode-content',
+	JSON = 'briar-json'
 }
 
 export enum Language {

@@ -52,7 +52,8 @@ export enum MenuKeyEnum {
 	JsonFormatter_3 = 'json-formatter',
 	compressImg_3 = 'compress-img',
 	DecodeEncode_3 = 'decode-encode',
-	TailWind_3 = 'tailwind'
+	TailWind_3 = 'tailwind',
+	Three_3 = 'three'
 }
 
 /** @description 菜单名称，value 请勿使用 kebab case */
@@ -87,7 +88,8 @@ export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.JsonFormatter_3]: t(TranslationEnum.JsonFormatter),
 	[MenuKeyEnum.compressImg_3]: t(TranslationEnum.compressImg),
 	[MenuKeyEnum.DecodeEncode_3]: t(TranslationEnum.DecodeEncode),
-	[MenuKeyEnum.TailWind_3]: t(TranslationEnum.TailWind)
+	[MenuKeyEnum.TailWind_3]: t(TranslationEnum.TailWind),
+	[MenuKeyEnum.Three_3]: 'Three'
 };
 
 export const DEFAULT_MENU_KEY = {
@@ -230,6 +232,11 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 						key: MenuKeyEnum.TailWind_3,
 						label: MENU_KEY_NAMES[MenuKeyEnum.TailWind_3],
 						component: lazy(() => import('../pages/tools/pages/tail-wind'))
+					},
+					{
+						key: MenuKeyEnum.Three_3,
+						label: 'Three',
+						component: lazy(() => import('../pages/tools/pages/three'))
 					}
 				]
 			}

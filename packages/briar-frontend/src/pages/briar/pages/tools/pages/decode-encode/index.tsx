@@ -4,15 +4,7 @@ import { useEffect, useState } from 'react';
 import { LocalStorageKey } from '@/pages/briar/constants/env';
 
 const DecodeEncode = () => {
-	const [input, setInput] = useState('');
-
-	// Load cached input from localStorage when the component mounts
-	useEffect(() => {
-		const cachedInput = localStorage.getItem(LocalStorageKey.DecodeContent);
-		if (cachedInput) {
-			setInput(cachedInput);
-		}
-	}, []);
+	const [input, setInput] = useState(localStorage.getItem(LocalStorageKey.DecodeContent) || '');
 
 	// Save input to localStorage whenever it changes
 	useEffect(() => {

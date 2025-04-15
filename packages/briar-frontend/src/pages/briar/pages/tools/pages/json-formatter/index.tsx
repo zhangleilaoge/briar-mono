@@ -1,9 +1,12 @@
-import { CheckCircleOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
 import { useMemo, useState } from 'react';
+import ReactJson from 'react-json-view';
+
+import { LocalStorageKey } from '@/pages/briar/constants/env';
 
 const JsonFormatter = () => {
-	const [input, setInput] = useState('');
+	const [input, setInput] = useState(localStorage.getItem(LocalStorageKey.JSON) || '');
+	const [object, setObject] = useState<object>({});
 	const [validateStatus, setValidateStatus] = useState<
 		'' | 'success' | 'error' | 'warning' | 'validating' | undefined
 	>('');
@@ -29,6 +32,7 @@ const JsonFormatter = () => {
 
 			// 格式化 JSON
 			const formatted = JSON.stringify(json, null, 2);
+			setObject(json);
 			setInput(formatted);
 			setValidateStatus('success'); // 格式化成功，状态为成功
 		} catch (error) {
@@ -98,8 +102,6 @@ const JsonFormatter = () => {
 	const help = useMemo(() => {
 		if (validateStatus === 'error') {
 			return error;
-		} else if (validateStatus === 'success') {
-			return <CheckCircleOutlined className="mt-[12px] text-2xl text-[#329d38]" />;
 		}
 	}, [error, validateStatus]);
 
@@ -126,11 +128,17 @@ const JsonFormatter = () => {
 				<Input.TextArea
 					rows={22}
 					value={input}
-					onChange={(e) => setInput(e.target.value)}
+					onChange={(e) => {
+						setInput(e.target.value);
+						localStorage.setItem(LocalStorageKey.JSON, e.target.value);
+					}}
 					placeholder="输入 JSON 字符串"
 					onKeyDown={handleKeyDown}
 				/>
 			</Form.Item>
+			{validateStatus === 'success' && (
+				<ReactJson src={object} collapsed={2} displayDataTypes={false} />
+			)}
 		</>
 	);
 };
