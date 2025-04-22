@@ -1,7 +1,12 @@
 import { useEffect } from 'react';
 import * as THREE from 'three';
 
-const useLights = (scene: THREE.Scene | null) => {
+import { useContainer } from '@/pages/briar/hooks/useContainer';
+
+import { threeContainer } from '../container';
+
+const useLights = () => {
+	const { scene } = useContainer(threeContainer);
 	useEffect(() => {
 		if (!scene) return;
 

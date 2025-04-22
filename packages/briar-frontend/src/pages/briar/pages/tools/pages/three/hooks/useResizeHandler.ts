@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
-import * as THREE from 'three';
 
-const useResizeHandler = (
-	camera: THREE.PerspectiveCamera | null,
-	renderer: THREE.WebGLRenderer | null,
-	width: number,
-	height: number
-) => {
+import { useContainer } from '@/pages/briar/hooks/useContainer';
+
+import { threeContainer } from '../container';
+
+const useResizeHandler = (width: number, height: number) => {
+	const { camera, renderer } = useContainer(threeContainer);
 	useEffect(() => {
 		const handleResize = () => {
 			if (camera && renderer) {

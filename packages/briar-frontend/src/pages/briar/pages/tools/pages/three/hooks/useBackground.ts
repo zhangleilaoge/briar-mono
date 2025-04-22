@@ -5,7 +5,7 @@ import * as THREE from 'three';
  * @Description:
  * @Author: zhanglei
  * @Date: 2025-04-09 11:23:17
- * @LastEditTime: 2025-04-09 11:23:18
+ * @LastEditTime: 2025-04-21 19:53:31
  * @LastEditors: zhanglei
  * @Reference:
  */
@@ -26,7 +26,6 @@ const useBackground = (props: IProps) => {
 			(texture) => {
 				// 1. 计算图片和场景的宽高比
 				const imgAspect = texture.image.width / texture.image.height;
-				console.log('imgAspect', imgAspect);
 				const sceneAspect = options.width / options.height;
 
 				// 2. 创建平面几何体

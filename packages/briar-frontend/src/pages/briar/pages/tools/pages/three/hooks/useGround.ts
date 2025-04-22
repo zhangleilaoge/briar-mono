@@ -1,21 +1,14 @@
-/*
- * @Description:
- * @Author: zhanglei
- * @Date: 2025-04-10 20:53:36
- * @LastEditTime: 2025-04-10 20:53:38
- * @LastEditors: zhanglei
- * @Reference:
- */
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
-interface IProps {
-	scene: THREE.Scene | null;
-	options: { width: number; height: number };
-}
+import { useContainer } from '@/pages/briar/hooks/useContainer';
 
-const useGround = (props: IProps) => {
-	const { scene } = props;
+import { threeContainer } from '../container';
+
+interface IProps {}
+
+const useGround = (_props: IProps) => {
+	const { scene } = useContainer(threeContainer);
 	const groundRef = useRef<THREE.Mesh | null>(null);
 
 	useEffect(() => {

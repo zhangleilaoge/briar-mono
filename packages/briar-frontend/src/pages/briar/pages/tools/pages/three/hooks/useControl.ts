@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhanglei
  * @Date: 2025-04-09 17:53:51
- * @LastEditTime: 2025-04-09 17:53:53
+ * @LastEditTime: 2025-04-22 10:13:48
  * @LastEditors: zhanglei
  * @Reference:
  */
@@ -11,14 +11,28 @@ import { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-interface IProps {
-	camera: THREE.PerspectiveCamera | null;
-	renderer: THREE.WebGLRenderer | null;
-}
+import { useContainer } from '@/pages/briar/hooks/useContainer';
 
-const useControl = (props: IProps) => {
-	const { camera, renderer } = props;
+import { threeContainer } from '../container';
+import { keyEventManager } from '../event';
+
+interface IProps {}
+
+const useControl = (_props: IProps) => {
+	const { camera, renderer, velocityRef, isJumpingRef, roleModelRef } =
+		useContainer(threeContainer);
 	const [controls, setControls] = useState<OrbitControls | null>(null);
+
+	useEffect(() => {
+		keyEventManager.subscribe('Space', () => {
+			// 如果角色模型存在且当前没有在跳跃状态下，执行跳跃动画
+			if (!isJumpingRef.current && roleModelRef.current) {
+				isJumpingRef.current = true;
+				velocityRef.current.y = 3; // 初始跳跃速度
+			}
+		});
+	}, []);
+
 	useEffect(() => {
 		// 初始化控制器
 		if (camera && renderer) {
@@ -33,7 +47,7 @@ const useControl = (props: IProps) => {
 
 			// 配置控制器参数
 			orbitControls.enableDamping = true; // 启用阻尼效果，使旋转更平滑
-			orbitControls.dampingFactor = 0.05; // 阻尼系数
+			orbitControls.dampingFactor = 0.1; // 阻尼系数
 			orbitControls.screenSpacePanning = false; // 定义平移时如何平移相机
 			orbitControls.minDistance = 0.5; // 最小缩放距离
 			orbitControls.maxDistance = 10; // 最大缩放距离
