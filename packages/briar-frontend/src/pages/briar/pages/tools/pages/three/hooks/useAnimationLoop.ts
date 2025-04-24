@@ -82,16 +82,22 @@ const useAnimationLoop = (props: AnimationLoopProps) => {
 				if (pressW || pressS) {
 					// 获取相机的前进方向（Z 轴方向）
 					const direction = new THREE.Vector3(0, 0, 0);
+
 					direction.setFromMatrixColumn(camera.matrix, 2); // 获取相机的 Z 轴方向
 					direction.multiplyScalar(pressW ? -1 : 1); // 取反，因为相机的 Z 轴方向是向后的
+					direction.y = 0;
+					direction.normalize(); // 归一化确保速度一致
 					roleModelRef.current.position.x += direction.x * HORIZONTAL_SPEED * delta;
 					roleModelRef.current.position.z += direction.z * HORIZONTAL_SPEED * delta;
-					setRolePosition(pick(roleModelRef.current.position, ['x', 'y', 'z']));
 
-					// const up = new THREE.Vector3(1, 0, 0); // 假设模型的上方向是 Y 轴
-					// const quaternion = new THREE.Quaternion();
-					// quaternion.setFromUnitVectors(up, direction);
-					// roleModelRef.current.quaternion.copy(quaternion);
+					// 更新角色朝向
+					const targetAngle = pressW
+						? Math.atan2(direction.x, direction.z)
+						: Math.atan2(direction.x, direction.z) + Math.PI;
+					// Smoothly rotate towards target angle
+					roleModelRef.current.rotation.y = targetAngle;
+
+					setRolePosition(pick(roleModelRef.current.position, ['x', 'y', 'z']));
 				}
 			}
 
