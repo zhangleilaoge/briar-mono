@@ -15,7 +15,9 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import useClock from '@/pages/briar/hooks/useClock';
 import { useContainer } from '@/pages/briar/hooks/useContainer';
 
+import { HORIZONTAL_SPEED } from '../constants';
 import { threeContainer } from '../container';
+import { keyEventManager } from '../event';
 import { AnimationState } from '../type';
 
 interface AnimationLoopProps {
@@ -28,8 +30,8 @@ const useAnimationLoop = (props: AnimationLoopProps) => {
 		scene,
 		camera,
 		renderer,
-		cameraPosition,
-		setCameraPosition,
+		rolePosition,
+		// setCameraPosition,
 		setRolePosition,
 		isJumpingRef,
 		roleModelRef,
@@ -39,7 +41,17 @@ const useAnimationLoop = (props: AnimationLoopProps) => {
 	const { animation, control } = props;
 	const { update } = useClock();
 	const clockRef = useRef(new THREE.Clock());
-	const cameraPositionRef = useRef(cameraPosition);
+
+	// 更新相机位置，使其跟随角色
+	useEffect(() => {
+		if (!camera || !control) return;
+
+		const offset = new THREE.Vector3();
+
+		offset.copy(camera.position).sub(control.target);
+		camera?.position.copy(rolePosition).add(offset); // 使用偏移向量更新相机位置
+		control?.target.copy(rolePosition); // 更新控制器的目标位置
+	}, [camera, control, rolePosition]);
 
 	useEffect(() => {
 		if (!scene || !camera || !renderer) return;
@@ -48,18 +60,6 @@ const useAnimationLoop = (props: AnimationLoopProps) => {
 			requestAnimationFrame(animate);
 
 			const delta = update() / 1000.0;
-
-			// 相机位置变化
-			const cameraPositionRefXYZ = pick(cameraPositionRef.current, ['x', 'y', 'z']);
-			const cameraPositionXYZ: {
-				x: number;
-				y: number;
-				z: number;
-			} = pick(camera.position, ['x', 'y', 'z']);
-			if (JSON.stringify(cameraPositionRefXYZ) !== JSON.stringify(cameraPositionXYZ)) {
-				setCameraPosition(cameraPositionXYZ);
-				cameraPositionRef.current = cameraPositionXYZ;
-			}
 
 			// 角色跳跃
 			if (isJumpingRef.current && roleModelRef.current) {
@@ -72,6 +72,26 @@ const useAnimationLoop = (props: AnimationLoopProps) => {
 					roleModelRef.current.position.y = 0;
 					setRolePosition(pick(roleModelRef.current.position, ['x', 'y', 'z']));
 					isJumpingRef.current = false;
+				}
+			}
+
+			// 角色水平移动
+			if (roleModelRef.current) {
+				const pressW = keyEventManager.pressedKeys.has('KeyW');
+				const pressS = keyEventManager.pressedKeys.has('KeyS');
+				if (pressW || pressS) {
+					// 获取相机的前进方向（Z 轴方向）
+					const direction = new THREE.Vector3(0, 0, 0);
+					direction.setFromMatrixColumn(camera.matrix, 2); // 获取相机的 Z 轴方向
+					direction.multiplyScalar(pressW ? -1 : 1); // 取反，因为相机的 Z 轴方向是向后的
+					roleModelRef.current.position.x += direction.x * HORIZONTAL_SPEED * delta;
+					roleModelRef.current.position.z += direction.z * HORIZONTAL_SPEED * delta;
+					setRolePosition(pick(roleModelRef.current.position, ['x', 'y', 'z']));
+
+					// const up = new THREE.Vector3(1, 0, 0); // 假设模型的上方向是 Y 轴
+					// const quaternion = new THREE.Quaternion();
+					// quaternion.setFromUnitVectors(up, direction);
+					// roleModelRef.current.quaternion.copy(quaternion);
 				}
 			}
 

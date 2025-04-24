@@ -1,18 +1,10 @@
-/*
- * @Description:
- * @Author: zhanglei
- * @Date: 2025-04-09 17:53:51
- * @LastEditTime: 2025-04-22 10:13:48
- * @LastEditors: zhanglei
- * @Reference:
- */
-
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import { useContainer } from '@/pages/briar/hooks/useContainer';
 
+import { JUMP_INITIAL_VELOCITY } from '../constants';
 import { threeContainer } from '../container';
 import { keyEventManager } from '../event';
 
@@ -23,15 +15,55 @@ const useControl = (_props: IProps) => {
 		useContainer(threeContainer);
 	const [controls, setControls] = useState<OrbitControls | null>(null);
 
-	useEffect(() => {
-		keyEventManager.subscribe('Space', () => {
-			// 如果角色模型存在且当前没有在跳跃状态下，执行跳跃动画
-			if (!isJumpingRef.current && roleModelRef.current) {
-				isJumpingRef.current = true;
-				velocityRef.current.y = 3; // 初始跳跃速度
-			}
-		});
+	const jumpHandler = useCallback(() => {
+		// 如果角色模型存在且当前没有在跳跃状态下，执行跳跃动画
+		if (!isJumpingRef.current && roleModelRef.current) {
+			isJumpingRef.current = true;
+			velocityRef.current.y = JUMP_INITIAL_VELOCITY; // 初始跳跃速度
+		}
 	}, []);
+
+	useEffect(() => {
+		keyEventManager.subscribe({
+			key: 'Space',
+			callback: jumpHandler,
+			name: 'jump',
+			eventType: 'down'
+		});
+		keyEventManager.subscribe({
+			key: 'KeyW',
+			callback: () => {},
+			name: 'move',
+			eventType: 'down'
+		});
+		keyEventManager.subscribe({
+			key: 'KeyW',
+			callback: () => {},
+			name: 'move',
+			eventType: 'up'
+		});
+		keyEventManager.subscribe({
+			key: 'KeyS',
+			callback: () => {},
+			name: 'move',
+			eventType: 'down'
+		});
+		keyEventManager.subscribe({
+			key: 'KeySw',
+			callback: () => {},
+			name: 'move',
+			eventType: 'up'
+		});
+
+		return () => {
+			keyEventManager.unsubscribe({
+				name: 'jump'
+			});
+			keyEventManager.unsubscribe({
+				name: 'move'
+			});
+		};
+	}, [jumpHandler]);
 
 	useEffect(() => {
 		// 初始化控制器

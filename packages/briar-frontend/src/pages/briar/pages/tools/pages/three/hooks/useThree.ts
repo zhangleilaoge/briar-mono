@@ -1,12 +1,12 @@
+import useRoleModel from './model/useRoleModel';
+import useGround from './scene/useGround';
+import useLights from './scene/useLights';
 import useAnimationLoop from './useAnimationLoop';
 import useControl from './useControl';
-import useGround from './useGround';
-import useLights from './useLights';
 import useResizeHandler from './useResizeHandler';
-import useRoleModel from './useRoleModel';
 import useThreeCore from './useThreeCore';
 
-export const useThreeScene = (
+export const useThree = (
 	containerRef: React.RefObject<HTMLDivElement>,
 	options: {
 		width: number;

@@ -4,8 +4,8 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 import { useContainer } from '@/pages/briar/hooks/useContainer';
 
-import { threeContainer } from '../container';
-import { AnimationState } from '../type';
+import { threeContainer } from '../../container';
+import { AnimationState } from '../../type';
 
 const useRoleModel = (modelUrl: string) => {
 	const { scene, rolePosition, roleModelRef } = useContainer(threeContainer);

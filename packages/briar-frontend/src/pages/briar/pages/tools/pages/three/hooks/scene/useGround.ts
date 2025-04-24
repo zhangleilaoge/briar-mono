@@ -3,7 +3,7 @@ import * as THREE from 'three';
 
 import { useContainer } from '@/pages/briar/hooks/useContainer';
 
-import { threeContainer } from '../container';
+import { threeContainer } from '../../container';
 
 interface IProps {}
 

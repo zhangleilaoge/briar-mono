@@ -3,6 +3,7 @@ import * as THREE from 'three';
 
 import { useContainer } from '@/pages/briar/hooks/useContainer';
 
+import { CAMERA_POSITION } from '../constants';
 import { threeContainer } from '../container';
 
 const useThreeCore = (
@@ -18,7 +19,7 @@ const useThreeCore = (
 
 		// 初始化相机
 		const camera = new THREE.PerspectiveCamera(75, options.width / options.height, 0.1, 1000);
-		camera.position.set(0, 2, 3);
+		camera.position.set(CAMERA_POSITION.x, CAMERA_POSITION.y, CAMERA_POSITION.z);
 		camera.lookAt(0, 0, 0);
 		setCamera(camera);
 
