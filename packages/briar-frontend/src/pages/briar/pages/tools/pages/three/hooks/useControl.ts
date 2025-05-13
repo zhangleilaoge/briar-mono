@@ -30,30 +30,6 @@ const useControl = (_props: IProps) => {
 			name: 'jump',
 			eventType: 'down'
 		});
-		keyEventManager.subscribe({
-			key: 'KeyW',
-			callback: () => {},
-			name: 'move',
-			eventType: 'down'
-		});
-		keyEventManager.subscribe({
-			key: 'KeyW',
-			callback: () => {},
-			name: 'move',
-			eventType: 'up'
-		});
-		keyEventManager.subscribe({
-			key: 'KeyS',
-			callback: () => {},
-			name: 'move',
-			eventType: 'down'
-		});
-		keyEventManager.subscribe({
-			key: 'KeySw',
-			callback: () => {},
-			name: 'move',
-			eventType: 'up'
-		});
 
 		return () => {
 			keyEventManager.unsubscribe({

@@ -6,7 +6,7 @@ class KeyEventManager {
 	// 按名称存储回调函数
 	private nameCallbacks: Map<string, { down: KeyCallback[]; up: KeyCallback[] }> = new Map();
 	// 记录当前按下的按键
-	pressedKeys: Set<string> = new Set();
+	private pressedKeys: Set<string> = new Set();
 
 	constructor() {
 		window.addEventListener('keydown', this.handleKeyDown);
@@ -112,6 +112,14 @@ class KeyEventManager {
 	destroy() {
 		window.removeEventListener('keydown', this.handleKeyDown);
 		window.removeEventListener('keyup', this.handleKeyUp);
+	}
+
+	ifPressed(keys: string[]) {
+		return {
+			anyPressed: keys.some((key) => this.pressedKeys.has(key)),
+			allPressed: keys.every((key) => this.pressedKeys.has(key)),
+			pressedDetail: keys.map((key) => this.pressedKeys.has(key))
+		};
 	}
 }
 
