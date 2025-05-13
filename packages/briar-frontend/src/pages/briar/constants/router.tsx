@@ -236,7 +236,9 @@ export const ROUTER_CONFIG: IMenuRouterConfig[] = [
 					{
 						key: MenuKeyEnum.Three_3,
 						label: 'Three',
-						component: lazy(() => import('../pages/tools/pages/three'))
+						component: lazy(() => import('../pages/tools/pages/three')) as LazyExoticComponent<
+							() => JSX.Element
+						>
 					}
 				]
 			}
