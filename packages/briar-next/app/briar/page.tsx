@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
+import {
+	useEffect,
+	useState
+} from 'react';
+
 import { supabase } from '@/src/supabase';
-import { useEffect, useState } from 'react';
 
 // 登录
 // await supabase.auth.signInWithPassword({
@@ -98,19 +102,6 @@ export default function Briar() {
 
 	useEffect(() => {
 		checkAuth();
-	}, []);
-
-	useEffect(() => {
-		const init = async () => {
-			const { data, error } = await supabase.from('hello').select();
-			if (error) {
-				console.log('error', error);
-			} else {
-				console.log('data', data);
-			}
-		};
-
-		init();
 	}, []);
 
 	if (loading) {

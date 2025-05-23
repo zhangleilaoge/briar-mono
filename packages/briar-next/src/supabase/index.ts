@@ -5,6 +5,9 @@ import 'dotenv/config';
 
 const supabaseUrl = 'https://zzcjbauazgbnnpxahajj.supabase.co';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+console.log('supabaseKey', supabaseKey);
+
 export const supabase = createClient(supabaseUrl, supabaseKey!, {
 	db: {
 		schema: 'briar'
