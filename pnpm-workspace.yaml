@@ -1,3 +1,4 @@
 packages:
   - 'packages/*'
   - '!packages/briar-lang-chain'
+  - '!packages/briar-next'
