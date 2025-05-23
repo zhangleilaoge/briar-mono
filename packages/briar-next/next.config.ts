@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
 				permanent: true
 			}
 		];
+	},
+	env: {
+		NEXTJS_VERSION: '15.3.2'
 	}
 };
 
