@@ -1,14 +1,9 @@
 #!/bin/sh
 
-# 定义拷贝任务数组（普通数组+字符串组合方案，兼容性更好）
-COPY_TASKS=(
-    "./briar-assets/ssl|./assets/ssl"
-    "./briar-assets/briar|./packages/briar-node ./packages/briar-frontend ./packages/briar-lang-chain ./packages/briar-next"
-)
-
-copy_files() {
-    local SOURCE_DIR="$1"
-    local TARGET_DIRS="$2"
+# 使用简单的字符串和循环替代数组
+process_copy_task() {
+    SOURCE_DIR="$1"
+    TARGET_DIRS="$2"
 
     # 检查源目录是否存在
     if [ ! -d "$SOURCE_DIR" ]; then
@@ -37,10 +32,5 @@ copy_files() {
 }
 
 # 主执行逻辑
-for TASK in "${COPY_TASKS[@]}"; do
-    # 分割源目录和目标目录列表
-    IFS="|" read -r SOURCE_DIR TARGET_DIRS <<< "$TASK"
-    
-    echo "处理任务: $SOURCE_DIR => $TARGET_DIRS"
-    copy_files "$SOURCE_DIR" "$TARGET_DIRS"
-done
+process_copy_task "./briar-assets/ssl" "./assets/ssl"
+process_copy_task "./briar-assets/briar" "./packages/briar-node ./packages/briar-frontend ./packages/briar-lang-chain ./packages/briar-next"
