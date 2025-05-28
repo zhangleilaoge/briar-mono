@@ -1,8 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 # 定义拷贝任务数组（普通数组+字符串组合方案，兼容性更好）
 COPY_TASKS=(
-    # 格式："源目录|目标目录1 目标目录2..."
     "./briar-assets/ssl|./assets/ssl"
     "./briar-assets/briar|./packages/briar-node ./packages/briar-frontend ./packages/briar-lang-chain ./packages/briar-next"
 )
