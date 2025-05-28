@@ -33,4 +33,4 @@ process_copy_task() {
 
 # 主执行逻辑
 process_copy_task "./briar-assets/ssl" "./assets/ssl"
-process_copy_task "./briar-assets/briar" "./packages/briar-node ./packages/briar-frontend ./packages/briar-lang-chain ./packages/briar-next"
+process_copy_task "./briar-assets/briar" "./packages/briar-node ./packages/briar-frontend ./packages/briar-lang-chain 
