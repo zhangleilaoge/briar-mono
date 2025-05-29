@@ -34,7 +34,7 @@ pnpm run init
 
 ### 开发
 
-使用 whistle 进行本地代理开发
+使用 whistle 进行本地代理和开发
 
 ```
 # 1. 前后端一起调试，本地通过 stardew.site 访问页面（client build && client cdn && node dev）
