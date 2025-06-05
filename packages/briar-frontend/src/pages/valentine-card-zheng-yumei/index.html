@@ -1,0 +1,488 @@
+<!--
+ * @Description: 
+ * @Author: zhanglei
+ * @Date: 2025-06-05 16:09:36
+ * @LastEditTime: 2025-06-05 16:11:13
+ * @LastEditors: zhanglei
+ * @Reference: 
+-->
+<!--
+ * @Description: 
+ * @Author: zhanglei
+ * @Date: 2025-06-05 15:35:01
+ * @LastEditTime: 2025-06-05 15:35:05
+ * @LastEditors: zhanglei
+ * @Reference: 
+-->
+<!--
+ * @Description: 
+ * @Author: zhanglei
+ * @Date: 2025-06-05 15:32:41
+ * @LastEditTime: 2025-06-05 15:32:45
+ * @LastEditors: zhanglei
+ * @Reference: 
+-->
+<!doctype html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>情人节贺卡 - 给郑玉梅</title>
+		<style>
+			@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: 'Noto Sans SC', sans-serif;
+				background: linear-gradient(135deg, #ff6b6b, #ffd93d, #ff8cc8, #ff6b6b);
+				background-size: 400% 400%;
+				animation: gradientShift 10s ease infinite;
+				min-height: 100vh;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				overflow: hidden;
+				position: relative;
+			}
+
+			@keyframes gradientShift {
+				0% {
+					background-position: 0% 50%;
+				}
+				50% {
+					background-position: 100% 50%;
+				}
+				100% {
+					background-position: 0% 50%;
+				}
+			}
+
+			.hearts-container {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+			}
+
+			.heart {
+				position: absolute;
+				color: rgba(255, 255, 255, 0.6);
+				animation: fall 8s linear infinite;
+				font-size: 20px;
+			}
+
+			@keyframes fall {
+				0% {
+					transform: translateY(-100vh) rotate(0deg);
+					opacity: 1;
+				}
+				100% {
+					transform: translateY(100vh) rotate(360deg);
+					opacity: 0;
+				}
+			}
+
+			.card-container {
+				perspective: 1000px;
+				position: relative;
+				z-index: 10;
+			}
+
+			.valentine-card {
+				width: 400px;
+				height: 600px;
+				background: linear-gradient(145deg, #ffffff, #f8f8f8);
+				border-radius: 20px;
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+				position: relative;
+				cursor: pointer;
+				transition: all 0.5s ease;
+				transform-style: preserve-3d;
+				overflow: hidden;
+			}
+
+			.valentine-card:hover {
+				transform: translateY(-10px) rotateY(5deg);
+				box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+			}
+
+			.valentine-card::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="roses" patternUnits="userSpaceOnUse" width="50" height="50"><circle cx="25" cy="25" r="3" fill="%23ff6b6b" opacity="0.1"/><path d="M20 20 Q25 15 30 20 Q35 25 30 30 Q25 35 20 30 Q15 25 20 20" fill="%23ff8cc8" opacity="0.15"/><circle cx="15" cy="35" r="2" fill="%23ff6b6b" opacity="0.1"/><circle cx="35" cy="15" r="2" fill="%23ff6b6b" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23roses)"/></svg>')
+					repeat;
+				opacity: 0.3;
+				pointer-events: none;
+			}
+
+			.card-header {
+				text-align: center;
+				padding: 40px 20px 20px;
+				position: relative;
+				z-index: 2;
+			}
+
+			.card-title {
+				font-family: 'Dancing Script', cursive;
+				font-size: 2.5rem;
+				color: #d63384;
+				margin-bottom: 10px;
+				text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+			}
+
+			.card-subtitle {
+				font-size: 1.1rem;
+				color: #666;
+				font-weight: 300;
+			}
+
+			.card-content {
+				padding: 20px 30px;
+				text-align: center;
+				position: relative;
+				z-index: 2;
+			}
+
+			.recipient {
+				font-size: 1.8rem;
+				color: #d63384;
+				margin-bottom: 30px;
+				font-weight: 500;
+			}
+
+			.message {
+				font-size: 1.2rem;
+				line-height: 1.8;
+				color: #444;
+				margin-bottom: 40px;
+				font-weight: 400;
+			}
+
+			.signature {
+				font-size: 1.3rem;
+				color: #d63384;
+				font-weight: 500;
+				margin-top: 20px;
+			}
+
+			.rose-decoration {
+				position: absolute;
+				bottom: 30px;
+				left: 50%;
+				transform: translateX(-50%);
+				font-size: 3rem;
+				color: #ff6b6b;
+				opacity: 0.8;
+				animation: pulse 2s ease-in-out infinite;
+			}
+
+			@keyframes pulse {
+				0%,
+				100% {
+					transform: translateX(-50%) scale(1);
+				}
+				50% {
+					transform: translateX(-50%) scale(1.1);
+				}
+			}
+
+			.music-hint {
+				position: absolute;
+				bottom: -50px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: rgba(255, 255, 255, 0.9);
+				padding: 10px 20px;
+				border-radius: 25px;
+				font-size: 0.9rem;
+				color: #666;
+				box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+				opacity: 0;
+				transition: all 0.3s ease;
+				backdrop-filter: blur(10px);
+			}
+
+			.valentine-card:hover .music-hint {
+				opacity: 1;
+				bottom: -60px;
+			}
+
+			.music-playing {
+				position: fixed;
+				top: 20px;
+				right: 20px;
+				background: rgba(214, 51, 132, 0.9);
+				color: white;
+				padding: 10px 20px;
+				border-radius: 25px;
+				font-size: 0.9rem;
+				display: none;
+				align-items: center;
+				gap: 10px;
+				box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+				backdrop-filter: blur(10px);
+			}
+
+			.music-playing.show {
+				display: flex;
+			}
+
+			.music-icon {
+				animation: musicBounce 1s ease-in-out infinite;
+			}
+
+			@keyframes musicBounce {
+				0%,
+				100% {
+					transform: scale(1);
+				}
+				50% {
+					transform: scale(1.2);
+				}
+			}
+
+			@media (max-width: 768px) {
+				.valentine-card {
+					width: 90vw;
+					max-width: 350px;
+					height: 500px;
+				}
+
+				.card-title {
+					font-size: 2rem;
+				}
+
+				.recipient {
+					font-size: 1.5rem;
+				}
+
+				.message {
+					font-size: 1.1rem;
+				}
+
+				.signature {
+					font-size: 1.2rem;
+				}
+
+				.rose-decoration {
+					font-size: 2.5rem;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.valentine-card {
+					height: 450px;
+				}
+
+				.card-content {
+					padding: 15px 20px;
+				}
+
+				.card-title {
+					font-size: 1.8rem;
+				}
+
+				.recipient {
+					font-size: 1.3rem;
+				}
+
+				.message {
+					font-size: 1rem;
+				}
+
+				.signature {
+					font-size: 1.1rem;
+				}
+			}
+		</style>
+	</head>
+	<script type="module" src="/src/pages/valentine-card-zheng-yumei/main.tsx"></script>
+	<body>
+		<div class="hearts-container" id="heartsContainer"></div>
+
+		<div class="card-container">
+			<div class="valentine-card" id="valentineCard">
+				<div class="card-header">
+					<h1 class="card-title">💝 情人节快乐 💝</h1>
+					<p class="card-subtitle">Valentine's Day</p>
+				</div>
+
+				<div class="card-content">
+					<div class="recipient">亲爱的郑玉梅：</div>
+
+					<div class="message">
+						情人节快乐！<br />
+						愿我们的爱情如玫瑰般绽放，<br />
+						永不凋谢。
+					</div>
+
+					<div class="signature">爱你的张磊 ❤️</div>
+				</div>
+
+				<div class="rose-decoration">🌹</div>
+				<div class="music-hint">点击贺卡播放音乐 🎵</div>
+			</div>
+		</div>
+
+		<div class="music-playing" id="musicPlaying">
+			<span class="music-icon">🎵</span>
+			<span>正在播放浪漫音乐...</span>
+		</div>
+
+		<audio id="romanticMusic" preload="auto">
+			<source src="https://www.soundjay.com/misc/sounds/magic-chime-02.mp3" type="audio/mpeg" />
+			<!-- 备用音频源 -->
+			<source
+				src="https://www2.cs.uic.edu/~i101/SoundFiles/BabyElephantWalk60.wav"
+				type="audio/wav"
+			/>
+		</audio>
+
+		<script>
+			// 创建飘落的心形
+			function createHearts() {
+				const heartsContainer = document.getElementById('heartsContainer');
+				const heartSymbols = ['💖', '💕', '💗', '💓', '💝', '🌹', '💐'];
+
+				function createHeart() {
+					const heart = document.createElement('div');
+					heart.className = 'heart';
+					heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+					heart.style.left = Math.random() * 100 + '%';
+					heart.style.animationDuration = Math.random() * 5 + 3 + 's';
+					heart.style.animationDelay = Math.random() * 2 + 's';
+					heartsContainer.appendChild(heart);
+
+					setTimeout(() => {
+						heart.remove();
+					}, 8000);
+				}
+
+				setInterval(createHeart, 800);
+			}
+
+			// 音乐播放功能
+			let isPlaying = false;
+			let audioContext;
+			let oscillator;
+
+			function playRomanticMusic() {
+				const musicPlaying = document.getElementById('musicPlaying');
+
+				if (isPlaying) {
+					stopMusic();
+					return;
+				}
+
+				isPlaying = true;
+				musicPlaying.classList.add('show');
+
+				// 创建一个简单的浪漫音乐旋律
+				audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+				// 浪漫音乐的音符序列 (简化版卡农)
+				const notes = [
+					{ freq: 523.25, duration: 0.5 }, // C5
+					{ freq: 587.33, duration: 0.5 }, // D5
+					{ freq: 659.25, duration: 0.5 }, // E5
+					{ freq: 698.46, duration: 0.5 }, // F5
+					{ freq: 783.99, duration: 0.5 }, // G5
+					{ freq: 880.0, duration: 0.5 }, // A5
+					{ freq: 987.77, duration: 0.5 }, // B5
+					{ freq: 1046.5, duration: 1.0 }, // C6
+					{ freq: 987.77, duration: 0.5 }, // B5
+					{ freq: 880.0, duration: 0.5 }, // A5
+					{ freq: 783.99, duration: 0.5 }, // G5
+					{ freq: 698.46, duration: 0.5 }, // F5
+					{ freq: 659.25, duration: 0.5 }, // E5
+					{ freq: 587.33, duration: 0.5 }, // D5
+					{ freq: 523.25, duration: 1.0 } // C5
+				];
+
+				let currentTime = audioContext.currentTime;
+
+				notes.forEach((note) => {
+					const osc = audioContext.createOscillator();
+					const gainNode = audioContext.createGain();
+
+					osc.connect(gainNode);
+					gainNode.connect(audioContext.destination);
+
+					osc.frequency.setValueAtTime(note.freq, currentTime);
+					osc.type = 'sine';
+
+					gainNode.gain.setValueAtTime(0, currentTime);
+					gainNode.gain.linearRampToValueAtTime(0.1, currentTime + 0.1);
+					gainNode.gain.linearRampToValueAtTime(0, currentTime + note.duration);
+
+					osc.start(currentTime);
+					osc.stop(currentTime + note.duration);
+
+					currentTime += note.duration;
+				});
+
+				// 音乐播放完成后自动停止
+				setTimeout(() => {
+					stopMusic();
+				}, currentTime * 1000);
+			}
+
+			function stopMusic() {
+				isPlaying = false;
+				const musicPlaying = document.getElementById('musicPlaying');
+				musicPlaying.classList.remove('show');
+
+				if (audioContext) {
+					audioContext.close();
+					audioContext = null;
+				}
+			}
+
+			// 贺卡点击事件
+			document.getElementById('valentineCard').addEventListener('click', function () {
+				this.style.transform = 'scale(0.95)';
+				setTimeout(() => {
+					this.style.transform = '';
+				}, 150);
+
+				playRomanticMusic();
+			});
+
+			// 初始化
+			document.addEventListener('DOMContentLoaded', function () {
+				createHearts();
+
+				// 添加一些随机的闪烁效果
+				setInterval(() => {
+					const card = document.getElementById('valentineCard');
+					card.style.boxShadow = '0 20px 40px rgba(214, 51, 132, 0.2)';
+					setTimeout(() => {
+						card.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.1)';
+					}, 200);
+				}, 5000);
+			});
+
+			// 防止音频播放被浏览器阻止
+			document.addEventListener(
+				'click',
+				function () {
+					if (audioContext && audioContext.state === 'suspended') {
+						audioContext.resume();
+					}
+				},
+				{ once: true }
+			);
+		</script>
+	</body>
+</html>
