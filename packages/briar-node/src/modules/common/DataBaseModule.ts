@@ -18,6 +18,7 @@ import { VerifyCodeModel } from '@/model/VerifyModel';
 // 如若只有一个.env，直接 import 'dotenv/config' 而不用指定 .env 也可以
 dotenv.config({ path: '../../.env' });
 
+// 已弃用，使用supabase
 @Module({
   imports: [
     SequelizeModule.forRoot({

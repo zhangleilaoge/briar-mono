@@ -1,69 +1,82 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { Inject, Injectable } from '@nestjs/common';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { IPageInfo, UrlEnum } from 'briar-shared';
 import { difference } from 'lodash';
-import { Op } from 'sequelize';
 
-import { ShortUrlModel } from '@/model/ShortUrlModel';
 import { generateRandomStr } from '@/utils/hash';
 
 @Injectable()
 export class ShortUrlDalService {
   constructor(
-    @InjectModel(ShortUrlModel)
-    private readonly shortUrlModel: typeof ShortUrlModel,
+    @Inject('SUPABASE_CLIENT')
+    private readonly supabase: SupabaseClient,
   ) {}
 
   async batchCreate(codes: string[]) {
-    return await this.shortUrlModel.bulkCreate(codes.map((code) => ({ code })));
+    const { data, error } = await this.supabase
+      .from('short_urls')
+      .insert(codes.map((code) => ({ code })))
+      .select();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
   }
 
   async findOneEmptyCode() {
-    return (
-      await this.shortUrlModel.findOne({
-        where: {
-          url: {
-            [Op.eq]: '',
-          },
-        },
-      })
-    )?.dataValues?.code;
+    const { data, error } = await this.supabase
+      .from('short_urls')
+      .select('code')
+      .is('url', null)
+      .limit(1)
+      .single();
+
+    if (error) {
+      return null;
+    }
+
+    return data?.code;
   }
 
   async findOneByCode(code: string) {
-    return (
-      await this.shortUrlModel.findOne({
-        where: {
-          code: {
-            [Op.eq]: code,
-          },
-        },
-      })
-    )?.dataValues;
+    const { data, error } = await this.supabase
+      .from('short_urls')
+      .select('*')
+      .eq('code', code)
+      .single();
+
+    if (error) {
+      return null;
+    }
+
+    return data;
   }
 
   async getList(pagination: IPageInfo, userId: number, url: string) {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize - 1;
     const code = url.replace(UrlEnum.Base, '');
 
-    const { count, rows } = await this.shortUrlModel.findAndCountAll({
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
-      order: [['createdAt', 'DESC']], // 以创建时间降序排列
-      where: {
-        creator: userId,
-        [Op.or]: [
-          { url: { [Op.like]: `%${url}%` } }, // 确保 URL 包含传入的 url
-          { code: { [Op.like]: `%${code}%` } }, // 确保 code 包含传入的 url
-        ],
-      },
-    });
+    const { data, count, error } = await this.supabase
+      .from('short_urls')
+      .select('*', { count: 'exact' })
+      .eq('creator', userId)
+      .or(`url.ilike.%${url}%,code.ilike.%${code}%`)
+      .order('createdAt', { ascending: false })
+      .range(start, end);
+
+    if (error) {
+      throw new Error(error.message);
+    }
 
     return {
-      items: rows.map((item) => item.dataValues),
+      items: data || [],
       paginator: {
-        total: count,
+        total: count || 0,
         page,
         pageSize,
       },
@@ -71,31 +84,27 @@ export class ShortUrlDalService {
   }
 
   async updateShortUrl(code: string, url: string, creator: number) {
-    await this.shortUrlModel.update(
-      {
-        url,
-        creator,
-      },
-      {
-        where: {
-          code,
-        },
-      },
-    );
+    const { error } = await this.supabase
+      .from('short_urls')
+      .update({ url, creator })
+      .eq('code', code);
+
+    if (error) {
+      throw new Error(error.message);
+    }
   }
 
   async findRepeatCodes(codes: string[]) {
-    const repeatCodes = (
-      await this.shortUrlModel.findAll({
-        where: {
-          code: {
-            [Op.in]: codes,
-          },
-        },
-      })
-    ).map((item) => item.dataValues.code);
+    const { data, error } = await this.supabase
+      .from('short_urls')
+      .select('code')
+      .in('code', codes);
 
-    return repeatCodes;
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data?.map((item) => item.code) || [];
   }
 
   async createEmptyShortCode() {

@@ -53,6 +53,7 @@ export class UserController {
   @Get('getUserInfo')
   async getUserInfo(): Promise<IUserAccess> {
     const data = await this.userService.getUserByJwt();
+
     let accessToken = '';
     let availablePage = [];
 
@@ -242,7 +243,7 @@ export class UserController {
 
   @Get('getRoleList')
   async getRoleList() {
-    const data = await this.userService.getRoleList();
+    const data = await this.userService.getRoleList(true);
 
     return data;
   }

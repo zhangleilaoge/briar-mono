@@ -6,10 +6,12 @@ import { ShortUrlDalService } from '@/services/dal/ShortUrlDalService';
 import { VerifyDalService } from '@/services/dal/VerifyDalService';
 import { SystemLogService } from '@/services/LogService';
 
-import { DatabaseModule } from './DataBaseModule';
+import { SupabaseModule } from './SupabaseModule';
+
+// import { DatabaseModule } from './DataBaseModule';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [SupabaseModule],
   controllers: [],
   providers: [
     ShortUrlDalService,

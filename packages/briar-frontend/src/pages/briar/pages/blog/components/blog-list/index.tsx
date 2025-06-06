@@ -1,7 +1,6 @@
 import { useMount } from 'ahooks';
 import { useRequest } from 'alova/client';
-import { List, Skeleton } from 'antd';
-import { Input } from 'antd';
+import { Input, List, Skeleton } from 'antd';
 import { IGetBlogsResponse, IPageInfo, ItemTypeOfArray } from 'briar-shared';
 import { useCallback, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';

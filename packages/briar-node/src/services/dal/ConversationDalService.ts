@@ -1,70 +1,93 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import { Inject, Injectable } from '@nestjs/common';
+import { SupabaseClient } from '@supabase/supabase-js';
 import { IConversationDTO } from 'briar-shared';
-import { Op } from 'sequelize';
-
-import { ConversationModel } from '@/model/ConversationModel';
-import { MessageModel } from '@/model/MessageModel';
-
-import { FollowDelete } from './MessageDalService';
 
 @Injectable()
 export class ConversationDalService {
   constructor(
-    @InjectModel(ConversationModel)
-    private readonly conversationModel: typeof ConversationModel,
-    @InjectModel(MessageModel)
-    private readonly messageModel: typeof MessageModel,
+    @Inject('SUPABASE_CLIENT')
+    private readonly supabase: SupabaseClient,
   ) {}
 
-  async create({ userId, title, profile, prompt }): Promise<ConversationModel> {
-    const conversation = await this.conversationModel.create({
-      title: title.slice(0, 25),
-      userId,
-      profile,
-      prompt,
-    });
+  async create({ userId, title, profile, prompt }) {
+    const { data, error } = await this.supabase
+      .from('conversations')
+      .insert({
+        title: title.slice(0, 25),
+        userId,
+        profile,
+        prompt,
+      })
+      .select()
+      .single();
 
-    return conversation.dataValues;
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
   }
 
-  @FollowDelete('conversationId')
   async delete(ids: number[]) {
-    return await this.conversationModel.destroy({
-      where: {
-        id: {
-          [Op.in]: ids, // 只删除这些 ID 的记录
-        },
-      },
-    });
+    // 首先删除关联的消息
+    const { error: messagesError } = await this.supabase
+      .from('messages')
+      .delete()
+      .in('conversationId', ids);
+
+    if (messagesError) {
+      throw new Error(messagesError.message);
+    }
+
+    // 然后删除对话
+    const { error: conversationsError } = await this.supabase
+      .from('conversations')
+      .delete()
+      .in('id', ids);
+
+    if (conversationsError) {
+      throw new Error(conversationsError.message);
+    }
   }
 
   async getConversationList(userId: number, limit = 100) {
-    return (
-      await this.conversationModel.findAll({
-        where: { userId },
-        limit,
-        order: [
-          ['marked', 'DESC'],
-          ['updatedAt', 'DESC'],
-        ],
-      })
-    ).map((c) => c.dataValues);
+    const { data, error } = await this.supabase
+      .from('conversations')
+      .select('*')
+      .eq('userId', userId)
+      .order('marked', { ascending: false })
+      .order('updatedAt', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data || [];
   }
 
   async getConversation(conversationId: number) {
-    return (
-      await this.conversationModel.findOne({
-        where: { id: conversationId },
-      })
-    ).dataValues;
+    const { data, error } = await this.supabase
+      .from('conversations')
+      .select('*')
+      .eq('id', conversationId)
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    return data;
   }
 
   async update(id: number, conversation: Partial<IConversationDTO>) {
-    const data = await this.conversationModel.update(conversation, {
-      where: { id },
-    });
+    const { error } = await this.supabase
+      .from('conversations')
+      .update(conversation)
+      .eq('id', id);
 
-    return data;
+    if (error) {
+      throw new Error(error.message);
+    }
   }
 }
