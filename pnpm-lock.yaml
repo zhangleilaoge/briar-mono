@@ -1216,7 +1216,6 @@ packages:
       '@smithy/signature-v4': ^2.0.10
       '@smithy/util-utf8': ^2.0.0
       '@spider-cloud/spider-client': ^0.0.21
-      '@supabase/supabase-js': ^2.45.0
       '@tensorflow-models/universal-sentence-encoder': '*'
       '@tensorflow/tfjs-converter': '*'
       '@tensorflow/tfjs-core': '*'
@@ -1391,8 +1390,6 @@ packages:
       '@smithy/util-utf8':
         optional: true
       '@spider-cloud/spider-client':
-        optional: true
-      '@supabase/supabase-js':
         optional: true
       '@tensorflow-models/universal-sentence-encoder':
         optional: true
