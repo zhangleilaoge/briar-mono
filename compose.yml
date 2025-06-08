@@ -1,6 +1,9 @@
 services:
   briar-node:
-    network_mode: 'host'
+    # network_mode: 'host'
+    dns:
+      - 8.8.8.8 # Google DNS
+      - 114.114.114.114 # 国内 DNS
     image: zhangleilaoge/briar-node
     build:
       context: .
@@ -11,7 +14,10 @@ services:
     ports:
       - '8922:8922'
   briar-nginx:
-    network_mode: 'host'
+    # network_mode: 'host'
+    dns:
+      - 8.8.8.8 # Google DNS
+      - 114.114.114.114 # 国内 DNS
     image: zhangleilaoge/briar-nginx
     build:
       context: .
