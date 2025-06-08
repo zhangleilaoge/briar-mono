@@ -13,24 +13,32 @@ if [ $? -ne 0 ]; then
 fi
 
 # 2. Init project
+echo "Initializing submodules..."
 git config --file .gitmodules submodule.briar-assets.url https://$GITHUB_USER:$GITHUB_TOKEN@github.com/zhangleilaoge/briar-assets.git
 git submodule sync
 git submodule update --init --recursive
 sh ./scripts/assets-init.sh
 
-# 3. Docker run
-echo "Trying to run docker..."
-sudo docker stop $(sudo docker ps -aq)
-sudo docker rm $(sudo docker ps -a -q)
-sudo docker system prune -a -f
-sleep 5
-echo "Start to clear static..."
-sudo docker volume rm briar-mono_briar-static -f
-sudo docker compose pull
-sudo docker compose up -d
-if [ $? -ne 0 ]; then
-    echo "Docker run failed. Exiting..."
-    exit 1
-fi
+# 3. Install dependencies
+echo "Installing dependencies..."
+pnpm install
+
+# 4. Build project
+echo "Building project..."
+pnpm run build
+
+# 5. Start backend
+echo "Starting backend..."
+cd packages/briar-node
+pnpm run start &
+cd ../..
+
+# 6. Configure and start Nginx
+echo "Configuring and starting Nginx..."
+sudo cp default.conf /etc/nginx/conf.d/
+sudo cp briar-assets/ssl/stardew.site_bundle.crt /etc/nginx/
+sudo cp briar-assets/ssl/stardew.site.key /etc/nginx/
+sudo systemctl restart nginx
+
 
 echo "All steps completed successfully."
