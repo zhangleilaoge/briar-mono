@@ -31,6 +31,12 @@ dotenv.config({ path: '../../.env' });
       synchronize: true, // 在开发环境中可能使用，生产环境建议关闭
       timezone: '+08:00', // 设置时区为 UTC+8
       logging: false,
+      pool: {
+        max: 20,
+        min: 5,
+        idle: 10000,
+        acquire: 30000
+      }
     }),
     SequelizeModule.forFeature([
       ConversationModel,
