@@ -1,9 +1,9 @@
 services:
   briar-node:
-    # network_mode: 'host'
-    dns:
-      - 8.8.8.8 # Google DNS
-      - 114.114.114.114 # 国内 DNS
+    network_mode: 'host'
+    # dns:
+    #   - 8.8.8.8 # Google DNS
+    #   - 114.114.114.114 # 国内 DNS
     image: zhangleilaoge/briar-node
     build:
       context: .
@@ -11,16 +11,16 @@ services:
     container_name: nodeimg
     volumes:
       - briar-static:/briar-mono/packages/briar-frontend/dist
-    ports:
-      - '8922:8922'
-    networks:
-      - briar-net
+    # ports:
+    #   - '8922:8922'
+    # networks:
+    #   - briar-net
 
   briar-nginx:
-    # network_mode: 'host'
-    dns:
-      - 8.8.8.8 # Google DNS
-      - 114.114.114.114 # 国内 DNS
+    network_mode: 'host'
+    # dns:
+    #   - 8.8.8.8 # Google DNS
+    #   - 114.114.114.114 # 国内 DNS
     image: zhangleilaoge/briar-nginx
     build:
       context: .
@@ -28,17 +28,16 @@ services:
     container_name: nginximg
     volumes:
       - briar-static:/usr/share/nginx/static
-    ports:
-      - '443:443'
-      - '80:80'
+    # ports:
+    #   - '443:443'
+    #   - '80:80'
     depends_on:
       - briar-node
-    networks:
-      - briar-net
+    # networks:
+    #   - briar-net
 
 volumes:
   briar-static:
-
-networks:
-  briar-net:
-    driver: bridge
+# networks:
+#   briar-net:
+#     driver: bridge
