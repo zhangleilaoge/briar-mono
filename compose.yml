@@ -13,6 +13,9 @@ services:
       - briar-static:/briar-mono/packages/briar-frontend/dist
     ports:
       - '8922:8922'
+    networks:
+      - briar-net
+
   briar-nginx:
     # network_mode: 'host'
     dns:
@@ -30,5 +33,12 @@ services:
       - '80:80'
     depends_on:
       - briar-node
+    networks:
+      - briar-net
+
 volumes:
   briar-static:
+
+networks:
+  briar-net:
+    driver: bridge
