@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "concurrently \"npx tailwindcss -i ./src/tailwind-from.css -o ./src/tailwind-to.css --watch\" \"vite\"",
-		"build": "tsc -b && npx tailwindcss -i ./src/tailwind-from.css -o ./src/tailwind-to.css && vite build NODE_OPTIONS=–max_old_space_size=4096 ",
+		"build": "tsc -b && npx tailwindcss -i ./src/tailwind-from.css -o ./src/tailwind-to.css && npx --max_old_space_size=10240 vite build",
 		"build:quick": "tsc -b && npx tailwindcss -i ./src/tailwind-from.css -o ./src/tailwind-to.css && vite build --mode quick",
 		"cdn": "node ./scripts/upload-cdn.js",
 		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
