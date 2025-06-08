@@ -33,6 +33,10 @@ cd packages/briar-node
 pnpm run start &
 cd ../..
 
+# 6. update cdn
+sleep 3
+pnpm run cdn
+
 # 6. Configure and start Nginx
 echo "Configuring and starting Nginx..."
 sudo cp default.conf /etc/nginx/conf.d/
