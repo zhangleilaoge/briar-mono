@@ -1,14 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { ILogDTO, LogFromEnum, LogTypeEnum, PureModel } from 'briar-shared';
+import sequelize, { Op } from 'sequelize';
 
-import { LogModel } from '@/model/LogModel';
+import { LogModel } from './../../model/LogModel';
 
 @Injectable()
 export class LogDalService {
   constructor(
-    @Inject('SUPABASE_CLIENT')
-    private readonly supabase: SupabaseClient,
+    @InjectModel(LogModel)
+    private readonly logModel: typeof LogModel,
   ) {}
 
   async create(
@@ -22,36 +23,30 @@ export class LogDalService {
     }: PureModel<ILogDTO>,
     from: LogFromEnum,
   ): Promise<LogModel> {
-    const { data, error } = await this.supabase
-      .from('logs')
-      .insert({
-        userId,
-        type,
+    return (
+      await this.logModel.create({
         content,
+        type,
+        userId,
         ip,
         from,
         traceId,
         location,
       })
-      .select()
-      .single();
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return data;
+    ).dataValues;
   }
 
-  async clear(days = 30): Promise<void> {
+  async clear(days = 30) {
     const maxAge = 60 * 60 * 24 * days;
-    const { error } = await this.supabase
-      .from('logs')
-      .delete()
-      .lt('created_at', new Date(Date.now() - maxAge * 1000).toISOString());
-
-    if (error) {
-      throw new Error(error.message);
-    }
+    // 清理 30 天前的日志
+    await this.logModel.destroy({
+      where: {
+        [Op.and]: [
+          sequelize.literal(
+            `TIMESTAMPDIFF(SECOND, createdAt, NOW()) > ${maxAge}`,
+          ),
+        ],
+      },
+    });
   }
 }
