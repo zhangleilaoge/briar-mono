@@ -36,7 +36,7 @@ jobs:
           sh ./scripts/assets-init.sh
 
       - name: Build
-        run: pnpm run build
+        run: pnpm run build:front
 
       - name: Run CDN script
         run: pnpm run cdn

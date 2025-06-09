@@ -25,11 +25,11 @@ pnpm install
 
 # 4. Build project
 echo "Building project..."
-pnpm run build
+pnpm run build:node
 
 # 5. update cdn
-sleep 3
-pnpm run cdn
+# sleep 3
+# pnpm run cdn
 
 # 6. Configure and start Nginx
 echo "Configuring and starting Nginx..."
