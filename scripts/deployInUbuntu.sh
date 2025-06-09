@@ -11,6 +11,7 @@ if [ $? -ne 0 ]; then
     echo "Git pull failed. Exiting..."
     exit 1
 fi
+git status
 
 sleep 3
 
