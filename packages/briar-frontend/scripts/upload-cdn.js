@@ -20,7 +20,7 @@ const bucket = process.env.BRIAR_TX_BUCKET_NAME;
  */
 function listFilesInDirectory(targetDirectory) {
 	const file_paths = [];
-	const projectRoot = process.cwd().split('briar-mono', 2)[0];
+	const projectRoot = process.cwd().slice(0, process.cwd().lastIndexOf('briar-mono'));
 	const absoluteTargetDirectory = path.join(
 		projectRoot,
 		'briar-mono/packages/briar-frontend',
