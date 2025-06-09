@@ -12,6 +12,8 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+sleep 3
+
 # 2. Init project
 echo "Initializing submodules..."
 git config --file .gitmodules submodule.briar-assets.url https://$GITHUB_USER:$GITHUB_TOKEN@github.com/zhangleilaoge/briar-assets.git
@@ -24,7 +26,7 @@ echo "Installing dependencies..."
 pnpm install
 
 # 4. Build project
-echo "Building node..."
+echo "Building node.."
 pnpm run build:node
 
 # 5. update cdn
