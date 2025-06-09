@@ -1,12 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { IVerifyCodeDTO, VerifyScene } from 'briar-shared';
+import sequelize, { Op } from 'sequelize';
+
+import { VerifyCodeModel } from '@/model/VerifyModel';
 
 @Injectable()
 export class VerifyDalService {
   constructor(
-    @Inject('SUPABASE_CLIENT')
-    private readonly supabase: SupabaseClient,
+    @InjectModel(VerifyCodeModel)
+    private readonly verifyCodeModel: typeof VerifyCodeModel,
   ) {}
 
   async createVerifyCode({
@@ -16,23 +19,13 @@ export class VerifyDalService {
     scene,
     consumer,
   }: Omit<IVerifyCodeDTO, 'id' | 'createdAt' | 'updatedAt'>) {
-    const { data, error } = await this.supabase
-      .from('verify_codes')
-      .insert({
-        creator,
-        validDuration,
-        code,
-        scene,
-        consumer,
-      })
-      .select()
-      .single();
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return data;
+    return await this.verifyCodeModel.create({
+      creator,
+      validDuration,
+      code,
+      scene,
+      consumer,
+    });
   }
 
   async checkVerifyCode({
@@ -46,38 +39,41 @@ export class VerifyDalService {
     scene: VerifyScene;
     consumer: number;
   }) {
-    const { data, error } = await this.supabase
-      .from('verify_codes')
-      .select('*')
-      .eq('creator', creator)
-      .eq('code', code)
-      .eq('scene', scene)
-      .eq('consumer', consumer)
-      .single();
+    // 查询数据库中符合条件的记录
+    const verifyCode = (
+      await this.verifyCodeModel.findOne({
+        where: {
+          creator,
+          code,
+          scene,
+          consumer,
+        },
+      })
+    )?.dataValues;
 
-    if (error) {
-      return false;
-    }
-
-    if (data) {
+    if (verifyCode) {
       const currentTime = new Date();
-      const createdAt = new Date(data.created_at);
-      const validDuration = data.validDuration;
+      const createdAt = verifyCode.createdAt;
+      const validDuration = verifyCode.validDuration; // 从数据库中获取 validDuration
 
-      return new Date(createdAt.getTime() + validDuration) > currentTime;
+      const isExpired =
+        new Date(createdAt.getTime() + validDuration) < currentTime;
+
+      return !isExpired;
     }
 
     return false;
   }
 
   async clearExpiredVerifyCode() {
-    const { error } = await this.supabase
-      .from('verify_codes')
-      .delete()
-      .filter('createdAt', 'lt', new Date(Date.now() - 1000).toISOString());
-
-    if (error) {
-      throw new Error(error.message);
-    }
+    await this.verifyCodeModel.destroy({
+      where: {
+        [Op.and]: [
+          sequelize.literal(
+            `TIMESTAMPDIFF(SECOND, createdAt, NOW()) > (validDuration / 1000)`,
+          ),
+        ],
+      },
+    });
   }
 }

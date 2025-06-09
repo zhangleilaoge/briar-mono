@@ -10,6 +10,7 @@ import {
   MOBILE_REG,
   RoleEnum,
 } from 'briar-shared';
+import { Op } from 'sequelize';
 
 import { ContextService } from './common/ContextService';
 import { UserDalService } from './dal/UserDalService';
@@ -51,7 +52,10 @@ export class UserService {
   }
 
   async getLoginUser(username: string, password: string) {
-    const user = await this.userDalService.getUser({ username, password });
+    const user = await this.userDalService.getUser(
+      { username, password },
+      Op.and,
+    );
     return user as IUserInfoDTO;
   }
 
@@ -146,8 +150,8 @@ export class UserService {
     return result;
   }
 
-  async getRoleList(withCount = false) {
-    const result = await this.userDalService.getRoles(withCount);
+  async getRoleList() {
+    const result = await this.userDalService.getRoles();
     return result;
   }
 

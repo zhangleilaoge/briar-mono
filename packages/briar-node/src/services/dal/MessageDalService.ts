@@ -1,14 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { ChatRoleEnum } from 'briar-shared';
+import { safeJSON } from 'openai/core';
+import { Op } from 'sequelize';
 
 import { MessageModel } from '@/model/MessageModel';
 
 @Injectable()
 export class MessageDalService {
   constructor(
-    @Inject('SUPABASE_CLIENT')
-    private readonly supabase: SupabaseClient,
+    @InjectModel(MessageModel)
+    private readonly messageModel: typeof MessageModel,
   ) {}
 
   async create({
@@ -23,67 +25,59 @@ export class MessageDalService {
     conversationId: number;
     model: string;
     imgList: string[];
-  }) {
-    const { data, error } = await this.supabase
-      .from('messages')
-      .insert({
+  }): Promise<MessageModel> {
+    const result = (
+      await this.messageModel.create({
         content,
         role,
         conversationId,
         model,
-        imgList, // Supabase 自动处理 JSON 字段，不需要手动 stringify
+        imgList: JSON.stringify(imgList),
       })
-      .select()
-      .single();
-
-    if (error) {
-      throw new Error(error.message);
-    }
+    ).dataValues;
 
     return {
-      ...data,
-      imgList: data.imgList || [],
-    };
+      ...result,
+      imgList: result.imgList ? safeJSON(result.imgList) : [],
+    } as MessageModel;
   }
 
   async update(data: Partial<MessageModel>) {
-    const { error } = await this.supabase
-      .from('messages')
-      .update(data)
-      .eq('id', data.id);
-
-    if (error) {
-      throw new Error(error.message);
-    }
+    return await this.messageModel.update(data, { where: { id: data.id } });
   }
 
   async findMessages(conversationId: number, endTime = Date.now(), limit = 50) {
-    const { data: messages, error: countError } = await this.supabase
-      .from('messages')
-      .select('*', { count: 'exact' })
-      .eq('conversationId', conversationId)
-      .lt('createdAt', new Date(endTime).toISOString())
-      .order('createdAt', { ascending: true })
-      .order('id', { ascending: true })
-      .limit(limit);
+    const totalCount = await this.messageModel.count({
+      where: {
+        conversationId,
+        createdAt: { [Op.lt]: new Date(endTime) },
+      },
+    });
 
-    if (countError) {
-      throw new Error(countError.message);
-    }
+    const messages = await this.messageModel.findAll({
+      where: { conversationId, createdAt: { [Op.lt]: new Date(endTime) } },
+      limit,
+      order: [
+        ['createdAt', 'DESC'],
+        ['id', 'DESC'],
+      ],
+    });
 
-    const messageData = (messages || []).map((msg) => ({
-      ...msg,
-      imgList: msg.imgList || [],
-    }));
+    const messageData = messages
+      .reverse()
+      .map((msg) => msg.dataValues)
+      .map((msg) => ({
+        ...msg,
+        imgList: msg.imgList ? safeJSON(msg.imgList) : [],
+      }));
 
     return {
-      total: messages?.length || 0,
+      total: totalCount,
       items: messageData,
     };
   }
 }
 
-// Supabase 版本的 FollowDelete 装饰器
 export function FollowDelete(idName: string) {
   return function (
     _target: any,
@@ -93,16 +87,16 @@ export function FollowDelete(idName: string) {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (ids: number[], ...args: any[]) {
-      const { error } = await this.supabase
-        .from('messages')
-        .delete()
-        .in(idName, ids);
-
-      if (error) {
-        throw new Error(error.message);
-      }
+      await this.messageModel.destroy({
+        where: {
+          [idName]: {
+            [Op.in]: ids,
+          },
+        },
+      });
 
       const result = await originalMethod.apply(this, [ids, ...args]);
+
       return result;
     };
 

@@ -1,20 +1,15 @@
-import {
-  Inject,
-  Injectable,
-} from '@nestjs/common';
-import { SupabaseClient } from '@supabase/supabase-js';
-import {
-  IMaterial,
-  IPageInfo,
-} from 'briar-shared';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
+import { IMaterial, IPageInfo } from 'briar-shared';
+import { Op } from 'sequelize';
 
 import { MaterialModel } from '@/model/MaterialModel';
 
 @Injectable()
 export class MaterialDalService {
   constructor(
-    @Inject('SUPABASE_CLIENT')
-    private readonly supabase: SupabaseClient,
+    @InjectModel(MaterialModel)
+    private readonly materialModel: typeof MaterialModel,
   ) {}
 
   async createImgMaterial(
@@ -23,76 +18,55 @@ export class MaterialDalService {
     const userId = files[0].userId;
     const urls = files.map((file) => file.url);
 
-    // 查找已存在的材料
-    const { data: existingMaterials } = await this.supabase
-      .from('materials')
-      .select('*')
-      .in('url', urls)
-      .eq('userId', userId);
-
-    // 过滤掉已存在的材料
-    const newFiles = files.filter((file) => {
-      return !existingMaterials?.some(
-        (existingMaterial) => existingMaterial.thumbUrl === file.thumbUrl,
-      );
+    const existingMaterials = await this.materialModel.findAll({
+      where: {
+        url: {
+          [Op.in]: urls,
+        },
+        userId,
+      },
     });
 
-    if (newFiles.length === 0) {
-      return [];
-    }
-
-    // 批量创建新材料
-    const { data, error } = await this.supabase
-      .from('materials')
-      .insert(newFiles)
-      .select();
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return data;
+    return await this.materialModel.bulkCreate(
+      files.filter((file) => {
+        return !existingMaterials.some(
+          (existingMaterial) => existingMaterial.thumbUrl === file.thumbUrl,
+        );
+      }),
+    );
   }
 
   async deleteImgMaterials(
     list: { id: number; name: string }[],
     userId: number,
   ) {
-    const { error } = await this.supabase
-      .from('materials')
-      .delete()
-      .in(
-        'id',
-        list.map((item) => item.id),
-      )
-      .eq('userId', userId);
-
-    if (error) {
-      throw new Error(error.message);
-    }
+    return await this.materialModel.destroy({
+      where: {
+        id: {
+          [Op.in]: list.map((item) => item.id), // 只删除这些 ID 的记录
+        },
+        userId,
+      },
+    });
   }
 
   async getImgMaterials(pagination: IPageInfo, userId: number) {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize - 1;
 
-    const { data, count, error } = await this.supabase
-      .from('materials')
-      .select('*', { count: 'exact' })
-      .eq('userId', userId)
-      .order('createdAt', { ascending: false })
-      .range(start, end);
-
-    if (error) {
-      throw new Error(error.message);
-    }
+    const { count, rows } = await this.materialModel.findAndCountAll({
+      limit: pageSize,
+      offset: (page - 1) * pageSize,
+      order: [['createdAt', 'DESC']], // 以创建时间降序排列
+      where: {
+        userId,
+      },
+    });
 
     return {
-      items: (data || []) as MaterialModel[],
+      items: rows.map((item) => item.dataValues),
       paginator: {
-        total: count || 0,
+        total: count,
         page,
         pageSize,
       },

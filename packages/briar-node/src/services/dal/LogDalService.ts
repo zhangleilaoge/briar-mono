@@ -48,7 +48,7 @@ export class LogDalService {
     const { error } = await this.supabase
       .from('logs')
       .delete()
-      .lt('createdAt', new Date(Date.now() - maxAge * 1000).toISOString());
+      .lt('created_at', new Date(Date.now() - maxAge * 1000).toISOString());
 
     if (error) {
       throw new Error(error.message);

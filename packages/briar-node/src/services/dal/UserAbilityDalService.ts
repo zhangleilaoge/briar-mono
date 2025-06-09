@@ -1,54 +1,51 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { SupabaseClient } from '@supabase/supabase-js';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { AbilityEnum, CycleEnum, IAbilityUsageRule } from 'briar-shared';
 import { startOfDay, startOfMonth, startOfWeek, startOfYear } from 'date-fns';
+import { Op } from 'sequelize';
+
+import {
+  AbilityUsageLimitModel,
+  AbilityUsageRecordModel,
+} from '@/model/UserAbilityModel';
 
 @Injectable()
 export class UserAbilityDalService {
   constructor(
-    @Inject('SUPABASE_CLIENT')
-    private readonly supabase: SupabaseClient,
+    @InjectModel(AbilityUsageLimitModel)
+    private readonly abilityUsageLimitModel: typeof AbilityUsageLimitModel,
+    @InjectModel(AbilityUsageRecordModel)
+    private readonly abilityUsageRecordModel: typeof AbilityUsageRecordModel,
   ) {}
 
   async create(
     rules: Partial<Record<AbilityEnum, Array<IAbilityUsageRule>>>,
     userId: number,
   ) {
-    const promises = Object.keys(rules).map((key) =>
-      this.supabase.from('ability_usage_limits').insert({
-        user_id: userId,
+    Object.keys(rules).forEach(async (key) => {
+      await this.abilityUsageLimitModel.create({
+        userId,
         ability: +key as AbilityEnum,
         rules: rules[key],
-      }),
-    );
+      });
+    });
 
-    await Promise.all(promises);
+    return;
   }
 
   async findRules(ability: AbilityEnum, userId: number) {
-    const { data, error } = await this.supabase
-      .from('ability_usage_limits')
-      .select('rules')
-      .eq('user_id', userId)
-      .eq('ability', ability)
-      .single();
-
-    if (error) {
-      return [];
-    }
-
-    return data?.rules || [];
+    const abilityLimit = await this.abilityUsageLimitModel.findOne({
+      where: { userId, ability },
+    });
+    const rules = abilityLimit?.dataValues?.rules || [];
+    return rules;
   }
 
   async createAbilityRecord(ability: AbilityEnum, userId: number) {
-    const { error } = await this.supabase.from('ability_usage_records').insert({
-      user_id: userId,
+    await this.abilityUsageRecordModel.create({
+      userId,
       ability,
     });
-
-    if (error) {
-      throw new Error(error.message);
-    }
   }
 
   async findAbilityRecords(
@@ -65,21 +62,21 @@ export class UserAbilityDalService {
     },
     userId: number,
   ) {
-    let query = this.supabase
-      .from('ability_usage_records')
-      .select('*')
-      .eq('userId', userId)
-      .eq('ability', ability);
+    let records = [];
 
     // 相对时间范围内的能力使用记录
     if (relativeDuration && durationType === 'relative') {
-      const startTime = new Date(
-        new Date().getTime() - relativeDuration * 1000,
-      ).toISOString();
-      query = query.gte('created_at', startTime);
-    }
-    // 周期时间范围内的能力使用记录
-    else if (cycleDuration && durationType === 'cycle') {
+      records = await this.abilityUsageRecordModel.findAll({
+        where: {
+          userId,
+          ability,
+          createdAt: {
+            [Op.gte]: new Date(new Date().getTime() - relativeDuration * 1000),
+          },
+        },
+      });
+      // 周期时间范围内的能力使用记录
+    } else if (cycleDuration && durationType === 'cycle') {
       let start = new Date(0);
       switch (cycleDuration) {
         case CycleEnum.day:
@@ -97,15 +94,18 @@ export class UserAbilityDalService {
         default:
           break;
       }
-      query = query.gte('createdAt', start.toISOString());
+
+      records = await this.abilityUsageRecordModel.findAll({
+        where: {
+          userId,
+          ability,
+          createdAt: {
+            [Op.gte]: start,
+          },
+        },
+      });
     }
 
-    const { data, error } = await query;
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return data || [];
+    return records;
   }
 }
