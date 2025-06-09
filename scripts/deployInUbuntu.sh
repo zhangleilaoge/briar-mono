@@ -11,10 +11,9 @@ if [ $? -ne 0 ]; then
     echo "Git pull failed. Exiting..."
     exit 1
 fi
+sleep 2
 #  打印当前分支信息
 git --no-pager log -1 --pretty=format:"当前分支状态为：%H %s"
-
-sleep 3
 
 # 2. Init project
 echo "Initializing submodules..."
