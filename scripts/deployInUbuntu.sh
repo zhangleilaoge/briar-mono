@@ -47,7 +47,10 @@ sudo systemctl restart nginx
 clash off
 echo "Starting backend..."
 cd packages/briar-node
-pnpm run start 
+pnpm run start > /dev/null 2>&1 &  # 将命令放到后台运行
+BACKEND_PID=$!  # 获取后台进程的 PID
+disown $BACKEND_PID  # 将进程从当前 shell 的作业控制中移除
+echo "Backend started and running in the background with PID $BACKEND_PID."
 
 
 
