@@ -1,7 +1,10 @@
-import fs from 'fs';
-import path from 'path';
-import COS from 'cos-nodejs-sdk-v5';
 import 'dotenv/config';
+
+import COS from 'cos-nodejs-sdk-v5';
+
+import fs from 'fs';
+
+import path from 'path';
 
 const region = process.env.BRIAR_TX_BUCKET_REGION;
 const cos = new COS({
@@ -25,7 +28,7 @@ function listFilesInDirectory(targetDirectory) {
 	);
 
 	if (!fs.existsSync(absoluteTargetDirectory)) {
-		console.log(`目录 ${absoluteTargetDirectory} 不存在`);
+		console.log(`当前目录为 ${process.cwd()}，目录 ${absoluteTargetDirectory} 不存在`);
 		return [];
 	}
 
