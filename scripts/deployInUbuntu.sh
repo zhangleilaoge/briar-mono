@@ -5,7 +5,7 @@ GITHUB_TOKEN=$2
 
 # 1. Git pull
 echo "Pulling latest changes from git..."
-clash on
+/opt/clash on
 git stash
 git pull
 if [ $? -ne 0 ]; then
@@ -44,12 +44,11 @@ sudo cp briar-assets/ssl/stardew.site.key /etc/nginx/
 sudo systemctl restart nginx
 
 # 7. Start backend
-clash off
+echo "Stopping clash..."
+/opt/clash off
 echo "Starting backend..."
 cd packages/briar-node
-pnpm run start 
-
-
-
-# 问题2 clash不关掉会导致数据库连不上
-# 问题3 关于 supabase我想再试试
+pnpm run start > backend.log 2>&1 &  # 将命令放到后台运行，并将输出重定向到 backend.log
+BACKEND_PID=$!  # 获取后台进程的 PID
+disown $BACKEND_PID  # 将进程从当前 shell 的作业控制中移除
+echo "Backend started and running in the background with PID $BACKEND_PID. Logs are available in backend.log."
