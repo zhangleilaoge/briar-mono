@@ -61,7 +61,7 @@ export class BlogDalService {
     // 获取博客信息
     const { data: blog, error: blogError } = await this.supabase
       .from('blogs')
-      .select('*')
+      .select('*, blog_favorites!inner(*)')
       .eq('id', blogId)
       .or(`showRange.eq.public,and(showRange.eq.private,userId.eq.${userId})`)
       .maybeSingle();
