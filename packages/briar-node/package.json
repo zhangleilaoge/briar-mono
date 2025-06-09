@@ -9,7 +9,7 @@
     "build": "nest build",
     "dev": "nest start --watch",
     "debug": "nest start --debug --watch",
-    "start": "cross-env NODE_ENV=production node dist/main  "
+    "start": "sh ./scripts/startCheck.sh && cross-env NODE_ENV=production node dist/main"
   },
   "dependencies": {
     "@fastify/compress": "7.0.3",

@@ -13,7 +13,7 @@ if [ $? -ne 0 ]; then
 fi
 sleep 2
 #  打印当前分支信息
-git --no-pager log -1 --pretty=format:"当前分支状态为：%H %s"
+git --no-pager log -1 --pretty=format:"当前分支状态为：%H %s \n"
 
 # 2. Init project
 echo "Initializing submodules..."
@@ -44,11 +44,9 @@ sudo systemctl restart nginx
 # 7. Start backend
 echo "Starting backend..."
 cd packages/briar-node
-pnpm run start &
-cd ../..
+pnpm run start 
 
 
 
-# 问题1，start之后后面就不进行了
 # 问题2 clash不关掉会导致数据库连不上
 # 问题3 关于 supabase我想再试试
