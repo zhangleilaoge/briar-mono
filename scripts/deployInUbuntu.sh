@@ -12,7 +12,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 #  打印当前分支信息
-git --no-pager log -1 --pretty=format:"%H %s"
+git --no-pager log -1 --pretty=format:"当前分支状态为：%H %s"
 
 sleep 3
 
