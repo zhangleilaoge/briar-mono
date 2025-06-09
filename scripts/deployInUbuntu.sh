@@ -24,7 +24,7 @@ echo "Installing dependencies..."
 pnpm install
 
 # 4. Build project
-echo "Building project..."
+echo "Building node..."
 pnpm run build:node
 
 # 5. update cdn
