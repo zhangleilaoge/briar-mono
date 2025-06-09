@@ -1,19 +1,5 @@
 #!/bin/bash
 
-GITHUB_USER=$1
-GITHUB_TOKEN=$2
-
-# 2. Init project
-echo "Initializing submodules..."
-git config --file .gitmodules submodule.briar-assets.url https://$GITHUB_USER:$GITHUB_TOKEN@github.com/zhangleilaoge/briar-assets.git
-git submodule sync
-git submodule update --init --recursive
-sh ./scripts/assets-init.sh
-
-# 3. Install dependencies
-echo "Installing dependencies..."
-pnpm install
-
 # 4. Build project
 echo "Building node."
 pnpm run build:node
@@ -30,8 +16,6 @@ sudo cp briar-assets/ssl/stardew.site.key /etc/nginx/
 sudo systemctl restart nginx
 
 # 7. Start backend
-echo "Stopping clash..."
-sudo /opt/clash off
 echo "Starting backend..."
 cd packages/briar-node
 pnpm run start > backend.log 2>&1 &  # 将命令放到后台运行，并将输出重定向到 backend.log
