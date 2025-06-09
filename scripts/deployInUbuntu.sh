@@ -14,7 +14,8 @@ if [ $? -ne 0 ]; then
 fi
 sleep 2
 #  打印当前分支信息
-git --no-pager log -1 --pretty=format:"当前分支状态为：%H %s \n"
+git --no-pager log -1 --pretty=format:"当前分支状态为：%H %s"
+echo ""
 
 # 2. Init project
 echo "Initializing submodules..."
