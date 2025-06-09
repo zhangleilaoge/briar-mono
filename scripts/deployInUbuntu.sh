@@ -27,13 +27,7 @@ pnpm install
 echo "Building project..."
 pnpm run build
 
-# 5. Start backend
-echo "Starting backend..."
-cd packages/briar-node
-pnpm run start &
-cd ../..
-
-# 6. update cdn
+# 5. update cdn
 sleep 3
 pnpm run cdn
 
@@ -44,10 +38,14 @@ sudo cp briar-assets/ssl/stardew.site_bundle.crt /etc/nginx/
 sudo cp briar-assets/ssl/stardew.site.key /etc/nginx/
 sudo systemctl restart nginx
 
+# 7. Start backend
+echo "Starting backend..."
+cd packages/briar-node
+pnpm run start &
+cd ../..
 
-echo "All steps completed successfully."
+
 
 # 问题1，start之后后面就不进行了
 # 问题2 clash不关掉会导致数据库连不上
 # 问题3 关于 supabase我想再试试
-# 问题4 服务端打包超内存还是放到github服务器上吧
