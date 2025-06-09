@@ -5,6 +5,7 @@ GITHUB_TOKEN=$2
 
 # 1. Git pull
 echo "Pulling latest changes from git..."
+clash on
 git stash
 git pull
 if [ $? -ne 0 ]; then
@@ -42,6 +43,7 @@ sudo cp briar-assets/ssl/stardew.site.key /etc/nginx/
 sudo systemctl restart nginx
 
 # 7. Start backend
+clash off
 echo "Starting backend..."
 cd packages/briar-node
 pnpm run start 
