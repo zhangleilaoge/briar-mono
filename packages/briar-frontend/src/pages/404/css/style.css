@@ -39,7 +39,7 @@ body {
 	font-weight: 900;
 	margin: 0;
 	text-transform: uppercase;
-	background: url('https://static.stardew.site/stardewbackground.png');
+	background: url('https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/stardewbackground.png');
 	background-clip: text;
 	-webkit-text-fill-color: transparent;
 	background-size: cover;

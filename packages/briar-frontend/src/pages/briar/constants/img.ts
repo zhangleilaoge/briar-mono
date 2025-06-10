@@ -3,7 +3,7 @@ import { StardewValleyGirl } from 'briar-shared';
 import { Language } from './env';
 
 export const BRIAR_ICON =
-	'https://static.stardew.site/%E8%B4%9D%E8%95%BE%E4%BA%9A%E4%B8%8A%E8%BA%AB64.png';
+	'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/%E8%B4%9D%E8%95%BE%E4%BA%9A%E4%B8%8A%E8%BA%AB64.png';
 
 export enum CursorEnum {
 	Auto = 'auto',
@@ -17,27 +17,27 @@ export enum CursorEnum {
 }
 
 export const CURSORS: Record<CursorEnum, string> = {
-	[CursorEnum.Auto]: 'https://static.stardew.site/Watanabe%20Yuuya%20normal_page_01.png',
-	[CursorEnum.Default]: 'https://static.stardew.site/Watanabe%20Yuuya%20normal_page_01.png',
-	[CursorEnum.Cursor]: 'https://static.stardew.site/Watanabe%20Yuuya%20help_page_01.png',
-	[CursorEnum.Grab]: 'https://static.stardew.site/Watanabe%20Yuuya%20hand_page_01.png',
-	[CursorEnum.Text]: 'https://static.stardew.site/Watanabe%20Yuuya%20text_page_01.png',
-	[CursorEnum.Help]: 'https://static.stardew.site/Watanabe%20Yuuya%20help_page_01.png',
-	[CursorEnum.Progress]: 'https://static.stardew.site/Watanabe%20Yuuya%20work_page_04.png',
-	[CursorEnum.Pointer]: 'https://static.stardew.site/Watanabe%20Yuuya%20link_page_01.png'
+	[CursorEnum.Auto]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20normal_page_01.png',
+	[CursorEnum.Default]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20normal_page_01.png',
+	[CursorEnum.Cursor]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20help_page_01.png',
+	[CursorEnum.Grab]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20hand_page_01.png',
+	[CursorEnum.Text]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20text_page_01.png',
+	[CursorEnum.Help]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20help_page_01.png',
+	[CursorEnum.Progress]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20work_page_04.png',
+	[CursorEnum.Pointer]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Watanabe%20Yuuya%20link_page_01.png'
 };
 
 export const STARDEW_VALLEY_GRIL = {
-	[StardewValleyGirl.Abigail]: 'https://static.stardew.site/Abigail.png',
-	[StardewValleyGirl.Caroline]: 'https://static.stardew.site/Caroline.png',
-	[StardewValleyGirl.Emily]: 'https://static.stardew.site/Emily.png',
-	[StardewValleyGirl.Haley]: 'https://static.stardew.site/Haley.png',
-	[StardewValleyGirl.Penny]: 'https://static.stardew.site/Penny.png',
-	[StardewValleyGirl.Robin]: 'https://static.stardew.site/Robin.png'
+	[StardewValleyGirl.Abigail]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Abigail.png',
+	[StardewValleyGirl.Caroline]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Caroline.png',
+	[StardewValleyGirl.Emily]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Emily.png',
+	[StardewValleyGirl.Haley]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Haley.png',
+	[StardewValleyGirl.Penny]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Penny.png',
+	[StardewValleyGirl.Robin]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/Robin.png'
 };
 
 export const LANGUAGE_ICON = {
 	[Language.Zh]:
-		'https://static.stardew.site/%E4%B8%AD%E8%8B%B1%E6%96%872%20%E4%B8%AD%E6%96%87.svg',
-	[Language.En]: 'https://static.stardew.site/%E4%B8%AD%E8%8B%B1%E6%96%87%20%E8%8B%B1%E6%96%87.svg'
+		'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/%E4%B8%AD%E8%8B%B1%E6%96%872%20%E4%B8%AD%E6%96%87.svg',
+	[Language.En]: 'https://briar-shanghai-1309736035.cos.ap-shanghai.myqcloud.com/%E4%B8%AD%E8%8B%B1%E6%96%87%20%E8%8B%B1%E6%96%87.svg'
 };
