@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import axios from 'axios';
 import {
   EMAIL_REG,
   IPageInfo,
@@ -10,7 +9,6 @@ import {
   MOBILE_REG,
   RoleEnum,
 } from 'briar-shared';
-import { Op } from 'sequelize';
 
 import { ContextService } from './common/ContextService';
 import { UserDalService } from './dal/UserDalService';
@@ -51,48 +49,12 @@ export class UserService {
     }
   }
 
-  async getLoginUser(username: string, password: string) {
-    const user = await this.userDalService.getUser(
-      { username, password },
-      Op.and,
-    );
-    return user as IUserInfoDTO;
-  }
-
   async createAnonymousUser() {
     const user = await this.userDalService.create({});
     this.contextService.setValue('userId', user.id);
     await this.userAbilityService.initUserAbilityLimit();
 
     return user as IUserInfoDTO;
-  }
-
-  async authenticateUserByGoogle(googleAccessToken: string, userId: number) {
-    const userInfo: any = await axios({
-      method: 'get',
-      url: `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${googleAccessToken}`,
-      responseType: 'stream',
-    });
-
-    if (!userInfo) return false;
-
-    const user = await this.userDalService.getUser({ googleId: userInfo.sub });
-
-    // 1. google 账号已绑定账号 => 返回绑定的账号
-    if (user?.id) {
-      return user?.id;
-    }
-
-    // 2. google 账号未绑定账号 => 绑定当前账号
-    await this.userDalService.update({
-      isAuthenticated: true,
-      id: userId,
-      name: userInfo.name,
-      profileImg: userInfo.picture,
-      email: userInfo.email,
-      googleId: userInfo.sub,
-    });
-    return userId;
   }
 
   async checkUserInfo(key: string, value: string) {

@@ -3,7 +3,6 @@ import {
   Controller,
   ForbiddenException,
   Get,
-  HttpCode,
   Post,
   Query,
   UseGuards,
@@ -56,6 +55,8 @@ export class UserController {
     let accessToken = '';
     let availablePage = [];
 
+    console.log('data', data);
+
     if (data) {
       accessToken = await this.userService.createJwt(data.id);
       availablePage = await this.userService.getAvailablePage(data.roles);
@@ -98,22 +99,6 @@ export class UserController {
     return result;
   }
 
-  @Post('authenticateUserByGoogle')
-  @HttpCode(200)
-  async authenticateUserByGoogle(@Body('tokenId') tokenId: string) {
-    const userId = await this.userService.authenticateUserByGoogle(
-      tokenId,
-      this.contextService.get().userId,
-    );
-
-    if (userId) {
-      const accessToken = await this.userService.createJwt(userId);
-      return accessToken;
-    }
-
-    return false;
-  }
-
   @Post('signUp')
   async signUp(
     @Body('username') username: string,
@@ -140,28 +125,6 @@ export class UserController {
     };
   }
 
-  @Post('signIn')
-  async signIn(
-    @Body('username') username: string,
-    @Body('password') password: string,
-  ): Promise<IUserAccess> {
-    if (!password) {
-      throw new ForbiddenException('请输入密码');
-    }
-
-    const data = await this.userService.getLoginUser(username, password);
-
-    if (!data?.id) {
-      throw new ForbiddenException('用户不存在或密码错误');
-    }
-
-    const accessToken = await this.userService.createJwt(data.id);
-
-    return {
-      userInfo: data,
-      accessToken,
-    };
-  }
   @UseGuards(RoleGuard)
   @Role([RoleEnum.Admin])
   @Post('addRole')

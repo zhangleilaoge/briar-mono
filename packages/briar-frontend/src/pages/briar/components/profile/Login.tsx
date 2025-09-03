@@ -3,10 +3,10 @@ import { Button, Form, Input, message } from 'antd';
 import md5 from 'md5-es';
 import React from 'react';
 
-import { signIn } from '@/pages/briar/api/user';
 import { LocalStorageKey } from '@/pages/briar/constants/env';
 import { errorNotify } from '@/pages/briar/utils/notify';
 
+import { login } from '../../api/auth';
 import { PASSWORD_RULES } from '../../constants/validateRules';
 
 export type FieldType = {
@@ -25,8 +25,8 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn, retrievePassword }) => {
 			content: '登录中，请稍等。',
 			duration: 0
 		});
-		const { accessToken } = await signIn({
-			username: values.username,
+		const { accessToken } = await login({
+			username: values.username || '',
 			password: md5.hash(values.password || '')
 		}).catch((err) => {
 			message.destroy();
@@ -45,27 +45,6 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn, retrievePassword }) => {
 
 		finishSignIn();
 	};
-
-	// const login = useGoogleLogin({
-	// 	onSuccess: async (tokenResponse) => {
-	// 		const googleAccessToken = tokenResponse.access_token;
-	// 		const accessToken = await authenticateUserByGoogle(googleAccessToken);
-	// 		console.log('google response: ', tokenResponse);
-	// 		console.log('accessToken: ', accessToken);
-
-	// 		if (accessToken) {
-	// 			message.success('登录成功，页面即将刷新。');
-	// 			localStorage.setItem(LocalStorageKey.AccessToken, accessToken);
-	// 			setTimeout(() => {
-	// 				window.location.reload();
-	// 			}, 1000);
-	// 		} else errorNotify('登录失败。');
-	// 	},
-	// 	onError: (err) => {
-	// 		console.log('Login Failed', err);
-	// 		alert('登录失败。');
-	// 	}
-	// });
 
 	return (
 		<>

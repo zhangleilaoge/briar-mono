@@ -15,19 +15,11 @@ export const createAnonymousUser = () =>
 
 export const getUserInfo = () => alovaInstance.Get<IUserAccess>(`/user/getUserInfo`);
 
-export const authenticateUserByGoogle = (googleAccessToken: string) =>
-	alovaInstance.Post<string | false>(`/user/authenticateUserByGoogle`, {
-		googleAccessToken
-	});
-
 export const checkUserInfo = (key: string, value: string) =>
 	alovaInstance.Get<ICheckUsername>(`/user/checkUserInfo?key=${key}&value=${value}`);
 
 export const signUp = (userInfo: Partial<IUserInfoDTO>) =>
 	alovaInstance.Post<IUserAccess>(`/user/signUp`, userInfo);
-
-export const signIn = (userInfo: Partial<IUserInfoDTO>) =>
-	alovaInstance.Post<IUserAccess>(`/user/signIn`, userInfo);
 
 export const addRole = (role: Pick<IRoleDTO, 'name' | 'desc' | 'menuKeys'>) =>
 	alovaInstance.Post(`/user/addRole`, role);
