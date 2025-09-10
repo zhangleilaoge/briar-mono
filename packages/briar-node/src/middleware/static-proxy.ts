@@ -2,7 +2,6 @@ import 'dotenv';
 
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import axios from 'axios';
-import { BRIAR_BASENAME } from 'briar-shared';
 import * as ejs from 'ejs';
 
 // 处理页面请求的转发
@@ -13,8 +12,12 @@ export class StaticProxyMiddleware implements NestMiddleware {
   async use(req, res, next) {
     const url = req.originalUrl;
 
-    const firstLevelPath =
-      url.split('/')?.[1] || BRIAR_BASENAME.replace('/', '');
+    const firstLevelPath = url.split('/')?.[1];
+    if (!firstLevelPath) {
+      res.writeHead(302, { Location: '/briar' });
+      res.end();
+    }
+
     if (
       !url.startsWith('/api') &&
       !url.startsWith('/static') &&
