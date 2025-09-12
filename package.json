@@ -17,7 +17,8 @@
 		"postinstall": "if [ \"$SKIP_HUSKY\" != \"true\" ]; then husky install; fi",
 		"lint": "eslint",
 		"lint-staged": "lint-staged",
-		"cdn": "cd packages/briar-frontend && pnpm run cdn"
+		"cdn": "cd packages/briar-frontend && pnpm run cdn",
+		"wiki": "sh ./scripts/start-wiki.sh"
 	},
 	"engines": {
 		"node": ">=18.17.0",

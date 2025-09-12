@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  wiki:
+    image: ghcr.io/requarks/wiki:2 # 避免Docker Hub问题
+    environment:
+      DB_TYPE: mysql
+      DB_HOST: ${BRIAR_DATABASE_HOST} # 你的阿里云RDS MySQL地址
+      DB_PORT: ${BRIAR_DATABASE_PORT}
+      DB_USER: ${BRIAR_DATABASE_USER}
+      DB_PASS: ${BRIAR_DATABASE_PASSWORD}
+      DB_NAME: wikijs # 确保你的MySQL中已经创建了这个数据库
+    volumes:
+      - ./wiki-data:/wiki/data/content # 本地存储Wiki内容
+    ports:
+      - '3000:3000' # 映射到宿主机的3000端口
+    restart: unless-stopped
