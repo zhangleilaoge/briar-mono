@@ -2,6 +2,7 @@ version: '3.8'
 services:
   wiki:
     image: ghcr.io/requarks/wiki:2 # 避免Docker Hub问题
+    network_mode: host # 关键行
     environment:
       DB_TYPE: mysql
       DB_HOST: ${BRIAR_DATABASE_HOST} # 你的阿里云RDS MySQL地址
