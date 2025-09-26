@@ -17,7 +17,7 @@ echo ""
 
 # 2. Init project
 echo "Initializing submodules..."
-git config --file .gitmodules submodule.briar-assets.url https://$GITHUB_USER:$GITHUB_TOKEN@github.com/zhangleilaoge/briar-assets.git
+# git config --file .gitmodules submodule.briar-assets.url https://$GITHUB_USER:$GITHUB_TOKEN@github.com/zhangleilaoge/briar-assets.git
 git submodule sync
 git submodule update --init --recursive
 sh ./scripts/assets-init.sh

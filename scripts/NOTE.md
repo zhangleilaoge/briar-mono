@@ -25,3 +25,8 @@ docker compose logs -f <服务名称>
 stardew.site 127.0.0.1:8922
 
 ```
+
+## 服务端使用
+
+1. 先执行 pullInUbuntu.sh 脚本
+2. 再执行 deployInUbuntu.sh 脚本

@@ -1,11 +1,8 @@
 import { Tabs } from 'antd';
 
-import Bird from '@/components/bird';
-import { AuroraBackgroundDemo } from '@/components/ui/code.demo';
-
-const ComponentB = () => {
-	return <div>这是组件 B 的内容</div>;
-};
+import Bird from './tabs/bird';
+import RegisterForm from './tabs/shadcn';
+import { AuroraBackgroundDemo } from './tabs/ui/code.demo';
 
 const TailWind = () => {
 	// 定义 Tabs 的配置项
@@ -22,8 +19,8 @@ const TailWind = () => {
 		},
 		{
 			key: '3',
-			label: '组件 B',
-			children: <ComponentB />
+			label: 'shadcn',
+			children: <RegisterForm />
 		}
 	];
 

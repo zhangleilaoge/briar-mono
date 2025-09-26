@@ -7,5 +7,12 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  // 新增下面两段，其余不动
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
 }
