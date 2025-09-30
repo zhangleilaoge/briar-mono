@@ -1,5 +1,9 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { IMaterial, IPageInfo, IUploadBase64Response } from 'briar-shared';
+import {
+  IGetImgMaterialsRequest,
+  IMaterial,
+  IUploadBase64Response,
+} from 'briar-shared';
 import * as qs from 'qs';
 
 import { ContextService } from '@/services/common/ContextService';
@@ -60,11 +64,12 @@ export class MaterialController {
   }
 
   @Get('/getImgMaterials')
-  async getImgMaterials(@Query() params: { pagination: IPageInfo }) {
-    const { pagination } = qs.parse(params);
-    return await this.materialService.getImgMaterials(
+  async getImgMaterials(@Query() params: IGetImgMaterialsRequest) {
+    const { pagination, searchTerm } = qs.parse(params);
+    return await this.materialService.getImgMaterials({
       pagination,
-      this.contextService.get().userId,
-    );
+      userId: this.contextService.get().userId,
+      searchTerm,
+    });
   }
 }

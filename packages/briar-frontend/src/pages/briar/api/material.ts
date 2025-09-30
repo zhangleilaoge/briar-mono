@@ -1,4 +1,9 @@
-import { IMaterial, IPageInfo, IPageResult, IUploadBase64Response } from 'briar-shared';
+import {
+	IGetImgMaterialsRequest,
+	IMaterial,
+	IPageResult,
+	IUploadBase64Response
+} from 'briar-shared';
 
 import alovaInstance from './common';
 
@@ -8,7 +13,7 @@ export const uploadBase64 = (data: { filename: string; base64: string }) =>
 export const createImgMaterial = (data: { files: Pick<IMaterial, 'name' | 'thumbUrl'>[] }) =>
 	alovaInstance.Post('/material/createImgMaterial', data);
 
-export const getImgMaterials = (data: { pagination: IPageInfo }) =>
+export const getImgMaterials = (data: IGetImgMaterialsRequest) =>
 	alovaInstance.Get<IPageResult<IMaterial>>(`/material/getImgMaterials`, {
 		params: data
 	});

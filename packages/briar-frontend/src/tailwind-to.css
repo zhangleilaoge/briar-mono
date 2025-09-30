@@ -1565,6 +1565,10 @@ body {
   height: 1px;
 }
 
+.h-7 {
+  height: 1.75rem;
+}
+
 .max-h-60 {
   max-height: 15rem;
 }
@@ -2318,6 +2322,10 @@ body {
 
 .pt-\[16px\] {
   padding-top: 16px;
+}
+
+.pr-20 {
+  padding-right: 5rem;
 }
 
 .text-center {
@@ -3171,6 +3179,10 @@ body {
 
   .sm\:w-auto {
     width: auto;
+  }
+
+  .sm\:w-80 {
+    width: 20rem;
   }
 
   .sm\:flex-initial {

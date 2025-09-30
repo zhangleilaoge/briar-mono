@@ -28,7 +28,19 @@ export class MaterialService {
     return this.materialDalService.deleteImgMaterials(list, userId);
   }
 
-  async getImgMaterials(pagination: IPageInfo, userId: number) {
-    return this.materialDalService.getImgMaterials(pagination, userId);
+  async getImgMaterials({
+    pagination,
+    userId,
+    searchTerm,
+  }: {
+    pagination: IPageInfo;
+    userId: number;
+    searchTerm?: string;
+  }) {
+    return this.materialDalService.getImgMaterials({
+      pagination,
+      userId,
+      searchTerm,
+    });
   }
 }

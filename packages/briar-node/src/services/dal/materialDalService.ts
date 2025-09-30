@@ -50,17 +50,33 @@ export class MaterialDalService {
     });
   }
 
-  async getImgMaterials(pagination: IPageInfo, userId: number) {
+  async getImgMaterials({
+    pagination,
+    userId,
+    searchTerm,
+  }: {
+    pagination: IPageInfo;
+    userId: number;
+    searchTerm?: string;
+  }) {
     const page = +pagination.page;
     const pageSize = +pagination.pageSize;
+    const whereCondition: any = {
+      userId,
+    };
+
+    // 如果有关键词，添加名称模糊查询
+    if (searchTerm && searchTerm.trim() !== '') {
+      whereCondition.name = {
+        [Op.like]: `%${searchTerm.trim()}%`, // 使用Sequelize的模糊查询操作符
+      };
+    }
 
     const { count, rows } = await this.materialModel.findAndCountAll({
       limit: pageSize,
       offset: (page - 1) * pageSize,
       order: [['createdAt', 'DESC']], // 以创建时间降序排列
-      where: {
-        userId,
-      },
+      where: whereCondition,
     });
 
     return {

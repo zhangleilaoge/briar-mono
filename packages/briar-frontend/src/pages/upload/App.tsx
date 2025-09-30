@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { FileUploadArea } from './components/FileUploadArea';
-import { ImageGallery } from './components/ImageGallery';
+import { ImageGallery } from './components/image-gallery';
 import { Profile } from './components/profile';
 
 export default function ImageHostingPage() {

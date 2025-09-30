@@ -1,4 +1,9 @@
-import { IMaterial, IPageInfo, IPageResult, IUploadBase64Response } from 'briar-shared';
+import {
+	IGetImgMaterialsRequest,
+	IMaterial,
+	IPageResult,
+	IUploadBase64Response
+} from 'briar-shared';
 
 import { axiosInstance } from '@/apis/axios';
 
@@ -8,7 +13,7 @@ export const createImgMaterial = (data: { files: any[] }) =>
 export const uploadBase64 = (data: { filename: string; base64: string }) =>
 	axiosInstance.post<IUploadBase64Response>(`/material/uploadBase64`, data);
 
-export const getImgMaterials = (data: { pagination: IPageInfo }) =>
+export const getImgMaterials = (data: IGetImgMaterialsRequest) =>
 	axiosInstance.get<IPageResult<IMaterial>>(`/material/getImgMaterials`, {
 		params: data
 	});
