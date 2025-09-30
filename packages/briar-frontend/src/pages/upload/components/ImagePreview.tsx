@@ -1,6 +1,7 @@
 // components/ImagePreview.tsx
 import { Image, Spin } from 'antd';
 import { IMaterial } from 'briar-shared';
+import { useState } from 'react';
 
 interface ImagePreviewProps {
 	image: IMaterial;
@@ -8,22 +9,28 @@ interface ImagePreviewProps {
 }
 
 function ImagePreview({ image, viewMode }: ImagePreviewProps) {
+	const [isLoading, setIsLoading] = useState(true);
+
+	const handleImageLoad = () => {
+		setIsLoading(false);
+	};
+
 	return (
 		<div
 			className={`
       relative group cursor-pointer
-      ${viewMode === 'list' ? 'w-20 h-20 overflow-hidden' : 'aspect-square'}
+      ${viewMode === 'list' ? 'overflow-hidden' : 'aspect-square'}
     `}
 		>
-			<Image
-				preview={{ src: image.url }}
-				src={image.url}
-				alt={image.name}
-				className="w-full h-full object-cover"
-				placeholder={
-					<Spin percent="auto" className="h-[60px] w-[60px] flex items-center justify-center" />
-				}
-			/>
+			<Spin spinning={isLoading} className="flex items-center justify-center size-full">
+				<Image
+					preview={{ src: image.url }}
+					src={image.url}
+					alt={image.name}
+					className="w-full h-full object-cover"
+					onLoad={handleImageLoad}
+				/>
+			</Spin>
 		</div>
 	);
 }

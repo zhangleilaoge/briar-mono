@@ -8,3 +8,4 @@ es/
 ssl/
 .env
 test-results/
+!packages/briar-frontend/src/lib/
