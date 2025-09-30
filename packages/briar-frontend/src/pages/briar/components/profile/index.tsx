@@ -5,24 +5,17 @@ import {
 	SignatureOutlined,
 	UserOutlined
 } from '@ant-design/icons';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Dropdown, message, Modal } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { clientId } from '@/pages/briar/constants/user';
 import CommonContext from '@/pages/briar/context/common';
 
 import { TranslationEnum } from '../../constants/locales/common';
 import { MenuKeyEnum } from '../../constants/router';
 import useNavigateTo from '../../hooks/biz/useNavigateTo';
 import Avatar from '../avatar';
-import Login from './Login';
-import Register from './Register';
-import ResetPassword from './ResetPassword';
-import RetrievePassword from './RetrievePassword';
-import s from './style.module.scss';
 
 export enum OperationEnum {
 	Name = 'name',
@@ -35,27 +28,11 @@ export enum OperationEnum {
 	Admin = 'admin'
 }
 
-export const ModelTitle = {
-	[OperationEnum.Login]: '登录',
-	[OperationEnum.Register]: '注册',
-	[OperationEnum.ResetPassword]: '重置密码',
-	[OperationEnum.RetrievePassword]: '找回密码'
-};
-
 const Profile = () => {
 	const { userInfo, logout, availablePage } = useContext(CommonContext);
-	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { t } = useTranslation();
-	const [modelType, setModelType] = useState<
-		| OperationEnum.Login
-		| OperationEnum.Register
-		| OperationEnum.ResetPassword
-		| OperationEnum.RetrievePassword
-	>(OperationEnum.Login);
+
 	const navigate = useNavigateTo();
-	// 重置密码用
-	const [checkedEmail, setCheckedEmail] = useState<string>('');
-	const [checkedCode, setCheckedCode] = useState<string>('');
 
 	const personalAccess = useMemo(() => {
 		return availablePage.includes(MenuKeyEnum.Personal_1);
@@ -108,8 +85,7 @@ const Profile = () => {
 				label: (
 					<a
 						onClick={async () => {
-							setModelType(OperationEnum.Register);
-							setIsModalOpen(true);
+							location.href = `/account/register?redirectTo=${location.href}`;
 						}}
 					>
 						{t(TranslationEnum.SignUp)}
@@ -122,8 +98,7 @@ const Profile = () => {
 				label: (
 					<a
 						onClick={async () => {
-							setModelType(OperationEnum.Login);
-							setIsModalOpen(true);
+							location.href = `/account/login?redirectTo=${location.href}`;
 						}}
 					>
 						{t(TranslationEnum.SignIn)}
@@ -154,52 +129,6 @@ const Profile = () => {
 		].filter(Boolean) as ItemType[];
 	}, [AdminAccess, logout, navigate, personalAccess, t, userInfo?.isAuthenticated, userInfo?.name]);
 
-	const modelContent = useMemo(() => {
-		switch (modelType) {
-			case OperationEnum.Login:
-				return (
-					<div className={s.ModalContent}>
-						<GoogleOAuthProvider clientId={clientId}>
-							<Login
-								finishSignIn={() => setIsModalOpen(false)}
-								retrievePassword={() => setModelType(OperationEnum.RetrievePassword)}
-							/>
-						</GoogleOAuthProvider>
-					</div>
-				);
-			case OperationEnum.Register:
-				return (
-					<div className={s.ModalContent}>
-						<Register finishSignUp={() => setIsModalOpen(false)} />
-					</div>
-				);
-			case OperationEnum.RetrievePassword:
-				return (
-					<div className={s.ModalContent}>
-						<RetrievePassword
-							finishCheckCode={(email: string, code: string) => {
-								setModelType(OperationEnum.ResetPassword);
-								setCheckedEmail(email);
-								setCheckedCode(code);
-							}}
-						/>
-					</div>
-				);
-			case OperationEnum.ResetPassword:
-				return (
-					<div className={s.ModalContent}>
-						<ResetPassword
-							checkedCode={checkedCode}
-							checkedEmail={checkedEmail}
-							finishReset={() => setIsModalOpen(false)}
-						/>
-					</div>
-				);
-			default:
-				return null;
-		}
-	}, [checkedCode, checkedEmail, modelType]);
-
 	return (
 		<>
 			<Dropdown menu={{ items: dropdownItems }} placement="bottomRight">
@@ -207,18 +136,6 @@ const Profile = () => {
 					<Avatar user={userInfo}></Avatar>
 				</div>
 			</Dropdown>
-			<Modal
-				open={isModalOpen}
-				footer={null}
-				closable={false}
-				onCancel={() => {
-					setIsModalOpen(false);
-				}}
-				title={ModelTitle[modelType]}
-				destroyOnClose
-			>
-				{modelContent}
-			</Modal>
 		</>
 	);
 };

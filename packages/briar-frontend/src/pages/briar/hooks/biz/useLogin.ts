@@ -9,6 +9,10 @@ import { LocalStorageKey } from '@/pages/briar/constants/env';
 import { ROUTER_CONFIG } from '../../constants/router';
 import { getAvailablePages, removeChildren } from '../../utils/router';
 
+interface IProps {
+	needCreateUser?: boolean;
+}
+
 const DEFAULT_USER_INFO = {
 	id: 0,
 	createdAt: '',
@@ -24,7 +28,7 @@ const hideLoading = () => {
 	}, 200);
 };
 
-const useLogin = () => {
+const useLogin = ({ needCreateUser = true }: IProps) => {
 	const [userInfo, setUserInfo] = useState<IUserInfoDTO>(DEFAULT_USER_INFO);
 	const [availablePage, setAvailablePage] = useState<string[]>([]);
 
@@ -34,6 +38,10 @@ const useLogin = () => {
 			userInfo,
 			availablePage: availablePages = []
 		} = await getUserInfo().catch(() => ({}) as IUserAccess);
+
+		if (!needCreateUser && !userInfo?.id) {
+			return;
+		}
 
 		if (!userInfo?.id) {
 			if (localStorage.getItem(LocalStorageKey.AccessToken)) {

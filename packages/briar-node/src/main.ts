@@ -8,10 +8,16 @@ import {
 import { localHost, origins } from './constants/env';
 import { MainModule } from './modules/MainModule';
 
+process.on('uncaughtException', (err) => {
+  console.error('[FATAL] uncaughtException', err);
+  // 不写 process.exit(1) 就不会退出
+});
+
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     MainModule,
     new FastifyAdapter({ bodyLimit: 10048576 }),
+    { abortOnError: false },
   );
 
   // @ts-ignore
