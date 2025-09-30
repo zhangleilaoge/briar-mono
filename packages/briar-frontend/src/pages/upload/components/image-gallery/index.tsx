@@ -34,7 +34,7 @@ export function ImageGallery({}: ImageGalleryProps) {
 		activeSearchTerm
 	} = useImageMaterials();
 
-	// 处理输入框变化
+	// 处理输入框变
 	const handleSearchChange = useCallback(
 		(term: string) => {
 			setSearchTerm(term); // 只更新输入框的值，不触发搜索
