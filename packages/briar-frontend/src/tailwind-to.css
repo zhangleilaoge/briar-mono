@@ -1516,6 +1516,10 @@ body {
   height: 1.5rem;
 }
 
+.h-7 {
+  height: 1.75rem;
+}
+
 .h-8 {
   height: 2rem;
 }
@@ -1563,10 +1567,6 @@ body {
 
 .h-px {
   height: 1px;
-}
-
-.h-7 {
-  height: 1.75rem;
 }
 
 .max-h-60 {
@@ -2312,6 +2312,10 @@ body {
   padding-right: 0.5rem;
 }
 
+.pr-20 {
+  padding-right: 5rem;
+}
+
 .pr-8 {
   padding-right: 2rem;
 }
@@ -2322,10 +2326,6 @@ body {
 
 .pt-\[16px\] {
   padding-top: 16px;
-}
-
-.pr-20 {
-  padding-right: 5rem;
 }
 
 .text-center {
@@ -3173,16 +3173,12 @@ body {
     display: inline;
   }
 
-  .sm\:w-64 {
-    width: 16rem;
+  .sm\:w-80 {
+    width: 20rem;
   }
 
   .sm\:w-auto {
     width: auto;
-  }
-
-  .sm\:w-80 {
-    width: 20rem;
   }
 
   .sm\:flex-initial {

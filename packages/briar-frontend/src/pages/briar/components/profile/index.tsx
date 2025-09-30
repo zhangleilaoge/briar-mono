@@ -8,11 +8,9 @@ import {
 import { Dropdown, message, Modal } from 'antd';
 import { ItemType } from 'antd/es/menu/interface';
 import { useContext, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import CommonContext from '@/pages/briar/context/common';
 
-import { TranslationEnum } from '../../constants/locales/common';
 import { MenuKeyEnum } from '../../constants/router';
 import useNavigateTo from '../../hooks/biz/useNavigateTo';
 import Avatar from '../avatar';
@@ -30,7 +28,6 @@ export enum OperationEnum {
 
 const Profile = () => {
 	const { userInfo, logout, availablePage } = useContext(CommonContext);
-	const { t } = useTranslation();
 
 	const navigate = useNavigateTo();
 
@@ -60,7 +57,7 @@ const Profile = () => {
 							});
 						}}
 					>
-						{t(TranslationEnum.PersonalHomepage)}
+						{'个人主页'}
 					</a>
 				)
 			},
@@ -75,7 +72,7 @@ const Profile = () => {
 							});
 						}}
 					>
-						{t(TranslationEnum.Admin)}
+						{'控制台'}
 					</a>
 				)
 			},
@@ -88,7 +85,7 @@ const Profile = () => {
 							location.href = `/account/register?redirectTo=${location.href}`;
 						}}
 					>
-						{t(TranslationEnum.SignUp)}
+						{'注册'}
 					</a>
 				)
 			},
@@ -101,7 +98,7 @@ const Profile = () => {
 							location.href = `/account/login?redirectTo=${location.href}`;
 						}}
 					>
-						{t(TranslationEnum.SignIn)}
+						{'登录'}
 					</a>
 				)
 			},
@@ -122,12 +119,12 @@ const Profile = () => {
 							});
 						}}
 					>
-						{t(TranslationEnum.SignOut)}
+						{'退出登录'}
 					</a>
 				)
 			}
 		].filter(Boolean) as ItemType[];
-	}, [AdminAccess, logout, navigate, personalAccess, t, userInfo?.isAuthenticated, userInfo?.name]);
+	}, [AdminAccess, logout, navigate, personalAccess, userInfo?.isAuthenticated, userInfo?.name]);
 
 	return (
 		<>

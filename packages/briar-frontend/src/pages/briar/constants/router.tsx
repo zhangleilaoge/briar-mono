@@ -10,13 +10,10 @@ import {
 	ToolOutlined,
 	UserOutlined
 } from '@ant-design/icons';
-import { t } from 'i18next';
 import { lazy, LazyExoticComponent } from 'react';
 
 import CompositionApiIntro from '@/pages/briar/pages/tools/pages/composition-style-intro';
 import { IMenuRouterConfig } from '@/pages/briar/types/router';
-
-import { TranslationEnum } from './locales/common';
 
 /** 菜单路由 key，以层级作为后缀 */
 export enum MenuKeyEnum {
@@ -59,36 +56,36 @@ export enum MenuKeyEnum {
 /** @description 菜单名称，value 请勿使用 kebab case */
 export const MENU_KEY_NAMES = {
 	[MenuKeyEnum.Ai_1]: 'AI',
-	[MenuKeyEnum.Tools_1]: t(TranslationEnum.Tools),
-	[MenuKeyEnum.Admin_1]: t(TranslationEnum.Admin),
-	[MenuKeyEnum.Personal_1]: t(TranslationEnum.PersonalHomepage),
-	[MenuKeyEnum.Blog_1]: t(TranslationEnum.Blog),
+	[MenuKeyEnum.Tools_1]: '工具',
+	[MenuKeyEnum.Admin_1]: '控制台',
+	[MenuKeyEnum.Personal_1]: '个人主页',
+	[MenuKeyEnum.Blog_1]: '博客',
 
-	[MenuKeyEnum.CodeConverter_2]: t(TranslationEnum.CodeConverter),
-	[MenuKeyEnum.Pragmatic_2]: t(TranslationEnum.Pragmatic),
-	[MenuKeyEnum.Utility_2]: t(TranslationEnum.Utility),
-	[MenuKeyEnum.Playground_2]: t(TranslationEnum.Playground),
-	[MenuKeyEnum.User_2]: t(TranslationEnum.User),
-	[MenuKeyEnum.Account_2]: t(TranslationEnum.Account),
-	[MenuKeyEnum.Images_2]: t(TranslationEnum.Images),
-	[MenuKeyEnum.RecommendBlogPost_2]: t(TranslationEnum.RecommendBlogPost),
-	[MenuKeyEnum.MyBlogPost_2]: t(TranslationEnum.MyBlogPost),
-	[MenuKeyEnum.PostBlog_2]: t(TranslationEnum.PostBlog),
-	[MenuKeyEnum.BlogDetail_2]: t(TranslationEnum.BlogDetail),
-	[MenuKeyEnum.FavoriteBlog_2]: t(TranslationEnum.FavoriteBlog),
+	[MenuKeyEnum.CodeConverter_2]: '代码转换',
+	[MenuKeyEnum.Pragmatic_2]: '日常便利',
+	[MenuKeyEnum.Utility_2]: '码农工具',
+	[MenuKeyEnum.Playground_2]: '实验室',
+	[MenuKeyEnum.User_2]: '用户管理',
+	[MenuKeyEnum.Account_2]: '账号管理',
+	[MenuKeyEnum.Images_2]: '图片管理',
+	[MenuKeyEnum.RecommendBlogPost_2]: '推荐',
+	[MenuKeyEnum.MyBlogPost_2]: '我的',
+	[MenuKeyEnum.PostBlog_2]: '创作',
+	[MenuKeyEnum.BlogDetail_2]: '博客详情',
+	[MenuKeyEnum.FavoriteBlog_2]: '收藏',
 
-	[MenuKeyEnum.CompositionStyleConverter_3]: t(TranslationEnum.CompositionStyleConverter),
-	[MenuKeyEnum.CompositionStyleIntro_3]: t(TranslationEnum.CompositionApiIntro),
+	[MenuKeyEnum.CompositionStyleConverter_3]: 'compositionApi转换器',
+	[MenuKeyEnum.CompositionStyleIntro_3]: 'compositionApi转换介绍',
 	[MenuKeyEnum.Shader_3]: 'shader',
-	[MenuKeyEnum.CommuteCalculator_3]: t(TranslationEnum.CommuteCalculator),
-	[MenuKeyEnum.ShortUrl_3]: t(TranslationEnum.ShortUrl),
-	[MenuKeyEnum.RoleList_3]: t(TranslationEnum.RoleList),
-	[MenuKeyEnum.UserList_3]: t(TranslationEnum.UserList),
-	[MenuKeyEnum.Calculator_3]: t(TranslationEnum.Calculator),
-	[MenuKeyEnum.JsonFormatter_3]: t(TranslationEnum.JsonFormatter),
-	[MenuKeyEnum.compressImg_3]: t(TranslationEnum.compressImg),
-	[MenuKeyEnum.DecodeEncode_3]: t(TranslationEnum.DecodeEncode),
-	[MenuKeyEnum.TailWind_3]: t(TranslationEnum.TailWind),
+	[MenuKeyEnum.CommuteCalculator_3]: '通勤计算器',
+	[MenuKeyEnum.ShortUrl_3]: '短链工具',
+	[MenuKeyEnum.RoleList_3]: '角色列表',
+	[MenuKeyEnum.UserList_3]: '用户列表',
+	[MenuKeyEnum.Calculator_3]: '计算器',
+	[MenuKeyEnum.JsonFormatter_3]: 'JSON格式化校验',
+	[MenuKeyEnum.compressImg_3]: '图片压缩',
+	[MenuKeyEnum.DecodeEncode_3]: '解码/编码',
+	[MenuKeyEnum.TailWind_3]: 'TailWind',
 	[MenuKeyEnum.Three_3]: 'Three'
 };
 

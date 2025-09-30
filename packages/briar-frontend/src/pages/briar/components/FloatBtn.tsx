@@ -1,21 +1,21 @@
 import { DownOutlined, FullscreenOutlined, MoreOutlined } from '@ant-design/icons';
 import { FloatButton } from 'antd';
-import { useCallback, useContext } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
 
+// import { useTranslation } from 'react-i18next';
 import CommonContext from '@/pages/briar/context/common';
 import s from '@/pages/briar/styles/main.module.scss';
 
-import { Language } from '../constants/env';
-import { LANGUAGE_ICON } from '../constants/img';
+// import { Language } from '../constants/env';
+// import { LANGUAGE_ICON } from '../constants/img';
 const FloatBtn = () => {
 	const { toggleFullscreen } = useContext(CommonContext);
-	const { i18n } = useTranslation();
-	const switchLanguage = useCallback(() => {
-		i18n.changeLanguage(i18n.language === Language.Zh ? Language.En : Language.Zh);
+	// const { i18n } = useTranslation();
+	// const switchLanguage = useCallback(() => {
+	// 	i18n.changeLanguage(i18n.language === Language.Zh ? Language.En : Language.Zh);
 
-		window.location.reload();
-	}, [i18n]);
+	// 	window.location.reload();
+	// }, [i18n]);
 	return (
 		<FloatButton.Group
 			shape="circle"
@@ -28,11 +28,11 @@ const FloatBtn = () => {
 				className={s.ColoredText}
 				onClick={toggleFullscreen}
 			/>
-			<FloatButton
+			{/* <FloatButton
 				icon={<img src={LANGUAGE_ICON[i18n.language as Language]} className="scale-125" />}
 				className={s.ColoredText}
 				onClick={switchLanguage}
-			/>
+			/> */}
 		</FloatButton.Group>
 	);
 };
