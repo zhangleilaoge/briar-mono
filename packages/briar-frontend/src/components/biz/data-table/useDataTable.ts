@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { EntityName } from '@/pages/index-db/db/types/common';
+import { DbName } from '@/pages/index-db/db/types/common';
 
 export function useDataTable<T>({
 	initialSort = { field: 'id', direction: 'asc' },
@@ -16,7 +16,7 @@ export function useDataTable<T>({
 		sort: { field: string; direction: 'asc' | 'desc' };
 		pagination: { page: number; pageSize: number };
 	}) => Promise<{ data: T[]; total: number }>;
-	entityName: EntityName;
+	entityName: DbName;
 }) {
 	const [data, setData] = useState<T[]>([]);
 	const [total, setTotal] = useState(0);

@@ -5,11 +5,11 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import { Input } from '@/components/ui/input';
 
 import { addFriend, deleteFriend, getFriends, updateFriend } from '../query/friend';
-import { EntityName, EntityStrategy } from '../types/common';
+import { DbName, EntityStrategy } from '../types/common';
 import { Friend, FriendSchema } from '../types/friend';
 
 export const friendStrategy: EntityStrategy<Friend> = {
-	entityName: EntityName.Friend,
+	entityName: DbName.Friend,
 	schema: FriendSchema,
 	formSchema: FriendSchema.omit({ id: true }),
 	add: addFriend,

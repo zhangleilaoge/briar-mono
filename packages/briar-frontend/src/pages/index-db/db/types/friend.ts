@@ -5,5 +5,8 @@ export const FriendSchema = z.object({
 	name: z.string().min(1),
 	age: z.number().int().min(0).max(150)
 });
+export const UpdateFriendSchema = FriendSchema.required({ id: true });
+
 export type Friend = z.infer<typeof FriendSchema>;
+export type UpdateFriend = z.infer<typeof UpdateFriendSchema>;
 export type FriendFormValues = Omit<Friend, 'id'>;

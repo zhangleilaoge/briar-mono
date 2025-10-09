@@ -15,12 +15,12 @@ import { errorNotify } from '../briar/utils/notify';
 import { EditForm } from './components/edit';
 import { broStrategy } from './db/strategies/bro';
 import { friendStrategy } from './db/strategies/friend';
-import { EntityName, EntityStrategy } from './db/types/common';
+import { DbName, EntityStrategy } from './db/types/common';
 
 const allStrategies: EntityStrategy<any>[] = [friendStrategy, broStrategy];
 
 export default function IndexDBPlayground() {
-	const [currentStrategy, setCurrentStrategy] = useState<EntityName>(EntityName.Friend);
+	const [currentStrategy, setCurrentStrategy] = useState<DbName>(DbName.Friend);
 	const [editingEntity, setEditingEntity] = useState<any | null>(null);
 
 	const strategy = allStrategies.find((s) => s.entityName === currentStrategy)!;
@@ -86,7 +86,7 @@ export default function IndexDBPlayground() {
 		[refresh, strategy, currentStrategy]
 	);
 
-	const handleStrategyChange = useCallback((newStrategy: EntityName) => {
+	const handleStrategyChange = useCallback((newStrategy: DbName) => {
 		setCurrentStrategy(newStrategy);
 		setEditingEntity(null);
 	}, []);
@@ -127,7 +127,7 @@ export default function IndexDBPlayground() {
 				<h1 className="text-2xl font-bold">Select Entity</h1>
 				<Tabs
 					value={currentStrategy}
-					onValueChange={(value) => handleStrategyChange(value as EntityName)}
+					onValueChange={(value) => handleStrategyChange(value as DbName)}
 					className="w-full"
 				>
 					<TabsList className="grid w-full grid-cols-2">
@@ -152,7 +152,7 @@ export default function IndexDBPlayground() {
 			<Separator />
 			<div className="space-y-2">
 				<h1 className="text-2xl font-bold">
-					{currentStrategy === EntityName.Friend ? 'Friend Database' : 'Bro Database'}
+					{currentStrategy === DbName.Friend ? 'Friend Database' : 'Bro Database'}
 				</h1>
 				<DataTable
 					data={data}
