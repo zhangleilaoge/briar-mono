@@ -15,7 +15,7 @@ import { errorNotify } from '../briar/utils/notify';
 import { EditForm } from './components/edit';
 import { broStrategy } from './db/strategies/bro';
 import { friendStrategy } from './db/strategies/friend';
-import { DbName, EntityStrategy } from './db/types/common';
+import { DbName, EntityStrategy, MaybeArray } from './db/types/common';
 
 const allStrategies: EntityStrategy<any>[] = [friendStrategy, broStrategy];
 
@@ -74,7 +74,7 @@ export default function IndexDBPlayground() {
 	);
 
 	const handleDelete = useCallback(
-		async (id: number) => {
+		async (id: MaybeArray<number>) => {
 			try {
 				await strategy.delete(id);
 				message.success(`${currentStrategy} deleted successfully`);
@@ -163,6 +163,13 @@ export default function IndexDBPlayground() {
 					onSortChange={onSortChange}
 					onPageChange={onPageChange}
 					onPageSizeChange={onPageSizeChange}
+					batchActions={[
+						{
+							label: 'Delete All',
+							danger: true,
+							onClick: (rows) => handleDelete(rows.map((row) => row.id))
+						}
+					]}
 				/>
 			</div>
 		</div>

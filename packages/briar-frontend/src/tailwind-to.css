@@ -2187,6 +2187,10 @@ body {
   background-color: hsl(var(--muted));
 }
 
+.bg-muted\/40 {
+  background-color: hsl(var(--muted) / 0.4);
+}
+
 .bg-muted\/50 {
   background-color: hsl(var(--muted) / 0.5);
 }
@@ -2537,6 +2541,10 @@ body {
 
 .text-card-foreground {
   color: hsl(var(--card-foreground));
+}
+
+.text-current {
+  color: currentColor;
 }
 
 .text-destructive {
@@ -3220,6 +3228,10 @@ body {
   background-color: hsl(var(--background));
 }
 
+.data-\[state\=checked\]\:bg-primary[data-state="checked"] {
+  background-color: hsl(var(--primary));
+}
+
 .data-\[state\=open\]\:bg-accent[data-state="open"] {
   background-color: hsl(var(--accent));
 }
@@ -3238,6 +3250,10 @@ body {
 
 .data-\[state\=active\]\:text-foreground[data-state="active"] {
   color: hsl(var(--foreground));
+}
+
+.data-\[state\=checked\]\:text-primary-foreground[data-state="checked"] {
+  color: hsl(var(--primary-foreground));
 }
 
 .data-\[state\=open\]\:text-muted-foreground[data-state="open"] {
