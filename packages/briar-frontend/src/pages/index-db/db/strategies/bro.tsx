@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/select';
 
 import { addBro, deleteBro, getBros, updateBro } from '../query/bro';
-import { Bro, BroSchema, ZodiacSigns } from '../types/bro';
+import { Bro, BroSchema, FieldEnum, ZodiacSigns } from '../types/bro';
 import { DbName, EntityStrategy } from '../types/common';
 
 export const broStrategy: EntityStrategy<Bro> = {
@@ -25,22 +25,22 @@ export const broStrategy: EntityStrategy<Bro> = {
 	update: updateBro,
 	columns: [
 		{
-			key: 'id',
+			key: FieldEnum.Id,
 			header: 'ID',
 			sortable: true
 		},
 		{
-			key: 'name',
+			key: FieldEnum.Name,
 			header: 'Name',
 			sortable: true
 		},
 		{
-			key: 'hobby',
+			key: FieldEnum.Hobby,
 			header: 'Hobby',
 			sortable: true
 		},
 		{
-			key: 'zodiac',
+			key: FieldEnum.Zodiac,
 			header: 'Zodiac',
 			sortable: true
 		}

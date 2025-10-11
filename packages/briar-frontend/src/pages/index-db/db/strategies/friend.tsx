@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 
 import { addFriend, deleteFriend, getFriends, updateFriend } from '../query/friend';
 import { DbName, EntityStrategy } from '../types/common';
-import { Friend, FriendSchema } from '../types/friend';
+import { FieldEnum, Friend, FriendSchema } from '../types/friend';
 
 export const friendStrategy: EntityStrategy<Friend> = {
 	entityName: DbName.Friend,
@@ -18,17 +18,17 @@ export const friendStrategy: EntityStrategy<Friend> = {
 	update: updateFriend,
 	columns: [
 		{
-			key: 'id',
+			key: FieldEnum.Id,
 			header: 'ID',
 			sortable: true
 		},
 		{
-			key: 'name',
+			key: FieldEnum.Name,
 			header: 'Name',
 			sortable: true
 		},
 		{
-			key: 'age',
+			key: FieldEnum.Age,
 			header: 'Age',
 			sortable: true,
 			cell: (row) => `${row.age}岁`

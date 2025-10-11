@@ -24,7 +24,7 @@ export type ColumnDef<T> = {
 };
 
 export type DataTableProps<T> = {
-	data: T[];
+	data?: T[];
 	columns: ColumnDef<T>[];
 	total?: number;
 	pagination?: {
@@ -37,6 +37,7 @@ export type DataTableProps<T> = {
 	onPageSizeChange?: (pageSize: number) => void;
 	/* ===== 多选相关 ===== */
 	rowKey?: (row: T) => React.Key; // 不传默认用数组 index
+	sortConfig?: { field: string; direction: 'asc' | 'desc' };
 	batchActions?: {
 		// 顶部批量操作按钮组
 		label: ReactNode;
@@ -45,7 +46,7 @@ export type DataTableProps<T> = {
 	}[];
 };
 export function DataTable<T>({
-	data,
+	data = [],
 	columns,
 	total = 0,
 	pagination = { page: 1, pageSize: 10 },
@@ -54,12 +55,9 @@ export function DataTable<T>({
 	onPageChange = () => {},
 	onPageSizeChange,
 	batchActions = [],
+	sortConfig = { field: 'id', direction: 'asc' },
 	rowKey
 }: DataTableProps<T>) {
-	const [sortConfig, setSortConfig] = useState<{
-		field: string;
-		direction: 'asc' | 'desc';
-	}>({ field: 'id', direction: 'asc' });
 	/* 多选核心状态 */
 	const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]); // 只存 key 数组，跨页记忆
 	/* 当前页对应的 key 集合 */
@@ -70,7 +68,6 @@ export function DataTable<T>({
 			field,
 			direction: sortConfig.field === field && sortConfig.direction === 'asc' ? 'desc' : 'asc'
 		};
-		setSortConfig(newSortConfig);
 		onSortChange?.(newSortConfig);
 	};
 

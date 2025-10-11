@@ -30,3 +30,10 @@ export type Bro = z.infer<typeof BroSchema>;
 export type UpdateBro = z.infer<typeof UpdateBroSchema>;
 export type BroFormValues = Omit<Bro, 'id'>;
 export type ZodiacSign = (typeof ZodiacSigns)[number];
+
+export enum FieldEnum {
+	Id = 'id',
+	Name = 'name',
+	Hobby = 'hobby',
+	Zodiac = 'zodiac'
+}

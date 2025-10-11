@@ -10,3 +10,9 @@ export const UpdateFriendSchema = FriendSchema.required({ id: true });
 export type Friend = z.infer<typeof FriendSchema>;
 export type UpdateFriend = z.infer<typeof UpdateFriendSchema>;
 export type FriendFormValues = Omit<Friend, 'id'>;
+
+export enum FieldEnum {
+	Id = 'id',
+	Name = 'name',
+	Age = 'age'
+}

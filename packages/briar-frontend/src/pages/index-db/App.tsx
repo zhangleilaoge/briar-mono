@@ -1,7 +1,6 @@
 // src/features/index-db-playground/page.tsx
 'use client';
 
-import { useMount } from 'ahooks';
 import { message } from 'antd';
 import { useCallback, useState } from 'react';
 
@@ -27,10 +26,9 @@ export default function IndexDBPlayground() {
 
 	const {
 		data,
-		total,
 		pagination,
 		isLoading,
-		loadData,
+		sortConfig,
 		refresh,
 		onSortChange,
 		onPageChange,
@@ -39,11 +37,7 @@ export default function IndexDBPlayground() {
 		fetchData: async ({ sort, pagination }) => {
 			return strategy.get({ sort, pagination });
 		},
-		entityName: currentStrategy
-	});
-
-	useMount(() => {
-		loadData();
+		updateKey: strategy.entityName
 	});
 
 	const handleStartEdit = useCallback((entity: any) => {
@@ -86,10 +80,15 @@ export default function IndexDBPlayground() {
 		[refresh, strategy, currentStrategy]
 	);
 
-	const handleStrategyChange = useCallback((newStrategy: DbName) => {
-		setCurrentStrategy(newStrategy);
-		setEditingEntity(null);
-	}, []);
+	const handleStrategyChange = useCallback(
+		(newStrategy: DbName) => {
+			setCurrentStrategy(newStrategy);
+			setEditingEntity(null);
+
+			onSortChange();
+		},
+		[onSortChange]
+	);
 
 	const columns = [
 		...strategy.columns,
@@ -155,14 +154,15 @@ export default function IndexDBPlayground() {
 					{currentStrategy === DbName.Friend ? 'Friend Database' : 'Bro Database'}
 				</h1>
 				<DataTable
-					data={data}
+					data={data?.data}
 					columns={columns}
-					total={total}
+					total={data?.total}
 					pagination={pagination}
 					isLoading={isLoading}
 					onSortChange={onSortChange}
 					onPageChange={onPageChange}
 					onPageSizeChange={onPageSizeChange}
+					sortConfig={sortConfig}
 					batchActions={[
 						{
 							label: 'Delete All',
