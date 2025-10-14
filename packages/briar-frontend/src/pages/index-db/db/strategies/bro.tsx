@@ -41,8 +41,7 @@ export const broStrategy: EntityStrategy<Bro> = {
 		},
 		{
 			key: FieldEnum.Zodiac,
-			header: 'Zodiac',
-			sortable: true
+			header: 'Zodiac'
 		}
 	],
 	getFormFields: (form: UseFormReturn<Omit<Bro, 'id'>>) => (

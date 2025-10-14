@@ -121,7 +121,7 @@ export default function IndexDBPlayground() {
 	];
 
 	return (
-		<div className="container mx-auto p-4 max-w-2xl space-y-6">
+		<div className="container mx-auto p-4 max-w-2xl space-y-6 mt-16">
 			<div className="space-y-2">
 				<h1 className="text-2xl font-bold">Select Entity</h1>
 				<Tabs
