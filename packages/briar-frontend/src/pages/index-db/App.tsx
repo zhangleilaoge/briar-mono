@@ -2,11 +2,14 @@
 'use client';
 
 import { message } from 'antd';
+import { saveAs } from 'file-saver';
 import { useCallback, useState } from 'react';
+import * as XLSX from 'xlsx';
 
 import { DataTable } from '@/components/biz/data-table';
 import { Operation } from '@/components/biz/data-table/operation';
 import { useDataTable } from '@/components/biz/data-table/useDataTable';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -15,6 +18,30 @@ import { EditForm } from './components/edit';
 import { broStrategy } from './db/strategies/bro';
 import { friendStrategy } from './db/strategies/friend';
 import { DbName, EntityStrategy, MaybeArray } from './db/types/common';
+
+const mergeSheets = async () => {
+	const urls = [
+		'https://file-pr.yzcdn.cn/upload_files/yz-private-file/2025/10/14/FokGkiTP-GxhG1IFu36Smgi3tge7.xlsx?attname=导购提醒计划00005加购_导购提醒00005-客户关怀明细-REACH.xlsx&e=1760438274&token=pNRZT0KqE-4QuBa6MxYRg-Uc-FTJ8vw_TDVMOYK0:UL2ylJ09IvNQlemaSiFlzK33McE=',
+		'https://file-pr.yzcdn.cn/upload_files/yz-private-file/2025/10/14/FvwuB7ZlCjef_n-YBBcwwowoBQYi.xlsx?attname=导购提醒计划00005加购_导购提醒00005-导购明细-REACH.xlsx&e=1760438415&token=pNRZT0KqE-4QuBa6MxYRg-Uc-FTJ8vw_TDVMOYK0:sImCLeocHLVnLIVUMONWr2gnII8='
+	];
+	const merged = XLSX.utils.book_new(); // 空工作簿
+
+	for (const url of urls) {
+		const buf = await (await fetch(url)).arrayBuffer();
+		const wb = XLSX.read(buf, { type: 'array' }); // 解析整份文件
+
+		// 把每个 sheet 拷过来，重命名防冲突
+		wb.SheetNames.forEach((name) => {
+			const ws = wb.Sheets[name];
+			const newName = `${url.split('/').pop()!.replace('.xlsx', '')}_${name}`.slice(0, 20);
+			XLSX.utils.book_append_sheet(merged, ws, newName);
+		});
+	}
+
+	// 3. 生成 blob 并下载
+	const out = XLSX.write(merged, { bookType: 'xlsx', type: 'array' });
+	saveAs(new Blob([out], { type: 'application/octet-stream' }), 'merged.xlsx');
+};
 
 const allStrategies: EntityStrategy<any>[] = [friendStrategy, broStrategy];
 
@@ -153,6 +180,7 @@ export default function IndexDBPlayground() {
 				<h1 className="text-2xl font-bold">
 					{currentStrategy === DbName.Friend ? 'Friend Database' : 'Bro Database'}
 				</h1>
+				<Button onClick={mergeSheets}>merge</Button>
 				<DataTable
 					data={data?.data}
 					columns={columns}

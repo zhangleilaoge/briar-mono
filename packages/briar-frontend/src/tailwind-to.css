@@ -1427,6 +1427,10 @@ body {
   margin-right: 8px;
 }
 
+.mt-16 {
+  margin-top: 4rem;
+}
+
 .mt-2 {
   margin-top: 0.5rem;
 }
@@ -1457,14 +1461,6 @@ body {
 
 .mt-\[64px\] {
   margin-top: 64px;
-}
-
-.mt-8 {
-  margin-top: 2rem;
-}
-
-.mt-16 {
-  margin-top: 4rem;
 }
 
 .box-border {
@@ -2193,10 +2189,6 @@ body {
 
 .bg-muted {
   background-color: hsl(var(--muted));
-}
-
-.bg-muted\/40 {
-  background-color: hsl(var(--muted) / 0.4);
 }
 
 .bg-muted\/50 {
