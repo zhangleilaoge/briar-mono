@@ -3,6 +3,7 @@ import { Tabs } from 'antd';
 import Bird from './tabs/bird';
 import RegisterForm from './tabs/shadcn';
 import { AuroraBackgroundDemo } from './tabs/ui/code.demo';
+import Xyflow from './tabs/xyflow/App';
 
 const TailWind = () => {
 	// 定义 Tabs 的配置项
@@ -21,6 +22,11 @@ const TailWind = () => {
 			key: '3',
 			label: 'shadcn',
 			children: <RegisterForm />
+		},
+		{
+			key: '4',
+			label: 'xyflow',
+			children: <Xyflow />
 		}
 	];
 
