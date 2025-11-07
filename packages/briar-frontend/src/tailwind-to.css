@@ -1584,6 +1584,10 @@ body {
   height: 60px;
 }
 
+.h-\[calc\(100vh-300px\)\] {
+  height: calc(100vh - 300px);
+}
+
 .h-\[var\(--radix-select-trigger-height\)\] {
   height: var(--radix-select-trigger-height);
 }
