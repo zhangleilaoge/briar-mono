@@ -31,8 +31,9 @@ const hideLoading = () => {
 const useLogin = ({ needCreateUser = true }: IProps) => {
 	const [userInfo, setUserInfo] = useState<IUserInfoDTO>(DEFAULT_USER_INFO);
 	const [availablePage, setAvailablePage] = useState<string[]>([]);
+	const [initialized, setInitialized] = useState(false);
 
-	const init = async () => {
+	const init = useCallback(async () => {
 		let {
 			accessToken,
 			userInfo,
@@ -40,6 +41,7 @@ const useLogin = ({ needCreateUser = true }: IProps) => {
 		} = await getUserInfo().catch(() => ({}) as IUserAccess);
 
 		if (!needCreateUser && !userInfo?.id) {
+			setInitialized(true);
 			return;
 		}
 
@@ -60,7 +62,8 @@ const useLogin = ({ needCreateUser = true }: IProps) => {
 		setUserInfo(userInfo);
 
 		hideLoading();
-	};
+		setInitialized(true);
+	}, [needCreateUser]);
 
 	useEffect(() => {
 		const initClient = () => {
@@ -72,7 +75,7 @@ const useLogin = ({ needCreateUser = true }: IProps) => {
 		gapi.load('client:auth2', initClient);
 
 		init();
-	}, []);
+	}, [init]);
 
 	const logout = useCallback(async () => {
 		localStorage.removeItem(LocalStorageKey.AccessToken);
@@ -93,6 +96,7 @@ const useLogin = ({ needCreateUser = true }: IProps) => {
 	return {
 		userInfo,
 		availablePage,
+		initialized,
 		headerRoutes,
 		setUserInfo,
 		logout

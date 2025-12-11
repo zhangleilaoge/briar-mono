@@ -4,6 +4,12 @@ import * as dotenv from 'dotenv';
 
 import { BlogFavoriteModel, BlogModel } from '@/model/BlogModel';
 import { ConversationModel } from '@/model/ConversationModel';
+import {
+  JsonDocumentAccessLogModel,
+  JsonDocumentModel,
+  JsonDocumentOperationLogModel,
+  JsonDocumentVersionModel,
+} from '@/model/JsonDocumentModel';
 import { LogModel } from '@/model/LogModel';
 import { MaterialModel } from '@/model/MaterialModel';
 import { MessageModel } from '@/model/MessageModel';
@@ -35,8 +41,8 @@ dotenv.config({ path: '../../.env' });
         max: 20,
         min: 5,
         idle: 10000,
-        acquire: 30000
-      }
+        acquire: 30000,
+      },
     }),
     SequelizeModule.forFeature([
       ConversationModel,
@@ -51,6 +57,10 @@ dotenv.config({ path: '../../.env' });
       VerifyCodeModel,
       BlogModel,
       BlogFavoriteModel,
+      JsonDocumentModel,
+      JsonDocumentVersionModel,
+      JsonDocumentOperationLogModel,
+      JsonDocumentAccessLogModel,
     ]), // 注册特定模型以用于DI
   ],
   exports: [SequelizeModule],

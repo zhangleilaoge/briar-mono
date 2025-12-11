@@ -11,6 +11,7 @@ import { LogInterceptor } from '../interceptor/log';
 import { AiModule } from './AiModule';
 import { BlogModule } from './BlogModule';
 import { CommonModule } from './common/CommonModule';
+import { JsonModule } from './JsonModule';
 import { MaterialModule } from './MaterialModule';
 import { ShortUrlModule } from './ShortUrlModule';
 import { UserModule } from './UserModule';
@@ -29,6 +30,7 @@ import { VerifyModule } from './VerifyModule';
     MaterialModule,
     VerifyModule,
     BlogModule,
+    JsonModule,
     /** 不要改变 ShortUrlModule 最末位的顺序 */
     ShortUrlModule,
   ],

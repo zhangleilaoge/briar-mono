@@ -2,6 +2,7 @@ export * from './ai';
 export * from './apis';
 export * from './blog';
 export * from './common';
+export * from './json';
 export * from './log';
 export * from './material';
 export * from './model';
