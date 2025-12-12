@@ -1,7 +1,7 @@
 import 'jsoneditor/dist/jsoneditor.css';
 
 import JSONEditor, { JSONEditorOptions } from 'jsoneditor';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface Props {
 	jsonText: string;
