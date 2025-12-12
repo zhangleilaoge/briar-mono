@@ -1822,8 +1822,16 @@ body {
   flex-basis: 180px;
 }
 
+.table-auto {
+  table-layout: auto;
+}
+
 .caption-bottom {
   caption-side: bottom;
+}
+
+.border-collapse {
+  border-collapse: collapse;
 }
 
 .origin-\[--radix-dropdown-menu-content-transform-origin\] {
@@ -2155,6 +2163,10 @@ body {
   border-bottom-width: 2px;
 }
 
+.border-l {
+  border-left-width: 1px;
+}
+
 .border-t {
   border-top-width: 1px;
 }
@@ -2188,11 +2200,6 @@ body {
 
 .border-primary {
   border-color: hsl(var(--primary));
-}
-
-.border-red-500 {
-  --tw-border-opacity: 1;
-  border-color: rgb(239 68 68 / var(--tw-border-opacity));
 }
 
 .border-transparent {
@@ -2502,6 +2509,10 @@ body {
   padding-left: 0.5rem;
 }
 
+.pl-4 {
+  padding-left: 1rem;
+}
+
 .pl-8 {
   padding-left: 2rem;
 }
@@ -2544,6 +2555,10 @@ body {
 
 .text-center {
   text-align: center;
+}
+
+.align-top {
+  vertical-align: top;
 }
 
 .align-middle {

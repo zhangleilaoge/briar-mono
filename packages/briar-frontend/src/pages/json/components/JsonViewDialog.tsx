@@ -1,25 +1,23 @@
-import { autocompletion } from '@codemirror/autocomplete';
-import { defaultKeymap, history, historyKeymap } from '@codemirror/commands';
-import { json } from '@codemirror/lang-json';
-import { EditorView, highlightActiveLine, keymap } from '@codemirror/view';
-import CodeMirror from '@uiw/react-codemirror';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast as sonnerToast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import {
 	Dialog,
 	DialogContent,
-	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // notifications handled by sonner in this component
 import { createJsonDocument, JsonDocument, updateJsonDocument } from '../api';
+import JsonCodeEditor from './JsonCodeEditor';
+// import JsonTableEditor from './JsonTableEditor';
+import JsonTreeEditor from './JsonTreeEditor';
 
 interface JsonViewDialogProps {
 	document: JsonDocument | null;
@@ -33,20 +31,8 @@ export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonVi
 	const [content, setContent] = useState('');
 	const [isValid, setIsValid] = useState(true);
 	const [isSaving, setIsSaving] = useState(false);
-	const [isReadOnly, setIsReadOnly] = useState(false);
 	const [isCopied, setIsCopied] = useState(false);
-
-	const extensions = useMemo(
-		() => [
-			json(),
-			autocompletion(),
-			history(),
-			keymap.of([...defaultKeymap, ...historyKeymap]),
-			EditorView.lineWrapping,
-			highlightActiveLine()
-		],
-		[]
-	);
+	const [viewMode, setViewMode] = useState<'code' | 'tree' | 'table'>('code');
 
 	useEffect(() => {
 		if (document) {
@@ -57,7 +43,7 @@ export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonVi
 			setContent('');
 		}
 		setIsValid(true);
-		setIsReadOnly(false);
+		setViewMode('code');
 	}, [document]);
 
 	const validateJson = (value: string) => {
@@ -71,11 +57,6 @@ export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonVi
 		}
 	};
 
-	const handleContentChange = (value: string) => {
-		setContent(value);
-		validateJson(value);
-	};
-
 	const formatJson = () => {
 		try {
 			const parsed = JSON.parse(content);
@@ -87,6 +68,8 @@ export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonVi
 			sonnerToast('JSON 格式不正确');
 		}
 	};
+
+	// editors moved to separate components
 
 	const handleCopy = async () => {
 		try {
@@ -149,7 +132,7 @@ export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonVi
 			<DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
 				<DialogHeader>
 					<DialogTitle>查看/编辑 JSON 文档</DialogTitle>
-					<DialogDescription>修改文档名称和内容，然后保存更改</DialogDescription>
+					{/* <DialogDescription>修改文档名称和内容，然后保存更改</DialogDescription> */}
 				</DialogHeader>
 
 				{document && (
@@ -160,7 +143,7 @@ export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonVi
 					</div>
 				)}
 
-				<div className="space-y-4 py-4">
+				<div className="space-y-4">
 					<div className="space-y-2">
 						<Label htmlFor="edit-name">文档名称</Label>
 						<Input
@@ -172,36 +155,62 @@ export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonVi
 					</div>
 
 					<div className="space-y-2">
-						<div className="flex flex-wrap items-center justify-between gap-2">
+						{/* @ts-ignore */}
+						<Tabs value={viewMode} onValueChange={setViewMode}>
 							<Label htmlFor="edit-content">JSON 内容</Label>
-							<div className="flex flex-wrap items-center gap-2">
-								<Button variant="outline" size="sm" onClick={formatJson}>
-									格式化
-								</Button>
-								<Button variant="outline" size="sm" onClick={handleCopy}>
-									{isCopied ? '已复制' : '复制内容'}
-								</Button>
-								<Button variant="outline" size="sm" onClick={() => setIsReadOnly((prev) => !prev)}>
-									{isReadOnly ? '切换编辑' : '只读模式'}
-								</Button>
+							<div className="flex items-center justify-between gap-2 mb-2 mt-1">
+								<TabsList>
+									<TabsTrigger value="code">代码</TabsTrigger>
+									<TabsTrigger value="tree">树状</TabsTrigger>
+									{/* <TabsTrigger value="table">表格</TabsTrigger> */}
+								</TabsList>
+
+								<div className="ml-2 inline-flex items-center gap-2">
+									<Button variant="outline" size="sm" onClick={formatJson}>
+										格式化
+									</Button>
+									<Button variant="outline" size="sm" onClick={handleCopy}>
+										{isCopied ? '已复制' : '复制内容'}
+									</Button>
+								</div>
 							</div>
-						</div>
-						<div className="relative">
-							<CodeMirror
-								id="edit-content"
-								value={content}
-								extensions={extensions}
-								height="300px"
-								theme="light"
-								className={`rounded-md border bg-background text-sm font-mono border-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`}
-								onChange={handleContentChange}
-								editable={!isReadOnly}
-								placeholder='{
-  "key": "value"
-}'
-							/>
-							{!isValid && <p className="text-sm text-red-500 mt-2">JSON 格式不正确，请检查语法</p>}
-						</div>
+
+							<TabsContent value="code">
+								<JsonCodeEditor
+									jsonText={content}
+									onChange={(text) => {
+										setContent(text);
+										validateJson(text);
+									}}
+									height="300px"
+								/>
+								{!isValid && (
+									<p className="text-sm text-red-500 mt-2">JSON 格式不正确，请检查语法</p>
+								)}
+							</TabsContent>
+
+							<TabsContent value="tree">
+								<JsonTreeEditor
+									jsonText={content}
+									onChange={(text) => {
+										setContent(text);
+										setIsValid(true);
+									}}
+									height="300px"
+								/>
+							</TabsContent>
+
+							{/* <TabsContent value="table">
+								<JsonTableEditor
+									jsonText={content}
+									onChange={(text) => {
+										setContent(text);
+										validateJson(text);
+									}}
+									height="300px"
+								/>
+							</TabsContent> */}
+						</Tabs>
 					</div>
 				</div>
 
