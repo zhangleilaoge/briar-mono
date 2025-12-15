@@ -1,5 +1,5 @@
 import '../../definition.d.ts';
-import '../../tailwind-to.css';
+import '../../tailwind-from.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';

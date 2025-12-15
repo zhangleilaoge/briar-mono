@@ -1,6 +1,6 @@
 module.exports = {
 	extends: ['stylelint-config-standard', 'stylelint-config-prettier'],
-	ignoreFiles: ['packages/briar-frontend/**/tailwind-to.css'],
+	ignoreFiles: [],
 	plugins: [],
 	rules: {
 		'string-quotes': 'double'

@@ -1,4 +1,4 @@
-import '../../tailwind-to.css';
+import '../../tailwind-from.css';
 
 // import './base/i18n.ts';
 import { BRIAR_BASENAME } from 'briar-shared';

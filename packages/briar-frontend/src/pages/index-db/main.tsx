@@ -1,4 +1,4 @@
-import '../../tailwind-to.css';
+import '../../tailwind-from.css';
 
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
