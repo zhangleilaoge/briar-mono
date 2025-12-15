@@ -1,6 +1,6 @@
 ### 介绍
 
-zhangleilaoge 的个人博客网站，以及工具集。
+zhangleilaoge 个人博客网站，以及工具集。
 
 ### 项目结构
 
