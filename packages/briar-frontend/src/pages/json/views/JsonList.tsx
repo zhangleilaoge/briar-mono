@@ -15,7 +15,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 import { deleteJsonDocument, getJsonDocuments, JsonDocument } from '../api';
-import { JsonViewDialog } from './JsonViewDialog';
+import { JsonViewDialog } from '../components/JsonViewDialog';
 
 const ITEMS_PER_PAGE = 5;
 

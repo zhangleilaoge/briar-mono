@@ -2,8 +2,9 @@ import { Toaster } from '@/components/ui/sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import useLogin from '@/pages/briar/hooks/biz/useLogin';
 
-import { JsonList } from './components/JsonList';
-import { UsageStats } from './components/UsageStats';
+import JsonEditorTab from './views/JsonEditorTab';
+import { JsonList } from './views/JsonList';
+import { UsageStats } from './views/UsageStats';
 
 export default function JsonPage() {
 	const { userInfo, initialized } = useLogin({ needCreateUser: false });
@@ -49,6 +50,7 @@ export default function JsonPage() {
 				<TabsList>
 					<TabsTrigger value="list">JSON 列表</TabsTrigger>
 					<TabsTrigger value="stats">用量统计</TabsTrigger>
+					<TabsTrigger value="editor">JSON 编辑器</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="list">
@@ -57,6 +59,10 @@ export default function JsonPage() {
 
 				<TabsContent value="stats">
 					<UsageStats />
+				</TabsContent>
+
+				<TabsContent value="editor">
+					<JsonEditorTab />
 				</TabsContent>
 			</Tabs>
 			<Toaster />

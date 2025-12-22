@@ -4,7 +4,7 @@ import { TableRowSelection } from 'antd/es/table/interface';
 import { useContext, useEffect, useRef, useState } from 'react';
 import React from 'react';
 
-import { LocalStorageKey } from '@/pages/briar/constants/env';
+import { LocalStorageKey } from '@/constants';
 import { leFormatNumber } from '@/pages/briar/utils/format';
 
 // @ts-ignore

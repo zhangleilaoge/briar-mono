@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { toast as sonnerToast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -11,13 +11,10 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // notifications handled by sonner in this component
 import { createJsonDocument, JsonDocument, updateJsonDocument } from '../api';
-import JsonCodeEditor from './JsonCodeEditor';
-// import JsonTableEditor from './JsonTableEditor';
-import JsonTreeEditor from './JsonTreeEditor';
+import JsonEditor from './JsonEditor';
 
 interface JsonViewDialogProps {
 	document: JsonDocument | null;
@@ -28,67 +25,16 @@ interface JsonViewDialogProps {
 
 export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonViewDialogProps) {
 	const [name, setName] = useState('');
-	const [content, setContent] = useState('');
+	const [jsonText, setJsonText] = useState<string>('');
 	const [isValid, setIsValid] = useState(true);
 	const [isSaving, setIsSaving] = useState(false);
-	const [isCopied, setIsCopied] = useState(false);
-	const [viewMode, setViewMode] = useState<'code' | 'tree' | 'table'>('code');
-
-	useEffect(() => {
-		if (document) {
-			setName(document.name);
-			setContent(document.content);
-		} else {
-			setName('');
-			setContent('');
-		}
-		setIsValid(true);
-		setViewMode('code');
-	}, [document]);
-
-	const validateJson = (value: string) => {
-		try {
-			JSON.parse(value);
-			setIsValid(true);
-			return true;
-		} catch {
-			setIsValid(false);
-			return false;
-		}
-	};
-
-	const formatJson = () => {
-		try {
-			const parsed = JSON.parse(content);
-			const formatted = JSON.stringify(parsed, null, 2);
-			setContent(formatted);
-			setIsValid(true);
-			sonnerToast.success('JSON 已格式化');
-		} catch {
-			sonnerToast('JSON 格式不正确');
-		}
-	};
-
-	// editors moved to separate components
-
-	const handleCopy = async () => {
-		try {
-			await navigator.clipboard.writeText(content);
-			setIsCopied(true);
-			console.log('Content copied to clipboard');
-			sonnerToast.success('已复制');
-			setTimeout(() => setIsCopied(false), 1500);
-		} catch {
-			sonnerToast.error('复制失败，请手动复制内容');
-		}
-	};
 
 	const handleSave = async () => {
 		if (!name.trim()) {
 			sonnerToast.error('文档名称不能为空');
 			return;
 		}
-		if (!validateJson(content)) {
+		if (!isValid) {
 			sonnerToast.error('JSON 格式不正确');
 			return;
 		}
@@ -96,10 +42,10 @@ export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonVi
 		setIsSaving(true);
 		try {
 			if (document) {
-				await updateJsonDocument(document.id, { name, content });
+				await updateJsonDocument(document.id, { name, content: jsonText });
 				sonnerToast.success(`文档 "${name}" 已更新`);
 			} else {
-				await createJsonDocument({ name, content });
+				await createJsonDocument({ name, content: jsonText });
 				sonnerToast.success(`文档 "${name}" 已创建`);
 			}
 			onSaved();
@@ -155,62 +101,12 @@ export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonVi
 					</div>
 
 					<div className="space-y-2">
-						{/* @ts-ignore */}
-						<Tabs value={viewMode} onValueChange={setViewMode}>
-							<Label htmlFor="edit-content">JSON 内容</Label>
-							<div className="flex items-center justify-between gap-2 mb-2 mt-1">
-								<TabsList>
-									<TabsTrigger value="code">代码</TabsTrigger>
-									<TabsTrigger value="tree">树状</TabsTrigger>
-									{/* <TabsTrigger value="table">表格</TabsTrigger> */}
-								</TabsList>
-
-								<div className="ml-2 inline-flex items-center gap-2">
-									<Button variant="outline" size="sm" onClick={formatJson}>
-										格式化
-									</Button>
-									<Button variant="outline" size="sm" onClick={handleCopy}>
-										{isCopied ? '已复制' : '复制内容'}
-									</Button>
-								</div>
-							</div>
-
-							<TabsContent value="code">
-								<JsonCodeEditor
-									jsonText={content}
-									onChange={(text) => {
-										setContent(text);
-										validateJson(text);
-									}}
-									height="300px"
-								/>
-								{!isValid && (
-									<p className="text-sm text-red-500 mt-2">JSON 格式不正确，请检查语法</p>
-								)}
-							</TabsContent>
-
-							<TabsContent value="tree">
-								<JsonTreeEditor
-									jsonText={content}
-									onChange={(text) => {
-										setContent(text);
-										setIsValid(true);
-									}}
-									height="300px"
-								/>
-							</TabsContent>
-
-							{/* <TabsContent value="table">
-								<JsonTableEditor
-									jsonText={content}
-									onChange={(text) => {
-										setContent(text);
-										validateJson(text);
-									}}
-									height="300px"
-								/>
-							</TabsContent> */}
-						</Tabs>
+						<JsonEditor
+							jsonText={jsonText}
+							setJsonText={setJsonText}
+							isValid={isValid}
+							setIsValid={setIsValid}
+						/>
 					</div>
 				</div>
 

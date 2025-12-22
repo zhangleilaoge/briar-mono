@@ -2,7 +2,7 @@ import { Button, Form, Input, message } from 'antd';
 import { useMemo, useState } from 'react';
 import ReactJson from 'react-json-view';
 
-import { LocalStorageKey } from '@/pages/briar/constants/env';
+import { LocalStorageKey } from '@/constants';
 
 const JsonFormatter = () => {
 	const [input, setInput] = useState(localStorage.getItem(LocalStorageKey.JSON) || '');

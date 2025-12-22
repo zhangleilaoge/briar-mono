@@ -3,8 +3,8 @@ import { CLIENT_ID, IUserAccess, IUserInfoDTO } from 'briar-shared';
 import { gapi } from 'gapi-script';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { LocalStorageKey } from '@/constants';
 import { createAnonymousUser as createAnonymousUserApi, getUserInfo } from '@/pages/briar/api/user';
-import { LocalStorageKey } from '@/pages/briar/constants/env';
 
 import { ROUTER_CONFIG } from '../../constants/router';
 import { getAvailablePages, removeChildren } from '../../utils/router';

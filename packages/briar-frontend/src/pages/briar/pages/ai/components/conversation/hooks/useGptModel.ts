@@ -1,8 +1,8 @@
 import { safeJSON } from 'openai/core';
 import { useEffect, useState } from 'react';
 
+import { LocalStorageKey } from '@/constants';
 import { getConversationModels } from '@/pages/briar/api/ai';
-import { LocalStorageKey } from '@/pages/briar/constants/env';
 
 const useGptModel = () => {
 	const [options, setOptions] = useState([{ value: 'gpt-4o', label: 'gpt-4o' }]);

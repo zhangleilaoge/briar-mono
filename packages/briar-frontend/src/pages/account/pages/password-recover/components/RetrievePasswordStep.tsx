@@ -17,9 +17,9 @@ import {
 	FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { LocalStorageKey } from '@/constants';
 import { checkUserInfo } from '@/pages/briar/api/user';
 import { checkVerifyCode, sendVerifyCode4RetrievePassword } from '@/pages/briar/api/verify';
-import { LocalStorageKey } from '@/pages/briar/constants/env';
 import { errorNotify } from '@/pages/briar/utils/notify';
 
 import EmailAutoComplete from '../../register/email';

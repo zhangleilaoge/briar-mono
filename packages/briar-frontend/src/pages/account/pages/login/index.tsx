@@ -18,7 +18,7 @@ import {
 	FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { LocalStorageKey } from '@/pages/briar/constants/env';
+import { LocalStorageKey } from '@/constants';
 
 import useRedirect from '../../hooks/useRedirect';
 
@@ -146,15 +146,29 @@ const Login: React.FC<ILoginProps> = ({ finishSignIn, retrievePassword }) => {
 									)}
 								</Button>
 
-								<Button
-									type="button"
-									variant="outline"
-									onClick={retrievePassword}
-									disabled={isLoading}
-									className="h-10 text-sm text-gray-600 hover:text-gray-800 transition-colors"
-								>
-									忘记密码？
-								</Button>
+								<div className="flex justify-between gap-3">
+									<Button
+										type="button"
+										variant="outline"
+										onClick={retrievePassword}
+										disabled={isLoading}
+										className="h-10 text-sm text-gray-600 hover:text-gray-800 transition-colors basis-[180px] grow"
+									>
+										忘记密码？
+									</Button>
+
+									<Button
+										type="button"
+										variant="outline"
+										onClick={() => {
+											window.location.href = '/account/register';
+										}}
+										disabled={isLoading}
+										className="h-10 text-sm text-gray-600 hover:text-gray-800 transition-colors basis-[180px] grow"
+									>
+										注册账号
+									</Button>
+								</div>
 							</div>
 						</form>
 					</Form>

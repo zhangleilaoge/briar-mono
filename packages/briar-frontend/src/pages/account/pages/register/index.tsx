@@ -17,8 +17,8 @@ import {
 	FormMessage
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { LocalStorageKey } from '@/constants';
 import { checkUserInfo as checkUserInfoApi, signUp } from '@/pages/briar/api/user';
-import { LocalStorageKey } from '@/pages/briar/constants/env';
 
 import useRedirect from '../../hooks/useRedirect';
 import EmailAutoComplete from './email';

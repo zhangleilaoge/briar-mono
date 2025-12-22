@@ -1,7 +1,7 @@
 import { Button, Form, Input, message } from 'antd';
 import { useEffect, useState } from 'react';
 
-import { LocalStorageKey } from '@/pages/briar/constants/env';
+import { LocalStorageKey } from '@/constants';
 
 const DecodeEncode = () => {
 	const [input, setInput] = useState(localStorage.getItem(LocalStorageKey.DecodeContent) || '');

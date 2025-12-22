@@ -1,7 +1,7 @@
 import { safeJsonParse } from 'briar-shared';
 import { useEffect, useState } from 'react';
 
-import { LocalStorageKey } from '@/pages/briar/constants/env';
+import { LocalStorageKey } from '@/constants';
 
 const useSider = () => {
 	const [isCollapsed, _setIsCollapsed] = useState(

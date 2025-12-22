@@ -4,7 +4,8 @@ import reactHook from 'alova/react';
 import md5 from 'md5-es';
 import qs from 'qs';
 
-import { isDev, LocalStorageKey } from '@/pages/briar/constants/env';
+import { LocalStorageKey } from '@/constants';
+import { isDev } from '@/pages/briar/constants/env';
 import { errorNotify } from '@/pages/briar/utils/notify';
 
 const alovaInstance = createAlova({

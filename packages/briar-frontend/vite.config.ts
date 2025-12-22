@@ -1,5 +1,8 @@
 import 'dotenv/config';
 
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import react from '@vitejs/plugin-react-swc';
 import { BRIAR_BASENAME } from 'briar-shared';
 import externalGlobals from 'rollup-plugin-external-globals';
@@ -42,6 +45,11 @@ const externalOutputGlobals = {
 
 const config = ({ mode }: { mode: string }) => {
 	const dev = mode === 'development';
+
+	// Resolve workspace path for briar-shared/src to avoid needing lib during dev
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = path.dirname(__filename);
+	const sharedSrc = path.resolve(__dirname, '../briar-shared/src');
 
 	return defineConfig({
 		plugins: [
@@ -93,7 +101,9 @@ const config = ({ mode }: { mode: string }) => {
 		base: dev ? './' : STATIC_PATH,
 		resolve: {
 			alias: {
-				'@': '/src'
+				'@': '/src',
+				// Map briar-shared to its source only during development
+				...(dev ? { 'briar-shared': sharedSrc } : {})
 			}
 		}
 	});
