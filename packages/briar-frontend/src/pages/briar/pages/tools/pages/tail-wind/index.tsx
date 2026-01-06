@@ -2,6 +2,7 @@ import { Tabs } from 'antd';
 
 import Bird from './tabs/bird';
 import RegisterForm from './tabs/shadcn';
+import SolarSystem from './tabs/solar-system/App';
 import { AuroraBackgroundDemo } from './tabs/ui/code.demo';
 import Xyflow from './tabs/xyflow/App';
 
@@ -27,6 +28,11 @@ const TailWind = () => {
 			key: '4',
 			label: 'xyflow',
 			children: <Xyflow />
+		},
+		{
+			key: '5',
+			label: 'solor',
+			children: <SolarSystem />
 		}
 	];
 
