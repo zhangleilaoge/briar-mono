@@ -5,7 +5,7 @@ import * as THREE from 'three';
 export const Sun: React.FC = () => {
 	const meshRef = useRef<THREE.Mesh>(null);
 
-	useFrame(({ clock }) => {
+	useFrame(({}) => {
 		if (meshRef.current) {
 			meshRef.current.rotation.y += 0.002;
 		}

@@ -17,7 +17,7 @@ const useScroll = (querySelectorStr: string) => {
 		// 一段时间后恢复自动滚动
 		timeoutRef.current = setTimeout(() => {
 			setIsAutoScrollEnabled(true);
-		}, 1000);
+		}, 1000) as unknown as number;
 	};
 
 	const quickScrollToTop = () => {

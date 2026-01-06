@@ -1,9 +1,7 @@
 import './index.css';
 
-import React from 'react';
-
 import Calculator from './components/Calculator';
-const App: React.FC = () => {
+const App = () => {
 	return (
 		<div className="min-h-screen flex flex-col items-center bg-slate-950 p-4 md:p-8">
 			{/* Header */}
