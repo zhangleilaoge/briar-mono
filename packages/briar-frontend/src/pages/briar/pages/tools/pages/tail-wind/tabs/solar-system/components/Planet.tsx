@@ -1,6 +1,7 @@
-import { Html } from '@react-three/drei';
+/* eslint-disable react/no-unknown-property */
+import { Html, useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 import { PlanetProps } from '../types';
@@ -9,6 +10,25 @@ export const Planet: React.FC<PlanetProps> = ({ planet, isSelected, onSelect }) 
 	const meshRef = useRef<THREE.Mesh>(null);
 	const orbitRef = useRef<THREE.Group>(null);
 	const [hovered, setHover] = useState(false);
+
+	// Load planet texture if provided
+	const TRANSPARENT_1PX =
+		'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=';
+	const planetTexture = useTexture(planet.mapUrl || TRANSPARENT_1PX);
+	const ringTexture = useTexture(planet.ringMapUrl || TRANSPARENT_1PX);
+
+	// Ensure correct color space for color textures
+	useEffect(() => {
+		if (planetTexture) {
+			planetTexture.colorSpace = THREE.SRGBColorSpace;
+			planetTexture.anisotropy = 8;
+			planetTexture.needsUpdate = true;
+		}
+		if (ringTexture) {
+			ringTexture.colorSpace = THREE.SRGBColorSpace;
+			ringTexture.needsUpdate = true;
+		}
+	}, [planetTexture, ringTexture]);
 
 	// Random starting position for visual variety
 	const initialAngle = useRef(Math.random() * Math.PI * 2);
@@ -63,11 +83,12 @@ export const Planet: React.FC<PlanetProps> = ({ planet, isSelected, onSelect }) 
 				}}
 			>
 				<sphereGeometry args={[planet.size, 32, 32]} />
-				<meshStandardMaterial
-					color={planet.color}
-					emissive={isSelected ? '#444444' : '#000000'} // Glow slightly when selected
-					roughness={0.7}
-				/>
+				{/* Prefer Phong for simpler lighting when using custom textures */}
+				{planet.mapUrl ? (
+					<meshPhongMaterial color={'#ffffff'} map={planetTexture} shininess={20} />
+				) : (
+					<meshStandardMaterial color={planet.color} roughness={0.7} />
+				)}
 
 				{/* Selection Indicator Halo */}
 				{(isSelected || hovered) && (
@@ -91,8 +112,9 @@ export const Planet: React.FC<PlanetProps> = ({ planet, isSelected, onSelect }) 
 					<mesh rotation={[Math.PI / 2.2, 0, 0]}>
 						<ringGeometry args={[planet.size * 1.4, planet.size * 2.2, 64]} />
 						<meshStandardMaterial
-							color="#C5B595"
-							opacity={0.8}
+							color={planet.ringMapUrl ? '#ffffff' : '#C5B595'}
+							map={planet.ringMapUrl ? ringTexture : undefined}
+							opacity={0.9}
 							transparent
 							side={THREE.DoubleSide}
 						/>

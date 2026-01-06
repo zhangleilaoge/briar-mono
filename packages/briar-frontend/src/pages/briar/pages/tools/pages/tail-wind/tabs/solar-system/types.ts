@@ -6,6 +6,9 @@ export interface PlanetData {
 	speed: number; // Orbit speed
 	description: string;
 	hasRings?: boolean;
+	// Optional texture URLs
+	mapUrl?: string;
+	ringMapUrl?: string; // for Saturn-like ring textures
 }
 
 export interface PlanetProps {

@@ -1,6 +1,8 @@
+/* eslint-disable react/no-unknown-property */
 import { OrbitControls, PerspectiveCamera, Stars } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import React, { Suspense, useState } from 'react';
+import * as THREE from 'three';
 
 import { InfoPanel } from './components/InfoPanel';
 import { Planet } from './components/Planet';
@@ -25,7 +27,10 @@ const SolarSystem: React.FC = () => {
 	return (
 		<div className="relative w-full h-[calc(100vh-170px)] bg-black overflow-hidden">
 			{/* 3D Scene */}
-			<Canvas className="w-full h-[calc(100vh-170px)]">
+			<Canvas
+				className="w-full h-[calc(100vh-170px)]"
+				gl={{ outputColorSpace: THREE.SRGBColorSpace }}
+			>
 				<Suspense fallback={null}>
 					<PerspectiveCamera makeDefault position={[0, 40, 70]} fov={45} />
 
@@ -38,7 +43,7 @@ const SolarSystem: React.FC = () => {
 						target={[0, 0, 0]}
 					/>
 
-					<ambientLight intensity={0.3} />
+					<ambientLight intensity={0.9} />
 
 					{/* Stars Background */}
 					<Stars radius={300} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
