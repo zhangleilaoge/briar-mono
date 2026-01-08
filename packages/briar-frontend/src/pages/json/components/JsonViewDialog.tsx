@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast as sonnerToast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -28,6 +28,17 @@ export function JsonViewDialog({ document, open, onOpenChange, onSaved }: JsonVi
 	const [jsonText, setJsonText] = useState<string>('');
 	const [isValid, setIsValid] = useState(true);
 	const [isSaving, setIsSaving] = useState(false);
+
+	// Populate form fields when document changes
+	useEffect(() => {
+		if (document) {
+			setName(document.name || '');
+			setJsonText(document.content || '');
+		} else {
+			setName('');
+			setJsonText('');
+		}
+	}, [document, open]);
 
 	const handleSave = async () => {
 		if (!name.trim()) {
